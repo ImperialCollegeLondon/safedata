@@ -1,4 +1,4 @@
-readTransposedXlsx <- function (path, sheetName) {
+readTransposedXlsx <- function (file, sheetName) {
   #' Read a transposed .xlsx file into a dataframe
   #' 
   #' Provides capability to read .xlsx files that are transposed (i.e. 
@@ -11,8 +11,9 @@ readTransposedXlsx <- function (path, sheetName) {
   #' @note Dependency on package ReadXL
   
   df <- read_xlsx(file, sheetName, col_names=FALSE)
-  dfT <- as.data.frame(t(df[-1]), stringsAsFactors = FALSE)
+  dfT <- as.data.frame(t(df[-1]), stringsAsFactors=FALSE)
   names(dfT) <- t(df[,1])
-  dfT <- as.data.frame(lapply(dfT,type.convert))
+  dfT <- as.data.frame(lapply(dfT, type.convert))
   return(dfT)
 }
+
