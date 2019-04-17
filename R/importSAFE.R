@@ -18,6 +18,14 @@ readTransposedXlsx <- function (file, sheetName) {
   return(dfT)
 }
 
+simpleCap <- function (str) {
+  #' Capitalize the first letter of each word in a string
+  
+  x <- strsplit(str, " ")[[1]]
+  y <- paste(toupper(substring(x, 1, 1)), substring(x, 2), sep="", collapse=" ")
+  return(y)
+}
+
 processSummary <- function (df) {
   #' Process summary "meta" information for SAFE project data
   #' 
@@ -30,22 +38,33 @@ processSummary <- function (df) {
   safeObj <- list()
   safeObj$projectID <- df$SAFE.Project.ID[1]
   safeObj$title <- as.character(df$Title[1])
+  safeObj$dataSheets <- gsub(" ", "", lapply(subset(
+    as.character(df$Worksheet.name), !is.na(df$Worksheet.name)), simpleCap))
   safeObj$startDate <- as.Date.numeric(df$Start.Date[1], origin="1899-12-30")
   safeObj$endDate <- as.Date.numeric(df$End.Date[1], origin="1899-12-30")
   
   return(safeObj)
 }
 
-processTaxa <- function (dataframe, safeObj) {
+processTaxa <- function (file, safeObj) {
   #' Adds taxa information to SAFE data object
+
+  safeObj$Taxa <- as.data.frame(read_xlsx(file, "Taxa", col_names=TRUE))
+  return(safeObj)
 }
 
-processLocations <- function (dataframe, safeObj) {
+processLocations <- function (file, safeObj) {
   #' Adds location information to SAFE data object
+  
+  safeObj$Locations <- as.data.frame(read_xlsx(file, "Locations",
+                                               col_names=TRUE))
+  return(safeObj)
 }
 
 processData <- function (file, safeObj) {
   #' Adds data worksheets to SAFE data object
+  
+  
 }
 
 safeWrapper <- function (file) {
