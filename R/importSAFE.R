@@ -1,4 +1,4 @@
-readTransposedXlsx <- function (file, sheetName) {
+readTransposedXlsx <- function (file, sheetName, ...) {
   #' Read a transposed .xlsx file into a dataframe
   #' 
   #' Provides capability to read .xlsx files that are transposed (i.e. 
@@ -7,10 +7,11 @@ readTransposedXlsx <- function (file, sheetName) {
   #' 
   #' @param path The path to the .xlsx file to be opened
   #' @param sheetName The name of the worksheet to be imported
+  #' @param ... Optional arguments to be passed to read_xlsx()
   #' 
   #' @note Dependency on package ReadXL
   
-  df <- read_xlsx(file, sheetName, col_names=FALSE)
+  df <- read_xlsx(file, sheetName, col_names=FALSE, ...)
   dfT <- as.data.frame(t(df[-1]), stringsAsFactors=FALSE)
   names(dfT) <- t(df[,1])
   dfT <- as.data.frame(lapply(dfT, type.convert))
@@ -38,12 +39,21 @@ processSummary <- function (df) {
   safeObj <- list()
   safeObj$projectID <- df$SAFE.Project.ID[1]
   safeObj$title <- as.character(df$Title[1])
-  safeObj$dataSheets <- gsub(" ", "", lapply(subset(
-    as.character(df$Worksheet.name), !is.na(df$Worksheet.name)), simpleCap))
+  safeObj$data <- vector(
+    "list", length(df$Worksheet.name[!is.na(df$Worksheet.name)]))
+  safeObj$data <- setNames(safeObj$data, gsub(" ", "", lapply(subset(
+    as.character(df$Worksheet.name), !is.na(df$Worksheet.name)), simpleCap)))
+  safeObj$dataSheets <- names(safeObj$data)
   safeObj$startDate <- as.Date.numeric(df$Start.Date[1], origin="1899-12-30")
   safeObj$endDate <- as.Date.numeric(df$End.Date[1], origin="1899-12-30")
   
   return(safeObj)
+}
+
+printSummary <- function (safeObj) {
+  #' Prints summary information for SAFE project data
+  
+  
 }
 
 processTaxa <- function (file, safeObj) {
@@ -64,11 +74,85 @@ processLocations <- function (file, safeObj) {
 processData <- function (file, safeObj) {
   #' Adds data worksheets to SAFE data object
   
+  sheets <- excel_sheets(file)
+  sheetsNormed <- gsub(" ", "", lapply(sheets, simpleCap))
   
+  for (i in 1:length(safeObj$dataSheets)) {
+    idx <- which.max(sheetsNormed==safeObj$dataSheets[i])
+    
+    # get line index where data begins using field_name ID
+    fullData <- as.data.frame(read_xlsx(file, sheets[idx], col_names=FALSE))
+    firstDataRow <- which.max(fullData[,1] == "field_name")
+    
+    # extract meta information from header lines
+    headerInfo <- readTransposedXlsx(fPath, sheets[idx], n_max=firstDataRow-1)
+    fieldTypes <- c("numeric", sapply(headerInfo$field_type, getDataClass))
+    safeObj$data[[safeObj$dataSheets[i]]]$attributes <- headerInfo
+    
+    # store data (without header info) "en masse"
+    data <- as.data.frame(read_xlsx(fPath, sheets[idx], col_names=TRUE,
+                                    col_types=fieldTypes, skip=firstDataRow-1))
+
+    # convert categorical data types
+    categoricals <- c(FALSE, sapply(headerInfo$field_type, isCategorical))
+    factorCols <- names(data)[categoricals]
+    data[factorCols] <- lapply(data[factorCols], factor)
+    safeObj$data[[safeObj$dataSheets[i]]]$tab <- data
+  }
+  
+  return(safeObj)
+}
+
+getDataClass <- function (safeType) {
+  #' Get the R data type from the SAFE field_type variable
+  
+  #' @param safeType The SAFE field_type variable
+  #' @return The readxl data type
+  #' @seealso \url{https://www.safeproject.net/dokuwiki/} for accepted SAFE data 
+  #'   field types and \url{https://cran.r-project.org/web/packages/readxl/} for
+  #'   ReadXl data types
+  
+  typeDate <- c("Date","Datetime", "Time")
+  typeText <- c("Location", "ID", "Taxa", "Replicate", "Abundance")
+  typeNum <- c("Latitude", "Longitude", "Numeric")
+  typeFac <- c("Categorical", "Ordered Categorical", "Categorical Trait",
+               "Numeric Trait", "Categorical Interaction", "Numeric Interaction")
+  
+  if (safeType %in% typeDate) {
+    return("date")
+  } else if (safeType %in% typeText) {
+    return("text")
+  } else if (safeType %in% typeNum) {
+    return("numeric")
+  } else if (safeType %in% typeFac) {
+    return("text")
+  } else {
+    return("guess")
+  }
+}
+
+isCategorical <- function (safeType) {
+  #' Check if the SAFE data type is of R type "categorical"/"factor"
+  
+  if (safeType %in% c("Categorical", "Ordered Categorical", "Categorical Trait",
+                      "Numeric Trait", "Categorical Interaction",
+                      "Numeric Interaction")) {
+    return(TRUE)
+  } else {
+    return(FALSE)
+  }
 }
 
 safeWrapper <- function (file) {
   #' Wrapper to open and process SAFE data file
+  
+  summary <- readTransposedXlsx(file, sheet="Summary")
+  safeObj <- processSummary(summary)
+  safeObj <- processTaxa(file, safeObj)
+  safeObj <- processLocations(file, safeObj)
+  safeObj <- processData(file, safeObj)
+  
+  return(safeObj)
 }
 
 printSummary <- function (safeObj) {
