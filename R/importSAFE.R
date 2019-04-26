@@ -39,11 +39,11 @@ processSummary <- function (df) {
   safeObj <- list()
   safeObj$projectID <- df$SAFE.Project.ID[1]
   safeObj$title <- as.character(df$Title[1])
-  safeObj$data <- vector(
-    "list", length(df$Worksheet.name[!is.na(df$Worksheet.name)]))
-  safeObj$data <- setNames(safeObj$data, gsub(" ", "", lapply(subset(
-    as.character(df$Worksheet.name), !is.na(df$Worksheet.name)), simpleCap)))
-  safeObj$dataSheets <- names(safeObj$data)
+  safeObj$workSheets <- gsub(" ", "", lapply(subset(
+    as.character(df$Worksheet.name), !is.na(df$Worksheet.name)), simpleCap))
+  for (i in 1:length(safeObj$workSheets)) {
+    safeObj[[safeObj$workSheets[i]]] <- list()
+  }
   safeObj$startDate <- as.Date.numeric(df$Start.Date[1], origin="1899-12-30")
   safeObj$endDate <- as.Date.numeric(df$End.Date[1], origin="1899-12-30")
   
@@ -77,8 +77,8 @@ processData <- function (file, safeObj) {
   sheets <- excel_sheets(file)
   sheetsNormed <- gsub(" ", "", lapply(sheets, simpleCap))
   
-  for (i in 1:length(safeObj$dataSheets)) {
-    idx <- which.max(sheetsNormed==safeObj$dataSheets[i])
+  for (i in 1:length(safeObj$workSheets)) {
+    idx <- which.max(sheetsNormed==safeObj$workSheets[i])
     
     # get line index where data begins using field_name ID
     fullData <- as.data.frame(read_xlsx(file, sheets[idx], col_names=FALSE))
@@ -87,7 +87,7 @@ processData <- function (file, safeObj) {
     # extract meta information from header lines
     headerInfo <- readTransposedXlsx(fPath, sheets[idx], n_max=firstDataRow-1)
     fieldTypes <- c("numeric", sapply(headerInfo$field_type, getDataClass))
-    safeObj$data[[safeObj$dataSheets[i]]]$attributes <- headerInfo
+    safeObj[[safeObj$workSheets[i]]]$attributes <- headerInfo
     
     # store data (without header info) "en masse"
     data <- as.data.frame(read_xlsx(fPath, sheets[idx], col_names=TRUE,
@@ -97,7 +97,7 @@ processData <- function (file, safeObj) {
     categoricals <- c(FALSE, sapply(headerInfo$field_type, isCategorical))
     factorCols <- names(data)[categoricals]
     data[factorCols] <- lapply(data[factorCols], factor)
-    safeObj$data[[safeObj$dataSheets[i]]]$tab <- data
+    safeObj[[safeObj$workSheets[i]]]$data <- data
   }
   
   return(safeObj)
@@ -153,8 +153,4 @@ safeWrapper <- function (file) {
   safeObj <- processData(file, safeObj)
   
   return(safeObj)
-}
-
-printSummary <- function (safeObj) {
-  #' print summary information for SAFE data object
 }
