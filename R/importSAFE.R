@@ -53,7 +53,11 @@ processSummary <- function (df) {
 printSummary <- function (safeObj) {
   #' Prints summary information for SAFE project data
   
-  
+  cat("Project name:", safeObj$title, "\n")
+  cat("Project ID:", safeObj$projectID, "\n")
+  cat("Date:", paste(safeObj$startDate), "to", paste(safeObj$endDate), "\n")
+  cat("Contains", length(safeObj$workSheets), "worksheets:", "\n")
+  cat("  ", paste(safeObj$workSheets, collapse=", "))
 }
 
 processTaxa <- function (file, safeObj) {
