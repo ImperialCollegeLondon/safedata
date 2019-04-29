@@ -11,7 +11,7 @@ readTransposedXlsx <- function (file, sheetName, ...) {
   #' 
   #' @note Dependency on package ReadXL
   
-  df <- read_xlsx(file, sheetName, col_names=FALSE, ...)
+  df <- suppressMessages(read_xlsx(file, sheet=sheetName, col_names=FALSE, ...))
   dfT <- as.data.frame(t(df[-1]), stringsAsFactors=FALSE)
   names(dfT) <- t(df[,1])
   dfT <- as.data.frame(lapply(dfT, type.convert))
@@ -67,6 +67,8 @@ processTaxa <- function (file, safeObj) {
   return(safeObj)
 }
 
+
+
 processLocations <- function (file, safeObj) {
   #' Adds location information to SAFE data object
   
@@ -85,17 +87,20 @@ processData <- function (file, safeObj) {
     idx <- which.max(sheetsNormed==safeObj$workSheets[i])
     
     # get line index where data begins using field_name ID
-    fullData <- as.data.frame(read_xlsx(file, sheets[idx], col_names=FALSE))
+    fullData <- as.data.frame(suppressMessages(
+      read_xlsx(file, sheets[idx], col_names=FALSE, na=c("", "NA"))))
     firstDataRow <- which.max(fullData[,1] == "field_name")
     
     # extract meta information from header lines
-    headerInfo <- readTransposedXlsx(fPath, sheets[idx], n_max=firstDataRow-1)
+    headerInfo <- readTransposedXlsx(fPath, sheets[idx], na=c("", "NA"),
+                                     n_max=firstDataRow-1)
     fieldTypes <- c("numeric", sapply(headerInfo$field_type, getDataClass))
     safeObj[[safeObj$workSheets[i]]]$attributes <- headerInfo
     
     # store data (without header info) "en masse"
-    data <- as.data.frame(read_xlsx(fPath, sheets[idx], col_names=TRUE,
-                                    col_types=fieldTypes, skip=firstDataRow-1))
+    data <- as.data.frame(suppressMessages(
+      read_xlsx(fPath, sheets[idx], col_names=TRUE, col_types=fieldTypes,
+                skip=firstDataRow-1, na=c("", "NA"))))
 
     # convert categorical data types
     categoricals <- c(FALSE, sapply(headerInfo$field_type, isCategorical))
@@ -150,7 +155,7 @@ isCategorical <- function (safeType) {
 safeWrapper <- function (file) {
   #' Wrapper to open and process SAFE data file
   
-  summary <- readTransposedXlsx(file, sheet="Summary")
+  summary <- readTransposedXlsx(file, sheetName="Summary")
   safeObj <- processSummary(summary)
   safeObj <- processTaxa(file, safeObj)
   safeObj <- processLocations(file, safeObj)
