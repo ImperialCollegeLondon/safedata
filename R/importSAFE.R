@@ -7,9 +7,10 @@ readTransposedXlsx <- function (file, sheetName, ...) {
   #' 
   #' @param path The path to the .xlsx file to be opened
   #' @param sheetName The name of the worksheet to be imported
-  #' @param ... Optional arguments to be passed to read_xlsx()
+  #' @param ... Optional arguments to be passed to \code{read_xlsx}
+  #' @return The reformatted .xlsx with headers as columns and data in rows
   #' 
-  #' @note Dependency on package ReadXL
+  #' @note Dependency on package \code{ReadXL}
   
   df <- suppressMessages(read_xlsx(file, sheet=sheetName, col_names=FALSE, ...))
   dfT <- as.data.frame(t(df[-1]), stringsAsFactors=FALSE)
@@ -21,6 +22,15 @@ readTransposedXlsx <- function (file, sheetName, ...) {
 
 simpleCap <- function (str) {
   #' Capitalize the first letter of each word in a string
+  #' 
+  #' This function takes a string, capitalizes the first letter of each word
+  #' within it, removes all whitespace, and combines the result into a single
+  #' word, returning the result.
+  #' 
+  #' @param str The string to be capitalized
+  #' @return The original string pasted together with all whitespace removed and
+  #'   the first letter of each word capitalized
+  #' @examples simpleCap("The quick brown fox jumps over the lazy dog")
   
   x <- strsplit(str, " ")[[1]]
   y <- paste(toupper(substring(x, 1, 1)), substring(x, 2), sep="", collapse=" ")
@@ -30,11 +40,14 @@ simpleCap <- function (str) {
 processSummary <- function (df) {
   #' Process summary "meta" information for SAFE project data
   #' 
-  #' Reads and assigns variables from the provided dataframe, which must be a
-  #' transposed "Summary" sheet from a SAFE project data submission.
+  #' Initiates a SAFE data object from the summary sheet provided. This function
+  #' reads and assigns variables from the provided summary dataframe (a
+  #' transposed "Summary" worksheet from a SAFE project submission file) into a
+  #' new SAFE \code{list} object.
   #' 
-  #' @param dataframe Dataframe containing summary information
-  #' @return List object containing summary information
+  #' @param dataframe Dataframe containing summary information. This must be a 
+  #'   "Summary" worksheet from a SAFE project submission file
+  #' @return SAFE List object containing summary information for the project
   
   safeObj <- list()
   safeObj$projectID <- df$SAFE.Project.ID[1]
@@ -51,7 +64,14 @@ processSummary <- function (df) {
 }
 
 printSummary <- function (safeObj) {
-  #' Prints summary information for SAFE project data
+  #' Prints summary information for SAFE object
+  #' 
+  #' Prints a summary of metadata for the given SAFE project object to the
+  #' command line. Includes the project title, ID number, start and end dates,
+  #' and data worksheet names.
+  #' 
+  #' @param safeObj Existing SAFE data object with meta information added
+  #' @seelso \code{\link{processSummary}}
   
   cat("Project name:", safeObj$title, "\n")
   cat("Project ID:", safeObj$projectID, "\n")
@@ -61,24 +81,72 @@ printSummary <- function (safeObj) {
 }
 
 processTaxa <- function (file, safeObj) {
-  #' Adds taxa information to SAFE data object
-
-  safeObj$Taxa <- as.data.frame(read_xlsx(file, "Taxa", col_names=TRUE))
+  #' Add taxa information to SAFE data object
+  #'
+  #' This function adds a new dataframe to an existing SAFE object containing
+  #' all taxonomic information for the submitted dataset. Note that when the
+  #' data do not contain any taxa this table defaults to \code{NA}. When
+  #' provided, this dataframe is used to compile a complete taxonomic heirarchy 
+  #' for all taxa identified within the dataset.
+  #' 
+  #' @param file Complete path to the SAFE project file
+  #' @param safeObj An existing SAFE data object
+  #' @return A modified SAFE object with a Taxa dataframe
+  #' @note Not all SAFE project submissions contain the Taxa worksheet (for
+  #'   example if the data do not contain taxa). In this case the SAFE Taxa
+  #'   object defaults to \code{NA}.
+  #' @seealso \code{\link{buildTaxonHeirarchy}},
+  #'   \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/taxa/}
+  #'   for information on the Taxa worksheet
+  
+  safeObj$Taxa <- tryCatch(
+    {
+      as.data.frame(read_xlsx(file, "Taxas", col_names=TRUE))
+    },
+    error = function(cond) {
+      message("SAFE import note: No Taxa datasheet supplied")
+      return(NA)
+    }
+  )
   return(safeObj)
 }
 
-
+buildTaxonHeirarchy <- function (safeObj) {
+  return(safeObj)
+}
 
 processLocations <- function (file, safeObj) {
   #' Adds location information to SAFE data object
+  #' 
+  #' Processes the \code{Locations} worksheet in the SAFE project file and adds
+  #' it as a dataframe to the existing SAFE data object.
+  #' 
+  #' @param file Complete path to the SAFE object file
+  #' @param safeObj An existing SAFE data object
+  #' @return A modified SAFE object with a Locations dataframe
+  #' @seealso \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/locations/}
+  #'   for details on the Locations worksheet
   
-  safeObj$Locations <- as.data.frame(read_xlsx(file, "Locations",
-                                               col_names=TRUE))
+  safeObj$Locations <- as.data.frame(read_xlsx(file, "Locations", col_names=TRUE))
   return(safeObj)
 }
 
 processData <- function (file, safeObj) {
-  #' Adds data worksheets to SAFE data object
+  #' Add data worksheets to SAFE project object
+  #' 
+  #' This function processes data-containing worksheets for the given SAFE
+  #' project file and adds them to an existing SAFE data object. This function
+  #' works by creating a new \code{list} within the SAFE object for each
+  #' worksheet found within the SAFE project file. These lists are named
+  #' according to their names in the original SAFE project file. Each includes a
+  #' \code{data} and \code{attributes} field containing, respectively, the data
+  #' and header information within the given worksheet. Note that this function
+  #' attempts to read all data types according to the \code{field_type}
+  #' provided in the SAFE data table.
+  #' 
+  #' @param file Path to the SAFE project file. This is assumed to be .xlsx
+  #' @param safeObj An existing SAFE data object
+  #' @return A modified SAFE data object containing data worksheets 
   
   sheets <- excel_sheets(file)
   sheetsNormed <- gsub(" ", "", lapply(sheets, simpleCap))
@@ -86,7 +154,7 @@ processData <- function (file, safeObj) {
   for (i in 1:length(safeObj$workSheets)) {
     idx <- which.max(sheetsNormed==safeObj$workSheets[i])
     
-    # get line index where data begins using field_name ID
+    # get line index where actual data begins (at "field_name" header)
     fullData <- as.data.frame(suppressMessages(
       read_xlsx(file, sheets[idx], col_names=FALSE, na=c("", "NA"))))
     firstDataRow <- which.max(fullData[,1] == "field_name")
@@ -97,7 +165,7 @@ processData <- function (file, safeObj) {
     fieldTypes <- c("numeric", sapply(headerInfo$field_type, getDataClass))
     safeObj[[safeObj$workSheets[i]]]$attributes <- headerInfo
     
-    # store data (without header info) "en masse"
+    # store actual data (without header info) "en masse"
     data <- as.data.frame(suppressMessages(
       read_xlsx(fPath, sheets[idx], col_names=TRUE, col_types=fieldTypes,
                 skip=firstDataRow-1, na=c("", "NA"))))
@@ -113,10 +181,16 @@ processData <- function (file, safeObj) {
 }
 
 getDataClass <- function (safeType) {
-  #' Get the R data type from the SAFE field_type variable
+  #' Get the R data type from the SAFE \code{field_type} variable
+  #' 
+  #' Takes a SAFE \code{field_type} variable and returns the appropriate ReadXl
+  #' data type. This function is handy for ensuring SAFE worksheet data tables
+  #' are correctly imported by ReadXl (i.e. that format types are consistent).
+  #' If the data type is not identifiable then this function will return a value
+  #' of "guess".
   
-  #' @param safeType The SAFE field_type variable
-  #' @return The readxl data type
+  #' @param safeType The SAFE \code{field_type} variable
+  #' @return The corresponding readxl data type
   #' @seealso \url{https://www.safeproject.net/dokuwiki/} for accepted SAFE data 
   #'   field types and \url{https://cran.r-project.org/web/packages/readxl/} for
   #'   ReadXl data types
