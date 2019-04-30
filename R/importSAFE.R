@@ -48,6 +48,8 @@ processSummary <- function (df) {
   #' @param dataframe Dataframe containing summary information. This must be a 
   #'   "Summary" worksheet from a SAFE project submission file
   #' @return SAFE List object containing summary information for the project
+  #' @seealso \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/summary/}
+  #'   for information on the SAFE summary worksheet
   
   safeObj <- list()
   safeObj$projectID <- df$SAFE.Project.ID[1]
@@ -147,6 +149,8 @@ processData <- function (file, safeObj) {
   #' @param file Path to the SAFE project file. This is assumed to be .xlsx
   #' @param safeObj An existing SAFE data object
   #' @return A modified SAFE data object containing data worksheets 
+  #' @seealso \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/data/}
+  #'   for information on SAFE data worksheets
   
   sheets <- excel_sheets(file)
   sheetsNormed <- gsub(" ", "", lapply(sheets, simpleCap))
@@ -191,9 +195,9 @@ getDataClass <- function (safeType) {
   
   #' @param safeType The SAFE \code{field_type} variable
   #' @return The corresponding readxl data type
-  #' @seealso \url{https://www.safeproject.net/dokuwiki/} for accepted SAFE data 
-  #'   field types and \url{https://cran.r-project.org/web/packages/readxl/} for
-  #'   ReadXl data types
+  #' @seealso \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/data/}
+  #'   for accepted SAFE data field types and 
+  #'   \url{https://cran.r-project.org/web/packages/readxl/} for ReadXl data types
   
   typeDate <- c("Date","Datetime", "Time")
   typeText <- c("Location", "ID", "Taxa", "Replicate", "Abundance")
@@ -216,6 +220,16 @@ getDataClass <- function (safeType) {
 
 isCategorical <- function (safeType) {
   #' Check if the SAFE data type is of R type "categorical"/"factor"
+  #' 
+  #' Takes a SAFE \code{field_type} and checks whether it is of R type
+  #' "categorical"/"factor". This is used to convert SAFE data variables
+  #' after import.
+  #' 
+  #' @param safeType The SAFE \code{field_type} variable
+  #' @return \code{TRUE} if given variable is a categorical, \code{FALSE} if not
+  #' @seealso \code{\link{getDataClass}},
+  #'   \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/data/}
+  #'   for differernt SAFE data types
   
   if (safeType %in% c("Categorical", "Ordered Categorical", "Categorical Trait",
                       "Numeric Trait", "Categorical Interaction",
