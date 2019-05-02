@@ -77,7 +77,7 @@ printSummary <- function (safeObj) {
   
   cat("Project name:", safeObj$title, "\n")
   cat("Project ID:", safeObj$projectID, "\n")
-  cat("Date:", paste(safeObj$startDate), "to", paste(safeObj$endDate), "\n")
+  cat("Dates:", paste(safeObj$startDate), "to", paste(safeObj$endDate), "\n")
   cat("Contains", length(safeObj$workSheets), "worksheets:", "\n")
   cat("  ", paste(safeObj$workSheets, collapse=", "))
 }
@@ -103,7 +103,7 @@ processTaxa <- function (file, safeObj) {
   
   safeObj$Taxa <- tryCatch(
     {
-      as.data.frame(read_xlsx(file, "Taxas", col_names=TRUE))
+      as.data.frame(read_xlsx(file, "Taxa", col_names=TRUE))
     },
     error = function(cond) {
       message("SAFE import note: No Taxa datasheet supplied")
@@ -126,10 +126,24 @@ processLocations <- function (file, safeObj) {
   #' @param file Complete path to the SAFE object file
   #' @param safeObj An existing SAFE data object
   #' @return A modified SAFE object with a Locations dataframe
+  #' @note Although unusual, not all SAFE project submissions will contain a
+  #'   Locations worksheet. Examples of this include projects that present only
+  #'   laboratory data (that do not have the requirement of specifying where
+  #'   field samples came from), or for inconsistent data collection locations
+  #'   (e.g. tracking animal movements). In the case of the latter GPS data
+  #'   should be provided separately for each observation.
   #' @seealso \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/locations/}
   #'   for details on the Locations worksheet
   
-  safeObj$Locations <- as.data.frame(read_xlsx(file, "Locations", col_names=TRUE))
+  safeObj$Locations <- tryCatch(
+    {
+      as.data.frame(read_xlsx(file, "Locations", col_names=TRUE))
+    },
+    error = function(cond) {
+      message("SAFE import note: No Locations datasheet supplied")
+      return(NA)
+    }
+  )
   return(safeObj)
 }
 
@@ -238,6 +252,72 @@ isCategorical <- function (safeType) {
   } else {
     return(FALSE)
   }
+}
+
+getTaxonHeirarchy <- function(taxaRow, ...) {
+  #' Return taxonomic heirarchy for a SAFE taxonomic entry
+  #' 
+  #' This function attempts to perform a search of the GBIF database for the
+  #' named Taxon/Parent types in the SAFE project Taxa worksheet. The purpose
+  #' of this is to construct a taxonomic tree for all taxa reported in the
+  #' dataset(s) to facilitate data searching/subsetting.
+  #' 
+  #' @param taxaRow A row from a SAFE object Taxa worksheet
+  #' @param ... Optional arguments to pass to \code{name_backbone}
+  #' 
+  #' @seealso \code{\link[rgbif]{name_backbone}},
+  #'   \code{\link[rgbif]{name_usage}},
+  #'   \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/taxa/},
+  #'   \url{https://safe-dataset-checker.readthedocs.io/en/latest/safe_dataset_checker/gbif_validation/}
+  
+  # *NOTE* I'm not sure if this is the most efficient way to run this!
+  
+  if (!is.na(taxaRow[["Parent name"]])) {
+    # The Parent Name has been provided. This means one of 3 things:
+    # 1. The Taxon type is a morphospecies or functional group
+    # 2. The Taxon name:type is unrecognized
+    # 3. The Taxon is from a less common taxonomic level
+    # In any case, taxonomic look-ups need to be done at the Parent level
+    level = "Parent"
+  } else {
+    # No Parent Name given so look-ups can be done on the provided Taxon
+    level = "Taxon"
+  }
+  
+  # Taxonomic look-ups then follow a multi-step process
+  # 1. strict search on the name backbone
+  nameBackbone <- name_backbone(name=taxaRow[[paste(level, "name")]],
+                                rank=taxaRow[[paste(level, "type")]], 
+                                strict=TRUE, verbose=FALSE, ...)
+  
+  # 2. if this search fails there are a few options
+  if (nameBackbone$matchType == "NONE") {
+    # (i) attempt to match on Taxon/Parent ID (if this has been provided)
+    # this is the case when there are multiple entries for the given name
+    # first get all alternatives of the name using a strict search
+    if (!is.na(taxaRow[[paste(level, "ID")]])) {
+      altOpts <- name_backbone(name=taxaRow[[paste(level, "name")]],
+                               rank=taxaRow[[paste(level, "type")]], 
+                               strict=TRUE, verbose=TRUE, ...)$alternatives
+      # then match the ID against the GBIF entry within the alternatives
+      nameBackbone <- altOpts[altOpts$usageKey==taxaRow[[paste(level, "ID")]],]
+    } else {
+      # (ii) when no Taxon/Parent ID is given, perform non-strict GBIF search
+      altOpts <- name_backbone(name=taxaRow[[paste(level, "name")]],
+                               rank=taxaRow[[paste(level, "type")]], 
+                               strict=FALSE, verbose=TRUE, ...)
+      if (altOpts$data$matchType != "NONE") {
+        # take the top-matched entry, which may be a higher-rank
+        nameBackbone <- altOpts$data
+      } else {
+        # in rare cases this still fails, so take the alternative GBIF search
+        # option that has the highest confidence value
+        nameBackbone <- altOpts$alternatives[
+          which.max(altOpts$alternatives$confidence),]
+      }
+    }
+  }
+  return(nameBackbone)
 }
 
 safeWrapper <- function (file) {
