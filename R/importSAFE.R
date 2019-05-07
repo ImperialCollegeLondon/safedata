@@ -227,7 +227,7 @@ addTaxonHeirarchies <- function (safeObj, ...) {
   #' Adds a dataframe of taxonomic heirarchies for all taxa reported in the SAFE
   #' Taxa worksheet to the supplied SAFE object.
   
-  t <- Sys.time()
+  startT <- Sys.time()
   message("Starting taxonomy look-up...")
   safeObj$TaxaTree = tryCatch(
     {
@@ -238,8 +238,9 @@ addTaxonHeirarchies <- function (safeObj, ...) {
       return(NA)
     }
   )
+  runTime <- difftime(Sys.time(), startT, units="sec")
   message(paste("Finished taxonomy look-up, this took", 
-                round(Sys.time()-t, 2), "seconds!"))
+                round(runTime, 2), "seconds!"))
   return(safeObj)
 }
 
@@ -278,19 +279,22 @@ processData <- function (file, safeObj) {
   #' 
   #' This function processes data-containing worksheets for the given SAFE
   #' project file and adds them to an existing SAFE data object. This function
-  #' works by creating a new \code{list} within the SAFE object for each
-  #' worksheet found within the SAFE project file. These lists are named
-  #' according to their names in the original SAFE project file. Each includes a
-  #' \code{data} and \code{attributes} field containing, respectively, the data
-  #' and header information within the given worksheet. Note that this function
-  #' attempts to read all data types according to the \code{field_type}
-  #' provided in the SAFE data table.
+  #' works by creating a new \code{dataframe} within the SAFE object for each
+  #' worksheet found within the SAFE project file. The dataframes are named
+  #' according to their names in the original SAFE project file and contain the
+  #' data within the given workseet. All data columns are imported according to 
+  #' the \code{field_type} provided in the SAFE data table. Header information
+  #' for each worksheet is stored as a \code{metaInfo} attribute accessed via
+  #' the dataframe.
   #' 
   #' @param file Path to the SAFE project file. This is assumed to be .xlsx
   #' @param safeObj An existing SAFE data object
   #' @return A modified SAFE data object containing data worksheets 
   #' @seealso \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/data/}
   #'   for information on SAFE data worksheets
+  #' @note To access worksheet meta information in a SAFE object \code{safeObj}
+  #'   with worksheet \code{data}, it is recommended to use
+  #'   \code{View(attr(safeObj$data, "metaInfo"))}
   
   sheets <- excel_sheets(file)
   sheetsNormed <- gsub(" ", "", lapply(sheets, simpleCap))
@@ -307,7 +311,6 @@ processData <- function (file, safeObj) {
     headerInfo <- readTransposedXlsx(fPath, sheets[idx], na=c("", "NA"),
                                      n_max=firstDataRow-1)
     fieldTypes <- c("numeric", sapply(headerInfo$field_type, getDataClass))
-    safeObj[[safeObj$workSheets[i]]]$attributes <- headerInfo
     
     # store actual data (without header info) "en masse"
     data <- as.data.frame(suppressMessages(
@@ -318,7 +321,8 @@ processData <- function (file, safeObj) {
     categoricals <- c(FALSE, sapply(headerInfo$field_type, isCategorical))
     factorCols <- names(data)[categoricals]
     data[factorCols] <- lapply(data[factorCols], factor)
-    safeObj[[safeObj$workSheets[i]]]$data <- data
+    safeObj[[safeObj$workSheets[i]]] <- data
+    attr(safeObj[[safeObj$workSheets[i]]], "metaInfo") <- headerInfo
   }
   
   return(safeObj)
