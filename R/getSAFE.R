@@ -39,6 +39,18 @@ zenodoVersionsApiLookup <- function (id) {
 
 isSafeProject <- function (zenodoRecord) {
   #' checks whether the supplied zenodo record is from the SAFE community
+  #' 
+  #' This function returns a boolean indicating whether the supplied Zenodo
+  #' record information (the result of an API lookup to the Zenodo database) is 
+  #' part of the SAFE (Stability of Altered Forest Ecosystems) community.
+  #' 
+  #' @param zenodoRecord, returned \code{list} object from an API call to the
+  #'   Zenodo cloud storage database. Should contain information pertaining to
+  #'   a Zenodo record (or records)
+  #' @return \code{TRUE}/\code{FALSE} indicating whether the record is part of
+  #'   the SAFE community
+  #' @seealso \url{https://zenodo.org/communities/safe/},
+  #'   \code{\link{zenodoRecordApiLookup}}, \code{\link{zenodoVersionsApiLookup}}
   
   if (!is.null(zenodoRecord$metadata)) {
     # in this case a record ID has been passed
@@ -61,12 +73,21 @@ isSafeProject <- function (zenodoRecord) {
 }
 
 updateSafeVersionCache <- function (versions, dir) {
-  #' Updates the SAFE version cache for the project with the given concept ID
+  #' Update the offline version cache for a given SAFE project
+  #' 
+  #' Takes the output from a call to the Zenodo 'versions' API and processes the
+  #' returned \code{list} into a dataframe storing version details for all
+  #' records associated with a given SAFE project (identified using the concept
+  #' record ID number). Version fields include the DOI, record ID, creation
+  #' date, access status ('open', 'embargoed', or 'closed'), and - in the case 
+  #' of embargoed records - the open date (the date that the record will be
+  #' publicly accessible) for all records associated with the concept ID. The
+  #' constructed dataframe is stored at the specified directory \code{dir}.
   #' 
   #' @param versions, the full versions list from the Zenodo 'versions' API call
   #' @param dir, local SAFE cache directory
   #' @return a dataframe containing access status information for each version
-  #'   of the specified SAFE project
+  #'   of the specified SAFE project, which is saved at the \code{dir}.
   #' @seealso \code{\link{zenodoVersionsApiLookup}}
   
   # create a dataframe with record ID, date, and access status
@@ -95,22 +116,35 @@ getRecordIdFromDoi <- function (DOI) {
   return(substr(strsplit(DOI, 'zenodo')[[1]][2], start=2, stop=9999))
 }
 
-processSafe <- function (id, dir='.') {
-  #' Get record info for desired version of SAFE project stored on Zenodo
+processSafe <- function (id, dir, updateCache=TRUE) {
+  #' Get record info for specified SAFE project ID from the Zenodo database
   #' 
   #' This function returns a \code{list} object from an API call to the Zenodo
-  #' database using the supplied SAFE project record ID number. The API call
-  #' contains information required to access the appropriate SAFE data. The
-  #' function will raise an error in the event that the record ID either does
-  #' not exist on Zenodo, or is not located in the SAFE community, and flags a
-  #' warning when a concept record ID is supplied (in which case the latest
-  #' version of the project is returned -- NOTE that the latest version of the
-  #' project may be "embargoed", so further checks will then be needed to 
-  #' access the most recent "open" project file).
+  #' database using the supplied SAFE project ID number. The API call contains
+  #' information required to download the requested SAFE dataset into the
+  #' specified directory.
+  #' 
+  #' The function will automatically create a data folder at the directory
+  #' \code{dir} and (optionally, \code{updateCache} boolean) updates an offline 
+  #' cache of version information pertaining to the concept record ID associated
+  #' with the requested record. Note that the version cache is automatically
+  #' downloaded into the \code{dir} the first time a record is accessed.
+  #' 
+  #' \code{processSafe} additionally performs a series of checks on the record.
+  #' Specifically, an error is raised in the event that the ID does not exist on
+  #' Zenodo, or is not located in the SAFE community, or if the record is
+  #' unavailable (i.e. is 'embargoed' or 'closed'). A warning message will be
+  #' presented if a more recent version of the requested record is available for
+  #' download.
   #' 
   #' @param id, SAFE project record ID number. This could be a concept record
-  #'   ID or a DOI identifier for a specific version number
+  #'   ID or a DOI identifier for a specific record. In the event that a concept
+  #'   record ID is passed, the function will attempt to return the most recent
+  #'   'open' dataset associated with the project
+  #' @param dir, directory into which data should be stored
+  #' @param updateCache, \code{boolean}, should the version cache be updated?
   #' @return \code{list} object containing information from the Zenodo API call
+  #' @seealso \link{\code{zenodoRecordApiLookup}}, \link{\code{updateSafeVersionCache}}
   
   # get record info using standard API call
   record <- zenodoRecordApiLookup(id)
@@ -142,14 +176,20 @@ processSafe <- function (id, dir='.') {
   
   # do we have a cache directory for this concept ID? if not then build one
   if (!file.exists(file.path(dir, conceptRecId))) {
+    if (!updateCache) {
+      warning('No version cache found! Creating one now...')
+      updateCache <- TRUE
+    }
     dir.create(file.path(dir, conceptRecId))
   }
   
   # update and load the version cache
-  message('Updating version cache for concept record ID ', conceptRecId, '... ', 
-          appendLF=FALSE)
-  updateSafeVersionCache(allVersions, dir=dir)
-  message('complete!')
+  if (updateCache) {
+    message('Updating version cache for concept record ID ', conceptRecId, 
+            '... ', appendLF=FALSE)
+    updateSafeVersionCache(allVersions, dir=dir)
+    message('complete!')
+  }
   vers <- readRDS(file.path(dir, conceptRecId, 'versions.rds'))
   
   # perform access checks on the requested record
@@ -200,22 +240,21 @@ processSafe <- function (id, dir='.') {
   }
 }
 
-downloadSafeFile <- function (recordId, dir='.') {
-  #' Download SAFE project file using the given record ID
+downloadSafeFile <- function (zenodoRecord, dir) {
+  #' Download SAFE project data file associated with the supplied record
+  #' 
+  #' 
   
+  # check that it's a SAFE zenodo project?? maybe just trycatch the whole thing
   
+  bucket <- jsonlite::fromJSON(zenodoRecord$links$bucket)
+  fileName <- file.path(dir, basename(bucket$contents$links$self))
+  download.file(bucket$contents$links$self, destfile=fileName)
 }
 
-# getSAFE <-
-# function(record_ids, dir='.'){
-# 
-# api <- "https://sandbox.zenodo.org/api/records/%s"
-# 
-# for(rec in record_ids){
-# record <- fromJSON(url(sprintf(api, record_id)))
-# bucket <- fromJSON(record$links$bucket)
-# 
-# fname <- file.path(dir, basename(bucket$contents$links$self))
-# download.file(bucket$contents$links$self, destfile=fname) 
-# }
-# }
+getSafe <- function () {
+  
+  # could supply a list of project IDs so should be able to handle this
+  # need to specify a SAFE directory for storing files
+  
+}
