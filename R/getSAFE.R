@@ -156,6 +156,7 @@ processSAFE <- function (id, dir, updateCache=TRUE) {
   #' @param updateCache \code{boolean}, should the version cache be updated?
   #' @return \code{list} object containing information from the Zenodo API call
   #' @seealso \code{\link{zenodoRecordApiLookup}}, \code{\link{updateVersionCache}}
+  #' @export
   
   # get record info using standard API call
   record <- zenodoRecordApiLookup(id)
@@ -266,6 +267,7 @@ downloadSAFE <- function (zenodoRecord, dir) {
   #'   call. This should be a call to the desired SAFE project
   #' @param dir directory into which data file should be downloaded
   #' @seealso \code{\link{zenodoRecordApiLookup}}
+  #' @export
   
   if (is.null(zenodoRecord$links$bucket)) {
     stop(paste0('No download link found for record, please check record ID'))
@@ -302,6 +304,7 @@ getSAFE <- function (ids, dir, ...) {
   #' @examples
   #'   getSAFE(3081059, "C:/Users/User/Desktop/SAFE_data/")
   #'   getSAFE(c(3081059, 2537074), "C:/Users/User/Desktop/SAFE_data/")
+  #' @export
   
   for (id in ids) {
     zenodoRecord <- processSAFE(id, dir, ...)

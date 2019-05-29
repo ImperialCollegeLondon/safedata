@@ -132,6 +132,8 @@ printSummary <- function (safeObj) {
   #' 
   #' @param safeObj Existing SAFE data object with meta information added
   #' @seealso \code{\link{processSummary}}
+  #' @export
+  
   
   cat('Project name:', safeObj$title, '\n')
   cat('Project ID:', safeObj$projectID, '\n')
@@ -417,6 +419,7 @@ importSAFE <- function (file) {
   #' @seealso \code{\link{getSAFE}} for downloading SAFE files from the Zenodo
   #'   cloud database, \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview}
   #'   for an overview on Excel file formats used for SAFE data submissions.
+  #' @export
   
   if (tools::file_ext(file) != 'xlsx') {
     stop(paste0('File extension is ', tools::file_ext(file), ': currently only',
