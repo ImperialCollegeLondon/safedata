@@ -3,8 +3,9 @@ Type: Package
 Title: R interface to data from the SAFE Project 
 Version: 0.1
 Date: 2019-04-08
-Author: Andy Aldersley, David Orme
-Maintainer: David Orme <d.orme@imperial.ac.uk>
+Authors@R: c(
+    person('Andy', 'Aldersley', email='a.aldersley@imperial.ac.uk', role=c('aut','cre')),
+    person('David', 'Orme', email='d.orme@imperial.ac.uk', role='aut'))
 Description: The SAFE Project is a large scale ecological experiment
     in Malaysian Borneo that explores the impact of habitat fragmentation
     and conversion on ecosystem function and services. Data collected at
@@ -17,4 +18,6 @@ Imports:
     rgbif,
     dplyr,
     docstring
+URL: https://imperialcollegelondon.github.io/safe_data/index.html
+BugReports: https://github.com/ImperialCollegeLondon/safe_data/issues
 RoxygenNote: 6.1.1
