@@ -142,17 +142,17 @@ concept record ID directory</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>optional argument to be passed to <code>processSAFE</code></p></td>
+      <td><p>optional argument to be passed to <code><a href='processSAFE.html'>processSAFE</a></code></p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code>processSAFE</code>, <code>downloadSAFE</code></p></div>
+    <div class='dont-index'><p><code><a href='processSAFE.html'>processSAFE</a></code>, <code><a href='downloadSAFE.html'>downloadSAFE</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>  <span class='fu'>getSAFE</span>(<span class='fl'>3081059</span>, <span class='st'>"C:/Users/User/Desktop/SAFE_data/"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in getSAFE(3081059, "C:/Users/User/Desktop/SAFE_data/"): could not find function "getSAFE"</span></div><div class='input'>  <span class='fu'>getSAFE</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>3081059</span>, <span class='fl'>2537074</span>), <span class='st'>"C:/Users/User/Desktop/SAFE_data/"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in getSAFE(c(3081059, 2537074), "C:/Users/User/Desktop/SAFE_data/"): could not find function "getSAFE"</span></div></pre>
+    <pre class="examples"><div class='input'>  <span class='fu'>getSAFE</span>(<span class='fl'>3081059</span>, <span class='st'>"C:/Users/User/Desktop/SAFE_data/"</span>)</div><div class='output co'>#&gt; <span class='message'>Requested record (ID: 3081059) is associated with concept record ID 3081058</span></div><div class='output co'>#&gt; <span class='warning'>Warning: cannot create dir 'C:/Users/User/Desktop/SAFE_data//3081058', reason 'No such file or directory'</span></div><div class='output co'>#&gt; <span class='message'>Updating version cache for concept record ID 3081058... </span></div><div class='output co'>#&gt; <span class='warning'>Warning: cannot open compressed file 'C:/Users/User/Desktop/SAFE_data//3081058/versions.rds', probable reason 'No such file or directory'</span></div><div class='output co'>#&gt; <span class='error'>Error in gzfile(file, mode): cannot open the connection</span></div><div class='input'>  <span class='fu'>getSAFE</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>3081059</span>, <span class='fl'>2537074</span>), <span class='st'>"C:/Users/User/Desktop/SAFE_data/"</span>)</div><div class='output co'>#&gt; <span class='message'>Requested record (ID: 3081059) is associated with concept record ID 3081058</span></div><div class='output co'>#&gt; <span class='warning'>Warning: cannot create dir 'C:/Users/User/Desktop/SAFE_data//3081058', reason 'No such file or directory'</span></div><div class='output co'>#&gt; <span class='message'>Updating version cache for concept record ID 3081058... </span></div><div class='output co'>#&gt; <span class='warning'>Warning: cannot open compressed file 'C:/Users/User/Desktop/SAFE_data//3081058/versions.rds', probable reason 'No such file or directory'</span></div><div class='output co'>#&gt; <span class='error'>Error in gzfile(file, mode): cannot open the connection</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
