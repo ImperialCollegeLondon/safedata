@@ -1,14 +1,20 @@
-Package: safer
+Package: safe_data
 Type: Package
-Title: What the package does (short line)
-Version: 1.0
+Title: R interface to data from the SAFE Project 
+Version: 0.1
 Date: 2019-04-08
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
+Author: Andy Aldersley, David Orme
+Maintainer: David Orme <d.orme@imperial.ac.uk>
+Description: The SAFE Project is a large scale ecological experiment
+in Malaysian Borneo that explores the impact of habitat fragmentation
+and conversion on ecosystem function and services. Data collected at
+the SAFE Project is made available under a common format through the
+Zenodo data repository and this package makes it easy to discover and
+load that data into R.
 License: What license is it under?
 Imports: 
     readxl,
     rgbif,
     dplyr,
     docstring
+RoxygenNote: 6.1.1

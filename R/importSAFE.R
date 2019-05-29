@@ -131,7 +131,7 @@ printSummary <- function (safeObj) {
   #' dates, and data worksheet names.
   #' 
   #' @param safeObj Existing SAFE data object with meta information added
-  #' @seelso \code{\link{processSummary}}
+  #' @seealso \code{\link{processSummary}}
   
   cat('Project name:', safeObj$title, '\n')
   cat('Project ID:', safeObj$projectID, '\n')
@@ -254,7 +254,7 @@ nameBackboneToDf <- function (nameBackbone) {
   #' 
   #' @param nameBackbone List of taxonomic heirarchy returned by 
   #'   \code{\link[rgbif]{name_backbone}}
-  #' @returns Taxonomic heirarchy stored as a dataframe including the 8 main
+  #' @return Taxonomic heirarchy stored as a dataframe including the 8 main
   #'   taxonomic levels
   #' @seealso \code{\link{getTaxonHeirarchy}}, \code{\link[rgbif]{name_backbone}}
   
@@ -275,7 +275,7 @@ getTaxonWrapper <- function (taxaRow, ...) {
   #'
   #' @param taxaRow A row from a SAFE object Taxa worksheet
   #' @param ... Optional arguments to pass to \code{\link[rgbif]{name_backbone}}
-  #' @returns Dataframe containing the taxonomic heirarchy for the given taxon
+  #' @return Dataframe containing the taxonomic heirarchy for the given taxon
   #' @seealso \code{\link{getNameBackbone}}, \code{\link{nameBackboneToDf}}
   
   listBackbone <- getNameBackbone(taxaRow, ...)
