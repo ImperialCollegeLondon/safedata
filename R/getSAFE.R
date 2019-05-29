@@ -98,21 +98,20 @@ updateVersionCache <- function (versions, dir) {
   #' @seealso \code{\link{zenodoVersionsApiLookup}}
   
   # create a dataframe with record ID, date, and access status
-  versionsDf <- data.frame('doi'=versions$hits$hits$doi,
-                           'record_ID'=as.character(
-                             lapply(versions$hits$hits$doi, getRecordIdFromDoi)),
-                           'created_on'=as.Date(versions$hits$hits$created),
-                           'access_right'=versions$hits$hits$metadata$access_right,
-                           'open_date'=nullToNA(
-                             versions$hits$hits$metadata$embargo_date),
-                           stringsAsFactors=FALSE)
+  versionsDf <- data.frame(
+    'doi'          = versions$hits$hits$doi,
+    'record_ID'    = as.character(lapply(versions$hits$hits$doi, getRecordIdFromDoi)),
+    'created_on'   = as.Date(versions$hits$hits$created),
+    'access_right' = versions$hits$hits$metadata$access_right,
+    'open_date'    = nullToNA(versions$hits$hits$metadata$embargo_date),
+    stringsAsFactors = FALSE)
   
   # order the versions by date (newest first)
-  versionsDf <- versionsDf[order(versionsDf$created_on, decreasing=TRUE), ]
+  versionsDf <- versionsDf[order(versionsDf$created_on, decreasing = TRUE), ]
   
   # save this locally in the concept ID cache
-  saveRDS(versionsDf, file=file.path(dir, versions$hits$hits$conceptrecid[1],
-                                     'versions.rds'))
+  saveRDS(versionsDf, file = file.path(dir, versions$hits$hits$conceptrecid[1], 
+                                       'versions.rds'))
 }
 
 getRecordIdFromDoi <- function (DOI) {
@@ -125,7 +124,7 @@ getRecordIdFromDoi <- function (DOI) {
   if (!grepl('zenodo', DOI)) {
     stop('Please supply a valid Zenodo-sourced DOI')
   }
-  return(substr(strsplit(DOI, 'zenodo')[[1]][2], start=2, stop=9999))
+  return(substr(strsplit(DOI, 'zenodo')[[1]][2], start = 2, stop = 9999))
 }
 
 processSAFE <- function (id, dir, updateCache=TRUE) {
@@ -167,7 +166,8 @@ processSAFE <- function (id, dir, updateCache=TRUE) {
       stop(paste0('Could not retrieve record (ID: ', id, ') - ', record$message))
     } else if (record$status == 301) {
       warning('Supplied ID (', id, ') is a concept record ID, attempting to ', 
-              'return most recent file submission', call.=FALSE, immediate.=TRUE)
+              'return most recent file submission', 
+              call. = FALSE, immediate. = TRUE)
       isConceptRecId <- TRUE
       conceptRecId <- id
       allVersions <- zenodoVersionsApiLookup(id)
@@ -198,7 +198,7 @@ processSAFE <- function (id, dir, updateCache=TRUE) {
   # update and load the version cache
   if (updateCache) {
     message('Updating version cache for concept record ID ', conceptRecId, 
-            '... ', appendLF=FALSE)
+            '... ', appendLF = FALSE)
     updateVersionCache(allVersions, dir=dir)
     message('complete!')
   }
@@ -208,45 +208,46 @@ processSAFE <- function (id, dir, updateCache=TRUE) {
   # records may be embargoed (raise an error)
   # records may be closed (raise an error)
   # records may not be the latest available version (raise a warning)
-  latestOpen <- vers[which(vers$access_right == 'open')[1],]
+  latestOpen <- vers[which(vers$access_right == 'open')[1], ]
   if (isConceptRecId) {
     if (is.na(latestOpen$record_ID)) {
       stop(paste0('No open records found for concept record ID ', conceptRecId, 
                   '. Current record status:\n', paste0(
-                    capture.output(print(vers[,2:5], row.names=FALSE, right=FALSE)),
-                    collapse='\n')), call.=FALSE)
+                    capture.output(print(vers[,2:5], row.names = FALSE, 
+                                         right = FALSE)),
+                    collapse = '\n')), call. = FALSE)
     } else {
       return(zenodoRecordApiLookup(latestOpen$record_ID))
     }
   } else {
     printVers <- vers[,2:5]
     printVers[' '] <- rep('', nrow(vers))
-    printVers[printVers$record_ID==record$id, ' '] <- '  <-REQUESTED'
+    printVers[printVers$record_ID == record$id, ' '] <- '  <-REQUESTED'
     if (record$metadata$access_right %in% c('embargoed', 'closed')) {
       if (!is.na(latestOpen$record_ID)) {
         # there are other records that are open
         stop(paste0('Requested record (ID: ', record$id, ') is ', 
                     record$metadata$access_right, '. Please select an open ',
                     'record for this concept ID. Current record status:\n',
-                    paste0(
-                      capture.output(print(printVers, row.names=FALSE, right=FALSE)),
-                      collapse='\n')), call.=FALSE)
+                    paste0(capture.output(print(printVers, row.names = FALSE,
+                                                right = FALSE)),
+                           collapse = '\n')), call. = FALSE)
       } else {
         # there are no other open records
         stop(paste0('Requested record (ID: ', record$id, ') is ', 
                     record$metadata$access_right, '. There are no other open ',
                     'records for this concept ID. Current record status:\n',
-                    paste0(
-                      capture.output(print(printVers, row.names=FALSE, right=FALSE)),
-                      collapse='\n')), call.=FALSE)
+                    paste0(capture.output(print(printVers, row.names = FALSE,
+                                                right = FALSE)),
+                           collapse = '\n')), call. = FALSE)
       }
     } else if (latestOpen$record_ID != record$id) {
       # a more recent version is available
       warning(paste0('A more recent version of the requested record is ',
                      'available.\nCurrent record status:\n',
-                     paste0(
-                       capture.output(print(printVers, row.names=FALSE, right=FALSE)),
-                       collapse='\n')), call.=FALSE, immediate.=TRUE)
+                     paste0(capture.output(print(printVers, row.names = FALSE, 
+                                                 right = FALSE)),
+                            collapse = '\n')), call. = FALSE, immediate. = TRUE)
     }
     return(record)
   }
@@ -276,8 +277,8 @@ downloadSAFE <- function (zenodoRecord, dir) {
                   '", only xlsx format is currently supported'))
     } else {
       message(paste0('\nDownloading file ', basename(fileName), '... '), 
-              appendLF=FALSE)
-      download.file(bucket$contents$links$self, destfile=fileName, quiet=TRUE)
+              appendLF = FALSE)
+      download.file(bucket$contents$links$self, destfile = fileName, quiet = TRUE)
       message('complete!\n')
     }
   }

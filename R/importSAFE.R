@@ -12,8 +12,8 @@ readTransposedXlsx <- function (file, sheetName, ...) {
   #' @seealso \code{\link[readxl]{read_xlsx}}
   
   df <- suppressMessages(
-    readxl::read_xlsx(file, sheet=sheetName, col_names=FALSE, ...))
-  dfT <- as.data.frame(t(df[-1]), stringsAsFactors=FALSE)
+    readxl::read_xlsx(file, sheet = sheetName, col_names = FALSE, ...))
+  dfT <- as.data.frame(t(df[-1]), stringsAsFactors = FALSE)
   names(dfT) <- t(df[,1])
   dfT <- as.data.frame(lapply(dfT, type.convert))
   
@@ -35,7 +35,8 @@ simpleCap <- function (str) {
   
   x <- strsplit(str, ' ')[[1]]
   return(
-    paste0(toupper(substring(x, 1, 1)), substring(x, 2), sep='', collapse=' '))
+    paste0(toupper(substring(x, 1, 1)), substring(x, 2), sep = '', 
+           collapse = ' '))
 }
 
 getDataClass <- function (safeType) {
@@ -116,8 +117,8 @@ processSummary <- function (df) {
   for (i in 1:length(safeObj$workSheets)) {
     safeObj[[safeObj$workSheets[i]]] <- list()
   }
-  safeObj$startDate <- as.Date.numeric(df$Start.Date[1], origin='1899-12-30')
-  safeObj$endDate <- as.Date.numeric(df$End.Date[1], origin='1899-12-30')
+  safeObj$startDate <- as.Date.numeric(df$Start.Date[1], origin = '1899-12-30')
+  safeObj$endDate <- as.Date.numeric(df$End.Date[1], origin = '1899-12-30')
   
   return(safeObj)
 }
@@ -136,7 +137,7 @@ printSummary <- function (safeObj) {
   cat('Project ID:', safeObj$projectID, '\n')
   cat('Dates:', paste0(safeObj$startDate), 'to', paste(safeObj$endDate), '\n')
   cat('Contains', length(safeObj$workSheets), 'data worksheets:', '\n')
-  cat('  ', paste0(safeObj$workSheets, collapse=', '))
+  cat('  ', paste0(safeObj$workSheets, collapse = ', '))
 }
 
 processTaxa <- function (file, safeObj) {
@@ -160,7 +161,7 @@ processTaxa <- function (file, safeObj) {
   
   safeObj$Taxa <- tryCatch(
     {
-      as.data.frame(readxl::read_xlsx(file, 'Taxa', col_names=TRUE))
+      as.data.frame(readxl::read_xlsx(file, 'Taxa', col_names = TRUE))
     },
     error = function(e) {
       warning('SAFE import note: No Taxa datasheet supplied')
@@ -204,9 +205,9 @@ getNameBackbone <- function(taxaRow, ...) {
   
   # Taxonomic look-ups then follow a multi-step process
   # 1. strict search on the name backbone
-  nameBackbone <- rgbif::name_backbone(name=taxaRow[[paste0(level, ' name')]],
-                                       rank=taxaRow[[paste0(level, ' type')]], 
-                                       strict=TRUE, verbose=FALSE, ...)
+  nameBackbone <- rgbif::name_backbone(name = taxaRow[[paste0(level, ' name')]],
+                                       rank = taxaRow[[paste0(level, ' type')]], 
+                                       strict = TRUE, verbose = FALSE, ...)
   
   # 2. if this search fails there are a few options
   if (nameBackbone$matchType == 'NONE') {
@@ -214,17 +215,17 @@ getNameBackbone <- function(taxaRow, ...) {
     # this is the case when there are multiple entries for the given name
     # first get all alternatives of the name using a strict search
     if (!is.na(taxaRow[[paste(level, 'ID')]])) {
-      altOpts <- rgbif::name_backbone(name=taxaRow[[paste0(level, ' name')]],
-                                      rank=taxaRow[[paste0(level, ' type')]], 
-                                      strict=TRUE, verbose=TRUE, 
+      altOpts <- rgbif::name_backbone(name = taxaRow[[paste0(level, ' name')]],
+                                      rank = taxaRow[[paste0(level, ' type')]], 
+                                      strict = TRUE, verbose = TRUE, 
                                       ...)$alternatives
       # then match the ID against the GBIF entry within the alternatives
       nameBackbone <- altOpts[altOpts$usageKey==taxaRow[[paste0(level, ' ID')]],]
     } else {
       # (ii) when no Taxon/Parent ID is given, perform non-strict GBIF search
-      altOpts <- rgbif::name_backbone(name=taxaRow[[paste0(level, ' name')]],
-                                      rank=taxaRow[[paste0(level, ' type')]], 
-                                      strict=FALSE, verbose=TRUE, ...)
+      altOpts <- rgbif::name_backbone(name = taxaRow[[paste0(level, ' name')]],
+                                      rank = taxaRow[[paste0(level, ' type')]], 
+                                      strict = FALSE, verbose = TRUE, ...)
       if (altOpts$data$matchType != 'NONE') {
         # take the top-matched entry, which may be a higher-rank
         nameBackbone <- altOpts$data
@@ -259,9 +260,9 @@ nameBackboneToDf <- function (nameBackbone) {
   
   cols <- c('safeName', 'subspecies', 'species', 'genus', 'family', 'class', 
             'order', 'phylum', 'kingdom', 'matchType')
-  taxaDf <- setNames(data.frame(matrix(ncol=length(cols), nrow=0), 
-                                stringsAsFactors=FALSE), cols)
-  rgbifDf <- as.data.frame(nameBackbone, stringsAsFactors=FALSE)
+  taxaDf <- setNames(data.frame(matrix(ncol = length(cols), nrow = 0), 
+                                stringsAsFactors = FALSE), cols)
+  rgbifDf <- as.data.frame(nameBackbone, stringsAsFactors = FALSE)
   return(dplyr::bind_rows(rgbifDf, taxaDf)[, cols])
 }
 
@@ -298,9 +299,8 @@ addTaxonHeirarchies <- function (safeObj, ...) {
   #' @seealso \code{\link{getNameBackbone}}
   
   startT <- Sys.time()
-  message('Starting taxonomy look-up... ', appendLF=FALSE)
-  safeObj$TaxaTree = tryCatch(
-    {
+  message('Starting taxonomy look-up... ', appendLF = FALSE)
+  safeObj$TaxaTree = tryCatch( {
       invisible(dplyr::bind_rows(apply(safeObj$Taxa, 1, getTaxonWrapper)))
     },
     error = function(e) {
@@ -308,7 +308,7 @@ addTaxonHeirarchies <- function (safeObj, ...) {
       return(NA)
     }
   )
-  runT <- difftime(Sys.time(), startT, units='sec')
+  runT <- difftime(Sys.time(), startT, units = 'sec')
   message(sprintf('completed! This took %.2f seconds!', runT))
   return(safeObj)
 }
@@ -331,9 +331,8 @@ processLocations <- function (file, safeObj) {
   #' @seealso \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/locations/}
   #'   for details on the Locations worksheet
   
-  safeObj$Locations <- tryCatch(
-    {
-      as.data.frame(readxl::read_xlsx(file, 'Locations', col_names=TRUE))
+  safeObj$Locations <- tryCatch( {
+      as.data.frame(readxl::read_xlsx(file, 'Locations', col_names = TRUE))
     },
     error = function(e) {
       warning('SAFE import note: No Locations datasheet supplied')
@@ -369,23 +368,23 @@ processData <- function (file, safeObj) {
   sheetsNormed <- gsub(' ', '', lapply(sheets, simpleCap))
   
   for (i in 1:length(safeObj$workSheets)) {
-    idx <- which.max(sheetsNormed==safeObj$workSheets[i])
+    idx <- which.max(sheetsNormed == safeObj$workSheets[i])
     
     # get line index where actual data begins (at 'field_name' header)
     fullData <- as.data.frame(suppressMessages(
-      readxl::read_xlsx(file, sheets[idx], col_names=FALSE, na=c('', 'NA'))))
+      readxl::read_xlsx(file, sheets[idx], col_names = FALSE, na = c('', 'NA'))))
     firstDataRow <- which.max(fullData[,1] == 'field_name')
     
     # extract meta information from header lines
-    headerInfo <- readTransposedXlsx(fPath, sheets[idx], na=c('', 'NA'),
-                                     n_max=firstDataRow-1)
+    headerInfo <- readTransposedXlsx(fPath, sheets[idx], na = c('', 'NA'),
+                                     n_max = firstDataRow-1)
     fieldTypes <- c('numeric', sapply(headerInfo$field_type, getDataClass))
     
     # store actual data (without header info) 'en masse'
     data <- as.data.frame(suppressMessages(
-      readxl::read_xlsx(fPath, sheets[idx], col_names=TRUE, 
-                        col_types=fieldTypes, skip=firstDataRow-1, 
-                        na=c('', 'NA'))))
+      readxl::read_xlsx(fPath, sheets[idx], col_names = TRUE, 
+                        col_types = fieldTypes, skip = firstDataRow-1, 
+                        na = c('', 'NA'))))
 
     # convert categorical data types
     categoricals <- c(FALSE, sapply(headerInfo$field_type, isCategorical))
@@ -423,7 +422,7 @@ importSAFE <- function (file) {
     stop(paste0('File extension is ', tools::file_ext(file), ': currently only',
                 ' .xlsx format is supported'))
   } else {
-    message(paste0('Opening file ', basename(file), '...'), appendLF=FALSE)
+    message(paste0('Opening file ', basename(file), '...'), appendLF = FALSE)
     summary <- readTransposedXlsx(file, sheetName='Summary')
     safeObj <- processSummary(summary)
     safeObj <- processTaxa(file, safeObj)
