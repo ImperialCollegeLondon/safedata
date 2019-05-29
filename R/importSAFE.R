@@ -9,8 +9,7 @@ readTransposedXlsx <- function (file, sheetName, ...) {
   #' @param sheetName The name of the worksheet to be imported
   #' @param ... Optional arguments to be passed to \code{read_xlsx}
   #' @return The reformatted .xlsx with headers as columns and data in rows
-  #' 
-  #' @note Dependency on package \code{ReadXL}
+  #' @seealso \code{\link[readxl]{read_xlsx}}
   
   df <- suppressMessages(
     readxl::read_xlsx(file, sheet=sheetName, col_names=FALSE, ...))
@@ -31,11 +30,68 @@ simpleCap <- function (str) {
   #' @param str The string to be capitalized
   #' @return The original string pasted together with all whitespace removed and
   #'   the first letter of each word capitalized
-  #' @examples simpleCap('The quick brown fox jumps over the lazy dog')
+  #' @examples
+  #'   simpleCap('The quick brown fox jumps over the lazy dog')
   
   x <- strsplit(str, ' ')[[1]]
   return(
     paste0(toupper(substring(x, 1, 1)), substring(x, 2), sep='', collapse=' '))
+}
+
+getDataClass <- function (safeType) {
+  #' Get the R data type from the SAFE \code{field_type} variable
+  #' 
+  #' Takes a SAFE \code{field_type} variable and returns the appropriate ReadXl
+  #' data type. This function is handy for ensuring SAFE worksheet data tables
+  #' are correctly imported by ReadXl (i.e. that format types are consistent).
+  #' If the data type is not identifiable then this function will return a value
+  #' of "guess".
+  
+  #' @param safeType The SAFE \code{field_type} variable
+  #' @return The corresponding readxl data type
+  #' @seealso \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/data/}
+  #'   for accepted SAFE data field types and 
+  #'   \url{https://cran.r-project.org/web/packages/readxl/} for ReadXl data types
+  
+  typeDate <- c('Date','Datetime', 'Time')
+  typeText <- c('Location', 'ID', 'Taxa', 'Replicate', 'Abundance')
+  typeNum <- c('Latitude', 'Longitude', 'Numeric')
+  typeFac <- c('Categorical', 'Ordered Categorical', 'Categorical Trait',
+               'Numeric Trait', 'Categorical Interaction', 'Numeric Interaction')
+  
+  if (safeType %in% typeDate) {
+    return('date')
+  } else if (safeType %in% typeText) {
+    return('text')
+  } else if (safeType %in% typeNum) {
+    return('numeric')
+  } else if (safeType %in% typeFac) {
+    return('text')
+  } else {
+    return('guess')
+  }
+}
+
+isCategorical <- function (safeType) {
+  #' Check if the SAFE data type is of R type "categorical"/"factor"
+  #' 
+  #' Takes a SAFE \code{field_type} and checks whether it is of R type
+  #' "categorical"/"factor". This is used to convert SAFE data variables
+  #' after import.
+  #' 
+  #' @param safeType The SAFE \code{field_type} variable
+  #' @return \code{TRUE} if given variable is a categorical, \code{FALSE} if not
+  #' @seealso \code{\link{getDataClass}},
+  #'   \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/data/}
+  #'   for differernt SAFE data types
+  
+  if (safeType %in% c('Categorical', 'Ordered Categorical', 'Categorical Trait',
+                      'Numeric Trait', 'Categorical Interaction',
+                      'Numeric Interaction')) {
+    return(TRUE)
+  } else {
+    return(FALSE)
+  }
 }
 
 processSummary <- function (df) {
@@ -70,8 +126,8 @@ printSummary <- function (safeObj) {
   #' Prints summary information for SAFE object
   #' 
   #' Prints a summary of metadata for the given SAFE project object to the
-  #' command line. Includes the project title, ID number, start and end dates,
-  #' and data worksheet names.
+  #' command line. Includes the project title, project ID number, start and end
+  #' dates, and data worksheet names.
   #' 
   #' @param safeObj Existing SAFE data object with meta information added
   #' @seelso \code{\link{processSummary}}
@@ -79,7 +135,7 @@ printSummary <- function (safeObj) {
   cat('Project name:', safeObj$title, '\n')
   cat('Project ID:', safeObj$projectID, '\n')
   cat('Dates:', paste0(safeObj$startDate), 'to', paste(safeObj$endDate), '\n')
-  cat('Contains', length(safeObj$workSheets), 'worksheets:', '\n')
+  cat('Contains', length(safeObj$workSheets), 'data worksheets:', '\n')
   cat('  ', paste0(safeObj$workSheets, collapse=', '))
 }
 
@@ -94,7 +150,7 @@ processTaxa <- function (file, safeObj) {
   #' 
   #' @param file Complete path to the SAFE project file
   #' @param safeObj An existing SAFE data object
-  #' @return A modified SAFE object with a Taxa dataframe
+  #' @return A modified SAFE object with a \code{Taxa} dataframe
   #' @note Not all SAFE project submissions contain the Taxa worksheet (for
   #'   example if the data do not contain taxa). In this case the SAFE Taxa
   #'   object defaults to \code{NA}.
@@ -104,10 +160,10 @@ processTaxa <- function (file, safeObj) {
   
   safeObj$Taxa <- tryCatch(
     {
-      as.data.frame(read_xlsx(file, 'Taxa', col_names=TRUE))
+      as.data.frame(readxl::read_xlsx(file, 'Taxa', col_names=TRUE))
     },
-    error = function(cond) {
-      message('SAFE import note: No Taxa datasheet supplied')
+    error = function(e) {
+      warning('SAFE import note: No Taxa datasheet supplied')
       return(NA)
     }
   )
@@ -134,8 +190,6 @@ getNameBackbone <- function(taxaRow, ...) {
   #' @note This function can take a few seconds to run, particularly if there
   #'   are a large number of Taxa in the SAFE dataset.
   
-  # *NOTE* I'm not sure if this is the most efficient way to run this!
-  
   if (!is.na(taxaRow[['Parent name']])) {
     # The Parent Name has been provided. This means one of 3 things:
     # 1. The Taxon type is a morphospecies or functional group
@@ -150,8 +204,8 @@ getNameBackbone <- function(taxaRow, ...) {
   
   # Taxonomic look-ups then follow a multi-step process
   # 1. strict search on the name backbone
-  nameBackbone <- rgbif::name_backbone(name=taxaRow[[paste0(level, 'name')]],
-                                       rank=taxaRow[[paste0(level, 'type')]], 
+  nameBackbone <- rgbif::name_backbone(name=taxaRow[[paste0(level, ' name')]],
+                                       rank=taxaRow[[paste0(level, ' type')]], 
                                        strict=TRUE, verbose=FALSE, ...)
   
   # 2. if this search fails there are a few options
@@ -160,16 +214,16 @@ getNameBackbone <- function(taxaRow, ...) {
     # this is the case when there are multiple entries for the given name
     # first get all alternatives of the name using a strict search
     if (!is.na(taxaRow[[paste(level, 'ID')]])) {
-      altOpts <- rgbif::name_backbone(name=taxaRow[[paste0(level, 'name')]],
-                                      rank=taxaRow[[paste0(level, 'type')]], 
+      altOpts <- rgbif::name_backbone(name=taxaRow[[paste0(level, ' name')]],
+                                      rank=taxaRow[[paste0(level, ' type')]], 
                                       strict=TRUE, verbose=TRUE, 
                                       ...)$alternatives
       # then match the ID against the GBIF entry within the alternatives
-      nameBackbone <- altOpts[altOpts$usageKey==taxaRow[[paste(level, 'ID')]],]
+      nameBackbone <- altOpts[altOpts$usageKey==taxaRow[[paste0(level, ' ID')]],]
     } else {
       # (ii) when no Taxon/Parent ID is given, perform non-strict GBIF search
-      altOpts <- rgbif::name_backbone(name=taxaRow[[paste0(level, 'name')]],
-                                      rank=taxaRow[[paste0(level, 'type')]], 
+      altOpts <- rgbif::name_backbone(name=taxaRow[[paste0(level, ' name')]],
+                                      rank=taxaRow[[paste0(level, ' type')]], 
                                       strict=FALSE, verbose=TRUE, ...)
       if (altOpts$data$matchType != 'NONE') {
         # take the top-matched entry, which may be a higher-rank
@@ -182,6 +236,7 @@ getNameBackbone <- function(taxaRow, ...) {
       }
     }
   }
+  
   nameBackbone$safeName <- taxaRow[['Name']]
   return(nameBackbone)
 }
@@ -200,8 +255,7 @@ nameBackboneToDf <- function (nameBackbone) {
   #'   \code{\link[rgbif]{name_backbone}}
   #' @returns Taxonomic heirarchy stored as a dataframe including the 8 main
   #'   taxonomic levels
-  #' @seealso \code{\link{getTaxonHeirarchy}}, 
-  #'   \code{\link[rgbif]{name_backbone}}
+  #' @seealso \code{\link{getTaxonHeirarchy}}, \code{\link[rgbif]{name_backbone}}
   
   cols <- c('safeName', 'subspecies', 'species', 'genus', 'family', 'class', 
             'order', 'phylum', 'kingdom', 'matchType')
@@ -212,7 +266,11 @@ nameBackboneToDf <- function (nameBackbone) {
 }
 
 getTaxonWrapper <- function (taxaRow, ...) {
-  #' Wrapper function for extracting taxonomic heirarchies from the GBIF
+  #' Extract taxonomic heirarchy from the GBIF database for the given taxa
+  #' 
+  #' This function is a wrapper that provides capabilities to extract taxonomic
+  #' herirarchies from the GBIF database using Taxa worksheet in a SAFE data 
+  #' file.
   #'
   #' @param taxaRow A row from a SAFE object Taxa worksheet
   #' @param ... Optional arguments to pass to \code{\link[rgbif]{name_backbone}}
@@ -227,34 +285,43 @@ addTaxonHeirarchies <- function (safeObj, ...) {
   #' Add taxonomic heirarchies to SAFE object
   #' 
   #' Adds a dataframe of taxonomic heirarchies for all taxa reported in the SAFE
-  #' Taxa worksheet to the supplied SAFE object.
+  #' Taxa worksheet to the supplied SAFE object. When no Taxa worksheet has been
+  #' supplied, this function flags a warning.
+  #' 
+  #' @param safeObj An existing SAFE data object
+  #' @param ... Optional arguments to pass to \code{\link[rgbif]{name_backbone}}
+  #' @return The updated SAFE object \code{safeObj} with a dataframe of
+  #'   taxonomic heirarchies for all taxa listed in the Taxa worksheet of the
+  #'   data file. This is accessed using the reference \code{TaxaTree}
+  #' @note Not all SAFE data files contain the Taxa worksheet. In this case, a
+  #'   value of \code{NA} will be assigned to the \code{TaxaTree}
+  #' @seealso \code{\link{getNameBackbone}}
   
   startT <- Sys.time()
-  message('Starting taxonomy look-up...')
+  message('Starting taxonomy look-up... ', appendLF=FALSE)
   safeObj$TaxaTree = tryCatch(
     {
-      invisible(dplyr::bind_rows(apply(safe$Taxa, 1, getTaxonWrapper)))
+      invisible(dplyr::bind_rows(apply(safeObj$Taxa, 1, getTaxonWrapper)))
     },
-    error = function(cond) {
-      message('Cannot process Taxa: SAFE project contains no Taxa worksheet!')
+    error = function(e) {
+      warning('Cannot process Taxa: SAFE project contains no Taxa worksheet!')
       return(NA)
     }
   )
-  runTime <- difftime(Sys.time(), startT, units='sec')
-  message(paste0('Finished taxonomy look-up, this took', 
-                round(runTime, 2), 'seconds!'))
+  runT <- difftime(Sys.time(), startT, units='sec')
+  message(sprintf('completed! This took %.2f seconds!', runT))
   return(safeObj)
 }
 
 processLocations <- function (file, safeObj) {
-  #' Adds location information to SAFE data object
+  #' Add location information to SAFE data object
   #' 
   #' Processes the \code{Locations} worksheet in the SAFE project file and adds
   #' it as a dataframe to the existing SAFE data object.
   #' 
   #' @param file Complete path to the SAFE object file
   #' @param safeObj An existing SAFE data object
-  #' @return A modified SAFE object with a Locations dataframe
+  #' @return A modified SAFE object with a \code{Locations} dataframe
   #' @note Although unusual, not all SAFE project submissions will contain a
   #'   Locations worksheet. Examples of this include projects that present only
   #'   laboratory data (that do not have the requirement of specifying where
@@ -266,10 +333,10 @@ processLocations <- function (file, safeObj) {
   
   safeObj$Locations <- tryCatch(
     {
-      as.data.frame(read_xlsx(file, 'Locations', col_names=TRUE))
+      as.data.frame(readxl::read_xlsx(file, 'Locations', col_names=TRUE))
     },
-    error = function(cond) {
-      message('SAFE import note: No Locations datasheet supplied')
+    error = function(e) {
+      warning('SAFE import note: No Locations datasheet supplied')
       return(NA)
     }
   )
@@ -331,70 +398,38 @@ processData <- function (file, safeObj) {
   return(safeObj)
 }
 
-getDataClass <- function (safeType) {
-  #' Get the R data type from the SAFE \code{field_type} variable
+importSAFE <- function (file) {
+  #' Import a SAFE data file
   #' 
-  #' Takes a SAFE \code{field_type} variable and returns the appropriate ReadXl
-  #' data type. This function is handy for ensuring SAFE worksheet data tables
-  #' are correctly imported by ReadXl (i.e. that format types are consistent).
-  #' If the data type is not identifiable then this function will return a value
-  #' of "guess".
+  #' This function is a wrapper to open and process SAFE data tables stored in
+  #' memory as .xlsx files. A full path to a SAFE .xlsx file should be provided,
+  #' which is then opened and processed according to the following procedure:
+  #' 1. Process \code{Summary} worksheet
+  #' 2. Process \code{Taxa} worksheet (when provided)
+  #' 3. Process \code{Locations} worksheet (when provided)
+  #' 4. Process individual data worksheets
+  #' More information on SAFE .xlsx file structures can be found at
+  #' \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview}.
+  #' 
+  #' @param file Path to the .xlsx SAFE file
+  #' @return A SAFE object \code{list} with varied attributes, including
+  #'   \code{Summary}, \code{Taxa}, \code{Locations}, and individual data
+  #'   fields for accessing different components of the SAFE record data.
+  #' @seealso \code{\link{getSAFE}} for downloading SAFE files from the Zenodo
+  #'   cloud database, \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview}
+  #'   for an overview on Excel file formats used for SAFE data submissions.
   
-  #' @param safeType The SAFE \code{field_type} variable
-  #' @return The corresponding readxl data type
-  #' @seealso \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/data/}
-  #'   for accepted SAFE data field types and 
-  #'   \url{https://cran.r-project.org/web/packages/readxl/} for ReadXl data types
-  
-  typeDate <- c('Date','Datetime', 'Time')
-  typeText <- c('Location', 'ID', 'Taxa', 'Replicate', 'Abundance')
-  typeNum <- c('Latitude', 'Longitude', 'Numeric')
-  typeFac <- c('Categorical', 'Ordered Categorical', 'Categorical Trait',
-               'Numeric Trait', 'Categorical Interaction', 'Numeric Interaction')
-  
-  if (safeType %in% typeDate) {
-    return('date')
-  } else if (safeType %in% typeText) {
-    return('text')
-  } else if (safeType %in% typeNum) {
-    return('numeric')
-  } else if (safeType %in% typeFac) {
-    return('text')
+  if (tools::file_ext(file) != 'xlsx') {
+    stop(paste0('File extension is ', tools::file_ext(file), ': currently only',
+                ' .xlsx format is supported'))
   } else {
-    return('guess')
+    message(paste0('Opening file ', basename(file), '...'), appendLF=FALSE)
+    summary <- readTransposedXlsx(file, sheetName='Summary')
+    safeObj <- processSummary(summary)
+    safeObj <- processTaxa(file, safeObj)
+    safeObj <- processLocations(file, safeObj)
+    safeObj <- processData(file, safeObj)
+    message(' completed!')
+    return(safeObj)  
   }
-}
-
-isCategorical <- function (safeType) {
-  #' Check if the SAFE data type is of R type "categorical"/"factor"
-  #' 
-  #' Takes a SAFE \code{field_type} and checks whether it is of R type
-  #' "categorical"/"factor". This is used to convert SAFE data variables
-  #' after import.
-  #' 
-  #' @param safeType The SAFE \code{field_type} variable
-  #' @return \code{TRUE} if given variable is a categorical, \code{FALSE} if not
-  #' @seealso \code{\link{getDataClass}},
-  #'   \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/data/}
-  #'   for differernt SAFE data types
-  
-  if (safeType %in% c('Categorical', 'Ordered Categorical', 'Categorical Trait',
-                      'Numeric Trait', 'Categorical Interaction',
-                      'Numeric Interaction')) {
-    return(TRUE)
-  } else {
-    return(FALSE)
-  }
-}
-
-safeWrapper <- function (file) {
-  #' Wrapper to open and process SAFE data file
-  
-  summary <- readTransposedXlsx(file, sheetName='Summary')
-  safeObj <- processSummary(summary)
-  safeObj <- processTaxa(file, safeObj)
-  safeObj <- processLocations(file, safeObj)
-  safeObj <- processData(file, safeObj)
-  
-  return(safeObj)
 }
