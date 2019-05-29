@@ -1,4 +1,4 @@
-Package: safe_data
+Package: safedata
 Type: Package
 Title: R interface to data from the SAFE Project 
 Version: 0.1
@@ -6,11 +6,11 @@ Date: 2019-04-08
 Author: Andy Aldersley, David Orme
 Maintainer: David Orme <d.orme@imperial.ac.uk>
 Description: The SAFE Project is a large scale ecological experiment
-in Malaysian Borneo that explores the impact of habitat fragmentation
-and conversion on ecosystem function and services. Data collected at
-the SAFE Project is made available under a common format through the
-Zenodo data repository and this package makes it easy to discover and
-load that data into R.
+    in Malaysian Borneo that explores the impact of habitat fragmentation
+    and conversion on ecosystem function and services. Data collected at
+    the SAFE Project is made available under a common format through the
+    Zenodo data repository and this package makes it easy to discover and
+    load that data into R.
 License: What license is it under?
 Imports: 
     readxl,
