@@ -72,13 +72,6 @@ isSAFE <- function (zenodoRecord) {
   } 
 }
 
-nullToNA <- function(x) {
-  #' Convert \code{NULL} values in \code{x} to \code{NA}
-  
-  x[is.null(x)] <- NA
-  return(x)
-}
-
 updateVersionCache <- function (versions, dir) {
   #' Update the offline version cache for a given SAFE project
   #' 
