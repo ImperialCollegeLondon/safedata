@@ -1,7 +1,7 @@
 # safe_data
 An R package for discovering and using data from the SAFE Project. For more information, please visit the [SAFE Project homepage](https://www.safeproject.net/), learn about how [SAFE Project data are handled](https://safe-dataset-checker.readthedocs.io/en/latest/), and browse the [SAFE Project database](https://zenodo.org/communities/safe/?page=1&size=20).
 
-Further details for the `safe_data` package can be accessed at the [package homepage](https://imperialcollegelondon.github.io/safe_data/index.html).
+Further details for the `safe_data` package can be accessed at the [homepage](https://imperialcollegelondon.github.io/safe_data/index.html).
 
 ## Getting started
 There are two options for installing the package
