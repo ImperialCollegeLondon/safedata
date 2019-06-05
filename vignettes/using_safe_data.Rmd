@@ -8,10 +8,64 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
-# Welcome
+# About the package
+`safe_data` is an R package designed to access and interact with data from the
+Stability of Altered Forest Ecosystems (SAFE) Project. The SAFE Project is one
+of the largest ecological experiments in the world, investigating the effects
+of human activities on biodiversity and ecosystem function in the Malaysian 
+rainforest. Further information can be found at our
+[website](https://www.safeproject.net/).
 
-
+Research conducted at the SAFE Project encompasses expertise from many 
+disciplines and institutions, each running interlinked projects that help to 
+develop our understanding of ecology within changing environments. Data from 
+the many activities conducted through the SAFE Project are curated and made
+available at the [SAFE Zenodo repository](https://zenodo.org/communities/safe/),
+a cloud-storage platform. The `safe_data` package is intended to enable 
+researchers to quickly and easily interface with these datasets.
 
 ## Data format
+All researchers working at the SAFE Project are required to submit their project
+data to the [SAFE Zenodo repository](https://zenodo.org/communities/safe/). 
+Submitted data are required to meet strict formatting requirements and pass a
+validation check before acceptance. Full details of this process can be found on
+the [SAFE Project data](https://safe-dataset-checker.readthedocs.io/) webpages.
+
+In most cases, data are provided as tabular datasets stored in Excel
+spreadsheets (note that v0.1 only supports .xlsx imports). Briefly, these
+comprise the following worksheets:
+* *Summary* simple metadata (authors, access rights) about the dataset
+* *Taxa* A description of the Taxa reported in the dataset
+* *Locations* A description of all sampling locations in the dataset
+* *Data worksheets* The actual data tables, described in the *Summary* sheet
+
+The `safe_data` package allows users to import and interrogate these datasets
+within the R environment.
 
 ## Data repository
+Published [SAFE Zenodo repository](https://zenodo.org/communities/safe/)
+
+Searchable database, DOI numbers from which concept IDs and concept record IDs
+can be accessed. Some datasets might be embargoed.
+
+
+# Get safe_data
+The latest stable version of `safe_data` can be installed from CRAN
+```R
+install.packages("safe_data")
+```
+
+Alternatively, the current development version can be installed from GitHub
+```R
+devtools::install_github("ImperialCollegeLondon/safe_data")
+```
+
+# Access a SAFE Project dataset
+
+## The SAFE directory
+
+## Local directory structure
+
+## Versioning
+
+# Load a SAFE Project dataset
