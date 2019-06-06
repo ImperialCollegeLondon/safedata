@@ -3,18 +3,33 @@ An R package for discovering and using data from the SAFE Project. For more info
 
 Further details for the `safe_data` package can be accessed at the [homepage](https://imperialcollegelondon.github.io/safe_data/index.html).
 
-## Getting started
+## Installing safe_data
 There are two options for installing the package
 1. Use `install_github` in the `devtools` package, i.e. `devtools::instsall_github("ImperialCollegeLondon/safe_data")`
 2. Install the binary package from CRAN, i.e. `install.packages("safe_data")`
 
-## Quick examples
+## Getting started
 The two main functionalities of `safe_data` are for accessing and downloading SAFE data files, and importing them into R.
 
 ### 1. Download SAFE project data
-
+Download data for record ID [3081059](https://zenodo.org/record/3081059#.XPfX9xZKhhE):
+```R
+library(safe_data)
+SAFE_dir <- 'C:/Users/User/Documents/SAFE/'
+record_ID <- 3081059
+getSAFE(record_ID, SAFE_dir)
+```
 
 ### 2. Import SAFE project data into R
+Import data file associated with record ID [3081059](https://zenodo.org/record/3081059#.XPfX9xZKhhE), named LiDAR_Aboveground_Carbon.xlsx:
+```R
+library(safe_data)
+SAFE_dir <- 'C:/Users/User/Documents/SAFE/'
+file_name <- 'LiDAR_Aboveground_Carbon.xlsx'
+path_to_file <- file.path(SAFE_dir, concept_ID, record_ID, file_name)
+record <- importSAFE(path_to_file)
+printSummary(path_to_file)
+```
 
-## More examples
-A more detailed description of the package and further examples can be found in the [package vignettes](https://imperialcollegelondon.github.io/safe_data/articles/).
+## Further examples
+A more detailed description of the package and additional, more detailed examples can be found in the [package vignettes](https://imperialcollegelondon.github.io/safe_data/articles/).
