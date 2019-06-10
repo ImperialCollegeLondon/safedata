@@ -13,21 +13,21 @@ The two main functionalities of `safe_data` are for accessing and downloading SA
 
 ### 1. Download SAFE project data
 Download data for record ID [3081059](https://zenodo.org/record/3081059#.XPfX9xZKhhE):
-```R
+```r
 library(safe_data)
 SAFE_dir <- 'C:/Users/User/Documents/SAFE/'
 record_ID <- 3081059
-getSAFE(record_ID, SAFE_dir)
+getSafe(record_ID, SAFE_dir)
 ```
 
 ### 2. Import SAFE project data into R
 Import data file associated with record ID [3081059](https://zenodo.org/record/3081059#.XPfX9xZKhhE), named LiDAR_Aboveground_Carbon.xlsx:
-```R
+```r
 library(safe_data)
 SAFE_dir <- 'C:/Users/User/Documents/SAFE/'
 file_name <- 'LiDAR_Aboveground_Carbon.xlsx'
 path_to_file <- file.path(SAFE_dir, concept_ID, record_ID, file_name)
-record <- importSAFE(path_to_file)
+record <- importSafe(path_to_file)
 printSummary(path_to_file)
 ```
 
