@@ -22,50 +22,108 @@ develop our understanding of ecology within changing environments. Data from
 the many activities conducted through the SAFE Project are curated and made
 available at the [SAFE Zenodo repository](https://zenodo.org/communities/safe/),
 a cloud-storage platform. The `safe_data` package is intended to enable 
-researchers to quickly and easily interface with these datasets.
+researchers to quickly and easily interface with these datasets. This document
+provides an introduction to the core functionalities of the package and
+describes the concepts supporting its development.
 
 ## Data format
-All researchers working at the SAFE Project are required to submit their project
+All researchers working at the SAFE Project are asked to submit their project
 data to the [SAFE Zenodo repository](https://zenodo.org/communities/safe/). 
-Submitted data are required to meet strict formatting requirements and pass a
-validation check before acceptance. Full details of this process can be found on
-the [SAFE Project data](https://safe-dataset-checker.readthedocs.io/) webpages.
+Submitted data must meet strict formatting requirements and pass a validation
+check before acceptance. Full details of this process can be found on the
+[SAFE Project data](https://safe-dataset-checker.readthedocs.io/) webpages.
 
 In most cases, data are provided as tabular datasets stored in Excel
-spreadsheets (note that v0.1 only supports .xlsx imports). Briefly, these
-comprise the following worksheets:
-* *Summary* simple metadata (authors, access rights) about the dataset
-* *Taxa* A description of the Taxa reported in the dataset
-* *Locations* A description of all sampling locations in the dataset
-* *Data worksheets* The actual data tables, described in the *Summary* sheet
+spreadsheets (note that v0.1 of `safe_data` only provides support for .xlsx
+imports). Briefly, these datasets comprise the following worksheets:
+
+* **Summary**: simple metadata (authors, access rights) about the dataset
+* **Taxa**: a description of the Taxa reported in the dataset
+* **Locations**: a description of all sampling locations in the dataset
+* **Data worksheets**: the actual data tables, described in the **Summary** sheet
 
 The `safe_data` package allows users to import and interrogate these datasets
 within the R environment.
 
 ## Data repository
-Published [SAFE Zenodo repository](https://zenodo.org/communities/safe/)
+The [SAFE Zenodo repository](https://zenodo.org/communities/safe/) provides a
+searchable cloud-based data storage facility for research outputs from the SAFE
+Project. Zenodo uses a [DOI versioning](https://help.zenodo.org/) system for 
+file storage. When uploads are published on Zenodo for the first time, two DOIs 
+are registered:
 
-Searchable database, DOI numbers from which concept IDs and concept record IDs
-can be accessed. Some datasets might be embargoed.
+* a DOI representing the _specific version_ of the record: the **version ID**
+* a DOI representing _all versions_ of the record: the **concept ID**
 
+Subsequent versions of an upload are then logged under a new DOI.
+
+In practice, this means that multiple versions of a project's data (or multiple
+datasets associated with a single research project) can be stored and referenced
+separately under a single identifier. The **concept** DOI allows users to cite
+the _entire_ project, while the **version** DOI refers to a _particular_ instance.
+
+Datasets published on Zenodo can have differing access rights:
+
+* **Open**: the dataset is open for download
+* **Embargoed**: the dataset is currently unavailable for download, but will be
+opened in the future
+* **Closed**: the dataset is no longer available
+
+`safe_data` enables downloading of SAFE project datasets using either a specific
+version ID or concept ID (in which case the latest **open** version of the
+project records is returned). More detail on this can be found in the sections
+below.
 
 # Get safe_data
 The latest stable version of `safe_data` can be installed from CRAN
-```R
+```r
 install.packages("safe_data")
 ```
 
 Alternatively, the current development version can be installed from GitHub
-```R
+```r
 devtools::install_github("ImperialCollegeLondon/safe_data")
 ```
 
 # Access a SAFE Project dataset
+SAFE project datasets can be downloaded to a local directory.
 
 ## The SAFE directory
+Information on how to set the `SAFE_data_dir` in R.
 
 ## Local directory structure
+SAFE Project datasets are stored locally within the `SAFE_data_dir`. Each SAFE
+Project has a master folder named according to the concept DOI. Separate
+versions of this project are then created as subfolders within the main project
+folder according to their version DOI. All datasets associated with this upload
+are then stored within the version subfolder.
+```
+index.rds
+concept_DOI/
+concept_DOI/versions.rds
+concept_DOI/record_DOI_1/file.xlsx
+concept_DOI/record_DOI_1/external_file1.xlsx
+concept_DOI/record_DOI_2/file.xlsx
+```
+
+The `index.rds` and `versions.rds` are local caches containing up-to-date
+offline records of files accessed and version statuses for all concept DOIs
+requested by the user. These files are described in more detail below.
 
 ## Versioning
 
+The `versions.rds` file is always 
+
 # Load a SAFE Project dataset
+
+## Importing a SAFE data object
+Using `importSafe()`
+
+## The SAFE data object structure
+Description of different features within the object and how to access them (e.g.
+`print()`)
+
+## Building taxonomic heirarchies
+Using `addTaxonHeirarchies()` to build a taxonomic tree
+
+## Visualising locational information

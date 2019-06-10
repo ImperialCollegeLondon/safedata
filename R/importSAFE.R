@@ -380,7 +380,7 @@ processData <- function (file, safeObj) {
   return(safeObj)
 }
 
-importSAFE <- function (file) {
+importSafe <- function (file) {
   #' Import a SAFE data file
   #' 
   #' This function is a wrapper to open and process SAFE data tables stored in
@@ -397,7 +397,7 @@ importSAFE <- function (file) {
   #' @return A SAFE object \code{list} with varied attributes, including
   #'   \code{Summary}, \code{Taxa}, \code{Locations}, and individual data
   #'   fields for accessing different components of the SAFE record data.
-  #' @seealso \code{\link{getSAFE}} for downloading SAFE files from the Zenodo
+  #' @seealso \code{\link{getSafe}} for downloading SAFE files from the Zenodo
   #'   cloud database, \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview}
   #'   for an overview on Excel file formats used for SAFE data submissions.
   #' @export

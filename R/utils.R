@@ -1,4 +1,4 @@
-nullToNA <- function(x) {
+nullToNa <- function(x) {
   #' Convert \code{NULL} values to \code{NA}
   
   x[is.null(x)] <- NA
@@ -22,4 +22,25 @@ simpleCap <- function (str) {
   return(
     paste0(toupper(substring(x, 1, 1)), substring(x, 2), sep = '', 
            collapse = ' '))
+}
+
+setSafeDir <- function (dir = NULL) {
+  #' Set the local SAFE data directory
+  #'
+  #' Sets the local SAFE data directory using R "options". If an invalid/no
+  #' directory is specified, defaults to the current working directory.
+  #'
+  #' @param dir, the directory to set as the SAFE_data_dir (defaults to 
+  #'   \code{getwd()})
+  
+  if (is.null(dir)) {
+    warning(paste0('SAFE_data_dir not supplied, ', 
+                   'defaulting to current working directory'))
+    dir = getwd()
+  } else if (!dir.exists(dir)) {
+    warning(paste0('Invalid SAFE_data_dir supplied, ', 
+                   'defaulting to current working directory'))
+    dir = getwd()
+  }
+  options('SAFE_data_dir' = dir)
 }

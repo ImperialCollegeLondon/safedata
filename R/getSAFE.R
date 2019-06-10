@@ -6,7 +6,7 @@ zenodoRecordApiLookup <- function (id) {
   #' contains varied record information for the ID.
   #' 
   #' @param id the data ID number, which in this instance should be either a
-  #'   SAFE project DOI or concept ID number
+  #'   SAFE version DOI or concept DOI number
   #' @return \code{list} object containing information from the Zenodo API call
   #' @note Zenodo Record API: \url{https://zenodo.org/api/records/}
   
@@ -25,8 +25,7 @@ zenodoVersionsApiLookup <- function (id) {
   #' \code{list} if a concept record ID is passed, otherwise the \code{list} is
   #' empty.
   #' 
-  #' @param id the data ID number, which in this instance should be a concept
-  #'   record ID
+  #' @param id the data ID number, which in this instance should be a concept ID
   #' @return \code{list} object containing information on all versions of the ID
   #'   from the Zenodo API call
   #' @note Zenodo Versions API example: 
@@ -37,7 +36,7 @@ zenodoVersionsApiLookup <- function (id) {
            '&all_versions&sort=-version&size=10&page=1'))))
 }
 
-isSAFE <- function (zenodoRecord) {
+isSafe <- function (zenodoRecord) {
   #' Checks whether the supplied zenodo record is from the SAFE community
   #' 
   #' This function returns a boolean indicating whether the supplied Zenodo
@@ -93,10 +92,11 @@ updateVersionCache <- function (versions, dir) {
   # create a dataframe with record ID, date, and access status
   versionsDf <- data.frame(
     'doi'          = versions$hits$hits$doi,
-    'record_ID'    = as.character(lapply(versions$hits$hits$doi, getRecordIdFromDoi)),
+    'record_ID'    = as.character(lapply(versions$hits$hits$doi, 
+                                         getRecordIdFromDoi)),
     'created_on'   = as.Date(versions$hits$hits$created),
     'access_right' = versions$hits$hits$metadata$access_right,
-    'open_date'    = nullToNA(versions$hits$hits$metadata$embargo_date),
+    'open_date'    = nullToNa(versions$hits$hits$metadata$embargo_date),
     stringsAsFactors = FALSE)
   
   # order the versions by date (newest first)
@@ -120,7 +120,7 @@ getRecordIdFromDoi <- function (DOI) {
   return(substr(strsplit(DOI, 'zenodo')[[1]][2], start = 2, stop = 9999))
 }
 
-processSAFE <- function (id, dir, updateCache=TRUE) {
+processSafe <- function (id, dir, updateCache=TRUE) {
   #' Get record info for specified SAFE project ID from the Zenodo database
   #' 
   #' This function returns a \code{list} object from an API call to the Zenodo
@@ -176,7 +176,7 @@ processSAFE <- function (id, dir, updateCache=TRUE) {
   }
   
   # check that the project is part of the SAFE community
-  if (!isSAFE(allVersions)) {
+  if (!isSafe(allVersions)) {
     stop(paste0('Concept ID ', conceptRecId, ' is not in the SAFE community'))
   }
   
@@ -247,7 +247,7 @@ processSAFE <- function (id, dir, updateCache=TRUE) {
   }
 }
 
-downloadSAFE <- function (zenodoRecord, dir) {
+downloadSafe <- function (zenodoRecord, dir) {
   #' Download SAFE project data file associated with the supplied record
   #' 
   #' Attempts to download the data file associated with the supplied Zenodo
@@ -279,7 +279,7 @@ downloadSAFE <- function (zenodoRecord, dir) {
   }
 }
 
-getSAFE <- function (ids, dir, ...) {
+getSafe <- function (ids, dir = NULL, ...) {
   #' Get the SAFE files with the specified IDs
   #'
   #' This function processes and downloads the data files associated with the
@@ -289,22 +289,37 @@ getSAFE <- function (ids, dir, ...) {
   #' the relevant folder.
   #' 
   #' @param ids an individual or array of project ID numbers to be downloaded
-  #' @param dir SAFE data directory. A new directory is created for each
-  #'   concept record ID. Data for individual records are stored within the
-  #'   concept record ID directory
-  #' @param ... optional argument to be passed to \code{\link{processSAFE}}
-  #' @seealso \code{\link{processSAFE}}, \code{\link{downloadSAFE}}
+  #' @param dir SAFE data directory, which defaults to the \code{SAFE_data_dir} 
+  #'   option. A new directory is created for each concept record ID. Data for
+  #'   individual records are stored within the concept record ID directory
+  #' @param ... optional argument to be passed to \code{\link{processSafe}}
+  #' @seealso \code{\link{processSafe}}, \code{\link{downloadSafe}}
   #' @examples
-  #'   getSAFE(3081059, "C:/Users/User/Desktop/SAFE_data/")
-  #'   getSAFE(c(3081059, 2537074), "C:/Users/User/Desktop/SAFE_data/")
+  #'   getSafe(3081059, "C:/Users/User/Desktop/SAFE_data/")
+  #'   getSafe(c(3081059, 2537074), "C:/Users/User/Desktop/SAFE_data/")
   #' @export
   
+  # check whether directory has been supplied, use SAFE_data_dir if not
+  if (is.null(dir)) {
+    message('SAFE directory not specified, using SAFE_data_dir (', 
+            appendLF = FALSE)
+    if (!is.null(getOption('SAFE_data_dir'))) {
+      dir <- getOption('SAFE_data_dir')
+      message(paste0(dir, ')\n'))
+    } else {
+      message(paste0(getwd(), ')\n'))
+      setSafeDir()
+      dir <- getOption('SAFE_data_dir')
+    }
+  }
+  
+  # download files from Zenodo
   for (id in ids) {
-    zenodoRecord <- processSAFE(id, dir, ...)
+    zenodoRecord <- processSafe(id, dir, ...)
     recordDir <- file.path(dir, zenodoRecord$conceptrecid, zenodoRecord$id)
     if (!file.exists(recordDir)) {
       dir.create(recordDir)
     }
-    downloadSAFE(zenodoRecord, recordDir)
+    downloadSafe(zenodoRecord, recordDir)
   }
 }
