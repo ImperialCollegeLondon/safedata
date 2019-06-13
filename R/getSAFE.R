@@ -71,7 +71,7 @@ isSafe <- function (zenodoRecord) {
   } 
 }
 
-updateVersionCache <- function (versions, dir) {
+updateVersionCache <- function (versions, dir = NULL) {
   #' Update the offline version cache for a given SAFE project
   #' 
   #' Takes the output from a call to the Zenodo 'versions' API and processes the
@@ -84,10 +84,21 @@ updateVersionCache <- function (versions, dir) {
   #' constructed dataframe is stored at the specified directory \code{dir}.
   #' 
   #' @param versions the full versions list from the Zenodo 'versions' API call
-  #' @param dir local SAFE cache directory
+  #' @param dir local SAFE cache directory (searches for \code{SAFE_data_dir} in
+  #'   \code{getOptions()}, or throws an error)
   #' @return a dataframe containing access status information for each version
   #'   of the specified SAFE project, which is saved at the \code{dir}.
-  #' @seealso \code{\link{zenodoVersionsApiLookup}}
+  #' @seealso \code{\link{zenodoVersionsApiLookup}}, \code{\link{setSafeDir}}
+  
+  # check directory - if not supplied and SAFE_data_dir not set then error
+  if (is.null(dir)) {
+    if (is.null(getOption('SAFE_data_dir'))) {
+      stop(paste0('Directory not supplied and SAFE_data_dir not set! See ',
+                  'setSafeDir() function'))
+    } else {
+      dir = getOption('SAFE_data_dir')
+    }
+  }
   
   # create a dataframe with record ID, date, and access status
   versionsDf <- data.frame(
@@ -105,6 +116,125 @@ updateVersionCache <- function (versions, dir) {
   # save this locally in the concept ID cache
   saveRDS(versionsDf, file = file.path(dir, versions$hits$hits$conceptrecid[1], 
                                        'versions.rds'))
+}
+
+updateIndex <- function (conceptRecId, dir = NULL) {
+  #' Update the SAFE index file
+  #' 
+  #' The index file supplements (/replaces?) the individual versions files for
+  #' each concept ID, providing an offline cache of all versions and files
+  #' associated with record IDs that have been requested by the user from the
+  #' server. It is stored in the \code{SAFE_data_dir}. This function updates
+  #' the index.rds record when new requests are made to the Zenodo database.
+  #' 
+  #' @param conceptRecId, the concept record ID of the record being accessed
+  #' @param dir, the directory into which the index.rds file should be stored,
+  #'   which defaults to the \code{SAFE_data_dir}
+  #' @seealso \code{\link{zenodoVersionsApiLookup}}, \code{\link{setSafeDir}}
+  #' @export
+  
+  # check directory - if not supplied and SAFE_data_dir not set then error
+  if (is.null(dir)) {
+    if (is.null(getOption('SAFE_data_dir'))) {
+      stop(paste0('Directory not supplied and SAFE_data_dir not set! See ',
+                  'setSafeDir() function'))
+    } else {
+      dir = getOption('SAFE_data_dir')
+    }
+  }
+  
+  # get all versions of the conceptRecId - check that concept ID is valid
+  allVersions <- zenodoVersionsApiLookup(conceptRecId)
+  if (length(allVersions$aggregations$access_right$buckets) == 0) {
+    stop(paste0('Supplied concept ID (', conceptRecId, ') is invalid'))
+  }
+  
+  # check that the index file exists (if so modify, otherwise create new)
+  if (file.exists(file.path(dir, 'index.rds'))) {
+    index <- readRDS(file.path(dir, 'index.rds'))
+  } else {
+    index <- data.frame()
+  }
+  
+  # build local dataframe for this concept ID
+  versionsDf <- data.frame(
+    'conceptId'    = allVersions$hits$hits$conceptrecid,
+    'doi'          = allVersions$hits$hits$doi,
+    'recordId'     = as.character(lapply(allVersions$hits$hits$doi,
+                                         getRecordIdFromDoi)),
+    'created_on'   = as.Date(allVersions$hits$hits$created),
+    'access_right' = allVersions$hits$hits$metadata$access_right,
+    'open_date'    = nullToNa(allVersions$hits$hits$metadata$embargo_date),
+    'downloaded'   = as.character(unlist(lapply(mapply(file.path, dir,
+                                          buildFilePath(allVersions)), 
+                                   checkRecordDownloaded), use.names = FALSE)),
+    stringsAsFactors = FALSE)
+  
+  # order the versions by date (newest first)
+  versionsDf <- versionsDf[order(versionsDf$created_on, decreasing = TRUE), ]
+  
+  # combine with the index meta-table and save the output
+  # two cases:
+  #   the concept ID is already in the index (replacement), or
+  #   concept ID is not in the index (add to the index)
+  if (any(index$conceptId == conceptRecId)) {
+    inds <- which(index$conceptId == conceptRecId)
+    index[inds, ] = versionsDf
+  } else {
+    index <- rbind(index, versionsDf)
+  }
+  
+  # save the modified index table
+  saveRDS(index, file = file.path(dir, 'index.rds'))
+}
+
+buildFilePath <- function (versions) {
+  #' Builds a list of file paths to SAFE datasets in the versions list
+  #' 
+  #' Using the output from a call to the Zenodo "versions" API
+  #' (\code{\link{zenodoVersionsApiLookup}}), this function builds a set of
+  #' pathways to local copies of downloaded datasets within a given SAFE concept
+  #' ID. The structure of these pathways is governed by the \code{safe_data}
+  #' directory protocol, i.e. concept_ID > record_ID > file_name.
+  #' 
+  #' @param versions, list of all record versions contained within a given
+  #'   concept ID. The output from a call to
+  #'   \code{\link{zenodoVersionsApiLookup}}
+  #' @return a list object containing (prospective) file paths to the data files
+  #'   associated with each record within the concept ID, constructed according
+  #'   to the \code{safe_data} directory structure
+  #' @seealso \code{\link{zenodoVersionsApiLookup}}
+  #' @export
+  
+  if (class(versions) != 'list') {
+    stop(paste0('buildFilePath expected list, got ', class(versions)))
+  }
+  
+  numVers <- length(versions$hits$hits$conceptrecid)
+  if (is.null(numVers)) {
+    stop(paste0('Invalid input supplied, please check input list is output ',
+                'from zenodoVersionsApiLookup'))
+  }
+  
+  filePaths <- list()
+  for (i in 1:numVers) {
+    filePaths[[i]] <- file.path(versions$hits$hits$conceptrecid[i],
+                                versions$hits$hits$id[i],
+                                versions$hits$hits$files[[i]]$key)
+  }
+  return(filePaths)
+}
+
+checkRecordDownloaded <- function (path) {
+  #' Check if the record at the specified path has been downloaded
+  #' 
+  #'
+  
+  if (file.exists(path)) {
+    return(TRUE)
+  } else {
+    return(FALSE)
+  }
 }
 
 getRecordIdFromDoi <- function (DOI) {
@@ -181,7 +311,7 @@ processSafe <- function (id, dir, updateCache=TRUE) {
   }
   
   # do we have a cache directory for this concept ID? if not then build one
-  if (!file.exists(file.path(dir, conceptRecId))) {
+  if (!dir.exists(file.path(dir, conceptRecId))) {
     if (!updateCache) {
       warning('No version cache found! Creating one now...')
       updateCache <- TRUE
