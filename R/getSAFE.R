@@ -71,66 +71,54 @@ isSafe <- function (zenodoRecord) {
   } 
 }
 
-updateVersionCache <- function (versions, dir = NULL) {
-  #' Update the offline version cache for a given SAFE project
-  #' 
-  #' Takes the output from a call to the Zenodo 'versions' API and processes the
-  #' returned \code{list} into a dataframe storing version details for all
-  #' records associated with a given SAFE project (identified using the concept
-  #' record ID number). Version fields include the DOI, record ID, creation
-  #' date, access status ('open', 'embargoed', or 'closed'), and - in the case 
-  #' of embargoed records - the open date (the date that the record will be
-  #' publicly accessible) for all records associated with the concept ID. The
-  #' constructed dataframe is stored at the specified directory \code{dir}.
-  #' 
-  #' @param versions the full versions list from the Zenodo 'versions' API call
-  #' @param dir local SAFE cache directory (searches for \code{SAFE_data_dir} in
-  #'   \code{getOptions()}, or throws an error)
-  #' @return a dataframe containing access status information for each version
-  #'   of the specified SAFE project, which is saved at the \code{dir}.
-  #' @seealso \code{\link{zenodoVersionsApiLookup}}, \code{\link{setSafeDir}}
-  
-  # check directory - if not supplied and SAFE_data_dir not set then error
-  if (is.null(dir)) {
-    if (is.null(getOption('SAFE_data_dir'))) {
-      stop(paste0('Directory not supplied and SAFE_data_dir not set! See ',
-                  'setSafeDir() function'))
-    } else {
-      dir = getOption('SAFE_data_dir')
-    }
-  }
-  
-  # create a dataframe with record ID, date, and access status
-  versionsDf <- data.frame(
-    'doi'          = versions$hits$hits$doi,
-    'record_ID'    = as.character(lapply(versions$hits$hits$doi, 
-                                         getRecordIdFromDoi)),
-    'created_on'   = as.Date(versions$hits$hits$created),
-    'access_right' = versions$hits$hits$metadata$access_right,
-    'open_date'    = nullToNa(versions$hits$hits$metadata$embargo_date),
-    stringsAsFactors = FALSE)
-  
-  # order the versions by date (newest first)
-  versionsDf <- versionsDf[order(versionsDf$created_on, decreasing = TRUE), ]
-  
-  # save this locally in the concept ID cache
-  saveRDS(versionsDf, file = file.path(dir, versions$hits$hits$conceptrecid[1], 
-                                       'versions.rds'))
-}
-
-updateIndex <- function (conceptRecId, dir = NULL) {
+updateIndex <- function (id, isConceptId = TRUE, dir = NULL) {
   #' Update the SAFE index file
   #' 
-  #' The index file supplements (/replaces?) the individual versions files for
-  #' each concept ID, providing an offline cache of all versions and files
-  #' associated with record IDs that have been requested by the user from the
-  #' server. It is stored in the \code{SAFE_data_dir}. This function updates
-  #' the index.rds record when new requests are made to the Zenodo database.
+  #' The SAFE index file contains version and file-download information for all
+  #' SAFE projects that have been requested by the user through the 
+  #' \code{safe_data} package. The intended use of the index file is to provide
+  #' an offline cache of information associated with the varied records on the
+  #' SAFE Zenodo database to streamline operation of \code{safe_data} and 
+  #' reduce redundancies. The index file is a dataframe stored (by default) in
+  #' the \code{SAFE_data_dir}. Records are grouped by concept ID. Meta 
+  #' information, including DOI, record ID, date created, ddataset embargo
+  #' status, open date, and local file download status (TRUE/FALSE) are then
+  #' saved for each record within the concept IDs requested. Every time a call
+  #' is made to the Zenodo database for a SAFE dataset, \code{updateIndex} runs,
+  #' either adding new version data or overwriting existing entries, depending
+  #' on whether the concept ID has been previously requested.
   #' 
-  #' @param conceptRecId, the concept record ID of the record being accessed
-  #' @param dir, the directory into which the index.rds file should be stored,
+  #' \code{updateIndex} takes a Zenodo ID as its main input, which may be a
+  #' concept ID (the default, \code{isConceptId = TRUE}), or the ID of a
+  #' specific record entry (\code{isConceptId = FALSE}). Under the default
+  #' behaviour, information pertaining to all versions of a particular concept
+  #' are accessed through a call to \code{\link{zenodoVersionsApiLookup}} and
+  #' stored within the index file. When a record ID is passed as input, it is
+  #' assumed that it is because the dataset associated with this version has
+  #' been downloaded and, after a directory check, the download status of this
+  #' entry is modified. At the end of each call the modified index dataframe is
+  #' saved in the local SAFE directory.
+  #' 
+  #' The SAFE index file is used downstream to identify and notify the user of
+  #' the most recent available versions of a project, or in the event that the
+  #' user is attempting to access a dataset that already exists within the
+  #' \code{SAFE_data_dir}.
+  #' 
+  #' @param id the concept ID/record ID associated with the version of the SAFE
+  #'   project being accessed
+  #' @param isConceptId boolean indicating whether parameter \code{ID} is a 
+  #'   concept ID or a record ID. This changes the operation of the function
+  #' @param dir the directory into which the index.rds file should be stored,
   #'   which defaults to the \code{SAFE_data_dir}
-  #' @seealso \code{\link{zenodoVersionsApiLookup}}, \code{\link{setSafeDir}}
+  #' @seealso \code{\link{zenodoVersionsApiLookup}}, \code{\link{setSafeDir}},
+  #'   \code{\link{buildVersionsDataframe}}
+  #' @examples
+  #'   # add version information for concept ID 3081058
+  #'   setSafeDir("C:/Users/User/SAFE_data/")
+  #'   updateIndex(3081058)
+  #'   
+  #'   # update download status of record 3081059 to TRUE
+  #'   updateIndex(3081059, isConceptId = FALSE)
   #' @export
   
   # check directory - if not supplied and SAFE_data_dir not set then error
@@ -143,52 +131,103 @@ updateIndex <- function (conceptRecId, dir = NULL) {
     }
   }
   
-  # get all versions of the conceptRecId - check that concept ID is valid
-  allVersions <- zenodoVersionsApiLookup(conceptRecId)
-  if (length(allVersions$aggregations$access_right$buckets) == 0) {
-    stop(paste0('Supplied concept ID (', conceptRecId, ') is invalid'))
-  }
-  
   # check that the index file exists (if so modify, otherwise create new)
   if (file.exists(file.path(dir, 'index.rds'))) {
     index <- readRDS(file.path(dir, 'index.rds'))
   } else {
-    index <- data.frame()
+    if (isConceptId) {
+      index <- data.frame()
+    } else {
+      stop('No index.rds file found at the specified directory!')
+    }
   }
   
-  # build local dataframe for this concept ID
-  versionsDf <- data.frame(
-    'conceptId'    = allVersions$hits$hits$conceptrecid,
-    'doi'          = allVersions$hits$hits$doi,
-    'recordId'     = as.character(lapply(allVersions$hits$hits$doi,
-                                         getRecordIdFromDoi)),
-    'created_on'   = as.Date(allVersions$hits$hits$created),
-    'access_right' = allVersions$hits$hits$metadata$access_right,
-    'open_date'    = nullToNa(allVersions$hits$hits$metadata$embargo_date),
-    'downloaded'   = as.character(unlist(lapply(mapply(file.path, dir,
-                                          buildFilePath(allVersions)), 
-                                   checkRecordDownloaded), use.names = FALSE)),
-    stringsAsFactors = FALSE)
-  
-  # order the versions by date (newest first)
-  versionsDf <- versionsDf[order(versionsDf$created_on, decreasing = TRUE), ]
-  
-  # combine with the index meta-table and save the output
-  # two cases:
-  #   the concept ID is already in the index (replacement), or
-  #   concept ID is not in the index (add to the index)
-  if (any(index$conceptId == conceptRecId)) {
-    inds <- which(index$conceptId == conceptRecId)
-    index[inds, ] = versionsDf
+  if (isConceptId) {
+    # build the versions table associated with the concept ID
+    allVersions <- zenodoVersionsApiLookup(id)
+    versionsDf <- buildVersionsDataframe(allVersions)
+    
+    # add download info for each record in the concept
+    versionsDf$downloaded <- as.logical(
+      unlist(lapply(mapply(
+        file.path, dir, buildFilePathFromVersions(allVersions)), 
+        checkRecordDownloaded), use.names = FALSE))
+    
+    # order the versions by date (newest first)
+    versionsDf <- versionsDf[order(versionsDf$created_on, decreasing = TRUE), ]
+    
+    # combine with the index meta-table and save the resulting table
+    # two cases:
+    #   the concept ID is already in the index (replacement), or
+    #   concept ID is not in the index (add to the index)
+    if (any(index$conceptId == id)) {
+      inds <- which(index$conceptId == id)
+      index[inds, ] = versionsDf
+    } else {
+      index <- rbind(index, versionsDf)
+    }
   } else {
-    index <- rbind(index, versionsDf)
+    # assume that a record ID has been passed and want to update the download
+    # status (from not-downloaded to downloaded). Check in the index file...
+    if (!any(index$recordId == id)) {
+      stop(paste0('Record ID ', id, ' not found in index file'))
+    } else {
+      # get list of files in the directory
+      files <- list.dirs(file.path(dir, index$conceptId[index$recordId == id], id))
+      
+      # if any files in the directory have '.xlsx' extension then set download
+      # status to TRUE, otherwise set to FALSE
+      if (any(grepl('.xlsx', unlist(files)))) {
+        index$downloaded[index$recordId == id] = TRUE
+      } else {
+        index$downloaded[index$recordId == id] = FALSE
+      }
+    }
   }
   
   # save the modified index table
   saveRDS(index, file = file.path(dir, 'index.rds'))
 }
 
-buildFilePath <- function (versions) {
+buildVersionsDataframe <- function (allVersions) {
+  #' Build a "versions" dataframe of a SAFE concept ID 
+  #' 
+  #' Takes the output from a call to the Zenodo 'versions' API and processes the
+  #' returned \code{list} into a dataframe storing version details for all
+  #' records associated with a given SAFE project (identified using the concept
+  #' record ID number). Version fields include the DOI, record ID, creation
+  #' date, access status ('open', 'embargoed', or 'closed'), and - in the case 
+  #' of embargoed records - the open date (the date that the record will be
+  #' publicly accessible) for all records associated with the concept ID.
+  #' 
+  #' @param allVersions the full versions list returned from a call to 
+  #'   \code{\link{zenodoVersionsApiLookup}}
+  #' @return a dataframe containing various information for each record version
+  #'   associated with a particular SAFE concept ID
+  #' @seealso \code{\link{zenodoVersionsApiLookup}}, \code{\link{updateIndex}}
+  #' @export
+  
+  # check that the result of a valid versions API call has been passed
+  if (length(allVersions$aggregations$access_right$buckets) == 0) {
+    stop(paste0('Supplied concept ID (', conceptRecId, ') is invalid'))
+  }
+  
+  # create a dataframe with record ID, date, and access status
+  versionsDf <- data.frame(
+    'conceptId'    = allVersions$hits$hits$conceptrecid,
+    'doi'          = allVersions$hits$hits$doi,
+    'recordId'     = as.character(lapply(allVersions$hits$hits$doi, 
+                                         getRecordIdFromDoi)),
+    'created_on'   = as.Date(allVersions$hits$hits$created),
+    'access_right' = allVersions$hits$hits$metadata$access_right,
+    'open_date'    = nullToNa(allVersions$hits$hits$metadata$embargo_date),
+    stringsAsFactors = FALSE)
+  
+  # return the output
+  return(versionsDf)
+}
+
+buildFilePathFromVersions <- function (versions) {
   #' Builds a list of file paths to SAFE datasets in the versions list
   #' 
   #' Using the output from a call to the Zenodo "versions" API
@@ -197,9 +236,8 @@ buildFilePath <- function (versions) {
   #' ID. The structure of these pathways is governed by the \code{safe_data}
   #' directory protocol, i.e. concept_ID > record_ID > file_name.
   #' 
-  #' @param versions, list of all record versions contained within a given
-  #'   concept ID. The output from a call to
-  #'   \code{\link{zenodoVersionsApiLookup}}
+  #' @param versions list of all record versions contained within a given
+  #'   concept ID. The output from a call to \code{\link{zenodoVersionsApiLookup}}
   #' @return a list object containing (prospective) file paths to the data files
   #'   associated with each record within the concept ID, constructed according
   #'   to the \code{safe_data} directory structure
@@ -226,9 +264,12 @@ buildFilePath <- function (versions) {
 }
 
 checkRecordDownloaded <- function (path) {
-  #' Check if the record at the specified path has been downloaded
+  #' Check if the record (file) at the specified path has been downloaded
   #' 
-  #'
+  #' @param path the full path to the prospective file
+  #' @return \code{TRUE}/\code{FALSE} value indicating whether file was found at
+  #'   the specified path
+  #' @export
   
   if (file.exists(path)) {
     return(TRUE)
@@ -242,7 +283,8 @@ getRecordIdFromDoi <- function (DOI) {
   #' 
   #' @param DOI DOI link for a Zenodo-stored project
   #' @return The record ID component associated with the DOI, i.e. the numeric
-  #'   components that appear after the final "/" 
+  #'   components that appear after the final "/"
+  #' @export
   
   if (!grepl('zenodo', DOI)) {
     stop('Please supply a valid Zenodo-sourced DOI')
@@ -250,7 +292,7 @@ getRecordIdFromDoi <- function (DOI) {
   return(substr(strsplit(DOI, 'zenodo')[[1]][2], start = 2, stop = 9999))
 }
 
-processSafe <- function (id, dir, updateCache=TRUE) {
+processSafe <- function (id, dir, updateIndex = TRUE, overwrite = FALSE) {
   #' Get record info for specified SAFE project ID from the Zenodo database
   #' 
   #' This function returns a \code{list} object from an API call to the Zenodo
@@ -259,10 +301,11 @@ processSafe <- function (id, dir, updateCache=TRUE) {
   #' specified directory.
   #' 
   #' The function will automatically create a data folder at the directory
-  #' \code{dir} and (optionally, \code{updateCache} boolean) updates an offline 
-  #' cache of version information pertaining to the concept record ID associated
-  #' with the requested record. Note that the version cache is automatically
-  #' downloaded into the \code{dir} the first time a record is accessed.
+  #' \code{dir} and (optionally, \code{updateIndex} boolean) updates the SAFE
+  #' index offline cache - a table that records version and file information for
+  #' SAFE datasets that have been requested by the user. The index cache is
+  #' automatically downloaded into the \code{dir} the first time a record from
+  #' a particular concept ID is accessed.
   #' 
   #' \code{processSafe} additionally performs a series of checks on the record.
   #' Specifically, an error is raised in the event that the ID does not exist on
@@ -275,10 +318,11 @@ processSafe <- function (id, dir, updateCache=TRUE) {
   #'   ID or a DOI identifier for a specific record. In the event that a concept
   #'   record ID is passed, the function will attempt to return the most recent
   #'   'open' dataset associated with the project
-  #' @param dir directory into which data should be stored
-  #' @param updateCache \code{boolean}, should the version cache be updated?
+  #' @param dir directory into which data will be stored
+  #' @param updateIndex \code{boolean}, should the SAFE index file be updated?
+  #' @param overwrite 
   #' @return \code{list} object containing information from the Zenodo API call
-  #' @seealso \code{\link{zenodoRecordApiLookup}}, \code{\link{updateVersionCache}}
+  #' @seealso \code{\link{zenodoRecordApiLookup}}, \code{\link{updateIndex}}
   #' @export
   
   # get record info using standard API call
@@ -310,74 +354,99 @@ processSafe <- function (id, dir, updateCache=TRUE) {
     stop(paste0('Concept ID ', conceptRecId, ' is not in the SAFE community'))
   }
   
-  # do we have a cache directory for this concept ID? if not then build one
+  # check whether a SAFE directory exists for the concept ID (create one if not)
   if (!dir.exists(file.path(dir, conceptRecId))) {
-    if (!updateCache) {
-      warning('No version cache found! Creating one now...')
-      updateCache <- TRUE
-    }
     dir.create(file.path(dir, conceptRecId))
   }
   
-  # update and load the version cache
-  if (updateCache) {
-    message('Updating version cache for concept record ID ', conceptRecId, 
-            '... ', appendLF = FALSE)
-    updateVersionCache(allVersions, dir=dir)
+  # update the SAFE index and select rows matching the concept record ID
+  if (updateIndex) {
+    message('Updating SAFE index for concept record ID ', conceptRecId, '... ',
+            appendLF = FALSE)
+    updateIndex(conceptRecId, dir = dir)
     message('complete!')
+  } else {
+    warning('updateIndex set to FALSE, offline SAFE index will not be updated!')
   }
-  vers <- readRDS(file.path(dir, conceptRecId, 'versions.rds'))
+  safeIndex <- readRDS(file.path(dir, 'index.rds'))
+  vers <- safeIndex[which(safeIndex$conceptId == conceptRecId), ]
   
   # perform access checks on the requested record
   # records may be embargoed (raise an error)
   # records may be closed (raise an error)
   # records may not be the latest available version (raise a warning)
+  # records may already be downloaded (rase an error unless overwrite = TRUE)
   latestOpen <- vers[which(vers$access_right == 'open')[1], ]
+  printVers <- vers[, c(1,3:7)]
+  printVers[' '] <- rep('', nrow(vers))
+  printVers[printVers$recordId == record$id, ' '] <- '  <-REQUESTED'
+  versionPrintout <- printVersions(printVers)
+  
   if (isConceptRecId) {
-    if (is.na(latestOpen$record_ID)) {
+    if (is.na(latestOpen$recordId)) {
       stop(paste0('No open records found for concept record ID ', conceptRecId, 
-                  '. Current record status:\n', paste0(
-                    capture.output(print(vers[,2:5], row.names = FALSE, 
-                                         right = FALSE)),
-                    collapse = '\n')), call. = FALSE)
+                  '. Current record status:\n', versionPrintout), call. = FALSE)
     } else {
-      return(zenodoRecordApiLookup(latestOpen$record_ID))
+      if (!overwite & latestOpen$downloaded) {
+        stop(paste0('Access cancelled: most recent version (record ', 
+                    latestOpen$recordId, ') has already been downloaded! ', 
+                    'Current record status:\n', versionPrintout), call. = FALSE)
+      } else {
+        return(zenodoRecordApiLookup(latestOpen$recordId))
+      }
     }
   } else {
-    printVers <- vers[,2:5]
-    printVers[' '] <- rep('', nrow(vers))
-    printVers[printVers$record_ID == record$id, ' '] <- '  <-REQUESTED'
     if (record$metadata$access_right %in% c('embargoed', 'closed')) {
-      if (!is.na(latestOpen$record_ID)) {
+      if (!is.na(latestOpen$recordId)) {
         # there are other records that are open
         stop(paste0('Requested record (ID: ', record$id, ') is ', 
                     record$metadata$access_right, '. Please select an open ',
                     'record for this concept ID. Current record status:\n',
-                    paste0(capture.output(print(printVers, row.names = FALSE,
-                                                right = FALSE)),
-                           collapse = '\n')), call. = FALSE)
+                    versionPrintout), call. = FALSE)
       } else {
         # there are no other open records
         stop(paste0('Requested record (ID: ', record$id, ') is ', 
                     record$metadata$access_right, '. There are no other open ',
                     'records for this concept ID. Current record status:\n',
-                    paste0(capture.output(print(printVers, row.names = FALSE,
-                                                right = FALSE)),
-                           collapse = '\n')), call. = FALSE)
+                    versionPrintout), call. = FALSE)
       }
-    } else if (latestOpen$record_ID != record$id) {
+    } else if (latestOpen$recordId != record$id) {
       # a more recent version is available
-      warning(paste0('A more recent version of the requested record is ',
-                     'available.\nCurrent record status:\n',
-                     paste0(capture.output(print(printVers, row.names = FALSE, 
-                                                 right = FALSE)),
-                            collapse = '\n')), call. = FALSE, immediate. = TRUE)
+      if (!overwrite & vers$downloaded[vers$recordId == record$id]) {
+        stop(paste0('\nAccess cancelled: record ', record$id, ' has already ',
+                    'been downloaded. Newer versions are available. Current ',
+                    'record status:\n', versionPrintout), 
+             call. = FALSE)
+      } else {
+        warning(paste0('A more recent version of the requested record is ',
+                       'available. Current record status:\n', versionPrintout), 
+                call. = FALSE, immediate. = TRUE)
+      }
     }
-    return(record)
+    # check whether we already have the record
+    if (!overwrite & vers$downloaded[vers$recordId == record$id]) {
+      stop(paste0('\nAccess cancelled: record ', record$id,
+                  'has already been downloaded!'), call. = FALSE)
+    } else {
+      return(record)
+    }
   }
 }
 
-downloadSafe <- function (zenodoRecord, dir) {
+printVersions <- function (printVers) {
+  #' Returns print-friendly table displaying versions information for a given
+  #' SAFE concept ID
+  #' 
+  #' @param printVers dataframe of versions information
+  #' @return print-friendly table in the form of a string
+  #' @seealso \code{\link{processSafe}}
+  
+  return(paste0(
+    capture.output(print(printVers, row.names = FALSE, right = FALSE)),
+    collapse = '\n'))
+}
+
+downloadSafe <- function (zenodoRecord, dir = NULL) {
   #' Download SAFE project data file associated with the supplied record
   #' 
   #' Attempts to download the data file associated with the supplied Zenodo
@@ -389,9 +458,9 @@ downloadSafe <- function (zenodoRecord, dir) {
   #' @param zenodoRecord \code{list} object returned from Zenodo database API
   #'   call. This should be a call to the desired SAFE project
   #' @param dir directory into which data file should be downloaded
-  #' @seealso \code{\link{zenodoRecordApiLookup}}
+  #' @seealso \code{\link{zenodoRecordApiLookup}}, \code{\link{setSafeDir}}
   #' @export
-  
+
   if (is.null(zenodoRecord$links$bucket)) {
     stop(paste0('No download link found for record, please check record ID'))
   } else {
@@ -416,7 +485,8 @@ getSafe <- function (ids, dir = NULL, ...) {
   #' SAFE project IDs supplied. Each ID (which may be either a concept record ID
   #' or specific record ID) is validated as being from a SAFE community project,
   #' checked for versioning and access permissions, and finally downloaded into
-  #' the relevant folder.
+  #' the relevant folder. Lastly, the ID downloaded statuses are updated in the
+  #' SAFE index.rds file. 
   #' 
   #' @param ids an individual or array of project ID numbers to be downloaded
   #' @param dir SAFE data directory, which defaults to the \code{SAFE_data_dir} 
@@ -431,7 +501,7 @@ getSafe <- function (ids, dir = NULL, ...) {
   
   # check whether directory has been supplied, use SAFE_data_dir if not
   if (is.null(dir)) {
-    message('SAFE directory not specified, using SAFE_data_dir (', 
+    message('Active directory not specified, using SAFE_data_dir (', 
             appendLF = FALSE)
     if (!is.null(getOption('SAFE_data_dir'))) {
       dir <- getOption('SAFE_data_dir')
@@ -451,5 +521,6 @@ getSafe <- function (ids, dir = NULL, ...) {
       dir.create(recordDir)
     }
     downloadSafe(zenodoRecord, recordDir)
+    updateIndex(zenodoRecord$id, isConceptId = FALSE, dir = dir)
   }
 }
