@@ -36,7 +36,7 @@ zenodoVersionsApiLookup <- function (id) {
            '&all_versions&sort=-version&size=10&page=1'))))
 }
 
-isSafe <- function (zenodoRecord) {
+isSafeRecord <- function (zenodoRecord) {
   #' Checks whether the supplied zenodo record is from the SAFE community
   #' 
   #' This function returns a boolean indicating whether the supplied Zenodo
@@ -260,6 +260,7 @@ buildFilePathFromVersions <- function (versions) {
                                 versions$hits$hits$id[i],
                                 versions$hits$hits$files[[i]]$key)
   }
+  
   return(filePaths)
 }
 
@@ -271,7 +272,9 @@ checkRecordDownloaded <- function (path) {
   #'   the specified path
   #' @export
   
-  if (file.exists(path)) {
+  if (length(path) == 0) {
+    return(FALSE)
+  } else if (file.exists(path)) {
     return(TRUE)
   } else {
     return(FALSE)
@@ -334,7 +337,7 @@ processSafe <- function (id, dir, updateIndex = TRUE, overwrite = FALSE) {
       stop(paste0('Could not retrieve record (ID: ', id, ') - ', record$message))
     } else if (record$status == 301) {
       warning('Supplied ID (', id, ') is a concept record ID, attempting to ', 
-              'return most recent file submission', 
+              'return most recent record version', 
               call. = FALSE, immediate. = TRUE)
       isConceptRecId <- TRUE
       conceptRecId <- id
@@ -344,13 +347,13 @@ processSafe <- function (id, dir, updateIndex = TRUE, overwrite = FALSE) {
     # a valid record ID has been passed
     isConceptRecId <- FALSE
     conceptRecId <- record$conceptrecid
-    message('Requested record (ID: ', id, ') is associated with concept record',
+    message('Requested record (ID ', id, ') is associated with concept record',
             ' ID ', conceptRecId)
     allVersions <- zenodoVersionsApiLookup(record$conceptrecid)
   }
   
   # check that the project is part of the SAFE community
-  if (!isSafe(allVersions)) {
+  if (!isSafeRecord(allVersions)) {
     stop(paste0('Concept ID ', conceptRecId, ' is not in the SAFE community'))
   }
   
@@ -379,33 +382,36 @@ processSafe <- function (id, dir, updateIndex = TRUE, overwrite = FALSE) {
   latestOpen <- vers[which(vers$access_right == 'open')[1], ]
   printVers <- vers[, c(1,3:7)]
   printVers[' '] <- rep('', nrow(vers))
-  printVers[printVers$recordId == record$id, ' '] <- '  <-REQUESTED'
-  versionPrintout <- printVersions(printVers)
   
   if (isConceptRecId) {
     if (is.na(latestOpen$recordId)) {
       stop(paste0('No open records found for concept record ID ', conceptRecId, 
                   '. Current record status:\n', versionPrintout), call. = FALSE)
     } else {
-      if (!overwite & latestOpen$downloaded) {
+      if (!overwrite & latestOpen$downloaded) {
+        printVers[printVers$recordId == latestOpen$recordId, ' '] <- '  <-REQUESTED'
+        versionPrintout <- printVersions(printVers)
         stop(paste0('Access cancelled: most recent version (record ', 
                     latestOpen$recordId, ') has already been downloaded! ', 
                     'Current record status:\n', versionPrintout), call. = FALSE)
       } else {
+        message(paste0('Accessing record ID ', latestOpen$recordId, '...'))
         return(zenodoRecordApiLookup(latestOpen$recordId))
       }
     }
   } else {
+    printVers[printVers$recordId == record$id, ' '] <- '  <-REQUESTED'
+    versionPrintout <- printVersions(printVers)
     if (record$metadata$access_right %in% c('embargoed', 'closed')) {
       if (!is.na(latestOpen$recordId)) {
         # there are other records that are open
-        stop(paste0('Requested record (ID: ', record$id, ') is ', 
+        stop(paste0('Requested record (ID ', record$id, ') is ', 
                     record$metadata$access_right, '. Please select an open ',
                     'record for this concept ID. Current record status:\n',
                     versionPrintout), call. = FALSE)
       } else {
         # there are no other open records
-        stop(paste0('Requested record (ID: ', record$id, ') is ', 
+        stop(paste0('Requested record (ID ', record$id, ') is ', 
                     record$metadata$access_right, '. There are no other open ',
                     'records for this concept ID. Current record status:\n',
                     versionPrintout), call. = FALSE)

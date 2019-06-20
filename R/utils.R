@@ -44,3 +44,25 @@ setSafeDir <- function (dir = NULL) {
   }
   options('SAFE_data_dir' = dir)
 }
+
+readTransposedXlsx <- function (file, sheetName, ...) {
+  #' Read a transposed .xlsx file into a dataframe
+  #' 
+  #' Provides capability to read .xlsx files that are transposed (i.e. 
+  #' organised with headers in rows and data across columns) into a standard R
+  #' dataframe. This function preserves data types.
+  #' 
+  #' @param path The path to the .xlsx file to be opened
+  #' @param sheetName The name of the worksheet to be imported
+  #' @param ... Optional arguments to be passed to \code{read_xlsx}
+  #' @return The reformatted .xlsx with headers as columns and data in rows
+  #' @seealso \code{\link[readxl]{read_xlsx}}
+  
+  df <- suppressMessages(
+    readxl::read_xlsx(file, sheet = sheetName, col_names = FALSE, ...))
+  dfT <- as.data.frame(t(df[-1]), stringsAsFactors = FALSE)
+  names(dfT) <- t(df[,1])
+  dfT <- as.data.frame(lapply(dfT, type.convert))
+  
+  return(dfT)
+}

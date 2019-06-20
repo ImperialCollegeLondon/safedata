@@ -1,26 +1,4 @@
-readTransposedXlsx <- function (file, sheetName, ...) {
-  #' Read a transposed .xlsx file into a dataframe
-  #' 
-  #' Provides capability to read .xlsx files that are transposed (i.e. 
-  #' organised with headers in rows and data across columns) into a standard R
-  #' dataframe. This function preserves data types.
-  #' 
-  #' @param path The path to the .xlsx file to be opened
-  #' @param sheetName The name of the worksheet to be imported
-  #' @param ... Optional arguments to be passed to \code{read_xlsx}
-  #' @return The reformatted .xlsx with headers as columns and data in rows
-  #' @seealso \code{\link[readxl]{read_xlsx}}
-  
-  df <- suppressMessages(
-    readxl::read_xlsx(file, sheet = sheetName, col_names = FALSE, ...))
-  dfT <- as.data.frame(t(df[-1]), stringsAsFactors = FALSE)
-  names(dfT) <- t(df[,1])
-  dfT <- as.data.frame(lapply(dfT, type.convert))
-  
-  return(dfT)
-}
-
-getDataClass <- function (safeType) {
+getSafeDataClassType <- function (safeType) {
   #' Get the R data type from the SAFE \code{field_type} variable
   #' 
   #' Takes a SAFE \code{field_type} variable and returns the appropriate ReadXl
@@ -34,6 +12,7 @@ getDataClass <- function (safeType) {
   #' @seealso \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/data/}
   #'   for accepted SAFE data field types and 
   #'   \url{https://cran.r-project.org/web/packages/readxl/} for ReadXl data types
+  #' @export
   
   typeDate <- c('Date','Datetime', 'Time')
   typeText <- c('Location', 'ID', 'Taxa', 'Replicate', 'Abundance')
@@ -54,7 +33,7 @@ getDataClass <- function (safeType) {
   }
 }
 
-isCategorical <- function (safeType) {
+isSafeTypeCategorical <- function (safeType) {
   #' Check if the SAFE data type is of R type \code{categorical}/\code{factor}
   #' 
   #' Takes a SAFE \code{field_type} and checks whether it is of R type
@@ -63,9 +42,10 @@ isCategorical <- function (safeType) {
   #' 
   #' @param safeType The SAFE \code{field_type} variable
   #' @return \code{TRUE} if given variable is a categorical, \code{FALSE} if not
-  #' @seealso \code{\link{getDataClass}},
+  #' @seealso \code{\link{getSafeDataClassType}},
   #'   \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/data/}
   #'   for differernt SAFE data types
+  #' @export
   
   if (safeType %in% c('Categorical', 'Ordered Categorical', 'Categorical Trait',
                       'Numeric Trait', 'Categorical Interaction',
@@ -76,82 +56,135 @@ isCategorical <- function (safeType) {
   }
 }
 
-processSummary <- function (df) {
-  #' Process summary 'meta' information for SAFE project data
+createSafe <- function (summaryDf = NULL) {
+  #' Initiate a new \code{safe_data} object
   #' 
-  #' Initiates a SAFE data object from the summary sheet provided. This function
-  #' reads and assigns variables from the provided summary dataframe (a
-  #' transposed "Summary" worksheet from a SAFE project submission file) into a
-  #' new SAFE \code{list} object.
-  #' 
-  #' @param dataframe Dataframe containing summary information. This must be a 
-  #'   "Summary" worksheet from a SAFE project submission file
-  #' @return SAFE List object containing summary information for the project
-  #' @seealso \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/summary/}
-  #'   for information on the SAFE summary worksheet
+  #' @param summaryDf
+  #' @return
+  #' @examples
+  #' @export
   
-  safeObj <- list()
-  safeObj$projectID <- df$SAFE.Project.ID[1]
-  safeObj$title <- as.character(df$Title[1])
-  safeObj$workSheets <- gsub(' ', '', lapply(subset(
-    as.character(df$Worksheet.name), !is.na(df$Worksheet.name)), simpleCap))
-  for (i in 1:length(safeObj$workSheets)) {
-    safeObj[[safeObj$workSheets[i]]] <- list()
+  safeObj <- structure(list(), class = 'safe_data')
+  
+  if (is.null(summaryDf)) {
+    return(safeObj)
+  } else {
+    safeObj <- processSafeSummary(safeObj, summaryDf)
+    return(safeObj)
   }
-  safeObj$startDate <- as.Date.numeric(df$Start.Date[1], origin = '1899-12-30')
-  safeObj$endDate <- as.Date.numeric(df$End.Date[1], origin = '1899-12-30')
-  
-  return(safeObj)
 }
 
-printSummary <- function (safeObj) {
-  #' Prints summary information for SAFE object
+is.safe_data <- function (obj) {
+  #' Check if \code{obj} is of the \code{safe_data} class
+  #' 
+  #' @param obj
+  #' @return Boolean
+  #' @export
+  
+  if (class(obj) == 'safe_data') {
+    return(TRUE)
+  } else {
+    return(FALSE)
+  }
+}
+
+processSafeSummary <- function (obj, summaryDf) {
+  UseMethod('processSafeSummary', obj)
+}
+
+processSafeSummary.default <- function (obj, summaryDf) {
+  stop('function processSafeSummary() works only with safe_data objects')
+}
+
+processSafeSummary.safe_data <- function (obj, summaryDf) {
+  #' Process summary 'meta' information for SAFE project data
+  #' 
+  #' Adds summary information to a \code{safe_data} object using the dataframe
+  #' provided. \code{processSafeSummary} reads and assigns variables from the
+  #' summary dataframe - a transposed "Summary" worksheet from a SAFE project
+  #' .xlsx dataset - into a \code{safe_data} object.
+  #' 
+  #' @param summaryDf Dataframe containing summary information associated with
+  #'   the SAFE project dataset. This must be a "Summary" worksheet from a SAFE
+  #'   file submission
+  #' @return \code{safe_data} object with metadata added
+  #' @seealso \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/summary/}
+  #'   for information on the SAFE summary worksheet, \code{\link{createSafe}}
+  #' @export
+  
+  obj$projectID <- summaryDf$SAFE.Project.ID[1]
+  obj$title <- as.character(summaryDf$Title[1])
+  obj$startDate <- as.Date.numeric(summaryDf$Start.Date[1], origin = '1899-12-30')
+  obj$endDate <- as.Date.numeric(summaryDf$End.Date[1], origin = '1899-12-30')
+  obj$workSheets <- gsub(' ', '', lapply(subset(as.character(
+    summaryDf$Worksheet.name), !is.na(summaryDf$Worksheet.name)), simpleCap))
+  for (i in 1:length(obj$workSheets)) {
+    obj[[obj$workSheets[i]]] <- list()
+  }
+
+  return(obj)
+}
+
+print.safe_data <- function (obj) {
+  #' Print summary of information for a \code{safe_data} object to the console
   #' 
   #' Prints a summary of metadata for the given SAFE project object to the
   #' command line. Includes the project title, project ID number, start and end
   #' dates, and data worksheet names.
   #' 
-  #' @param safeObj Existing SAFE data object with meta information added
-  #' @seealso \code{\link{processSummary}}
+  #' @param obj A \code{safe_data} object
+  #' @seealso \code{\link{createSafe}}, \code{\link{processSafeSummary}}
   #' @export
   
-  
-  cat('Project name:', safeObj$title, '\n')
-  cat('Project ID:', safeObj$projectID, '\n')
-  cat('Dates:', paste0(safeObj$startDate), 'to', paste(safeObj$endDate), '\n')
-  cat('Contains', length(safeObj$workSheets), 'data worksheets:', '\n')
-  cat('  ', paste0(safeObj$workSheets, collapse = ', '))
+  cat('Project name:', obj$title, '\n')
+  cat('Project ID:', obj$projectID, '\n')
+  cat('Dates:', paste0(obj$startDate), 'to', paste(obj$endDate), '\n')
+  cat('Contains', length(obj$workSheets), 'data worksheets:', '\n')
+  cat('  ', paste0(obj$workSheets, collapse = ', '))
 }
 
-processTaxa <- function (file, safeObj) {
-  #' Add taxa information to SAFE data object
+addTaxa <- function (obj, safeWorkbook) {
+  UseMethod('addTaxa', obj)
+}
+
+addTaxa.default <- function (obj, safeWorkbook) {
+  stop('function addTaxa() works only with safe_data objects')
+}
+
+addTaxa.safe_data <- function (obj, filePath) {
+  #' Add taxonomic observations to a \code{safe_data} object
   #'
-  #' This function adds a new dataframe to an existing SAFE object containing
-  #' all taxonomic information for the submitted dataset. Note that when the
-  #' data do not contain any taxa this table defaults to \code{NA}. When
-  #' provided, this dataframe is used to compile a complete taxonomic heirarchy 
-  #' for all taxa identified within the dataset.
+  #' This function adds taxonomic data from the Taxa worksheet in a SAFE project
+  #' dataset - in the form of a table - to an existing \code{safe_data} object.
+  #' If no Taxa worksheet is provided with the dataset, the table defaults to
+  #' \code{NA}.
   #' 
-  #' @param file Complete path to the SAFE project file
-  #' @param safeObj An existing SAFE data object
-  #' @return A modified SAFE object with a \code{Taxa} dataframe
+  #' @param obj An existing \code{safe_data} object
+  #' @param filePath Complete path to the SAFE project dataset (.xlsx format)
+  #' @return A modified \code{safe_data} object with a \code{Taxa} dataframe
   #' @note Not all SAFE project submissions contain the Taxa worksheet (for
-  #'   example if the data do not contain taxa). In this case the SAFE Taxa
-  #'   object defaults to \code{NA}.
+  #'   example if the data do not contain any taxonomic observations). In this
+  #'   case \code{safe_data$Taxa} defaults to \code{NA}.
   #' @seealso \code{\link{buildTaxonHeirarchy}},
   #'   \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/taxa/}
-  #'   for information on the Taxa worksheet
+  #'   for information on the Taxa worksheet, \code{\link{addTaxonHeirarchies}}
+  #' @export
   
-  safeObj$Taxa <- tryCatch(
+  if (!grepl(".xlsx", filePath)) {
+    stop(paste0('filePath must point to a SAFE .xlsx workbook! Please check the',
+                ' path entered:', filePath))
+  }
+  
+  obj$Taxa <- tryCatch(
     {
-      as.data.frame(readxl::read_xlsx(file, 'Taxa', col_names = TRUE))
+      as.data.frame(readxl::read_xlsx(filePath, 'Taxa', col_names = TRUE))
     },
     error = function(e) {
-      warning('SAFE import note: No Taxa datasheet supplied')
+      warning('SAFE import note: No Taxa datasheet exists!')
       return(NA)
     }
   )
-  return(safeObj)
+  return(obj)
 }
 
 getNameBackbone <- function(taxaRow, ...) {
@@ -173,6 +206,8 @@ getNameBackbone <- function(taxaRow, ...) {
   #'   
   #' @note This function can take a few seconds to run, particularly if there
   #'   are a large number of Taxa in the SAFE dataset.
+  #' 
+  #' @export
   
   if (!is.na(taxaRow[['Parent name']])) {
     # The Parent Name has been provided. This means one of 3 things:
@@ -240,6 +275,7 @@ nameBackboneToDf <- function (nameBackbone) {
   #' @return Taxonomic heirarchy stored as a dataframe including the 8 main
   #'   taxonomic levels
   #' @seealso \code{\link{getTaxonHeirarchy}}, \code{\link[rgbif]{name_backbone}}
+  #' @export
   
   cols <- c('safeName', 'subspecies', 'species', 'genus', 'family', 'class', 
             'order', 'phylum', 'kingdom', 'matchType')
@@ -260,51 +296,77 @@ getTaxonWrapper <- function (taxaRow, ...) {
   #' @param ... Optional arguments to pass to \code{\link[rgbif]{name_backbone}}
   #' @return Dataframe containing the taxonomic heirarchy for the given taxon
   #' @seealso \code{\link{getNameBackbone}}, \code{\link{nameBackboneToDf}}
+  #' @export
   
   listBackbone <- getNameBackbone(taxaRow, ...)
   return(nameBackboneToDf(listBackbone))
 }
 
-addTaxonHeirarchies <- function (safeObj, ...) {
-  #' Add taxonomic heirarchies to SAFE object
-  #' 
-  #' Adds a dataframe of taxonomic heirarchies for all taxa reported in the SAFE
-  #' Taxa worksheet to the supplied SAFE object. When no Taxa worksheet has been
-  #' supplied, this function flags a warning.
-  #' 
-  #' @param safeObj An existing SAFE data object
-  #' @param ... Optional arguments to pass to \code{\link[rgbif]{name_backbone}}
-  #' @return The updated SAFE object \code{safeObj} with a dataframe of
-  #'   taxonomic heirarchies for all taxa listed in the Taxa worksheet of the
-  #'   data file. This is accessed using the reference \code{TaxaTree}
-  #' @note Not all SAFE data files contain the Taxa worksheet. In this case, a
-  #'   value of \code{NA} will be assigned to the \code{TaxaTree}
-  #' @seealso \code{\link{getNameBackbone}}
-  
-  startT <- Sys.time()
-  message('Starting taxonomy look-up... ', appendLF = FALSE)
-  safeObj$TaxaTree = tryCatch( {
-      invisible(dplyr::bind_rows(apply(safeObj$Taxa, 1, getTaxonWrapper)))
-    },
-    error = function(e) {
-      warning('Cannot process Taxa: SAFE project contains no Taxa worksheet!')
-      return(NA)
-    }
-  )
-  runT <- difftime(Sys.time(), startT, units = 'sec')
-  message(sprintf('completed! This took %.2f seconds!', runT))
-  return(safeObj)
+addTaxonHeirarchies <- function (obj, ...) {
+  UseMethod('addTaxonHeirarchies', obj)
 }
 
-processLocations <- function (file, safeObj) {
-  #' Add location information to SAFE data object
+addTaxonHeirarchies.default <- function (obj, ...) {
+  stop('function addTaxonHeirarchies() works only with safe_data objects')
+}
+
+addTaxonHeirarchies.safe_data <- function (obj, ...) {
+  #' Add complete taxonomic heirarchies to a \code{safe_data} object
   #' 
-  #' Processes the \code{Locations} worksheet in the SAFE project file and adds
-  #' it as a dataframe to the existing SAFE data object.
+  #' Adds a dataframe of taxonomic heirarchies for all taxa reported in the SAFE
+  #' dataset Taxa worksheet to the supplied \code{safe_data} object. When no
+  #' Taxa worksheet exists, this function flags a warning.
   #' 
-  #' @param file Complete path to the SAFE object file
-  #' @param safeObj An existing SAFE data object
-  #' @return A modified SAFE object with a \code{Locations} dataframe
+  #' @param obj An existing \code{safe_data} object
+  #' @param ... Optional arguments to pass to \code{\link[rgbif]{name_backbone}}
+  #' @return The updated \code{safe_data} object with a dataframe of taxonomic
+  #'   heirarchies for all taxa listed in the Taxa worksheet of the SAFE dataset.
+  #'   This is accessed using the reference \code{TaxonHeirarchy}
+  #' @note Not all SAFE datasets contain the Taxa worksheet. In this case, a
+  #'   value of \code{NA} will be assigned to the \code{TaxonHeirarchy}
+  #' @seealso \code{\link{addTaxa}}, \code{\link{getNameBackbone}}
+  #' @export
+  
+  if (is.null(obj$Taxa)){
+    warning(paste0('Taxonomic data have not been added to the safe_data object,',
+                   ' please see addTaxa() function'))
+  } else if (is.na(obj$Taxa)){
+    warning('Cannot process Taxa: SAFE dataset contains no Taxa worksheet!')
+    obj$TaxonHeirarchy <- NA
+  } else {
+    startT <- Sys.time()
+    message('Starting taxonomy look-up... ', appendLF = FALSE)
+    obj$TaxonHeirarchy <- 
+      invisible(dplyr::bind_rows(apply(obj$Taxa, 1, getTaxonWrapper)))
+    runT <- difftime(Sys.time(), startT, units = 'sec')
+    message(sprintf('completed! This took %.2f seconds!', runT))
+  }
+  return(obj)
+}
+
+addLocations <- function (obj, ...) {
+  UseMethod('addLocations', obj)
+}
+
+addLocations.default <- function (obj, ...) {
+  stop('function addLocations() works only with safe_data objects')
+}
+
+addLocations.safe_data <- function (obj, filePath) {
+  #' Add location information to a \code{safe_data} object
+  #' 
+  #' Processes the Locations worksheet in the SAFE dataset at the supplied
+  #' \code{filePath} and adds it as a dataframe to an existing \code{safe_data}
+  #' object (\code{obj}). When no Locations worksheet is found the function
+  #' defaults to \code{NA}. The Locations worksheet contains details of the
+  #' commonly used areas in which research was conducted at SAFE. In some cases
+  #' locations will already be "known" (i.e. on the SAFE gazetteer at
+  #' \url{https://www.safeproject.net/info/gazetteer}), in other cases they will
+  #' be "new", and thus need to be accompanied by GPS coordinates.
+  #' 
+  #' @param obj An existing \code{safe_data} object
+  #' @param filePath Complete file path to the SAFE dataset
+  #' @return A modified \code{safe_data} with \code{Locations} dataframe added
   #' @note Although unusual, not all SAFE project submissions will contain a
   #'   Locations worksheet. Examples of this include projects that present only
   #'   laboratory data (that do not have the requirement of specifying where
@@ -312,107 +374,129 @@ processLocations <- function (file, safeObj) {
   #'   (e.g. tracking animal movements). In the case of the latter GPS data
   #'   should be provided separately for each observation.
   #' @seealso \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/locations/}
-  #'   for details on the Locations worksheet
+  #'   for details on the Locations worksheet,
+  #'   \url{https://www.safeproject.net/info/gazetteer} for the SAFE gazetteer
+  #' @export
   
-  safeObj$Locations <- tryCatch( {
-      as.data.frame(readxl::read_xlsx(file, 'Locations', col_names = TRUE))
+  if (!grepl(".xlsx", filePath)) {
+    stop(paste0('filePath must point to a SAFE .xlsx workbook! Please check the',
+                ' path entered:', filePath))
+  }
+  
+  obj$Locations <- tryCatch( {
+      as.data.frame(readxl::read_xlsx(filePath, 'Locations', col_names = TRUE))
     },
     error = function(e) {
-      warning('SAFE import note: No Locations datasheet supplied')
+      warning('SAFE import note: No Locations datasheet exists!')
       return(NA)
     }
   )
-  return(safeObj)
+  return(obj)
 }
 
-processData <- function (file, safeObj) {
-  #' Add data worksheets to SAFE project object
+addData <- function (obj, filePath) {
+  UseMethod('addData', obj)
+}
+
+addData.default <- function (obj, filePath) {
+  stop('function addData() works only with safe_data objects')
+}
+
+addData.safe_data <- function (obj, filePath) {
+  #' Add data worksheets to a \code{safe_data} object
   #' 
-  #' This function processes data-containing worksheets for the given SAFE
-  #' project file and adds them to an existing SAFE data object. This function
-  #' works by creating a new \code{dataframe} within the SAFE object for each
-  #' worksheet found within the SAFE project file. The dataframes are named
-  #' according to their names in the original SAFE project file and contain the
-  #' data within the given workseet. All data columns are imported according to 
-  #' the \code{field_type} provided in the SAFE data table. Header information
-  #' for each worksheet is stored as a \code{metaInfo} attribute accessed via
-  #' the dataframe.
+  #' This function processes data-containing worksheets for the SAFE dataset at
+  #' the specified \code{filePath} and adds them to an existing \code{safe_data}
+  #' object. \code{addData} creates a new dataframe within the \code{safe_data}
+  #' object for each worksheet stored in the SAFE dataset. The dataframes are
+  #' named as per those used in the SAFE dataset submission file. All data
+  #' columns are imported according to the \code{field_type} provided in the
+  #' SAFE data table. Header information for each worksheet is stored separately
+  #' as a \code{metaInfo} attribute accessed via the dataframe.
   #' 
-  #' @param file Path to the SAFE project file. This is assumed to be .xlsx
-  #' @param safeObj An existing SAFE data object
-  #' @return A modified SAFE data object containing data worksheets 
+  #' @param obj An existing \code{safe_data} object
+  #' @param filePath Complete path to the SAFE dataset, which is assumed to be
+  #'   an .xlsx file format
+  #' @return A modified \code{safe_data} object with data worksheets added 
   #' @seealso \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/data/}
   #'   for information on SAFE data worksheets
-  #' @note To access worksheet meta information in a SAFE object \code{safeObj}
-  #'   with worksheet \code{data}, it is recommended to use
-  #'   \code{View(attr(safeObj$data, 'metaInfo'))}
+  #' @examples
+  #'   # create a safe_data object and add data
+  #'   filePath <- 'C:/Users/User/safe_data/path_to_file.xlsx'
+  #'   summaryInfo <- readTransposedXlsx(filePath, sheetName='Summary')
+  #'   safe <- createSafe(summaryInfo)
+  #'   safe <- addData(safe, filePath)
+  #'   
+  #'   # access the data table named "data_1"
+  #'   View(safe$data_1)
+  #'   
+  #'   # access the metadata for this table
+  #'   View(attr(safe$data_1, 'metaInfo'))
+  #' @export
   
-  sheets <- readxl::excel_sheets(file)
-  sheetsNormed <- gsub(' ', '', lapply(sheets, simpleCap))
+  if (!grepl(".xlsx", filePath)) {
+    stop(paste0('filePath must point to a SAFE .xlsx workbook! Please check the',
+                ' path entered:', filePath))
+  }
   
-  for (i in 1:length(safeObj$workSheets)) {
-    idx <- which.max(sheetsNormed == safeObj$workSheets[i])
+  sheetNames <- readxl::excel_sheets(filePath)
+  sheetNamesNorm <- gsub(' ', '', lapply(sheetNames, simpleCap))
+  
+  for (i in 1:length(obj$workSheets)) {
+    idx <- which.max(sheetNamesNorm == obj$workSheets[i])
     
     # get line index where actual data begins (at 'field_name' header)
     fullData <- as.data.frame(suppressMessages(
-      readxl::read_xlsx(file, sheets[idx], col_names = FALSE, na = c('', 'NA'))))
+      readxl::read_xlsx(
+        filePath, sheetNames[idx], col_names = FALSE, na = c('', 'NA'))))
     firstDataRow <- which.max(fullData[,1] == 'field_name')
     
     # extract meta information from header lines
-    headerInfo <- readTransposedXlsx(fPath, sheets[idx], na = c('', 'NA'),
+    headerInfo <- readTransposedXlsx(filePath, sheetNames[idx], na = c('', 'NA'),
                                      n_max = firstDataRow-1)
-    fieldTypes <- c('numeric', sapply(headerInfo$field_type, getDataClass))
+    fieldTypes <- c('numeric', sapply(headerInfo$field_type, getSafeDataClassType))
     
     # store actual data (without header info) 'en masse'
     data <- as.data.frame(suppressMessages(
-      readxl::read_xlsx(fPath, sheets[idx], col_names = TRUE, 
+      readxl::read_xlsx(filePath, sheetNames[idx], col_names = TRUE, 
                         col_types = fieldTypes, skip = firstDataRow-1, 
                         na = c('', 'NA'))))
-
+    
     # convert categorical data types
-    categoricals <- c(FALSE, sapply(headerInfo$field_type, isCategorical))
+    categoricals <- c(FALSE, sapply(headerInfo$field_type, isSafeTypeCategorical))
     factorCols <- names(data)[categoricals]
     data[factorCols] <- lapply(data[factorCols], factor)
-    safeObj[[safeObj$workSheets[i]]] <- data
-    attr(safeObj[[safeObj$workSheets[i]]], 'metaInfo') <- headerInfo
+    obj[[obj$workSheets[i]]] <- data
+    attr(obj[[obj$workSheets[i]]], 'metaInfo') <- headerInfo
   }
   
-  return(safeObj)
+  return(obj)
 }
 
-importSafe <- function (file) {
+importSafe <- function (filePath) {
   #' Import a SAFE data file
   #' 
-  #' This function is a wrapper to open and process SAFE data tables stored in
-  #' memory as .xlsx files. A full path to a SAFE .xlsx file should be provided,
-  #' which is then opened and processed according to the following procedure:
-  #' 1. Process \code{Summary} worksheet
-  #' 2. Process \code{Taxa} worksheet (when provided)
-  #' 3. Process \code{Locations} worksheet (when provided)
-  #' 4. Process individual data worksheets
-  #' More information on SAFE .xlsx file structures can be found at
-  #' \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview}.
+  #' Create a new \code{safe_data} object with minimal summary information using
+  #' the SAFE dataset located at the specified \code{filePath}. Note that
+  #' currently only '.xlsx' file formats are supported - see
+  #' \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview}
+  #' for more information.
   #' 
-  #' @param file Path to the .xlsx SAFE file
-  #' @return A SAFE object \code{list} with varied attributes, including
-  #'   \code{Summary}, \code{Taxa}, \code{Locations}, and individual data
-  #'   fields for accessing different components of the SAFE record data.
+  #' @param filePath Full path to the .xlsx SAFE file
+  #' @return A \code{safe_data} object with \code{Summary} information added
   #' @seealso \code{\link{getSafe}} for downloading SAFE files from the Zenodo
   #'   cloud database, \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview}
-  #'   for an overview on Excel file formats used for SAFE data submissions.
+  #'   for an overview on Excel file formats used for SAFE data submissions
   #' @export
   
-  if (tools::file_ext(file) != 'xlsx') {
-    stop(paste0('File extension is ', tools::file_ext(file), ': currently only',
-                ' .xlsx format is supported'))
+  if (tools::file_ext(filePath) != 'xlsx') {
+    stop(paste0('Supplied file extension is ', tools::file_ext(filePath), 
+                ': currently only .xlsx format is supported'))
   } else {
-    message(paste0('Opening file ', basename(file), '...'), appendLF = FALSE)
-    summary <- readTransposedXlsx(file, sheetName='Summary')
-    safeObj <- processSummary(summary)
-    safeObj <- processTaxa(file, safeObj)
-    safeObj <- processLocations(file, safeObj)
-    safeObj <- processData(file, safeObj)
+    message(paste0('Opening file ', basename(filePath), '...'), appendLF = FALSE)
+    summary <- readTransposedXlsx(filePath, sheetName='Summary')
+    obj <- createSafe(summary)
     message(' completed!')
-    return(safeObj)  
+    return(obj)  
   }
 }
