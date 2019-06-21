@@ -56,29 +56,50 @@ isSafeTypeCategorical <- function (safeType) {
   }
 }
 
-createSafe <- function (summaryDf = NULL) {
+createSafe <- function (filePath = NULL, processSummary = TRUE) {
   #' Initiate a new \code{safe_data} object
   #' 
-  #' @param summaryDf
-  #' @return
-  #' @examples
+  #' \code{create_safe} generates an object of class type \code{safe_data} that
+  #' is used to import and view SAFE project datasets.
+  #' 
+  #' @param filePath the complete path to the SAFE dataset .xlsx file. This 
+  #'   could be absolute, or relative to the current working directory. When no
+  #'   path is specified (i.e. \code{filePath = NULL}), an empty \code{safe_data}
+  #'   object is returned.
+  #' @param processSummary a logical value indicating whether summary data
+  #'   should be added to the \code{safe_data} object on creation. If \code{TRUE},
+  #'   then summary metadata is added to the object using the function
+  #'   \code{\link{processSafeSummary}}.
+  #' @return an object of class \code{safe_data}.
+  #' @seealso \code{\link{processSafeSummary}}
   #' @export
   
-  safeObj <- structure(list(), class = 'safe_data')
-  
-  if (is.null(summaryDf)) {
-    return(safeObj)
+  obj <- structure(list(), class = 'safe_data')
+  if (is.null(filePath)) {
+    warning('No filePath specified, returning empty safe_data object',
+            call. = FALSE, immediate. = TRUE)
+    obj$filePath <- NULL
+    return(obj)
   } else {
-    safeObj <- processSafeSummary(safeObj, summaryDf)
-    return(safeObj)
+    if (!grepl(".xlsx", filePath)) {
+      stop(paste0('filePath must point to a SAFE .xlsx workbook! Please check ',
+                  'the path entered:', filePath))
+    } else {
+      obj$filePath <- filePath
+      if (processSummary) {
+        obj <- processSafeSummary(obj)
+      }
+    }
+    return(obj)
   }
 }
 
 is.safe_data <- function (obj) {
   #' Check if \code{obj} is of the \code{safe_data} class
   #' 
-  #' @param obj
-  #' @return Boolean
+  #' @param obj The object to be classified.
+  #' @return A logical value indicating whether \code{obj} is (\code{TRUE}) or
+  #'   is not (\code{FALSE}) of type \code{safe_data}.
   #' @export
   
   if (class(obj) == 'safe_data') {
@@ -88,15 +109,15 @@ is.safe_data <- function (obj) {
   }
 }
 
-processSafeSummary <- function (obj, summaryDf) {
+processSafeSummary <- function (obj, filePath = NULL) {
   UseMethod('processSafeSummary', obj)
 }
 
-processSafeSummary.default <- function (obj, summaryDf) {
+processSafeSummary.default <- function (obj, filePath = NULL) {
   stop('function processSafeSummary() works only with safe_data objects')
 }
 
-processSafeSummary.safe_data <- function (obj, summaryDf) {
+processSafeSummary.safe_data <- function (obj, filePath = NULL) {
   #' Process summary 'meta' information for SAFE project data
   #' 
   #' Adds summary information to a \code{safe_data} object using the dataframe
@@ -104,22 +125,43 @@ processSafeSummary.safe_data <- function (obj, summaryDf) {
   #' summary dataframe - a transposed "Summary" worksheet from a SAFE project
   #' .xlsx dataset - into a \code{safe_data} object.
   #' 
-  #' @param summaryDf Dataframe containing summary information associated with
-  #'   the SAFE project dataset. This must be a "Summary" worksheet from a SAFE
-  #'   file submission
-  #' @return \code{safe_data} object with metadata added
+  #' @param obj An object of class \code{safe_data}.
+  #' @filePath The complete path to the SAFE dataset .xlsx file. By default this
+  #'   value is set to \code{NULL} and the function attempts to access the
+  #'   \code{obj$filePath} variable (i.e. the file pointer stored in the
+  #'   \code{safe_data} object itself). When a \code{filePath} is supplied, it
+  #'   must point to a SAFE .xlsx file, otherwise an error is returned.
+  #' @return \code{safe_data} object with metadata added.
   #' @seealso \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/summary/}
   #'   for information on the SAFE summary worksheet, \code{\link{createSafe}}
   #' @export
   
-  obj$projectID <- summaryDf$SAFE.Project.ID[1]
-  obj$title <- as.character(summaryDf$Title[1])
-  obj$startDate <- as.Date.numeric(summaryDf$Start.Date[1], origin = '1899-12-30')
-  obj$endDate <- as.Date.numeric(summaryDf$End.Date[1], origin = '1899-12-30')
+  # check file path
+  if (is.null(filePath)) {
+    if (!is.null(obj$filePath)) {
+      filePath <- obj$filePath
+    } else {
+      stop(paste0('filePath not specified! Please check obj$filePath or pass a',
+                  ' valid path to a SAFE dataset'))
+    }
+  } else {
+    if (!grepl(".xlsx", filePath)) {
+      stop(paste0('filePath must point to a SAFE .xlsx workbook! Please check ', 
+                  'the path entered:', filePath))
+    }
+  }
+  summary <- readTransposedXlsx(filePath, sheetName='Summary')
+  
+  # add summary data
+  obj$projectID <- summary$SAFE.Project.ID[1]
+  obj$title <- as.character(summary$Title[1])
+  obj$startDate <- as.Date.numeric(summary$Start.Date[1], origin = '1899-12-30')
+  obj$endDate <- as.Date.numeric(summary$End.Date[1], origin = '1899-12-30')
   obj$workSheets <- gsub(' ', '', lapply(subset(as.character(
-    summaryDf$Worksheet.name), !is.na(summaryDf$Worksheet.name)), simpleCap))
+    summary$Worksheet.name), !is.na(summary$Worksheet.name)), simpleCap))
   for (i in 1:length(obj$workSheets)) {
-    obj[[obj$workSheets[i]]] <- list()
+    obj[[obj$workSheets[i]]] <- 
+      list("description" = as.character(summary$Worksheet.description[i]))
   }
 
   return(obj)
@@ -132,26 +174,26 @@ print.safe_data <- function (obj) {
   #' command line. Includes the project title, project ID number, start and end
   #' dates, and data worksheet names.
   #' 
-  #' @param obj A \code{safe_data} object
+  #' @param obj An object of class \code{safe_data}
   #' @seealso \code{\link{createSafe}}, \code{\link{processSafeSummary}}
   #' @export
   
   cat('Project name:', obj$title, '\n')
   cat('Project ID:', obj$projectID, '\n')
   cat('Dates:', paste0(obj$startDate), 'to', paste(obj$endDate), '\n')
-  cat('Contains', length(obj$workSheets), 'data worksheets:', '\n')
+  cat('Contains', length(obj$workSheets), 'data worksheet(s):', '\n')
   cat('  ', paste0(obj$workSheets, collapse = ', '))
 }
 
-addTaxa <- function (obj, safeWorkbook) {
+addTaxa <- function (obj, filePath = NULL) {
   UseMethod('addTaxa', obj)
 }
 
-addTaxa.default <- function (obj, safeWorkbook) {
+addTaxa.default <- function (obj, filePath = NULL) {
   stop('function addTaxa() works only with safe_data objects')
 }
 
-addTaxa.safe_data <- function (obj, filePath) {
+addTaxa.safe_data <- function (obj, filePath = NULL) {
   #' Add taxonomic observations to a \code{safe_data} object
   #'
   #' This function adds taxonomic data from the Taxa worksheet in a SAFE project
@@ -159,8 +201,12 @@ addTaxa.safe_data <- function (obj, filePath) {
   #' If no Taxa worksheet is provided with the dataset, the table defaults to
   #' \code{NA}.
   #' 
-  #' @param obj An existing \code{safe_data} object
-  #' @param filePath Complete path to the SAFE project dataset (.xlsx format)
+  #' @param obj An existing object of class \code{safe_data}
+  #' @param filePath The complete path to the SAFE dataset .xlsx file. By 
+  #'   default this value is set to \code{NULL} and the function attempts to 
+  #'   access the \code{obj$filePath} variable (i.e. the file pointer stored in
+  #'   the \code{safe_data} object itself). When a \code{filePath} is supplied, 
+  #'   it must point to a SAFE .xlsx file, otherwise an error is returned.
   #' @return A modified \code{safe_data} object with a \code{Taxa} dataframe
   #' @note Not all SAFE project submissions contain the Taxa worksheet (for
   #'   example if the data do not contain any taxonomic observations). In this
@@ -170,17 +216,29 @@ addTaxa.safe_data <- function (obj, filePath) {
   #'   for information on the Taxa worksheet, \code{\link{addTaxonHeirarchies}}
   #' @export
   
-  if (!grepl(".xlsx", filePath)) {
-    stop(paste0('filePath must point to a SAFE .xlsx workbook! Please check the',
-                ' path entered:', filePath))
+  # check file path
+  if (is.null(filePath)) {
+    if (!is.null(obj$filePath)) {
+      filePath <- obj$filePath
+    } else {
+      stop(paste0('filePath not specified! Please check obj$filePath or pass a',
+                  ' valid path to a SAFE dataset'))
+    }
+  } else {
+    if (!grepl(".xlsx", filePath)) {
+      stop(paste0('filePath must point to a SAFE .xlsx workbook! Please check ', 
+                  'the path entered:', filePath))
+    }
   }
   
+  # get Taxa
   obj$Taxa <- tryCatch(
     {
       as.data.frame(readxl::read_xlsx(filePath, 'Taxa', col_names = TRUE))
     },
     error = function(e) {
-      warning('SAFE import note: No Taxa datasheet exists!')
+      warning('SAFE import note - No Taxa datasheet exists!',
+              call. = FALSE, immediate. = TRUE)
       return(NA)
     }
   )
@@ -317,7 +375,7 @@ addTaxonHeirarchies.safe_data <- function (obj, ...) {
   #' dataset Taxa worksheet to the supplied \code{safe_data} object. When no
   #' Taxa worksheet exists, this function flags a warning.
   #' 
-  #' @param obj An existing \code{safe_data} object
+  #' @param obj An existing object of class \code{safe_data}
   #' @param ... Optional arguments to pass to \code{\link[rgbif]{name_backbone}}
   #' @return The updated \code{safe_data} object with a dataframe of taxonomic
   #'   heirarchies for all taxa listed in the Taxa worksheet of the SAFE dataset.
@@ -344,15 +402,15 @@ addTaxonHeirarchies.safe_data <- function (obj, ...) {
   return(obj)
 }
 
-addLocations <- function (obj, ...) {
+addLocations <- function (obj, filePath = NULL) {
   UseMethod('addLocations', obj)
 }
 
-addLocations.default <- function (obj, ...) {
+addLocations.default <- function (obj, filePath = NULL) {
   stop('function addLocations() works only with safe_data objects')
 }
 
-addLocations.safe_data <- function (obj, filePath) {
+addLocations.safe_data <- function (obj, filePath = NULL) {
   #' Add location information to a \code{safe_data} object
   #' 
   #' Processes the Locations worksheet in the SAFE dataset at the supplied
@@ -364,9 +422,13 @@ addLocations.safe_data <- function (obj, filePath) {
   #' \url{https://www.safeproject.net/info/gazetteer}), in other cases they will
   #' be "new", and thus need to be accompanied by GPS coordinates.
   #' 
-  #' @param obj An existing \code{safe_data} object
-  #' @param filePath Complete file path to the SAFE dataset
-  #' @return A modified \code{safe_data} with \code{Locations} dataframe added
+  #' @param obj An existing object of class \code{safe_data}
+  #' @param filePath The complete path to the SAFE dataset .xlsx file. By 
+  #'   default this value is set to \code{NULL} and the function attempts to 
+  #'   access the \code{obj$filePath} variable (i.e. the file pointer stored in
+  #'   the \code{safe_data} object itself). When a \code{filePath} is supplied, 
+  #'   it must point to a SAFE .xlsx file, otherwise an error is returned.
+  #' @return A modified \code{safe_data} object with \code{Locations} added
   #' @note Although unusual, not all SAFE project submissions will contain a
   #'   Locations worksheet. Examples of this include projects that present only
   #'   laboratory data (that do not have the requirement of specifying where
@@ -378,31 +440,43 @@ addLocations.safe_data <- function (obj, filePath) {
   #'   \url{https://www.safeproject.net/info/gazetteer} for the SAFE gazetteer
   #' @export
   
-  if (!grepl(".xlsx", filePath)) {
-    stop(paste0('filePath must point to a SAFE .xlsx workbook! Please check the',
-                ' path entered:', filePath))
+  # check file path
+  if (is.null(filePath)) {
+    if (!is.null(obj$filePath)) {
+      filePath <- obj$filePath
+    } else {
+      stop(paste0('filePath not specified! Please check obj$filePath or pass a',
+                  ' valid path to a SAFE dataset'))
+    }
+  } else {
+    if (!grepl(".xlsx", filePath)) {
+      stop(paste0('filePath must point to a SAFE .xlsx workbook! Please check ', 
+                  'the path entered:', filePath))
+    }
   }
   
+  # add Locations
   obj$Locations <- tryCatch( {
       as.data.frame(readxl::read_xlsx(filePath, 'Locations', col_names = TRUE))
     },
     error = function(e) {
-      warning('SAFE import note: No Locations datasheet exists!')
+      warning('SAFE import note - No Locations datasheet exists!', 
+              call. = FALSE, immediate. = TRUE)
       return(NA)
     }
   )
   return(obj)
 }
 
-addData <- function (obj, filePath) {
+addData <- function (obj, filePath = NULL) {
   UseMethod('addData', obj)
 }
 
-addData.default <- function (obj, filePath) {
+addData.default <- function (obj, filePath = NULL) {
   stop('function addData() works only with safe_data objects')
 }
 
-addData.safe_data <- function (obj, filePath) {
+addData.safe_data <- function (obj, filePath = NULL) {
   #' Add data worksheets to a \code{safe_data} object
   #' 
   #' This function processes data-containing worksheets for the SAFE dataset at
@@ -414,10 +488,13 @@ addData.safe_data <- function (obj, filePath) {
   #' SAFE data table. Header information for each worksheet is stored separately
   #' as a \code{metaInfo} attribute accessed via the dataframe.
   #' 
-  #' @param obj An existing \code{safe_data} object
-  #' @param filePath Complete path to the SAFE dataset, which is assumed to be
-  #'   an .xlsx file format
-  #' @return A modified \code{safe_data} object with data worksheets added 
+  #' @param obj An existing object of class \code{safe_data}.
+  #' @param filePath The complete path to the SAFE dataset .xlsx file. By 
+  #'   default this value is set to \code{NULL} and the function attempts to 
+  #'   access the \code{obj$filePath} variable (i.e. the file pointer stored in
+  #'   the \code{safe_data} object itself). When a \code{filePath} is supplied, 
+  #'   it must point to a SAFE .xlsx file, otherwise an error is returned.
+  #' @return A modified \code{safe_data} object with data worksheets added. 
   #' @seealso \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/data/}
   #'   for information on SAFE data worksheets
   #' @examples
@@ -434,11 +511,22 @@ addData.safe_data <- function (obj, filePath) {
   #'   View(attr(safe$data_1, 'metaInfo'))
   #' @export
   
-  if (!grepl(".xlsx", filePath)) {
-    stop(paste0('filePath must point to a SAFE .xlsx workbook! Please check the',
-                ' path entered:', filePath))
+  # check file path
+  if (is.null(filePath)) {
+    if (!is.null(obj$filePath)) {
+      filePath <- obj$filePath
+    } else {
+      stop(paste0('filePath not specified! Please check obj$filePath or pass a',
+                  ' valid path to a SAFE dataset'))
+    }
+  } else {
+    if (!grepl(".xlsx", filePath)) {
+      stop(paste0('filePath must point to a SAFE .xlsx workbook! Please check ', 
+                  'the path entered:', filePath))
+    }
   }
   
+  # add data
   sheetNames <- readxl::excel_sheets(filePath)
   sheetNamesNorm <- gsub(' ', '', lapply(sheetNames, simpleCap))
   
@@ -466,8 +554,8 @@ addData.safe_data <- function (obj, filePath) {
     categoricals <- c(FALSE, sapply(headerInfo$field_type, isSafeTypeCategorical))
     factorCols <- names(data)[categoricals]
     data[factorCols] <- lapply(data[factorCols], factor)
-    obj[[obj$workSheets[i]]] <- data
-    attr(obj[[obj$workSheets[i]]], 'metaInfo') <- headerInfo
+    obj[[obj$workSheets[i]]]$data <- data
+    attr(obj[[obj$workSheets[i]]]$data, 'metaInfo') <- headerInfo
   }
   
   return(obj)
@@ -494,8 +582,7 @@ importSafe <- function (filePath) {
                 ': currently only .xlsx format is supported'))
   } else {
     message(paste0('Opening file ', basename(filePath), '...'), appendLF = FALSE)
-    summary <- readTransposedXlsx(filePath, sheetName='Summary')
-    obj <- createSafe(summary)
+    obj <- createSafe(filePath)
     message(' completed!')
     return(obj)  
   }
