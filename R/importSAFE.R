@@ -94,30 +94,8 @@ createSafe <- function (filePath = NULL, processSummary = TRUE) {
   }
 }
 
-is.safedata <- function (obj) {
-  #' Check if \code{obj} is of the \code{safedata} class
-  #' 
-  #' @param obj The object to be classified.
-  #' @return A logical value indicating whether \code{obj} is (\code{TRUE}) or
-  #'   is not (\code{FALSE}) of type \code{safedata}.
-  #' @export
-  
-  if (class(obj) == 'safedata') {
-    return(TRUE)
-  } else {
-    return(FALSE)
-  }
-}
 
 processSafeSummary <- function (obj, filePath = NULL) {
-  UseMethod('processSafeSummary', obj)
-}
-
-processSafeSummary.default <- function (obj, filePath = NULL) {
-  stop('function processSafeSummary() works only with safedata objects')
-}
-
-processSafeSummary.safedata <- function (obj, filePath = NULL) {
   #' Process summary 'meta' information for SAFE project data
   #' 
   #' Adds summary information to a \code{safedata} object using the dataframe
@@ -186,15 +164,8 @@ print.safedata <- function (x, ...) {
   cat('  ', paste0(x$workSheets, collapse = ', '))
 }
 
+
 addTaxa <- function (obj, filePath = NULL) {
-  UseMethod('addTaxa', obj)
-}
-
-addTaxa.default <- function (obj, filePath = NULL) {
-  stop('function addTaxa() works only with safedata objects')
-}
-
-addTaxa.safedata <- function (obj, filePath = NULL) {
   #' Add taxonomic observations to a \code{safedata} object
   #'
   #' This function adds taxonomic data from the Taxa worksheet in a SAFE project
@@ -216,6 +187,10 @@ addTaxa.safedata <- function (obj, filePath = NULL) {
   #'   \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/taxa/}
   #'   for information on the Taxa worksheet, \code{\link{addTaxonHeirarchies}}
   #' @export
+  
+  if(! inherits(obj, 'safedata')){
+	  stop("addTaxa requires an object of class 'safedata'")
+  }
   
   # check file path
   if (is.null(filePath)) {
@@ -362,14 +337,6 @@ getTaxonWrapper <- function (taxaRow, ...) {
 }
 
 addTaxonHeirarchies <- function (obj, ...) {
-  UseMethod('addTaxonHeirarchies', obj)
-}
-
-addTaxonHeirarchies.default <- function (obj, ...) {
-  stop('function addTaxonHeirarchies() works only with safedata objects')
-}
-
-addTaxonHeirarchies.safedata <- function (obj, ...) {
   #' Add complete taxonomic heirarchies to a \code{safedata} object
   #' 
   #' Adds a dataframe of taxonomic heirarchies for all taxa reported in the SAFE
@@ -385,6 +352,10 @@ addTaxonHeirarchies.safedata <- function (obj, ...) {
   #'   value of \code{NA} will be assigned to the \code{TaxonHeirarchy}
   #' @seealso \code{\link{addTaxa}}, \code{\link{getNameBackbone}}
   #' @export
+  
+  if(! inherits(obj, 'safedata')){
+	  stop("addTaxonHeirarchies requires an object of class 'safedata'")
+  }
   
   if (is.null(obj$Taxa)){
     warning(paste0('Taxonomic data have not been added to the safedata object,',
@@ -404,14 +375,6 @@ addTaxonHeirarchies.safedata <- function (obj, ...) {
 }
 
 addLocations <- function (obj, filePath = NULL) {
-  UseMethod('addLocations', obj)
-}
-
-addLocations.default <- function (obj, filePath = NULL) {
-  stop('function addLocations() works only with safedata objects')
-}
-
-addLocations.safedata <- function (obj, filePath = NULL) {
   #' Add location information to a \code{safedata} object
   #' 
   #' Processes the Locations worksheet in the SAFE dataset at the supplied
@@ -441,6 +404,9 @@ addLocations.safedata <- function (obj, filePath = NULL) {
   #'   \url{https://www.safeproject.net/info/gazetteer} for the SAFE gazetteer
   #' @export
   
+  if(! inherits(obj, 'safedata')){
+	  stop("addLocations requires an object of class 'safedata'")
+  }
   # check file path
   if (is.null(filePath)) {
     if (!is.null(obj$filePath)) {
@@ -470,14 +436,6 @@ addLocations.safedata <- function (obj, filePath = NULL) {
 }
 
 addData <- function (obj, filePath = NULL) {
-  UseMethod('addData', obj)
-}
-
-addData.default <- function (obj, filePath = NULL) {
-  stop('function addData() works only with safedata objects')
-}
-
-addData.safedata <- function (obj, filePath = NULL) {
   #' Add data worksheets to a \code{safedata} object
   #' 
   #' This function processes data-containing worksheets for the SAFE dataset at
@@ -510,6 +468,10 @@ addData.safedata <- function (obj, filePath = NULL) {
   #'   # access the metadata for this table
   #'   View(attr(safe$data_1, 'metaInfo'))
   #' @export
+  
+  if(! inherits(obj, 'safedata')){
+	  stop("addData requires an object of class 'safedata'")
+  }
   
   # check file path
   if (is.null(filePath)) {
