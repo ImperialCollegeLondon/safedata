@@ -219,13 +219,13 @@ buildVersionsDataframe <- function (allVersions) {
   }
   
   versionsDf <- data.frame(
-    'conceptId'    = allVersions$hits$hits$conceptrecid,
-    'doi'          = allVersions$hits$hits$doi,
-    'recordId'     = as.character(lapply(allVersions$hits$hits$doi, 
+    conceptId    = allVersions$hits$hits$conceptrecid,
+    doi          = allVersions$hits$hits$doi,
+    recordId     = as.character(lapply(allVersions$hits$hits$doi, 
                                          getRecordIdFromDoi)),
-    'created_on'   = as.Date(allVersions$hits$hits$created),
-    'access_right' = allVersions$hits$hits$metadata$access_right,
-    'open_date'    = open_date),
+    created_on   = as.Date(allVersions$hits$hits$created),
+    access_right = allVersions$hits$hits$metadata$access_right,
+    open_date    = open_date,
     stringsAsFactors = FALSE)
   
   # return the output
