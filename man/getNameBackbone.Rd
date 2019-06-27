@@ -28,5 +28,5 @@ This function can take a few seconds to run, particularly if there
 \code{\link[rgbif]{name_backbone}},
   \code{\link[rgbif]{name_usage}},
   \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/taxa/},
-  \url{https://safe-dataset-checker.readthedocs.io/en/latest/safe_dataset_checker/gbif_validation/}
+  \url{https://safe-dataset-checker.readthedocs.io/en/latest/safedataset_checker/gbif_validation/}
 }

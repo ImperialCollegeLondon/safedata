@@ -15,7 +15,7 @@ call. This should be a call to the desired SAFE project}
 \description{
 Attempts to download the data file associated with the supplied Zenodo
 record, which should be a part of the SAFE community. The file will be
-downloaded into the specified directory (\code{dir}). \code{safe_data}
+downloaded into the specified directory (\code{dir}). \code{safedata}
 version 0.1 currently supports only .xlsx files. Future releases may be
 expanded to enable downloading of other file types.
 }

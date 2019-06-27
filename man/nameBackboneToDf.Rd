@@ -23,5 +23,5 @@ identifier within the SAFE project submission and the \code{matchtype}
 variable returned from \code{rgbif}.
 }
 \seealso{
-\code{\link{getTaxonHeirarchy}}, \code{\link[rgbif]{name_backbone}}
+\code{\link{addTaxonHeirarchies}}, \code{\link[rgbif]{name_backbone}}
 }

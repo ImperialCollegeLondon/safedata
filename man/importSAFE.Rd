@@ -10,10 +10,10 @@ importSafe(filePath)
 \item{filePath}{Full path to the .xlsx SAFE file}
 }
 \value{
-A \code{safe_data} object with \code{Summary} information added
+A \code{safedata} object with \code{Summary} information added
 }
 \description{
-Create a new \code{safe_data} object with minimal summary information using
+Create a new \code{safedata} object with minimal summary information using
 the SAFE dataset located at the specified \code{filePath}. Note that
 currently only '.xlsx' file formats are supported - see
 \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview}
