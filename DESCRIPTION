@@ -12,7 +12,7 @@ Description: The SAFE Project is a large scale ecological experiment
     the SAFE Project is made available under a common format through the
     Zenodo data repository and this package makes it easy to discover and
     load that data into R.
-License: What license is it under?
+License: GPL-3
 Imports: 
     readxl,
     rgbif,
