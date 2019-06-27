@@ -130,13 +130,13 @@ searchFields <- function (fieldText = NULL, fieldType = NULL, ids = NULL, mostRe
   #' @param fieldText Character string to search for within the data field name
   #'   and description.
   #' @param fieldType Character string to search for within the field type (for
-  #'   example field type \code(numeric)).
+  #'   example field type \code{numeric}).
   #' @param ids Numeric that restricts the returned API search to a subset of
   #'   Zenodo record IDs given in the \code{ids} parameter. This is typically
   #'   used to refine previous searches.
   #' @param mostRecent Logical indicating whether to restrict the API to
   #'   returning only the most recent versions of the datasets found. By default
-  #'   all versions of the discovered projects are returned.  #' 
+  #'   all versions of the discovered projects are returned.
   #' @return An array of Zenodo record IDs for the SAFE project datasets found
   #'   to match the search criteria.
   #' @note This function returns Zenodo record IDs. On the Zenodo database each
