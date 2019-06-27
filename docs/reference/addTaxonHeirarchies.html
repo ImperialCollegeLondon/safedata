@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Add taxonomic heirarchies to SAFE object — addTaxonHeirarchies • safedata</title>
+<title>Add complete taxonomic heirarchies to a <code>safedata</code> object — addTaxonHeirarchies • safedata</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,11 +30,11 @@
 
 
 
-<meta property="og:title" content="Add taxonomic heirarchies to SAFE object — addTaxonHeirarchies" />
+<meta property="og:title" content="Add complete taxonomic heirarchies to a <code>safedata</code> object — addTaxonHeirarchies" />
 
 <meta property="og:description" content="Adds a dataframe of taxonomic heirarchies for all taxa reported in the SAFE
-Taxa worksheet to the supplied SAFE object. When no Taxa worksheet has been
-supplied, this function flags a warning." />
+dataset Taxa worksheet to the supplied safedata object. When no
+Taxa worksheet exists, this function flags a warning." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -108,7 +108,7 @@ supplied, this function flags a warning." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Add taxonomic heirarchies to SAFE object</h1>
+    <h1>Add complete taxonomic heirarchies to a <code>safedata</code> object</h1>
     
     <div class="hidden name"><code>addTaxonHeirarchies.Rd</code></div>
     </div>
@@ -116,19 +116,19 @@ supplied, this function flags a warning." />
     <div class="ref-description">
     
     <p>Adds a dataframe of taxonomic heirarchies for all taxa reported in the SAFE
-Taxa worksheet to the supplied SAFE object. When no Taxa worksheet has been
-supplied, this function flags a warning.</p>
+dataset Taxa worksheet to the supplied <code>safedata</code> object. When no
+Taxa worksheet exists, this function flags a warning.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>addTaxonHeirarchies</span>(<span class='no'>safeObj</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>addTaxonHeirarchies</span>(<span class='no'>obj</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>safeObj</th>
-      <td><p>An existing SAFE data object</p></td>
+      <th>obj</th>
+      <td><p>An existing object of class <code>safedata</code></p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -138,18 +138,18 @@ supplied, this function flags a warning.</p>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The updated SAFE object <code>safeObj</code> with a dataframe of
-  taxonomic heirarchies for all taxa listed in the Taxa worksheet of the
-  data file. This is accessed using the reference <code>TaxaTree</code></p>
+    <p>The updated <code>safedata</code> object with a dataframe of taxonomic
+  heirarchies for all taxa listed in the Taxa worksheet of the SAFE dataset.
+  This is accessed using the reference <code>TaxonHeirarchy</code></p>
     
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>Not all SAFE data files contain the Taxa worksheet. In this case, a
-  value of <code>NA</code> will be assigned to the <code>TaxaTree</code></p>
+    <p>Not all SAFE datasets contain the Taxa worksheet. In this case, a
+  value of <code>NA</code> will be assigned to the <code>TaxonHeirarchy</code></p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='getNameBackbone.html'>getNameBackbone</a></code></p></div>
+    <div class='dont-index'><p><code><a href='addTaxa.html'>addTaxa</a></code>, <code><a href='getNameBackbone.html'>getNameBackbone</a></code></p></div>
     
 
   </div>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Import a SAFE data file — importSafe • safedata</title>
+<title>Initiate a new <code>safedata</code> object — createSafe • safedata</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,13 +30,10 @@
 
 
 
-<meta property="og:title" content="Import a SAFE data file — importSafe" />
+<meta property="og:title" content="Initiate a new <code>safedata</code> object — createSafe" />
 
-<meta property="og:description" content="Create a new safedata object with minimal summary information using
-the SAFE dataset located at the specified filePath. Note that
-currently only '.xlsx' file formats are supported - see
-https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview
-for more information." />
+<meta property="og:description" content="create_safe generates an object of class type safedata that
+is used to import and view SAFE project datasets." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -110,41 +107,46 @@ for more information." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Import a SAFE data file</h1>
+    <h1>Initiate a new <code>safedata</code> object</h1>
     
-    <div class="hidden name"><code>importSafe.Rd</code></div>
+    <div class="hidden name"><code>createSafe.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Create a new <code>safedata</code> object with minimal summary information using
-the SAFE dataset located at the specified <code>filePath</code>. Note that
-currently only '.xlsx' file formats are supported - see
-<a href='https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview'>https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview</a>
-for more information.</p>
+    <p><code>create_safe</code> generates an object of class type <code>safedata</code> that
+is used to import and view SAFE project datasets.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>importSafe</span>(<span class='no'>filePath</span>)</pre>
+    <pre class="usage"><span class='fu'>createSafe</span>(<span class='kw'>filePath</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>processSummary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>filePath</th>
-      <td><p>Full path to the .xlsx SAFE file</p></td>
+      <td><p>the complete path to the SAFE dataset .xlsx file. This 
+could be absolute, or relative to the current working directory. When no
+path is specified (i.e. <code>filePath = NULL</code>), an empty <code>safedata</code>
+object is returned.</p></td>
+    </tr>
+    <tr>
+      <th>processSummary</th>
+      <td><p>a logical value indicating whether summary data
+should be added to the <code>safedata</code> object on creation. If <code>TRUE</code>,
+then summary metadata is added to the object using the function
+<code><a href='processSafeSummary.html'>processSafeSummary</a></code>.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>safedata</code> object with <code>Summary</code> information added</p>
+    <p>an object of class <code>safedata</code>.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='getSafe.html'>getSafe</a></code> for downloading SAFE files from the Zenodo
-  cloud database, <a href='https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview'>https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview</a>
-  for an overview on Excel file formats used for SAFE data submissions</p></div>
+    <div class='dont-index'><p><code><a href='processSafeSummary.html'>processSafeSummary</a></code></p></div>
     
 
   </div>

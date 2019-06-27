@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Return taxonomic heirarchy for a SAFE taxonomic entry — getNameBackbone • safedata</title>
+<title>Search SAFE projects by date. — searchDates • safedata</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,12 +30,11 @@
 
 
 
-<meta property="og:title" content="Return taxonomic heirarchy for a SAFE taxonomic entry — getNameBackbone" />
+<meta property="og:title" content="Search SAFE projects by date. — searchDates" />
 
-<meta property="og:description" content="This function attempts to perform a search of the GBIF database for the
-named Taxon/Parent types in the SAFE project Taxa worksheet. The purpose
-of this is to construct a taxonomic tree for all taxa reported in the
-dataset(s) to facilitate data searching/subsetting." />
+<meta property="og:description" content="Search for SAFE datasets by temporal extent. searchDates allows
+users to search the Zenodo database for SAFE projects conducted on a
+specific date, or over a given date range." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -109,52 +108,73 @@ dataset(s) to facilitate data searching/subsetting." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Return taxonomic heirarchy for a SAFE taxonomic entry</h1>
+    <h1>Search SAFE projects by date.</h1>
     
-    <div class="hidden name"><code>getNameBackbone.Rd</code></div>
+    <div class="hidden name"><code>searchDates.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>This function attempts to perform a search of the GBIF database for the
-named Taxon/Parent types in the SAFE project Taxa worksheet. The purpose
-of this is to construct a taxonomic tree for all taxa reported in the
-dataset(s) to facilitate data searching/subsetting.</p>
+    <p>Search for SAFE datasets by temporal extent. <code>searchDates</code> allows
+users to search the Zenodo database for SAFE projects conducted on a
+specific date, or over a given date range.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>getNameBackbone</span>(<span class='no'>taxaRow</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>searchDates</span>(<span class='no'>dates</span>, <span class='kw'>matchType</span> <span class='kw'>=</span> <span class='st'>"intersect"</span>, <span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>mostRecent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>taxaRow</th>
-      <td><p>A row from a SAFE object Taxa worksheet</p></td>
+      <th>dates</th>
+      <td><p>A character string containing one or two (comma separated) 
+dates in ISO format (yyyy-mm-dd).</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>Optional arguments to pass to <code><a href='https://www.rdocumentation.org/packages/rgbif/topics/name_backbone'>name_backbone</a></code></p></td>
+      <th>matchType</th>
+      <td><p>A character string - one of 'intercept', 'contain', or 
+'within' used to match the provided dates to the temporal extents of SAFE
+datasets. Defaults to 'intersect'. The 'contain' option returns datasets
+that span a date range, while 'within' returns datasets that fall within
+the given range. Note that this parameter is only utilised when a date
+range is specified (i.e. it is not used for single-date searches).</p></td>
+    </tr>
+    <tr>
+      <th>ids</th>
+      <td><p>Numeric that restricts the returned API search to a subset of
+Zenodo record IDs given in the <code>ids</code> parameter. This is typically
+used to refine previous searches.</p></td>
+    </tr>
+    <tr>
+      <th>mostRecent</th>
+      <td><p>Logical indicating whether to restrict the API to
+returning only the most recent versions of the datasets found. By default
+all versions of the discovered projects are returned.  #'</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>GBIF name backbone list</p>
+    <p>An array of Zenodo record IDs for the SAFE project datasets found
+  to match the search criteria.</p>
     
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>This function can take a few seconds to run, particularly if there
-  are a large number of Taxa in the SAFE dataset.</p>
+    <p>This function returns Zenodo record IDs. On the Zenodo database each
+  version of a SAFE project has a unique record ID. Different versions of
+  the same dataset are grouped together under a single concept ID. See
+  <a href='https://help.zenodo.org/'>https://help.zenodo.org/</a> for more information on Zenodo versioning.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='https://www.rdocumentation.org/packages/rgbif/topics/name_backbone'>name_backbone</a></code>,
-  <code><a href='https://www.rdocumentation.org/packages/rgbif/topics/name_usage'>name_usage</a></code>,
-  <a href='https://safe-dataset-checker.readthedocs.io/en/latest/data_format/taxa/'>https://safe-dataset-checker.readthedocs.io/en/latest/data_format/taxa/</a>,
-  <a href='https://safe-dataset-checker.readthedocs.io/en/latest/safedataset_checker/gbif_validation/'>https://safe-dataset-checker.readthedocs.io/en/latest/safedataset_checker/gbif_validation/</a></p></div>
+    <div class='dont-index'><p><code><a href='getSafe.html'>getSafe</a></code> for downloading SAFE datasets.</p></div>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>  <span class='fu'>searchDates</span>(<span class='st'>'2014-06-12'</span>)</div><div class='output co'>#&gt; <span class='error'>Error in searchDates("2014-06-12"): could not find function "searchDates"</span></div><div class='input'>  <span class='fu'>searchDates</span>(<span class='st'>'2014-06-12,2015-06-11'</span>)</div><div class='output co'>#&gt; <span class='error'>Error in searchDates("2014-06-12,2015-06-11"): could not find function "searchDates"</span></div><div class='input'>  <span class='fu'>searchDates</span>(<span class='st'>'2014-06-12,2015-06-11'</span>, <span class='kw'>matchType</span> <span class='kw'>=</span> <span class='st'>'contain'</span>)</div><div class='output co'>#&gt; <span class='error'>Error in searchDates("2014-06-12,2015-06-11", matchType = "contain"): could not find function "searchDates"</span></div><div class='input'>  <span class='fu'>searchDates</span>(<span class='st'>'2014-06-12,2015-06-11'</span>, <span class='kw'>matchType</span> <span class='kw'>=</span> <span class='st'>'within'</span>)</div><div class='output co'>#&gt; <span class='error'>Error in searchDates("2014-06-12,2015-06-11", matchType = "within"): could not find function "searchDates"</span></div><div class='input'>  <span class='fu'>searchDates</span>(<span class='st'>'2014-06-12,2015-06-11'</span>, <span class='kw'>mostRecent</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in searchDates("2014-06-12,2015-06-11", mostRecent = TRUE): could not find function "searchDates"</span></div><div class='input'>  <span class='fu'>searchDates</span>(<span class='st'>'2014-06-12,2015-06-11'</span>,
+              <span class='kw'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>3247465</span>, <span class='fl'>3081059</span>, <span class='fl'>1478526</span>, <span class='fl'>3251902</span>))</div><div class='output co'>#&gt; <span class='error'>Error in searchDates("2014-06-12,2015-06-11", ids = c(3247465, 3081059,     1478526, 3251902)): could not find function "searchDates"</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -166,7 +186,9 @@ dataset(s) to facilitate data searching/subsetting.</p>
       <li><a href="#note">Note</a></li>
 
       <li><a href="#see-also">See also</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

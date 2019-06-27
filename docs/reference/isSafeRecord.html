@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Import a SAFE data file — importSafe • safedata</title>
+<title>Checks whether the supplied zenodo record is from the SAFE community — isSafeRecord • safedata</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,13 +30,11 @@
 
 
 
-<meta property="og:title" content="Import a SAFE data file — importSafe" />
+<meta property="og:title" content="Checks whether the supplied zenodo record is from the SAFE community — isSafeRecord" />
 
-<meta property="og:description" content="Create a new safedata object with minimal summary information using
-the SAFE dataset located at the specified filePath. Note that
-currently only '.xlsx' file formats are supported - see
-https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview
-for more information." />
+<meta property="og:description" content="This function returns a boolean indicating whether the supplied Zenodo
+record information (the result of an API lookup to the Zenodo database) is 
+part of the SAFE (Stability of Altered Forest Ecosystems) community." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -110,41 +108,41 @@ for more information." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Import a SAFE data file</h1>
+    <h1>Checks whether the supplied zenodo record is from the SAFE community</h1>
     
-    <div class="hidden name"><code>importSafe.Rd</code></div>
+    <div class="hidden name"><code>isSafeRecord.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Create a new <code>safedata</code> object with minimal summary information using
-the SAFE dataset located at the specified <code>filePath</code>. Note that
-currently only '.xlsx' file formats are supported - see
-<a href='https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview'>https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview</a>
-for more information.</p>
+    <p>This function returns a boolean indicating whether the supplied Zenodo
+record information (the result of an API lookup to the Zenodo database) is 
+part of the SAFE (Stability of Altered Forest Ecosystems) community.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>importSafe</span>(<span class='no'>filePath</span>)</pre>
+    <pre class="usage"><span class='fu'>isSafeRecord</span>(<span class='no'>zenodoRecord</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>filePath</th>
-      <td><p>Full path to the .xlsx SAFE file</p></td>
+      <th>zenodoRecord</th>
+      <td><p>returned <code>list</code> object from an API call to the
+Zenodo cloud storage database. Should contain information pertaining to
+a Zenodo record (or records)</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>safedata</code> object with <code>Summary</code> information added</p>
+    <p><code>TRUE</code>/<code>FALSE</code> indicating whether the record is part of
+  the SAFE community</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='getSafe.html'>getSafe</a></code> for downloading SAFE files from the Zenodo
-  cloud database, <a href='https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview'>https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview</a>
-  for an overview on Excel file formats used for SAFE data submissions</p></div>
+    <div class='dont-index'><p><a href='https://zenodo.org/communities/safe/'>https://zenodo.org/communities/safe/</a>,
+  <code><a href='zenodoRecordApiLookup.html'>zenodoRecordApiLookup</a></code>, <code><a href='zenodoVersionsApiLookup.html'>zenodoVersionsApiLookup</a></code></p></div>
     
 
   </div>

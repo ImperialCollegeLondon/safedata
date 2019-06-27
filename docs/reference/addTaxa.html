@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Import a SAFE data file — importSafe • safedata</title>
+<title>Add taxonomic observations to a <code>safedata</code> object — addTaxa • safedata</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,13 +30,12 @@
 
 
 
-<meta property="og:title" content="Import a SAFE data file — importSafe" />
+<meta property="og:title" content="Add taxonomic observations to a <code>safedata</code> object — addTaxa" />
 
-<meta property="og:description" content="Create a new safedata object with minimal summary information using
-the SAFE dataset located at the specified filePath. Note that
-currently only '.xlsx' file formats are supported - see
-https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview
-for more information." />
+<meta property="og:description" content="This function adds taxonomic data from the Taxa worksheet in a SAFE project
+dataset - in the form of a table - to an existing safedata object.
+If no Taxa worksheet is provided with the dataset, the table defaults to
+NA." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -110,41 +109,54 @@ for more information." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Import a SAFE data file</h1>
+    <h1>Add taxonomic observations to a <code>safedata</code> object</h1>
     
-    <div class="hidden name"><code>importSafe.Rd</code></div>
+    <div class="hidden name"><code>addTaxa.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Create a new <code>safedata</code> object with minimal summary information using
-the SAFE dataset located at the specified <code>filePath</code>. Note that
-currently only '.xlsx' file formats are supported - see
-<a href='https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview'>https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview</a>
-for more information.</p>
+    <p>This function adds taxonomic data from the Taxa worksheet in a SAFE project
+dataset - in the form of a table - to an existing <code>safedata</code> object.
+If no Taxa worksheet is provided with the dataset, the table defaults to
+<code>NA</code>.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>importSafe</span>(<span class='no'>filePath</span>)</pre>
+    <pre class="usage"><span class='fu'>addTaxa</span>(<span class='no'>obj</span>, <span class='kw'>filePath</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
+      <th>obj</th>
+      <td><p>An existing object of class <code>safedata</code></p></td>
+    </tr>
+    <tr>
       <th>filePath</th>
-      <td><p>Full path to the .xlsx SAFE file</p></td>
+      <td><p>The complete path to the SAFE dataset .xlsx file. By 
+default this value is set to <code>NULL</code> and the function attempts to 
+access the <code>obj$filePath</code> variable (i.e. the file pointer stored in
+the <code>safedata</code> object itself). When a <code>filePath</code> is supplied, 
+it must point to a SAFE .xlsx file, otherwise an error is returned.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>safedata</code> object with <code>Summary</code> information added</p>
+    <p>A modified <code>safedata</code> object with a <code>Taxa</code> dataframe</p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p>Not all SAFE project submissions contain the Taxa worksheet (for
+  example if the data do not contain any taxonomic observations). In this
+  case <code>safedata$Taxa</code> defaults to <code>NA</code>.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='getSafe.html'>getSafe</a></code> for downloading SAFE files from the Zenodo
-  cloud database, <a href='https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview'>https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview</a>
-  for an overview on Excel file formats used for SAFE data submissions</p></div>
+    <div class='dont-index'><p><code><a href='addTaxonHeirarchies.html'>addTaxonHeirarchies</a></code>,
+  <a href='https://safe-dataset-checker.readthedocs.io/en/latest/data_format/taxa/'>https://safe-dataset-checker.readthedocs.io/en/latest/data_format/taxa/</a>
+  for information on the Taxa worksheet, <code><a href='addTaxonHeirarchies.html'>addTaxonHeirarchies</a></code></p></div>
     
 
   </div>
@@ -154,6 +166,8 @@ for more information.</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#note">Note</a></li>
 
       <li><a href="#see-also">See also</a></li>
           </ul>

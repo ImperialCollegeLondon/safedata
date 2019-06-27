@@ -40,8 +40,12 @@ The package uses [roxygen2](https://cran.r-project.org/web/packages/roxygen2/ind
 
 ```sh
 # Make sure the documentation is up to date
+#  - create the .Rd files from roxygen2 docstrings 
 cd safe_data
 Rscript -e 'devtools::document()' 
+# - build the website using pkgdown
+Rscript -e " pkgdown::build_site()"
+
 # Build the package
 cd ../
 R CMD BUILD safe_data

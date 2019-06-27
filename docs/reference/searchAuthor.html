@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Import a SAFE data file — importSafe • safedata</title>
+<title>Search SAFE projects by author name. — searchAuthor • safedata</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,13 +30,12 @@
 
 
 
-<meta property="og:title" content="Import a SAFE data file — importSafe" />
+<meta property="og:title" content="Search SAFE projects by author name. — searchAuthor" />
 
-<meta property="og:description" content="Create a new safedata object with minimal summary information using
-the SAFE dataset located at the specified filePath. Note that
-currently only '.xlsx' file formats are supported - see
-https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview
-for more information." />
+<meta property="og:description" content="Search for SAFE datasets by author name. searchAuthor enables users
+to search the Zenodo database for SAFE projects containing the given
+author among the author list. Partial author names may also be used.
+Note that this function is not case sensitive." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -110,43 +109,63 @@ for more information." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Import a SAFE data file</h1>
+    <h1>Search SAFE projects by author name.</h1>
     
-    <div class="hidden name"><code>importSafe.Rd</code></div>
+    <div class="hidden name"><code>searchAuthor.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Create a new <code>safedata</code> object with minimal summary information using
-the SAFE dataset located at the specified <code>filePath</code>. Note that
-currently only '.xlsx' file formats are supported - see
-<a href='https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview'>https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview</a>
-for more information.</p>
+    <p>Search for SAFE datasets by author name. <code>searchAuthor</code> enables users
+to search the Zenodo database for SAFE projects containing the given
+<code>author</code> among the author list. Partial author names may also be used.
+Note that this function is not case sensitive.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>importSafe</span>(<span class='no'>filePath</span>)</pre>
+    <pre class="usage"><span class='fu'>searchAuthor</span>(<span class='no'>author</span>, <span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>mostRecent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>filePath</th>
-      <td><p>Full path to the .xlsx SAFE file</p></td>
+      <th>author</th>
+      <td><p>A character string used to search for datasets by author's 
+full (or partial) names.</p></td>
+    </tr>
+    <tr>
+      <th>ids</th>
+      <td><p>Numeric that restricts the returned API search to a subset of
+Zenodo record IDs given in the <code>ids</code> parameter. This is typically
+used to refine previous searches.</p></td>
+    </tr>
+    <tr>
+      <th>mostRecent</th>
+      <td><p>Logical indicating whether to restrict the API to
+returning only the most recent versions of the datasets found. By default
+all versions of the discovered projects are returned.  #'</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>safedata</code> object with <code>Summary</code> information added</p>
+    <p>An array of Zenodo record IDs for the SAFE project datasets found
+  to match the search criteria.</p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p>This function returns Zenodo record IDs. On the Zenodo database each
+  version of a SAFE project has a unique record ID. Different versions of
+  the same dataset are grouped together under a single concept ID. See
+  <a href='https://help.zenodo.org/'>https://help.zenodo.org/</a> for more information on Zenodo versioning.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='getSafe.html'>getSafe</a></code> for downloading SAFE files from the Zenodo
-  cloud database, <a href='https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview'>https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview</a>
-  for an overview on Excel file formats used for SAFE data submissions</p></div>
+    <div class='dont-index'><p><code><a href='getSafe.html'>getSafe</a></code> for downloading SAFE datasets.</p></div>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>  <span class='fu'>searchAuthor</span>(<span class='st'>'Ewers'</span>)</div><div class='output co'>#&gt; <span class='error'>Error in searchAuthor("Ewers"): could not find function "searchAuthor"</span></div><div class='input'>  <span class='fu'>searchAuthor</span>(<span class='st'>'Ew'</span>)</div><div class='output co'>#&gt; <span class='error'>Error in searchAuthor("Ew"): could not find function "searchAuthor"</span></div><div class='input'>  <span class='fu'>searchAuthor</span>(<span class='st'>'Ewers'</span>, <span class='kw'>mostRecent</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in searchAuthor("Ewers", mostRecent = TRUE): could not find function "searchAuthor"</span></div><div class='input'>  <span class='fu'>searchAuthor</span>(<span class='st'>'Ewers'</span>, <span class='kw'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1303014</span>, <span class='fl'>1237725</span>, <span class='fl'>3081059</span>, <span class='fl'>1323504</span>, <span class='fl'>3251902</span>))</div><div class='output co'>#&gt; <span class='error'>Error in searchAuthor("Ewers", ids = c(1303014, 1237725, 3081059, 1323504,     3251902)): could not find function "searchAuthor"</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -155,8 +174,12 @@ for more information.</p>
       
       <li><a href="#value">Value</a></li>
 
+      <li><a href="#note">Note</a></li>
+
       <li><a href="#see-also">See also</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

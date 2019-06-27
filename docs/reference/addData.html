@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Import a SAFE data file — importSafe • safedata</title>
+<title>Add data worksheets to a <code>safedata</code> object — addData • safedata</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,13 +30,16 @@
 
 
 
-<meta property="og:title" content="Import a SAFE data file — importSafe" />
+<meta property="og:title" content="Add data worksheets to a <code>safedata</code> object — addData" />
 
-<meta property="og:description" content="Create a new safedata object with minimal summary information using
-the SAFE dataset located at the specified filePath. Note that
-currently only '.xlsx' file formats are supported - see
-https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview
-for more information." />
+<meta property="og:description" content="This function processes data-containing worksheets for the SAFE dataset at
+the specified filePath and adds them to an existing safedata
+object. addData creates a new dataframe within the safedata
+object for each worksheet stored in the SAFE dataset. The dataframes are
+named as per those used in the SAFE dataset submission file. All data
+columns are imported according to the field_type provided in the
+SAFE data table. Header information for each worksheet is stored separately
+as a metaInfo attribute accessed via the dataframe." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -110,43 +113,62 @@ for more information." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Import a SAFE data file</h1>
+    <h1>Add data worksheets to a <code>safedata</code> object</h1>
     
-    <div class="hidden name"><code>importSafe.Rd</code></div>
+    <div class="hidden name"><code>addData.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Create a new <code>safedata</code> object with minimal summary information using
-the SAFE dataset located at the specified <code>filePath</code>. Note that
-currently only '.xlsx' file formats are supported - see
-<a href='https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview'>https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview</a>
-for more information.</p>
+    <p>This function processes data-containing worksheets for the SAFE dataset at
+the specified <code>filePath</code> and adds them to an existing <code>safedata</code>
+object. <code>addData</code> creates a new dataframe within the <code>safedata</code>
+object for each worksheet stored in the SAFE dataset. The dataframes are
+named as per those used in the SAFE dataset submission file. All data
+columns are imported according to the <code>field_type</code> provided in the
+SAFE data table. Header information for each worksheet is stored separately
+as a <code>metaInfo</code> attribute accessed via the dataframe.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>importSafe</span>(<span class='no'>filePath</span>)</pre>
+    <pre class="usage"><span class='fu'>addData</span>(<span class='no'>obj</span>, <span class='kw'>filePath</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
+      <th>obj</th>
+      <td><p>An existing object of class <code>safedata</code>.</p></td>
+    </tr>
+    <tr>
       <th>filePath</th>
-      <td><p>Full path to the .xlsx SAFE file</p></td>
+      <td><p>The complete path to the SAFE dataset .xlsx file. By 
+default this value is set to <code>NULL</code> and the function attempts to 
+access the <code>obj$filePath</code> variable (i.e. the file pointer stored in
+the <code>safedata</code> object itself). When a <code>filePath</code> is supplied, 
+it must point to a SAFE .xlsx file, otherwise an error is returned.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>safedata</code> object with <code>Summary</code> information added</p>
+    <p>A modified <code>safedata</code> object with data worksheets added.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='getSafe.html'>getSafe</a></code> for downloading SAFE files from the Zenodo
-  cloud database, <a href='https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview'>https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview</a>
-  for an overview on Excel file formats used for SAFE data submissions</p></div>
+    <div class='dont-index'><p><a href='https://safe-dataset-checker.readthedocs.io/en/latest/data_format/data/'>https://safe-dataset-checker.readthedocs.io/en/latest/data_format/data/</a>
+  for information on SAFE data worksheets</p></div>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>  <span class='co'># create a safedata object and add data</span>
+  <span class='no'>filePath</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>'extdata'</span>, <span class='st'>'demo_data.xlsx'</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>'safedata'</span>)
+  <span class='no'>safe</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='importSafe.html'>importSafe</a></span>(<span class='no'>filePath</span>)</div><div class='output co'>#&gt; <span class='message'>Opening file demo_data.xlsx...</span></div><div class='output co'>#&gt; <span class='message'> completed!</span></div><div class='input'>  <span class='no'>safe</span> <span class='kw'>&lt;-</span> <span class='fu'>addData</span>(<span class='no'>safe</span>, <span class='no'>filePath</span>)
+
+  <span class='co'># access the data table named "data_1"</span>
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/View'>View</a></span>(<span class='no'>safe</span>$<span class='no'>data_1</span>)</div><div class='output co'>#&gt; <span class='error'>Error in View(safe$data_1): invalid 'x' argument</span></div><div class='input'>
+  <span class='co'># access the metadata for this table</span>
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/View'>View</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/attr'>attr</a></span>(<span class='no'>safe</span>$<span class='no'>data_1</span>, <span class='st'>'metaInfo'</span>))</div><div class='output co'>#&gt; <span class='error'>Error in View(attr(safe$data_1, "metaInfo")): invalid 'x' argument</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -156,7 +178,9 @@ for more information.</p>
       <li><a href="#value">Value</a></li>
 
       <li><a href="#see-also">See also</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

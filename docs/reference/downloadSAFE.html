@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Download SAFE project data file associated with the supplied record — downloadSAFE • safedata</title>
+<title>Download SAFE project data file associated with the supplied record — downloadSafe • safedata</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,11 +30,11 @@
 
 
 
-<meta property="og:title" content="Download SAFE project data file associated with the supplied record — downloadSAFE" />
+<meta property="og:title" content="Download SAFE project data file associated with the supplied record — downloadSafe" />
 
 <meta property="og:description" content="Attempts to download the data file associated with the supplied Zenodo
 record, which should be a part of the SAFE community. The file will be
-downloaded into the specified directory (dir). safe_data
+downloaded into the specified directory (dir). safedata
 version 0.1 currently supports only .xlsx files. Future releases may be
 expanded to enable downloading of other file types." />
 <meta name="twitter:card" content="summary" />
@@ -112,20 +112,20 @@ expanded to enable downloading of other file types." />
     <div class="page-header">
     <h1>Download SAFE project data file associated with the supplied record</h1>
     
-    <div class="hidden name"><code>downloadSAFE.Rd</code></div>
+    <div class="hidden name"><code>downloadSafe.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
     <p>Attempts to download the data file associated with the supplied Zenodo
 record, which should be a part of the SAFE community. The file will be
-downloaded into the specified directory (<code>dir</code>). <code>safe_data</code>
+downloaded into the specified directory (<code>dir</code>). <code>safedata</code>
 version 0.1 currently supports only .xlsx files. Future releases may be
 expanded to enable downloading of other file types.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>downloadSAFE</span>(<span class='no'>zenodoRecord</span>, <span class='no'>dir</span>)</pre>
+    <pre class="usage"><span class='fu'>downloadSafe</span>(<span class='no'>zenodoRecord</span>, <span class='kw'>dir</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -143,7 +143,7 @@ call. This should be a call to the desired SAFE project</p></td>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='zenodoRecordApiLookup.html'>zenodoRecordApiLookup</a></code></p></div>
+    <div class='dont-index'><p><code><a href='zenodoRecordApiLookup.html'>zenodoRecordApiLookup</a></code>, <code><a href='setSafeDir.html'>setSafeDir</a></code></p></div>
     
 
   </div>

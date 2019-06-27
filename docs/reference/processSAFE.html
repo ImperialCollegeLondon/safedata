@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get record info for specified SAFE project ID from the Zenodo database — processSAFE • safedata</title>
+<title>Get record info for specified SAFE project ID from the Zenodo database — processSafe • safedata</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,7 +30,7 @@
 
 
 
-<meta property="og:title" content="Get record info for specified SAFE project ID from the Zenodo database — processSAFE" />
+<meta property="og:title" content="Get record info for specified SAFE project ID from the Zenodo database — processSafe" />
 
 <meta property="og:description" content="This function returns a list object from an API call to the Zenodo
 database using the supplied SAFE project ID number. The API call contains
@@ -111,7 +111,7 @@ specified directory." />
     <div class="page-header">
     <h1>Get record info for specified SAFE project ID from the Zenodo database</h1>
     
-    <div class="hidden name"><code>processSAFE.Rd</code></div>
+    <div class="hidden name"><code>processSafe.Rd</code></div>
     </div>
 
     <div class="ref-description">
@@ -123,7 +123,7 @@ specified directory.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>processSAFE</span>(<span class='no'>id</span>, <span class='no'>dir</span>, <span class='kw'>updateCache</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>processSafe</span>(<span class='no'>id</span>, <span class='no'>dir</span>, <span class='kw'>updateIndex</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -137,11 +137,15 @@ record ID is passed, the function will attempt to return the most recent
     </tr>
     <tr>
       <th>dir</th>
-      <td><p>directory into which data should be stored</p></td>
+      <td><p>directory into which data will be stored</p></td>
     </tr>
     <tr>
-      <th>updateCache</th>
-      <td><p><code>boolean</code>, should the version cache be updated?</p></td>
+      <th>updateIndex</th>
+      <td><p><code>boolean</code>, should the SAFE index file be updated?</p></td>
+    </tr>
+    <tr>
+      <th>overwrite</th>
+      <td><p>Should existing copies of the data be overwritten.</p></td>
     </tr>
     </table>
     
@@ -152,10 +156,11 @@ record ID is passed, the function will attempt to return the most recent
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The function will automatically create a data folder at the directory
-<code>dir</code> and (optionally, <code>updateCache</code> boolean) updates an offline 
-cache of version information pertaining to the concept record ID associated
-with the requested record. Note that the version cache is automatically
-downloaded into the <code>dir</code> the first time a record is accessed.</p>
+<code>dir</code> and (optionally, <code>updateIndex</code> boolean) updates the SAFE
+index offline cache - a table that records version and file information for
+SAFE datasets that have been requested by the user. The index cache is
+automatically downloaded into the <code>dir</code> the first time a record from
+a particular concept ID is accessed.</p>
 <p><code>processSafe</code> additionally performs a series of checks on the record.
 Specifically, an error is raised in the event that the ID does not exist on
 Zenodo, or is not located in the SAFE community, or if the record is
@@ -165,7 +170,7 @@ download.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='zenodoRecordApiLookup.html'>zenodoRecordApiLookup</a></code>, <code><a href='updateVersionCache.html'>updateVersionCache</a></code></p></div>
+    <div class='dont-index'><p><code><a href='zenodoRecordApiLookup.html'>zenodoRecordApiLookup</a></code>, <code><a href='updateIndex.html'>updateIndex</a></code></p></div>
     
 
   </div>
