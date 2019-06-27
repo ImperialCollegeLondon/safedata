@@ -33,3 +33,18 @@ printSummary(path_to_file)
 
 ## Further examples
 A more detailed description of the package and additional, more detailed examples can be found in the [package vignettes](https://imperialcollegelondon.github.io/safe_data/articles/).
+
+## Building the package from source
+
+The package uses [roxygen2](https://cran.r-project.org/web/packages/roxygen2/index.html) to maintain package documentation, so the build process is:
+
+```sh
+# Make sure the documentation is up to date
+cd safe_data
+Rscript -e 'devtools::document()' 
+# Build the package
+cd ../
+R CMD BUILD safe_data
+# Check the resulting package 
+R CMD check safedata_0.1.tar.gz
+```
