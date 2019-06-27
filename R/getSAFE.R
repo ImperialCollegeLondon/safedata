@@ -213,6 +213,11 @@ buildVersionsDataframe <- function (allVersions) {
   }
   
   # create a dataframe with record ID, date, and access status
+  open_date <- allVersions$hits$hits$metadata$embargo_date
+  if(is.null(open_date)) {
+	  open_date <- NA
+  }
+  
   versionsDf <- data.frame(
     'conceptId'    = allVersions$hits$hits$conceptrecid,
     'doi'          = allVersions$hits$hits$doi,
@@ -220,7 +225,7 @@ buildVersionsDataframe <- function (allVersions) {
                                          getRecordIdFromDoi)),
     'created_on'   = as.Date(allVersions$hits$hits$created),
     'access_right' = allVersions$hits$hits$metadata$access_right,
-    'open_date'    = nullToNa(allVersions$hits$hits$metadata$embargo_date),
+    'open_date'    = open_date),
     stringsAsFactors = FALSE)
   
   # return the output

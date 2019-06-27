@@ -1,10 +1,3 @@
-nullToNa <- function(x) {
-  #' Convert \code{NULL} values to \code{NA}
-  
-  x[is.null(x)] <- NA
-  return(x)
-}
-
 simpleCap <- function (str) {
   #' Capitalize the first letter of each word in a string
   #' 
