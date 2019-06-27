@@ -126,7 +126,7 @@ processSafeSummary.safe_data <- function (obj, filePath = NULL) {
   #' .xlsx dataset - into a \code{safe_data} object.
   #' 
   #' @param obj An object of class \code{safe_data}.
-  #' @filePath The complete path to the SAFE dataset .xlsx file. By default this
+  #' @param filePath The complete path to the SAFE dataset .xlsx file. By default this
   #'   value is set to \code{NULL} and the function attempts to access the
   #'   \code{obj$filePath} variable (i.e. the file pointer stored in the
   #'   \code{safe_data} object itself). When a \code{filePath} is supplied, it

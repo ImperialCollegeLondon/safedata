@@ -38,7 +38,7 @@ setSafeDir <- function (dir = NULL) {
   options('SAFE_data_dir' = dir)
 }
 
-readTransposedXlsx <- function (file, sheetName, ...) {
+readTransposedXlsx <- function (path, sheetName, ...) {
   #' Read a transposed .xlsx file into a dataframe
   #' 
   #' Provides capability to read .xlsx files that are transposed (i.e. 
@@ -52,7 +52,7 @@ readTransposedXlsx <- function (file, sheetName, ...) {
   #' @seealso \code{\link[readxl]{read_xlsx}}
   
   df <- suppressMessages(
-    readxl::read_xlsx(file, sheet = sheetName, col_names = FALSE, ...))
+    readxl::read_xlsx(path, sheet = sheetName, col_names = FALSE, ...))
   dfT <- as.data.frame(t(df[-1]), stringsAsFactors = FALSE)
   names(dfT) <- t(df[,1])
   dfT <- as.data.frame(lapply(dfT, utils::type.convert))
