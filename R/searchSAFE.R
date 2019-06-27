@@ -363,7 +363,7 @@ searchSpatial <- function (wkt = NULL, location = NULL, distance = NULL, ids = N
   #'   is provided.
   #' @seealso \code{\link{getSafe}} for downloading SAFE datasets,
   #'   \url{https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry}
-  #'   for setting up well-known text geomtries,
+  #'   for setting up well-known text geometries,
   #'   \url{https://www.safeproject.net/info/gazetteer} for an index of defined
   #'   SAFE locations.
   #' @examples 
@@ -374,7 +374,7 @@ searchSpatial <- function (wkt = NULL, location = NULL, distance = NULL, ids = N
   #'   searchSpatial(location = 'A_1', distance = 2500)
   #'   searchSpatial(location = 'A_1', mostRecent = TRUE)
   #'   searchSpatial(location = 'A_1', distance = 2500,
-  #'                 ids = c(1303018 1237730 1198585 1228188 1198461, 119832))
+  #'                 ids = c(1303018, 1237730, 1198585, 1228188, 1198461, 119832))
   
   # check inputs and set up API
   api <- 'https://www.safeproject.net/api/search/spatial?'
