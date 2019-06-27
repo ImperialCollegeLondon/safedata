@@ -386,8 +386,7 @@ searchSpatial <- function (wkt = NULL, location = NULL, distance = NULL, ids = N
                 'Only one should be specified.'))
   } else {
     if (!is.null(wkt)) {
-      if (any(
-        !is.na(stringr::str_match(wkt, c("Point", "LineString", "Polygon"))))) {
+      if (grepl('^Point|^LineString|^Polygon', wkt)) {
         api <- paste0(api, 'wkt=', gsub(' ', '%20', wkt))
       } else {
         stop(paste0('"wkt" must be a well-known text geometry representation ',
