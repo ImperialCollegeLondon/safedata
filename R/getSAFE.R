@@ -448,7 +448,7 @@ printVersions <- function (printVers) {
   #' @seealso \code{\link{processSafe}}
   
   return(paste0(
-    capture.output(print(printVers, row.names = FALSE, right = FALSE)),
+    utils::capture.output(print(printVers, row.names = FALSE, right = FALSE)),
     collapse = '\n'))
 }
 
@@ -478,7 +478,7 @@ downloadSafe <- function (zenodoRecord, dir = NULL) {
     } else {
       message(paste0('\nDownloading file ', basename(fileName), '... '), 
               appendLF = FALSE)
-      download.file(bucket$contents$links$self, destfile = fileName, quiet = TRUE)
+      utils::download.file(bucket$contents$links$self, destfile = fileName, quiet = TRUE)
       message('complete!\n')
     }
   }

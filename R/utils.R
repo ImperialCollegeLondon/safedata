@@ -62,7 +62,7 @@ readTransposedXlsx <- function (file, sheetName, ...) {
     readxl::read_xlsx(file, sheet = sheetName, col_names = FALSE, ...))
   dfT <- as.data.frame(t(df[-1]), stringsAsFactors = FALSE)
   names(dfT) <- t(df[,1])
-  dfT <- as.data.frame(lapply(dfT, type.convert))
+  dfT <- as.data.frame(lapply(dfT, utils::type.convert))
   
   return(dfT)
 }

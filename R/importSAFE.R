@@ -338,7 +338,7 @@ nameBackboneToDf <- function (nameBackbone) {
   
   cols <- c('safeName', 'subspecies', 'species', 'genus', 'family', 'class', 
             'order', 'phylum', 'kingdom', 'matchType')
-  taxaDf <- setNames(data.frame(matrix(ncol = length(cols), nrow = 0), 
+  taxaDf <- stats::setNames(data.frame(matrix(ncol = length(cols), nrow = 0), 
                                 stringsAsFactors = FALSE), cols)
   rgbifDf <- as.data.frame(nameBackbone, stringsAsFactors = FALSE)
   return(dplyr::bind_rows(rgbifDf, taxaDf)[, cols])

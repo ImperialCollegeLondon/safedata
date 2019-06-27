@@ -13,7 +13,7 @@ checkApiCall <- function (apiOutput) {
   
   if (is.null(apiOutput$count)) {
     if (apiOutput$error == 404) {
-      stop('Invalid Zenodo API search: ', apiOut$message, ' Please check all ',
+      stop('Invalid Zenodo API search: ', apiOutput$message, ' Please check all ',
            'terms.', call. = FALSE)
     }
   }
