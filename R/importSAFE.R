@@ -501,8 +501,7 @@ addData.safe_data <- function (obj, filePath = NULL) {
   #' @examples
   #'   # create a safe_data object and add data
   #'   filePath <- 'C:/Users/User/safe_data/path_to_file.xlsx'
-  #'   summaryInfo <- readTransposedXlsx(filePath, sheetName='Summary')
-  #'   safe <- createSafe(summaryInfo)
+  #'   safe <- importSafe(filePath)
   #'   safe <- addData(safe, filePath)
   #'   
   #'   # access the data table named "data_1"
