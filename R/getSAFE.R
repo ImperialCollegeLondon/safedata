@@ -328,7 +328,7 @@ processSafe <- function (id, dir, updateIndex = TRUE, overwrite = FALSE) {
   #'   'open' dataset associated with the project
   #' @param dir directory into which data will be stored
   #' @param updateIndex \code{boolean}, should the SAFE index file be updated?
-  #' @param overwrite 
+  #' @param overwrite Should existing copies of the data be overwritten.
   #' @return \code{list} object containing information from the Zenodo API call
   #' @seealso \code{\link{zenodoRecordApiLookup}}, \code{\link{updateIndex}}
   #' @export
