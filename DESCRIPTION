@@ -17,7 +17,6 @@ Imports:
     readxl,
     rgbif,
     dplyr,
-    docstring,
     jsonlite,
     RCurl
 Suggests:
