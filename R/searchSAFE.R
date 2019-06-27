@@ -367,9 +367,9 @@ searchSpatial <- function (wkt = NULL, location = NULL, distance = NULL, ids = N
   #'   \url{https://www.safeproject.net/info/gazetteer} for an index of defined
   #'   SAFE locations.
   #' @examples 
-  #'   searchSpatial(wkt = Point(116.5 4.75))
-  #'   searchSpatial(wkt = Point(116.5 4.75), distance = 100000)
-  #'   searchSpatial(wkt = Polygon((110 0, 110 10,120 10,120 0,110 0)))
+  #'   searchSpatial(wkt = 'Point(116.5 4.75)')
+  #'   searchSpatial(wkt = 'Point(116.5 4.75)', distance = 100000)
+  #'   searchSpatial(wkt = 'Polygon((110 0, 110 10,120 10,120 0,110 0))')
   #'   searchSpatial(location = 'A_1')
   #'   searchSpatial(location = 'A_1', distance = 2500)
   #'   searchSpatial(location = 'A_1', mostRecent = TRUE)
