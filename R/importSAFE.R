@@ -500,7 +500,7 @@ addData.safe_data <- function (obj, filePath = NULL) {
   #'   for information on SAFE data worksheets
   #' @examples
   #'   # create a safe_data object and add data
-  #'   filePath <- 'C:/Users/User/safe_data/path_to_file.xlsx'
+  #'   filePath <- system.file('extdata', 'demo_data.xlsx', package='safe_data')
   #'   safe <- importSafe(filePath)
   #'   safe <- addData(safe, filePath)
   #'   
