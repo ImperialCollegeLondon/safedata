@@ -183,7 +183,7 @@ addTaxa <- function (obj, filePath = NULL) {
   #' @note Not all SAFE project submissions contain the Taxa worksheet (for
   #'   example if the data do not contain any taxonomic observations). In this
   #'   case \code{safedata$Taxa} defaults to \code{NA}.
-  #' @seealso \code{\link{buildTaxonHeirarchy}},
+  #' @seealso \code{\link{addTaxonHeirarchies}},
   #'   \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/taxa/}
   #'   for information on the Taxa worksheet, \code{\link{addTaxonHeirarchies}}
   #' @export
@@ -308,7 +308,7 @@ nameBackboneToDf <- function (nameBackbone) {
   #'   \code{\link[rgbif]{name_backbone}}
   #' @return Taxonomic heirarchy stored as a dataframe including the 8 main
   #'   taxonomic levels
-  #' @seealso \code{\link{getTaxonHeirarchy}}, \code{\link[rgbif]{name_backbone}}
+  #' @seealso \code{\link{addTaxonHeirarchies}}, \code{\link[rgbif]{name_backbone}}
   #' @export
   
   cols <- c('safeName', 'subspecies', 'species', 'genus', 'family', 'class', 
