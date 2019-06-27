@@ -209,7 +209,7 @@ buildVersionsDataframe <- function (allVersions) {
   
   # check that the result of a valid versions API call has been passed
   if (length(allVersions$aggregations$access_right$buckets) == 0) {
-    stop(paste0('Supplied concept ID (', conceptRecId, ') is invalid'))
+    stop(paste0('Invalid API call'))
   }
   
   # create a dataframe with record ID, date, and access status
