@@ -167,22 +167,23 @@ processSafeSummary.safe_data <- function (obj, filePath = NULL) {
   return(obj)
 }
 
-print.safe_data <- function (obj) {
+print.safe_data <- function (x, ...) {
   #' Print summary of information for a \code{safe_data} object to the console
   #' 
   #' Prints a summary of metadata for the given SAFE project object to the
   #' command line. Includes the project title, project ID number, start and end
   #' dates, and data worksheet names.
   #' 
-  #' @param obj An object of class \code{safe_data}
+  #' @param x An object of class \code{safe_data}
+  #' @param ... Further arguments to print generic, ignored
   #' @seealso \code{\link{createSafe}}, \code{\link{processSafeSummary}}
   #' @export
   
-  cat('Project name:', obj$title, '\n')
-  cat('Project ID:', obj$projectID, '\n')
-  cat('Dates:', paste0(obj$startDate), 'to', paste(obj$endDate), '\n')
-  cat('Contains', length(obj$workSheets), 'data worksheet(s):', '\n')
-  cat('  ', paste0(obj$workSheets, collapse = ', '))
+  cat('Project name:', x$title, '\n')
+  cat('Project ID:', x$projectID, '\n')
+  cat('Dates:', paste0(x$startDate), 'to', paste(x$endDate), '\n')
+  cat('Contains', length(x$workSheets), 'data worksheet(s):', '\n')
+  cat('  ', paste0(x$workSheets, collapse = ', '))
 }
 
 addTaxa <- function (obj, filePath = NULL) {
