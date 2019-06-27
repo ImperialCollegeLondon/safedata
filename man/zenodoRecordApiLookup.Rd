@@ -8,7 +8,7 @@ zenodoRecordApiLookup(id)
 }
 \arguments{
 \item{id}{the data ID number, which in this instance should be either a
-SAFE project DOI or concept ID number}
+SAFE version DOI or concept DOI number}
 }
 \value{
 \code{list} object containing information from the Zenodo API call
