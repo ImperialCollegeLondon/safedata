@@ -9,18 +9,26 @@ There are two options for installing the package
 2. Install the binary package from CRAN, i.e. `install.packages("safe_data")`
 
 ## Getting started
-The two main functionalities of `safe_data` are for accessing and downloading SAFE data files, and importing them into R.
+The main functionalities of `safe_data` are for searching, downloading, and importing SAFE data files through R.
 
-### 1. Download SAFE project data
+### 1. Searching SAFE datasets
+SAFE datasets stored on the [Zenodo cloud database](https://zenodo.org/communities/safe/?page=1&size=20) can be browsed using varied metadata, such as author and taxa, for example:
+```r
+searchAuthor('Smith')
+searchTaxa(searchType = 'name', searchVal = 'Formicidae')
+```
+will return the record ID numbers of all datasets by author 'Smith' and all datasets containing the taxon name 'Formicidae'.
+
+### 2. Download SAFE project data
 Download data for record ID [3081059](https://zenodo.org/record/3081059#.XPfX9xZKhhE):
 ```r
 library(safe_data)
-SAFE_dir <- 'C:/Users/User/Documents/SAFE/'
+setSafeDir('C:/Users/User/Documents/SAFE/')
 record_ID <- 3081059
-getSafe(record_ID, SAFE_dir)
+getSafe(record_ID)
 ```
 
-### 2. Import SAFE project data into R
+### 3. Import SAFE project data into R
 Import data file associated with record ID [3081059](https://zenodo.org/record/3081059#.XPfX9xZKhhE), named LiDAR_Aboveground_Carbon.xlsx:
 ```r
 library(safe_data)
@@ -28,7 +36,7 @@ SAFE_dir <- 'C:/Users/User/Documents/SAFE/'
 file_name <- 'LiDAR_Aboveground_Carbon.xlsx'
 path_to_file <- file.path(SAFE_dir, concept_ID, record_ID, file_name)
 record <- importSafe(path_to_file)
-printSummary(path_to_file)
+print(record)
 ```
 
 ## Further examples
