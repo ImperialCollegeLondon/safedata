@@ -35,11 +35,11 @@ setSafeDir <- function (dir = NULL) {
   
   if (is.null(dir)) {
     warning(paste0('SAFE_data_dir not supplied, ', 
-                   'defaulting to current working directory'))
+                   'defaulting to current working directory'), immediate. = TRUE)
     dir = getwd()
   } else if (!dir.exists(dir)) {
     warning(paste0('Invalid SAFE_data_dir supplied, ', 
-                   'defaulting to current working directory'))
+                   'defaulting to current working directory'), immediate. = TRUE)
     dir = getwd()
   }
   options('SAFE_data_dir' = dir)

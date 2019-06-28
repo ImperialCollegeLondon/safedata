@@ -130,7 +130,8 @@ searchFields <- function (fieldText = NULL, fieldType = NULL, ids = NULL, mostRe
   #' @param fieldText Character string to search for within the data field name
   #'   and description.
   #' @param fieldType Character string to search for within the field type (for
-  #'   example field type \code(numeric)).
+  #'   example field type \code(numeric)). SAFE data types can be read about at
+  #'   \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/data/#field-types}.
   #' @param ids Numeric that restricts the returned API search to a subset of
   #'   Zenodo record IDs given in the \code{ids} parameter. This is typically
   #'   used to refine previous searches.
@@ -143,7 +144,9 @@ searchFields <- function (fieldText = NULL, fieldType = NULL, ids = NULL, mostRe
   #'   version of a SAFE project has a unique record ID. Different versions of
   #'   the same dataset are grouped together under a single concept ID. See
   #'   \url{https://help.zenodo.org/} for more information on Zenodo versioning.
-  #' @seealso \code{\link{getSafe}} for downloading SAFE datasets.
+  #' @seealso \code{\link{getSafe}} for downloading SAFE datasets,
+  #'   \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/data/#field-types}
+  #'   for accepted SAFE field types.
   #' @examples
   #'   searchFields(fieldText = 'temperature')
   #'   searchFields(fieldType = 'numeric')
@@ -156,9 +159,15 @@ searchFields <- function (fieldText = NULL, fieldType = NULL, ids = NULL, mostRe
     stop(paste0('Neither "fieldText" or "fieldType" have been provided. Please ',
                 'specify at least one!'))
   }
-  if (!is.character(fieldText) | !is.character(fieldType)) {
-    stop(paste0('"fieldText" and "fieldType" inputs must be of type character, ',
-                'got (respectively) ', class(fieldText), ' and ', class(fieldType)))
+  if (!is.null(fieldText)) {
+    if (!is.character(fieldText)) {
+      stop(paste0('"fieldText" must be of type character, got ', class(fieldText)))
+    }
+  }
+  if (!is.null(fieldType)) {
+    if (!is.character(fieldType)) {
+      stop(paste0('"fieldType" must be of type character, got ', class(fieldType)))
+    }
   }
   
   # set up the API
@@ -367,9 +376,9 @@ searchSpatial <- function (wkt = NULL, location = NULL, distance = NULL, ids = N
   #'   \url{https://www.safeproject.net/info/gazetteer} for an index of defined
   #'   SAFE locations.
   #' @examples 
-  #'   searchSpatial(wkt = Point(116.5 4.75))
-  #'   searchSpatial(wkt = Point(116.5 4.75), distance = 100000)
-  #'   searchSpatial(wkt = Polygon((110 0, 110 10,120 10,120 0,110 0)))
+  #'   searchSpatial(wkt = 'Point(116.5 4.75)')
+  #'   searchSpatial(wkt = 'Point(116.5 4.75)', distance = 100000)
+  #'   searchSpatial(wkt = 'Polygon((110 0, 110 10,120 10,120 0,110 0))')
   #'   searchSpatial(location = 'A_1')
   #'   searchSpatial(location = 'A_1', distance = 2500)
   #'   searchSpatial(location = 'A_1', mostRecent = TRUE)

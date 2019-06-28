@@ -21,13 +21,13 @@ disciplines and institutions, each running interlinked projects that help to
 develop our understanding of ecology within changing environments. Data from 
 the many activities conducted through the SAFE Project are curated and made
 available at the [SAFE Zenodo repository](https://zenodo.org/communities/safe/),
-a cloud-storage platform. The `safe_data` package is intended to enable 
-researchers to quickly and easily interface with these datasets. This document
-provides an introduction to the core functionalities of the package and
-describes the concepts supporting its development.
+a cloud-storage platform. The `safe_data` package enables researchers to 
+interface with SAFE datasets in the Zenodo database. This document provides an
+introduction to the core functionalities of the package and describes the
+concepts supporting its development.
 
 ## Data format
-All researchers working at the SAFE Project are asked to submit their project
+All researchers working at the SAFE Project are required to submit their project
 data to the [SAFE Zenodo repository](https://zenodo.org/communities/safe/). 
 Submitted data must meet strict formatting requirements and pass a validation
 check before acceptance. Full details of this process can be found on the
@@ -37,16 +37,16 @@ In most cases, data are provided as tabular datasets stored in Excel
 spreadsheets (note that v0.1 of `safe_data` only provides support for .xlsx
 imports). Briefly, these datasets comprise the following worksheets:
 
-* **Summary**: simple metadata (authors, access rights) about the dataset
+* **Summary**: dataset metadata (authors, access rights)
 * **Taxa**: a description of the Taxa reported in the dataset
 * **Locations**: a description of all sampling locations in the dataset
-* **Data worksheets**: the actual data tables, described in the **Summary** sheet
+* **Data worksheets**: the actual data tables, outlined in the **Summary** sheet
 
-The `safe_data` package allows users to import and interrogate these datasets
-within the R environment.
+The `safe_data` package provides functionality to search, download, and import
+these datasets within the R environment.
 
 ## Data repository
-The [SAFE Zenodo repository](https://zenodo.org/communities/safe/) provides a
+The [SAFE Zenodo repository](https://zenodo.org/communities/safe/) is a
 searchable cloud-based data storage facility for research outputs from the SAFE
 Project. Zenodo uses a [DOI versioning](https://help.zenodo.org/) system for 
 file storage. When uploads are published on Zenodo for the first time, two DOIs 
@@ -55,24 +55,25 @@ are registered:
 * a DOI representing the _specific version_ of the record: the **version ID**
 * a DOI representing _all versions_ of the record: the **concept ID**
 
-Subsequent versions of an upload are then logged under a new DOI.
+Subsequent versions of an upload are then logged under a new DOI (for the
+version) under the same concept.
 
 In practice, this means that multiple versions of a project's data (or multiple
 datasets associated with a single research project) can be stored and referenced
-separately under a single identifier. The **concept** DOI allows users to cite
-the _entire_ project, while the **version** DOI refers to a _particular_ instance.
+separately with a single unique identifier. The **concept** DOI allows users to
+cite the _entire_ project, while the **version** DOI refers to a _particular_ 
+instance.
 
-Datasets published on Zenodo can have differing access rights:
+Datasets published on Zenodo can also have differing access rights:
 
 * **Open**: the dataset is open for download
 * **Embargoed**: the dataset is currently unavailable for download, but will be
-opened in the future
+opened in the future (on some defined date)
 * **Closed**: the dataset is no longer available
 
 `safe_data` enables downloading of SAFE project datasets using either a specific
 version ID or concept ID (in which case the latest **open** version of the
-project records is returned). More detail on this can be found in the sections
-below.
+project records is returned).
 
 # Get safe_data
 The latest stable version of `safe_data` can be installed from CRAN
@@ -85,45 +86,313 @@ Alternatively, the current development version can be installed from GitHub
 devtools::install_github("ImperialCollegeLondon/safe_data")
 ```
 
+# Search the SAFE database
+`safe_data` provides functions to search for SAFE datasets on the Zenodo
+database using varied criteria, allowing users to index particular projects
+using different metadata. Full details of the SAFE API tool can be found on the
+[SAFE website](https://www.safeproject.net/api/). Searching for SAFE datasets
+in `safe_data` returns a list of individual record IDs matching the search
+criteria specified, which may then be downloaded or imported by the user. A
+brief description of the different search functions provided in `safe_data` are
+described below.
+
+## Search by date
+SAFE datasets can be searched by temporal extent. Users can search for a single 
+date, returning the IDs of all datasets whose reporting period includes that
+date:
+```r
+searchDates('2014-06-12')
+```
+
+Alternatively, users may specify a date range to search over. When a date range
+is supplied, users can additionally pass a keyword `matchType` to constrain the
+matching criteria. The default `matchType` is `intersect`, which will return a
+set of IDs for any datasets whose date range overlaps with the range queried:
+```r
+searchDates('2014-06-12,2015-06-11', matchType = 'intersect')
+```
+
+Setting `matchType` to `contain` returns a set of IDs for any datasets whose
+date range is entirely contained by the query range:
+```r 
+searchDate('2014-06-12,2015-06-11', matchType = 'contain')
+```
+
+Finally, `matchType` can also be set to `within`, which returns a set of IDs for
+any datasets whose date range completely encompasses the query range:
+```r 
+searchDate('2014-06-12,2015-06-11', matchType = 'within')
+```
+
+Note that in `searchDates` all dates must be passed in ISO format (yyyy-mm-dd).
+Date ranges must be specified as a **comma-separated** character string. 
+
+## Search by author
+SAFE datasets can also be searched by author name. Passing all or part of an
+author's name to `searchAuthor` will return IDs for all projects whose author
+list contains the queried string.
+```r
+searchAuthor('Orme')
+```
+
+## Search by data field description
+Users can query the SAFE database using descriptors of the data types reported
+in a particular dataset. For example, a list of IDs for all datasets recording
+temperature data can be extracted using the following search example:
+```r
+searchFields(fieldText = 'temperature')
+```
+
+`searchFields` accepts both a `fieldText` (a description of the data field) and
+`fieldType` (the [SAFE field type](https://safe-dataset-checker.readthedocs.io/en/latest/data_format/data/#field-types),
+e.g. `numeric`) argument, which can be provided separately, or together, in a
+query.
+```r
+# datasets containing numeric temperature data
+searchFields(fieldText = 'temperature', fieldType = 'numeric')
+
+# datasets containing locational data
+searchFields(fieldType = 'location')
+```
+
+## Search by taxa
+SAFE datasets can be searched by taxon information using several indices:
+
+* `name` - the Taxon name
+* `gbif_id` - the Taxon ID number on the [GBIF database](https://www.gbif.org/)
+* `rank` - the Taxon rank
+
+These indices are passed to `searchTaxa` using the named variable `searchType`, 
+with the associated query value passed using the named variable `searchValue`, 
+to return a set of IDs for datasets containing the matching taxa, as in the
+following examples:
+
+```r
+searchTaxa(searchType = 'name', searchVal = 'Formicidae')
+searchTaxa(searchType = 'gbif_id', searchVal = 4342)
+searchTaxa(searchType = 'rank', searchVal = 'Family')
+```
+
+## Search by location
+Users can search SAFE datasets by location (i.e. by the locations from which
+data were recorded) using either known, named locations on the
+[SAFE gazetteer](https://www.safeproject.net/info/gazetteer) (a complete list of
+which are provided in JSON format [here](https://www.safeproject.net/call/json/get_locations)),
+or by defining their own spatial area to query. The sampling locations provided 
+in each dataset are tested to see if they intersect the search geometry.
+
+User-defined geometries must be submitted as character strings in the format of
+a [well-known text geometry](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry#Geometric_objects)
+using latitude and longitude coordinates in 
+[WGS84 (EPSG:4326)](https://en.wikipedia.org/wiki/World_Geodetic_System).
+Examples of these constructs are given below.
+
+A final (optional) buffer `distance` (defined in metres) can be provided to
+search around the query location/geometry.
+
+Search SAFE datasets by named location `A_1`:
+```r
+searchSpatial(location = 'A_1')
+```
+
+Search SAFE datasets intersecting a user-defined polygon:
+```r
+searchSpatial(wkt = 'Polygon((110 0, 110 10,120 10,120 0,110 0))')
+```
+
+Search SAFE datasets intersecting a specific point with a buffer distance of 10km:
+```r
+searchSpatial(wkt = 'Point(116.5 4.75)', distance = 10000)
+```
+
+## Search by free text
+A final search option allows users to query SAFE datasets using a free-text
+search, which matches character strings across dataset, worksheet, and data
+field descriptions, as well as withinin titles and keywords.
+
+```r
+searchText('forest')
+searchText('ant')
+```
+
+## Additional search parameters
+The above search functions can each be supplemented by two additional optional
+parameters: `mostRecent` and `ids`.
+
+When `mostRecent` (a `logical`) is set to `TRUE`, the search query will only
+return record IDs for the most recent version of a concept. For example:
+```r
+searchTaxa('Formicidae', mostRecent = TRUE)
+```
+
+The `ids` parameter is intended to provide users with the capability to refine
+previous search results. `ids` is an array of SAFE record IDs that is used to
+filter the output from a previous query, for example:
+```r
+searchTaxa(searchType = 'name', searchVal = 'Formicidae', ids = searchFields(fieldType = 'location'))
+```
+
+will return a set of record IDs for SAFE datasets containing location data types
+including the taxon name Formicidae.
+
+
 # Access a SAFE Project dataset
-SAFE project datasets can be downloaded to a local directory.
+SAFE project datasets can be downloaded to a local directory using `getSafe`.
 
 ## The SAFE directory
-Information on how to set the `SAFE_data_dir` in R.
+It is good practice that users should use a common directory, known as the
+`SAFE_data_dir`, to store SAFE datasets. Upon importing `safe_data` into R one 
+receives the following message reminding the user to set the `SAFE_data_dir` in 
+the local environment:
+```text
+SAFE package reminder: Please set SAFE_data_dir using setSafeDir()
+```
+
+Setting the `SAFE_data_dir` is a simple case of calling `setSafeDir` with the 
+desired directory path passed as an argument. If the `SAFE_data_dir` is not set,
+and no alternative directory is supplied as an argument, then `safe_data` will 
+process all downloads to the current working directory. This can create issues
+with tracking versions and files associated with requested SAFE Project files.
 
 ## Local directory structure
-SAFE Project datasets are stored locally within the `SAFE_data_dir`. Each SAFE
-Project has a master folder named according to the concept DOI. Separate
+Usually, SAFE Project datasets will be stored locally within the `SAFE_data_dir`.
+Each SAFE Project has a master folder named according to the concept DOI. Separate
 versions of this project are then created as subfolders within the main project
 folder according to their version DOI. All datasets associated with this upload
 are then stored within the version subfolder.
-```
+```text
 index.rds
 concept_DOI/
-concept_DOI/versions.rds
 concept_DOI/record_DOI_1/file.xlsx
 concept_DOI/record_DOI_1/external_file1.xlsx
 concept_DOI/record_DOI_2/file.xlsx
 ```
 
-The `index.rds` and `versions.rds` are local caches containing up-to-date
-offline records of files accessed and version statuses for all concept DOIs
-requested by the user. These files are described in more detail below.
+The `index.rds` file is a local cache containing an up-to-date record of concept
+IDs and versions accessed by the user.
 
 ## Versioning
+`safe_data` keeps track of the dataset versions associated specifically with the
+concept IDs accessed by a user in the `index.rds` file. Essentially, this is a
+dataframe containing metadata such as `concept ID`, `record ID`, `embargo status`,
+`open date`, and `download status` for each version of a project. `safe_data`
+uses this information to notify or warn the user of problematic download
+requests, such as if the user attempts to download an embargoed project file (in
+which case an alternative version - if available - is suggested), or attempts to
+download a dataset for which a local version already exists (in which case an
+error message appears). The effective purpose of `index.rds` is to maintain an
+offline bank of SAFE dataset information to support user productivity in
+`safe_data`.
 
-The `versions.rds` file is always 
+Each time a Zenodo ID (whether a record ID or a concept ID) is passed to `getSafe`,
+the `index.rds` is updated.
 
-# Load a SAFE Project dataset
+## Downloading a SAFE Project dataset
+SAFE datasets are downloaded using the `getSafe` function. Users can pass either
+concept IDs - in which case `getSafe` will attempt to download the dataset
+associated with the latest version of the project - or specific record IDs. IDs
+can be also processed 'in bulk', for example `getSafe` will accept the output of
+a SAFE search query.
+
+Assuming that the `SAFE_data_dir` has been set, downloading a SAFE file is as
+simple as:
+```r
+getSafe(1216039)
+```
+
+**Note** that if the `SAFE_data_dir` has not been set, `getSafe` will set the
+current working directory as the `SAFE_data_dir`, meaning that all file
+downloads performed during the active R session will be saved to this directory.
+If no `index.rds` file exists at this location, it will be created.
+
+Alternatively, users can specify a separate download location using the `dir`
+variable:
+```r
+getSafe(1216039, dir = 'path/to/files)
+```
+
+Again this is not advised, as it invites the possibility for multiple versions
+of the same datasets to be stored in different locations on the user's local
+machine.
+
+By default datasets will not be overwritten if they have already been downloaded,
+although this behaviour can be overridden by setting `overwrite = TRUE` when
+calling `getSafe`.
+
+Downloaded data files are named according to the project name on the Zenodo
+database.
+
+
+# Load a SAFE Project dataset into an R session
+Local copies of SAFE Project datasets can be loaded into an R session using the
+`importSafe` function. This tool imports an object of class `safe_data` into R,
+and adds project metadata, taxa, location, and data worksheets from an existing
+record file (assumed to be an Excel .xlsx workbook).
 
 ## Importing a SAFE data object
-Using `importSafe()`
+To import a SAFE dataset simply pass the full (or relative) file path to the
+`importSafe` function:
+```r
+safe <- importSafe('path/to/SAFE_file.xlsx')
+```
 
-## The SAFE data object structure
-Description of different features within the object and how to access them (e.g.
-`print()`)
+The resulting object (class `safe_data`) - based on a `list` structure - has
+varied attributes that can be accessed using the `$` notation, for example:
+```r
+safe$title # project name
+safe$startDate # project start date
+```
+
+A simple summary of the imported project file can be shown using `print`, e.g.
+```r
+print(safe)
+```
+
+## Adding Taxa, Location, and data worksheets
+Once imported into the R environment, additional worksheets from the record
+.xlsx can be added to the `safe_data` object using simple `add` commands, for
+instance:
+```r
+safe <- addTaxa(safe) # add Taxa dataframe to an existing SAFE object
+safe <- addLocation(safe) # add Locations dataframe to an existing SAFE object
+```
+
+These functions add dataframes of Taxa (`safe$Taxa`) and Locations (`safe$Locations`)
+that mirror the respective tables in the Excel dataset. Note that as both the
+Taxa and Locations worksheets are optional inclusions for a SAFE dataset (not
+all records include this information), `addTaxa` and `addLocations` will return
+an error in the event that they do not exist.
+
+Each `safe_data` object created on calling `importSafe` includes, by default, a
+list of named data tables in the workbook under `safe$workSheets`. A empty list
+structure taking the name of each data table (e.g. workSheet1, workSheet2, ...)
+is also added to the object (`safe$workSheet1`).
+
+The `addData` function is then used to populate these lists, adding data and
+header information for each data worksheet in the SAFE dataset:
+```r
+safe <- addData(safe)
+safe$workSheet1$description # prints a description of the data contained in workSheet1
+safe$workSheet1$data # access the data (tabular) contained in worksheet1
+attributes(safe$workSheet1$data) # print header information (field types and descriptions)
+```
 
 ## Building taxonomic heirarchies
-Using `addTaxonHeirarchies()` to build a taxonomic tree
+Users can build a complete taxonomic heirarchy for all Taxa listed in a given
+SAFE Project dataset. This function makes use of the R package 
+[rgbif](https://cran.r-project.org/web/packages/rgbif/index.html), which provides
+a programmatic interface to the (Global Biodiversity Information Facility)[https://www.gbif.org/developer/summary].
+Once taxon information has been added to an existing `safe_data` object (`safe`)
+using `addTaxa`, run:
+```r
+safe <- addTaxonHeirarchies(safe)
+```
 
-## Visualising locational information
+to build the taxonomic tree. This is stored as a dataframe (`safe$TaxonHeirarchy`) 
+with full rank details for each taxon in the dataset (from the named taxon level
+up to Kingdom), and includes the `rgbif` match type - a measure of the confidence
+of the heirarchy structure - for user information.
+
+**Note** `addTaxonHeirarchies` performs repeated lookups to the GBIF API, and as
+a consequence will run slowly on datasets containing a large volume (>1000) of
+unique taxon records.
