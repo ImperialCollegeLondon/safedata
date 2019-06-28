@@ -17,25 +17,37 @@ simpleCap <- function (str) {
            collapse = ' '))
 }
 
-setSafeDir <- function (dir = NULL) {
-  #' Set the local SAFE data directory
-  #'
-  #' Sets the local SAFE data directory using R "options". If an invalid/no
-  #' directory is specified, defaults to the current working directory.
-  #'
-  #' @param dir, the directory to set as the SAFE_data_dir (defaults to 
-  #'   \code{getwd()})
-  
-  if (is.null(dir)) {
-    warning(paste0('SAFE_data_dir not supplied, ', 
-                   'defaulting to current working directory'))
-    dir = getwd()
-  } else if (!dir.exists(dir)) {
-    warning(paste0('Invalid SAFE_data_dir supplied, ', 
-                   'defaulting to current working directory'))
-    dir = getwd()
-  }
-  options('SAFE_data_dir' = dir)
+setSafeDir <- function(dir, init=FALSE) {
+    #' Set the local SAFE data directory
+    #'
+    #' Validate and sets the local SAFE data directory in options('safedata.dir').
+	#' The named directory must contain the index file ('safe_data_index.rds'),
+	#' although this will be created if \code{init} is set to true.
+    #'
+    #' @param dir A path to the directory to set as the SAFE data directory.
+	#' @param init A boolean to indicate whether to initialise the directory
+	#'     as a SAFE data directory.
+	#' @export
+
+	if (! dir.exists(dir)) {
+        stop("Directory not found.")
+    } 
+	
+	index_found <- file.exists(file.path(dir, 'safe_data_index.rds'))
+	
+	if(create & index_found){
+		warning("Index already exists, setting SAFE data directory,.")
+		options(safedata.dir = dir)		
+	} else if(create & ! index_found){
+		message('Downloading SAFE dataset index.')
+		index <- jsonlite::fromJSON('https://www.safeproject.net/api/files')
+		saveRDS(index, file.path(dir, 'safe_data_index.rds'))
+		options(safedata.dir = dir)
+	} else if(! index_found){
+		stop("Index not found, not a SAFE data directory.")
+	} else {
+		options(safedata.dir = dir)
+	}	
 }
 
 readTransposedXlsx <- function (path, sheetName, ...) {
