@@ -121,11 +121,15 @@ dataframe. This function preserves data types.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>readTransposedXlsx</span>(<span class='no'>file</span>, <span class='no'>sheetName</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>readTransposedXlsx</span>(<span class='no'>path</span>, <span class='no'>sheetName</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>path</th>
+      <td><p>The path to the .xlsx file to be opened</p></td>
+    </tr>
     <tr>
       <th>sheetName</th>
       <td><p>The name of the worksheet to be imported</p></td>
@@ -133,10 +137,6 @@ dataframe. This function preserves data types.</p>
     <tr>
       <th>...</th>
       <td><p>Optional arguments to be passed to <code>read_xlsx</code></p></td>
-    </tr>
-    <tr>
-      <th>path</th>
-      <td><p>The path to the .xlsx file to be opened</p></td>
     </tr>
     </table>
     

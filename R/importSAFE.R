@@ -57,26 +57,26 @@ isSafeTypeCategorical <- function (safeType) {
 }
 
 createSafe <- function (filePath = NULL, processSummary = TRUE) {
-  #' Initiate a new \code{safe_data} object
+  #' Initiate a new \code{safedata} object
   #' 
-  #' \code{create_safe} generates an object of class type \code{safe_data} that
+  #' \code{create_safe} generates an object of class type \code{safedata} that
   #' is used to import and view SAFE project datasets.
   #' 
   #' @param filePath the complete path to the SAFE dataset .xlsx file. This 
   #'   could be absolute, or relative to the current working directory. When no
-  #'   path is specified (i.e. \code{filePath = NULL}), an empty \code{safe_data}
+  #'   path is specified (i.e. \code{filePath = NULL}), an empty \code{safedata}
   #'   object is returned.
   #' @param processSummary a logical value indicating whether summary data
-  #'   should be added to the \code{safe_data} object on creation. If \code{TRUE},
+  #'   should be added to the \code{safedata} object on creation. If \code{TRUE},
   #'   then summary metadata is added to the object using the function
   #'   \code{\link{processSafeSummary}}.
-  #' @return an object of class \code{safe_data}.
+  #' @return an object of class \code{safedata}.
   #' @seealso \code{\link{processSafeSummary}}
   #' @export
   
-  obj <- structure(list(), class = 'safe_data')
+  obj <- structure(list(), class = 'safedata')
   if (is.null(filePath)) {
-    warning('No filePath specified, returning empty safe_data object',
+    warning('No filePath specified, returning empty safedata object',
             call. = FALSE, immediate. = TRUE)
     obj$filePath <- NULL
     return(obj)
@@ -94,44 +94,22 @@ createSafe <- function (filePath = NULL, processSummary = TRUE) {
   }
 }
 
-is.safe_data <- function (obj) {
-  #' Check if \code{obj} is of the \code{safe_data} class
-  #' 
-  #' @param obj The object to be classified.
-  #' @return A logical value indicating whether \code{obj} is (\code{TRUE}) or
-  #'   is not (\code{FALSE}) of type \code{safe_data}.
-  #' @export
-  
-  if (class(obj) == 'safe_data') {
-    return(TRUE)
-  } else {
-    return(FALSE)
-  }
-}
 
 processSafeSummary <- function (obj, filePath = NULL) {
-  UseMethod('processSafeSummary', obj)
-}
-
-processSafeSummary.default <- function (obj, filePath = NULL) {
-  stop('function processSafeSummary() works only with safe_data objects')
-}
-
-processSafeSummary.safe_data <- function (obj, filePath = NULL) {
   #' Process summary 'meta' information for SAFE project data
   #' 
-  #' Adds summary information to a \code{safe_data} object using the dataframe
+  #' Adds summary information to a \code{safedata} object using the dataframe
   #' provided. \code{processSafeSummary} reads and assigns variables from the
   #' summary dataframe - a transposed "Summary" worksheet from a SAFE project
-  #' .xlsx dataset - into a \code{safe_data} object.
+  #' .xlsx dataset - into a \code{safedata} object.
   #' 
-  #' @param obj An object of class \code{safe_data}.
-  #' @filePath The complete path to the SAFE dataset .xlsx file. By default this
+  #' @param obj An object of class \code{safedata}.
+  #' @param filePath The complete path to the SAFE dataset .xlsx file. By default this
   #'   value is set to \code{NULL} and the function attempts to access the
   #'   \code{obj$filePath} variable (i.e. the file pointer stored in the
-  #'   \code{safe_data} object itself). When a \code{filePath} is supplied, it
+  #'   \code{safedata} object itself). When a \code{filePath} is supplied, it
   #'   must point to a SAFE .xlsx file, otherwise an error is returned.
-  #' @return \code{safe_data} object with metadata added.
+  #' @return \code{safedata} object with metadata added.
   #' @seealso \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/summary/}
   #'   for information on the SAFE summary worksheet, \code{\link{createSafe}}
   #' @export
@@ -167,54 +145,52 @@ processSafeSummary.safe_data <- function (obj, filePath = NULL) {
   return(obj)
 }
 
-print.safe_data <- function (obj) {
-  #' Print summary of information for a \code{safe_data} object to the console
+print.safedata <- function (x, ...) {
+  #' Print summary of information for a \code{safedata} object to the console
   #' 
   #' Prints a summary of metadata for the given SAFE project object to the
   #' command line. Includes the project title, project ID number, start and end
   #' dates, and data worksheet names.
   #' 
-  #' @param obj An object of class \code{safe_data}
+  #' @param x An object of class \code{safedata}
+  #' @param ... Further arguments to print generic, ignored
   #' @seealso \code{\link{createSafe}}, \code{\link{processSafeSummary}}
   #' @export
   
-  cat('Project name:', obj$title, '\n')
-  cat('Project ID:', obj$projectID, '\n')
-  cat('Dates:', paste0(obj$startDate), 'to', paste(obj$endDate), '\n')
-  cat('Contains', length(obj$workSheets), 'data worksheet(s):', '\n')
-  cat('  ', paste0(obj$workSheets, collapse = ', '))
+  cat('Project name:', x$title, '\n')
+  cat('Project ID:', x$projectID, '\n')
+  cat('Dates:', paste0(x$startDate), 'to', paste(x$endDate), '\n')
+  cat('Contains', length(x$workSheets), 'data worksheet(s):', '\n')
+  cat('  ', paste0(x$workSheets, collapse = ', '))
 }
+
 
 addTaxa <- function (obj, filePath = NULL) {
-  UseMethod('addTaxa', obj)
-}
-
-addTaxa.default <- function (obj, filePath = NULL) {
-  stop('function addTaxa() works only with safe_data objects')
-}
-
-addTaxa.safe_data <- function (obj, filePath = NULL) {
-  #' Add taxonomic observations to a \code{safe_data} object
+  #' Add taxonomic observations to a \code{safedata} object
   #'
   #' This function adds taxonomic data from the Taxa worksheet in a SAFE project
-  #' dataset - in the form of a table - to an existing \code{safe_data} object.
+  #' dataset - in the form of a table - to an existing \code{safedata} object.
   #' If no Taxa worksheet is provided with the dataset, the table defaults to
   #' \code{NA}.
   #' 
-  #' @param obj An existing object of class \code{safe_data}
+  #' @param obj An existing object of class \code{safedata}
   #' @param filePath The complete path to the SAFE dataset .xlsx file. By 
   #'   default this value is set to \code{NULL} and the function attempts to 
   #'   access the \code{obj$filePath} variable (i.e. the file pointer stored in
-  #'   the \code{safe_data} object itself). When a \code{filePath} is supplied, 
+  #'   the \code{safedata} object itself). When a \code{filePath} is supplied, 
   #'   it must point to a SAFE .xlsx file, otherwise an error is returned.
-  #' @return A modified \code{safe_data} object with a \code{Taxa} dataframe
+  #' @return A modified \code{safedata} object with a \code{Taxa} dataframe
   #' @note Not all SAFE project submissions contain the Taxa worksheet (for
   #'   example if the data do not contain any taxonomic observations). In this
-  #'   case \code{safe_data$Taxa} defaults to \code{NA}.
-  #' @seealso \code{\link{buildTaxonHeirarchy}},
+  #'   case \code{safedata$Taxa} defaults to \code{NA}.
+  #' @seealso \code{\link{addTaxonHeirarchies}},
   #'   \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/taxa/}
   #'   for information on the Taxa worksheet, \code{\link{addTaxonHeirarchies}}
   #' @export
+  
+  if(! inherits(obj, 'safedata')){
+	  stop("addTaxa requires an object of class 'safedata'")
+  }
   
   # check file path
   if (is.null(filePath)) {
@@ -260,7 +236,7 @@ getNameBackbone <- function(taxaRow, ...) {
   #' @seealso \code{\link[rgbif]{name_backbone}},
   #'   \code{\link[rgbif]{name_usage}},
   #'   \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/taxa/},
-  #'   \url{https://safe-dataset-checker.readthedocs.io/en/latest/safe_dataset_checker/gbif_validation/}
+  #'   \url{https://safe-dataset-checker.readthedocs.io/en/latest/safedataset_checker/gbif_validation/}
   #'   
   #' @note This function can take a few seconds to run, particularly if there
   #'   are a large number of Taxa in the SAFE dataset.
@@ -332,12 +308,12 @@ nameBackboneToDf <- function (nameBackbone) {
   #'   \code{\link[rgbif]{name_backbone}}
   #' @return Taxonomic heirarchy stored as a dataframe including the 8 main
   #'   taxonomic levels
-  #' @seealso \code{\link{getTaxonHeirarchy}}, \code{\link[rgbif]{name_backbone}}
+  #' @seealso \code{\link{addTaxonHeirarchies}}, \code{\link[rgbif]{name_backbone}}
   #' @export
   
   cols <- c('safeName', 'subspecies', 'species', 'genus', 'family', 'class', 
             'order', 'phylum', 'kingdom', 'matchType')
-  taxaDf <- setNames(data.frame(matrix(ncol = length(cols), nrow = 0), 
+  taxaDf <- stats::setNames(data.frame(matrix(ncol = length(cols), nrow = 0), 
                                 stringsAsFactors = FALSE), cols)
   rgbifDf <- as.data.frame(nameBackbone, stringsAsFactors = FALSE)
   return(dplyr::bind_rows(rgbifDf, taxaDf)[, cols])
@@ -361,23 +337,15 @@ getTaxonWrapper <- function (taxaRow, ...) {
 }
 
 addTaxonHeirarchies <- function (obj, ...) {
-  UseMethod('addTaxonHeirarchies', obj)
-}
-
-addTaxonHeirarchies.default <- function (obj, ...) {
-  stop('function addTaxonHeirarchies() works only with safe_data objects')
-}
-
-addTaxonHeirarchies.safe_data <- function (obj, ...) {
-  #' Add complete taxonomic heirarchies to a \code{safe_data} object
+  #' Add complete taxonomic heirarchies to a \code{safedata} object
   #' 
   #' Adds a dataframe of taxonomic heirarchies for all taxa reported in the SAFE
-  #' dataset Taxa worksheet to the supplied \code{safe_data} object. When no
+  #' dataset Taxa worksheet to the supplied \code{safedata} object. When no
   #' Taxa worksheet exists, this function flags a warning.
   #' 
-  #' @param obj An existing object of class \code{safe_data}
+  #' @param obj An existing object of class \code{safedata}
   #' @param ... Optional arguments to pass to \code{\link[rgbif]{name_backbone}}
-  #' @return The updated \code{safe_data} object with a dataframe of taxonomic
+  #' @return The updated \code{safedata} object with a dataframe of taxonomic
   #'   heirarchies for all taxa listed in the Taxa worksheet of the SAFE dataset.
   #'   This is accessed using the reference \code{TaxonHeirarchy}
   #' @note Not all SAFE datasets contain the Taxa worksheet. In this case, a
@@ -385,8 +353,12 @@ addTaxonHeirarchies.safe_data <- function (obj, ...) {
   #' @seealso \code{\link{addTaxa}}, \code{\link{getNameBackbone}}
   #' @export
   
+  if(! inherits(obj, 'safedata')){
+	  stop("addTaxonHeirarchies requires an object of class 'safedata'")
+  }
+  
   if (is.null(obj$Taxa)){
-    warning(paste0('Taxonomic data have not been added to the safe_data object,',
+    warning(paste0('Taxonomic data have not been added to the safedata object,',
                    ' please see addTaxa() function'))
   } else if (is.na(obj$Taxa)){
     warning('Cannot process Taxa: SAFE dataset contains no Taxa worksheet!')
@@ -403,18 +375,10 @@ addTaxonHeirarchies.safe_data <- function (obj, ...) {
 }
 
 addLocations <- function (obj, filePath = NULL) {
-  UseMethod('addLocations', obj)
-}
-
-addLocations.default <- function (obj, filePath = NULL) {
-  stop('function addLocations() works only with safe_data objects')
-}
-
-addLocations.safe_data <- function (obj, filePath = NULL) {
-  #' Add location information to a \code{safe_data} object
+  #' Add location information to a \code{safedata} object
   #' 
   #' Processes the Locations worksheet in the SAFE dataset at the supplied
-  #' \code{filePath} and adds it as a dataframe to an existing \code{safe_data}
+  #' \code{filePath} and adds it as a dataframe to an existing \code{safedata}
   #' object (\code{obj}). When no Locations worksheet is found the function
   #' defaults to \code{NA}. The Locations worksheet contains details of the
   #' commonly used areas in which research was conducted at SAFE. In some cases
@@ -422,13 +386,13 @@ addLocations.safe_data <- function (obj, filePath = NULL) {
   #' \url{https://www.safeproject.net/info/gazetteer}), in other cases they will
   #' be "new", and thus need to be accompanied by GPS coordinates.
   #' 
-  #' @param obj An existing object of class \code{safe_data}
+  #' @param obj An existing object of class \code{safedata}
   #' @param filePath The complete path to the SAFE dataset .xlsx file. By 
   #'   default this value is set to \code{NULL} and the function attempts to 
   #'   access the \code{obj$filePath} variable (i.e. the file pointer stored in
-  #'   the \code{safe_data} object itself). When a \code{filePath} is supplied, 
+  #'   the \code{safedata} object itself). When a \code{filePath} is supplied, 
   #'   it must point to a SAFE .xlsx file, otherwise an error is returned.
-  #' @return A modified \code{safe_data} object with \code{Locations} added
+  #' @return A modified \code{safedata} object with \code{Locations} added
   #' @note Although unusual, not all SAFE project submissions will contain a
   #'   Locations worksheet. Examples of this include projects that present only
   #'   laboratory data (that do not have the requirement of specifying where
@@ -440,6 +404,9 @@ addLocations.safe_data <- function (obj, filePath = NULL) {
   #'   \url{https://www.safeproject.net/info/gazetteer} for the SAFE gazetteer
   #' @export
   
+  if(! inherits(obj, 'safedata')){
+	  stop("addLocations requires an object of class 'safedata'")
+  }
   # check file path
   if (is.null(filePath)) {
     if (!is.null(obj$filePath)) {
@@ -469,39 +436,30 @@ addLocations.safe_data <- function (obj, filePath = NULL) {
 }
 
 addData <- function (obj, filePath = NULL) {
-  UseMethod('addData', obj)
-}
-
-addData.default <- function (obj, filePath = NULL) {
-  stop('function addData() works only with safe_data objects')
-}
-
-addData.safe_data <- function (obj, filePath = NULL) {
-  #' Add data worksheets to a \code{safe_data} object
+  #' Add data worksheets to a \code{safedata} object
   #' 
   #' This function processes data-containing worksheets for the SAFE dataset at
-  #' the specified \code{filePath} and adds them to an existing \code{safe_data}
-  #' object. \code{addData} creates a new dataframe within the \code{safe_data}
+  #' the specified \code{filePath} and adds them to an existing \code{safedata}
+  #' object. \code{addData} creates a new dataframe within the \code{safedata}
   #' object for each worksheet stored in the SAFE dataset. The dataframes are
   #' named as per those used in the SAFE dataset submission file. All data
   #' columns are imported according to the \code{field_type} provided in the
   #' SAFE data table. Header information for each worksheet is stored separately
   #' as a \code{metaInfo} attribute accessed via the dataframe.
   #' 
-  #' @param obj An existing object of class \code{safe_data}.
+  #' @param obj An existing object of class \code{safedata}.
   #' @param filePath The complete path to the SAFE dataset .xlsx file. By 
   #'   default this value is set to \code{NULL} and the function attempts to 
   #'   access the \code{obj$filePath} variable (i.e. the file pointer stored in
-  #'   the \code{safe_data} object itself). When a \code{filePath} is supplied, 
+  #'   the \code{safedata} object itself). When a \code{filePath} is supplied, 
   #'   it must point to a SAFE .xlsx file, otherwise an error is returned.
-  #' @return A modified \code{safe_data} object with data worksheets added. 
+  #' @return A modified \code{safedata} object with data worksheets added. 
   #' @seealso \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/data/}
   #'   for information on SAFE data worksheets
   #' @examples
-  #'   # create a safe_data object and add data
-  #'   filePath <- 'C:/Users/User/safe_data/path_to_file.xlsx'
-  #'   summaryInfo <- readTransposedXlsx(filePath, sheetName='Summary')
-  #'   safe <- createSafe(summaryInfo)
+  #'   # create a safedata object and add data
+  #'   filePath <- system.file('extdata', 'demo_data.xlsx', package='safedata')
+  #'   safe <- importSafe(filePath)
   #'   safe <- addData(safe, filePath)
   #'   
   #'   # access the data table named "data_1"
@@ -510,6 +468,10 @@ addData.safe_data <- function (obj, filePath = NULL) {
   #'   # access the metadata for this table
   #'   View(attr(safe$data_1, 'metaInfo'))
   #' @export
+  
+  if(! inherits(obj, 'safedata')){
+	  stop("addData requires an object of class 'safedata'")
+  }
   
   # check file path
   if (is.null(filePath)) {
@@ -564,14 +526,14 @@ addData.safe_data <- function (obj, filePath = NULL) {
 importSafe <- function (filePath) {
   #' Import a SAFE data file
   #' 
-  #' Create a new \code{safe_data} object with minimal summary information using
+  #' Create a new \code{safedata} object with minimal summary information using
   #' the SAFE dataset located at the specified \code{filePath}. Note that
   #' currently only '.xlsx' file formats are supported - see
   #' \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview}
   #' for more information.
   #' 
   #' @param filePath Full path to the .xlsx SAFE file
-  #' @return A \code{safe_data} object with \code{Summary} information added
+  #' @return A \code{safedata} object with \code{Summary} information added
   #' @seealso \code{\link{getSafe}} for downloading SAFE files from the Zenodo
   #'   cloud database, \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/#excel-format-overview}
   #'   for an overview on Excel file formats used for SAFE data submissions

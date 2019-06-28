@@ -124,27 +124,69 @@
       <tr>
         
         <td>
+          <p><code><a href="addData.html">addData()</a></code> </p>
+        </td>
+        <td><p>Add data worksheets to a <code>safedata</code> object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="addLocations.html">addLocations()</a></code> </p>
+        </td>
+        <td><p>Add location information to a <code>safedata</code> object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="addTaxa.html">addTaxa()</a></code> </p>
+        </td>
+        <td><p>Add taxonomic observations to a <code>safedata</code> object</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="addTaxonHeirarchies.html">addTaxonHeirarchies()</a></code> </p>
         </td>
-        <td><p>Add taxonomic heirarchies to SAFE object</p></td>
+        <td><p>Add complete taxonomic heirarchies to a <code>safedata</code> object</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="dot-onLoad.html">.onLoad()</a></code> </p>
+          <p><code><a href="apiSearch.html">apiSearch()</a></code> </p>
         </td>
-        <td><p>Function to run on import of package <code>safer</code></p></td>
+        <td><p>Run an API call using the constructed <code>api</code> URL.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="downloadSAFE.html">downloadSAFE()</a></code> </p>
+          <p><code><a href="buildFilePathFromVersions.html">buildFilePathFromVersions()</a></code> </p>
+        </td>
+        <td><p>Builds a list of file paths to SAFE datasets in the versions list</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="buildVersionsDataframe.html">buildVersionsDataframe()</a></code> </p>
+        </td>
+        <td><p>Build a "versions" dataframe of a SAFE concept ID</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="checkApiCall.html">checkApiCall()</a></code> </p>
+        </td>
+        <td><p>Check a SAFE search API call for errors.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="checkRecordDownloaded.html">checkRecordDownloaded()</a></code> </p>
+        </td>
+        <td><p>Check if the record (file) at the specified path has been downloaded</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="createSafe.html">createSafe()</a></code> </p>
+        </td>
+        <td><p>Initiate a new <code>safedata</code> object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="downloadSafe.html">downloadSafe()</a></code> </p>
         </td>
         <td><p>Download SAFE project data file associated with the supplied record</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="getDataClass.html">getDataClass()</a></code> </p>
-        </td>
-        <td><p>Get the R data type from the SAFE <code>field_type</code> variable</p></td>
       </tr><tr>
         
         <td>
@@ -160,9 +202,15 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="getSAFE.html">getSAFE()</a></code> </p>
+          <p><code><a href="getSafe.html">getSafe()</a></code> </p>
         </td>
         <td><p>Get the SAFE files with the specified IDs</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getSafeDataClassType.html">getSafeDataClassType()</a></code> </p>
+        </td>
+        <td><p>Get the R data type from the SAFE <code>field_type</code> variable</p></td>
       </tr><tr>
         
         <td>
@@ -172,21 +220,21 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="importSAFE.html">importSAFE()</a></code> </p>
+          <p><code><a href="importSafe.html">importSafe()</a></code> </p>
         </td>
         <td><p>Import a SAFE data file</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="isCategorical.html">isCategorical()</a></code> </p>
+          <p><code><a href="isSafeRecord.html">isSafeRecord()</a></code> </p>
         </td>
-        <td><p>Check if the SAFE data type is of R type "categorical"/"factor"</p></td>
+        <td><p>Checks whether the supplied zenodo record is from the SAFE community</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="isSAFE.html">isSAFE()</a></code> </p>
+          <p><code><a href="isSafeTypeCategorical.html">isSafeTypeCategorical()</a></code> </p>
         </td>
-        <td><p>Checks whether the supplied zenodo record is from the SAFE community</p></td>
+        <td><p>Check if the SAFE data type is of R type <code>categorical</code>/<code>factor</code></p></td>
       </tr><tr>
         
         <td>
@@ -196,45 +244,28 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="nullToNA.html">nullToNA()</a></code> </p>
+          <p><code><a href="print.safedata.html">print(<i>&lt;safedata&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Convert <code>NULL</code> values in <code>x</code> to <code>NA</code></p></td>
+        <td><p>Print summary of information for a <code>safedata</code> object to the console</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="printSummary.html">printSummary()</a></code> </p>
+          <p><code><a href="printVersions.html">printVersions()</a></code> </p>
         </td>
-        <td><p>Prints summary information for SAFE object</p></td>
+        <td><p>Returns print-friendly table displaying versions information for a given
+SAFE concept ID</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="processData.html">processData()</a></code> </p>
-        </td>
-        <td><p>Add data worksheets to SAFE project object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="processLocations.html">processLocations()</a></code> </p>
-        </td>
-        <td><p>Add location information to SAFE data object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="processSAFE.html">processSAFE()</a></code> </p>
+          <p><code><a href="processSafe.html">processSafe()</a></code> </p>
         </td>
         <td><p>Get record info for specified SAFE project ID from the Zenodo database</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="processSummary.html">processSummary()</a></code> </p>
+          <p><code><a href="processSafeSummary.html">processSafeSummary()</a></code> </p>
         </td>
         <td><p>Process summary 'meta' information for SAFE project data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="processTaxa.html">processTaxa()</a></code> </p>
-        </td>
-        <td><p>Add taxa information to SAFE data object</p></td>
       </tr><tr>
         
         <td>
@@ -244,15 +275,57 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="searchAuthor.html">searchAuthor()</a></code> </p>
+        </td>
+        <td><p>Search SAFE projects by author name.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="searchDates.html">searchDates()</a></code> </p>
+        </td>
+        <td><p>Search SAFE projects by date.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="searchFields.html">searchFields()</a></code> </p>
+        </td>
+        <td><p>Search SAFE projects by data field information.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="searchSpatial.html">searchSpatial()</a></code> </p>
+        </td>
+        <td><p>Search SAFE projects by spatial sampling area/named location.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="searchTaxa.html">searchTaxa()</a></code> </p>
+        </td>
+        <td><p>Search SAFE projects by taxa.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="searchText.html">searchText()</a></code> </p>
+        </td>
+        <td><p>Search SAFE projects by free text search.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="setSafeDir.html">setSafeDir()</a></code> </p>
+        </td>
+        <td><p>Set the local SAFE data directory</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="simpleCap.html">simpleCap()</a></code> </p>
         </td>
         <td><p>Capitalize the first letter of each word in a string</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="updateVersionCache.html">updateVersionCache()</a></code> </p>
+          <p><code><a href="updateIndex.html">updateIndex()</a></code> </p>
         </td>
-        <td><p>Update the offline version cache for a given SAFE project</p></td>
+        <td><p>Update the SAFE index file</p></td>
       </tr><tr>
         
         <td>

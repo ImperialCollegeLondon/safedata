@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get the SAFE files with the specified IDs — getSAFE • safedata</title>
+<title>Get the SAFE files with the specified IDs — getSafe • safedata</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,13 +30,14 @@
 
 
 
-<meta property="og:title" content="Get the SAFE files with the specified IDs — getSAFE" />
+<meta property="og:title" content="Get the SAFE files with the specified IDs — getSafe" />
 
 <meta property="og:description" content="This function processes and downloads the data files associated with the
 SAFE project IDs supplied. Each ID (which may be either a concept record ID
 or specific record ID) is validated as being from a SAFE community project,
 checked for versioning and access permissions, and finally downloaded into
-the relevant folder." />
+the relevant folder. Lastly, the ID downloaded statuses are updated in the
+SAFE index.rds file." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -112,7 +113,7 @@ the relevant folder." />
     <div class="page-header">
     <h1>Get the SAFE files with the specified IDs</h1>
     
-    <div class="hidden name"><code>getSAFE.Rd</code></div>
+    <div class="hidden name"><code>getSafe.Rd</code></div>
     </div>
 
     <div class="ref-description">
@@ -121,11 +122,12 @@ the relevant folder." />
 SAFE project IDs supplied. Each ID (which may be either a concept record ID
 or specific record ID) is validated as being from a SAFE community project,
 checked for versioning and access permissions, and finally downloaded into
-the relevant folder.</p>
+the relevant folder. Lastly, the ID downloaded statuses are updated in the
+SAFE index.rds file.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>getSAFE</span>(<span class='no'>ids</span>, <span class='no'>dir</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>getSafe</span>(<span class='no'>ids</span>, <span class='kw'>dir</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -136,23 +138,23 @@ the relevant folder.</p>
     </tr>
     <tr>
       <th>dir</th>
-      <td><p>SAFE data directory. A new directory is created for each
-concept record ID. Data for individual records are stored within the
-concept record ID directory</p></td>
+      <td><p>SAFE data directory, which defaults to the <code>SAFE_data_dir</code> 
+option. A new directory is created for each concept record ID. Data for
+individual records are stored within the concept record ID directory</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>optional argument to be passed to <code><a href='processSAFE.html'>processSAFE</a></code></p></td>
+      <td><p>optional argument to be passed to <code><a href='processSafe.html'>processSafe</a></code></p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='processSAFE.html'>processSAFE</a></code>, <code><a href='downloadSAFE.html'>downloadSAFE</a></code></p></div>
+    <div class='dont-index'><p><code><a href='processSafe.html'>processSafe</a></code>, <code><a href='downloadSafe.html'>downloadSafe</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>  <span class='fu'>getSAFE</span>(<span class='fl'>3081059</span>, <span class='st'>"C:/Users/User/Desktop/SAFE_data/"</span>)</div><div class='output co'>#&gt; <span class='message'>Requested record (ID: 3081059) is associated with concept record ID 3081058</span></div><div class='output co'>#&gt; <span class='warning'>Warning: cannot create dir 'C:/Users/User/Desktop/SAFE_data//3081058', reason 'No such file or directory'</span></div><div class='output co'>#&gt; <span class='message'>Updating version cache for concept record ID 3081058... </span></div><div class='output co'>#&gt; <span class='warning'>Warning: cannot open compressed file 'C:/Users/User/Desktop/SAFE_data//3081058/versions.rds', probable reason 'No such file or directory'</span></div><div class='output co'>#&gt; <span class='error'>Error in gzfile(file, mode): cannot open the connection</span></div><div class='input'>  <span class='fu'>getSAFE</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>3081059</span>, <span class='fl'>2537074</span>), <span class='st'>"C:/Users/User/Desktop/SAFE_data/"</span>)</div><div class='output co'>#&gt; <span class='message'>Requested record (ID: 3081059) is associated with concept record ID 3081058</span></div><div class='output co'>#&gt; <span class='warning'>Warning: cannot create dir 'C:/Users/User/Desktop/SAFE_data//3081058', reason 'No such file or directory'</span></div><div class='output co'>#&gt; <span class='message'>Updating version cache for concept record ID 3081058... </span></div><div class='output co'>#&gt; <span class='warning'>Warning: cannot open compressed file 'C:/Users/User/Desktop/SAFE_data//3081058/versions.rds', probable reason 'No such file or directory'</span></div><div class='output co'>#&gt; <span class='error'>Error in gzfile(file, mode): cannot open the connection</span></div></pre>
+    <pre class="examples"><div class='input'>  <span class='fu'>getSafe</span>(<span class='fl'>3081059</span>, <span class='st'>"C:/Users/User/Desktop/SAFE_data/"</span>)</div><div class='output co'>#&gt; <span class='message'>Requested record (ID 3081059) is associated with concept record ID 3081058</span></div><div class='output co'>#&gt; <span class='warning'>Warning: cannot create dir 'C:/Users/User/Desktop/SAFE_data//3081058', reason 'No such file or directory'</span></div><div class='output co'>#&gt; <span class='message'>Updating SAFE index for concept record ID 3081058... </span></div><div class='output co'>#&gt; <span class='warning'>Warning: cannot open compressed file 'C:/Users/User/Desktop/SAFE_data//index.rds', probable reason 'No such file or directory'</span></div><div class='output co'>#&gt; <span class='error'>Error in gzfile(file, mode): cannot open the connection</span></div><div class='input'>  <span class='fu'>getSafe</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>3081059</span>, <span class='fl'>2537074</span>), <span class='st'>"C:/Users/User/Desktop/SAFE_data/"</span>)</div><div class='output co'>#&gt; <span class='message'>Requested record (ID 3081059) is associated with concept record ID 3081058</span></div><div class='output co'>#&gt; <span class='warning'>Warning: cannot create dir 'C:/Users/User/Desktop/SAFE_data//3081058', reason 'No such file or directory'</span></div><div class='output co'>#&gt; <span class='message'>Updating SAFE index for concept record ID 3081058... </span></div><div class='output co'>#&gt; <span class='warning'>Warning: cannot open compressed file 'C:/Users/User/Desktop/SAFE_data//index.rds', probable reason 'No such file or directory'</span></div><div class='output co'>#&gt; <span class='error'>Error in gzfile(file, mode): cannot open the connection</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

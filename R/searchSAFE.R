@@ -13,7 +13,7 @@ checkApiCall <- function (apiOutput) {
   
   if (is.null(apiOutput$count)) {
     if (apiOutput$error == 404) {
-      stop('Invalid Zenodo API search: ', apiOut$message, ' Please check all ',
+      stop('Invalid Zenodo API search: ', apiOutput$message, ' Please check all ',
            'terms.', call. = FALSE)
     }
   }
@@ -130,14 +130,13 @@ searchFields <- function (fieldText = NULL, fieldType = NULL, ids = NULL, mostRe
   #' @param fieldText Character string to search for within the data field name
   #'   and description.
   #' @param fieldType Character string to search for within the field type (for
-  #'   example field type \code(numeric)). SAFE data types can be read about at
-  #'   \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/data/#field-types}.
+  #'   example field type \code{numeric}).
   #' @param ids Numeric that restricts the returned API search to a subset of
   #'   Zenodo record IDs given in the \code{ids} parameter. This is typically
   #'   used to refine previous searches.
   #' @param mostRecent Logical indicating whether to restrict the API to
   #'   returning only the most recent versions of the datasets found. By default
-  #'   all versions of the discovered projects are returned.  #' 
+  #'   all versions of the discovered projects are returned.
   #' @return An array of Zenodo record IDs for the SAFE project datasets found
   #'   to match the search criteria.
   #' @note This function returns Zenodo record IDs. On the Zenodo database each
@@ -372,7 +371,7 @@ searchSpatial <- function (wkt = NULL, location = NULL, distance = NULL, ids = N
   #'   is provided.
   #' @seealso \code{\link{getSafe}} for downloading SAFE datasets,
   #'   \url{https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry}
-  #'   for setting up well-known text geomtries,
+  #'   for setting up well-known text geometries,
   #'   \url{https://www.safeproject.net/info/gazetteer} for an index of defined
   #'   SAFE locations.
   #' @examples 
@@ -383,7 +382,7 @@ searchSpatial <- function (wkt = NULL, location = NULL, distance = NULL, ids = N
   #'   searchSpatial(location = 'A_1', distance = 2500)
   #'   searchSpatial(location = 'A_1', mostRecent = TRUE)
   #'   searchSpatial(location = 'A_1', distance = 2500,
-  #'                 ids = c(1303018 1237730 1198585 1228188 1198461, 119832))
+  #'                 ids = c(1303018, 1237730, 1198585, 1228188, 1198461, 119832))
   
   # check inputs and set up API
   api <- 'https://www.safeproject.net/api/search/spatial?'
@@ -395,8 +394,7 @@ searchSpatial <- function (wkt = NULL, location = NULL, distance = NULL, ids = N
                 'Only one should be specified.'))
   } else {
     if (!is.null(wkt)) {
-      if (any(
-        !is.na(stringr::str_match(wkt, c("Point", "LineString", "Polygon"))))) {
+      if (grepl('^Point|^LineString|^Polygon', wkt)) {
         api <- paste0(api, 'wkt=', gsub(' ', '%20', wkt))
       } else {
         stop(paste0('"wkt" must be a well-known text geometry representation ',

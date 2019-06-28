@@ -1,5 +1,5 @@
-.onLoad <- function (libname, pkgname) {
-  #' Function to run on import of package \code{safer}
+.onAttach <- function (libname, pkgname) {
 
-  message('SAFE package reminder: Please set SAFE_data_dir using setSafeDir()')
+  packageStartupMessage('SAFE package reminder: Please set SAFE_data_dir using setSafeDir()')
+
 }

@@ -76,9 +76,9 @@ updateIndex <- function (id, isConceptId = TRUE, dir = NULL) {
   #' 
   #' The SAFE index file contains version and file-download information for all
   #' SAFE projects that have been requested by the user through the 
-  #' \code{safe_data} package. The intended use of the index file is to provide
+  #' \code{safedata} package. The intended use of the index file is to provide
   #' an offline cache of information associated with the varied records on the
-  #' SAFE Zenodo database to streamline operation of \code{safe_data} and 
+  #' SAFE Zenodo database to streamline operation of \code{safedata} and 
   #' reduce redundancies. The index file is a dataframe stored (by default) in
   #' the \code{SAFE_data_dir}. Records are grouped by concept ID. Meta 
   #' information, including DOI, record ID, date created, ddataset embargo
@@ -209,18 +209,23 @@ buildVersionsDataframe <- function (allVersions) {
   
   # check that the result of a valid versions API call has been passed
   if (length(allVersions$aggregations$access_right$buckets) == 0) {
-    stop(paste0('Supplied concept ID (', conceptRecId, ') is invalid'))
+    stop(paste0('Invalid API call'))
   }
   
   # create a dataframe with record ID, date, and access status
+  open_date <- allVersions$hits$hits$metadata$embargo_date
+  if(is.null(open_date)) {
+	  open_date <- NA
+  }
+  
   versionsDf <- data.frame(
-    'conceptId'    = allVersions$hits$hits$conceptrecid,
-    'doi'          = allVersions$hits$hits$doi,
-    'recordId'     = as.character(lapply(allVersions$hits$hits$doi, 
+    conceptId    = allVersions$hits$hits$conceptrecid,
+    doi          = allVersions$hits$hits$doi,
+    recordId     = as.character(lapply(allVersions$hits$hits$doi, 
                                          getRecordIdFromDoi)),
-    'created_on'   = as.Date(allVersions$hits$hits$created),
-    'access_right' = allVersions$hits$hits$metadata$access_right,
-    'open_date'    = nullToNa(allVersions$hits$hits$metadata$embargo_date),
+    created_on   = as.Date(allVersions$hits$hits$created),
+    access_right = allVersions$hits$hits$metadata$access_right,
+    open_date    = open_date,
     stringsAsFactors = FALSE)
   
   # return the output
@@ -233,14 +238,14 @@ buildFilePathFromVersions <- function (versions) {
   #' Using the output from a call to the Zenodo "versions" API
   #' (\code{\link{zenodoVersionsApiLookup}}), this function builds a set of
   #' pathways to local copies of downloaded datasets within a given SAFE concept
-  #' ID. The structure of these pathways is governed by the \code{safe_data}
+  #' ID. The structure of these pathways is governed by the \code{safedata}
   #' directory protocol, i.e. concept_ID > record_ID > file_name.
   #' 
   #' @param versions list of all record versions contained within a given
   #'   concept ID. The output from a call to \code{\link{zenodoVersionsApiLookup}}
   #' @return a list object containing (prospective) file paths to the data files
   #'   associated with each record within the concept ID, constructed according
-  #'   to the \code{safe_data} directory structure
+  #'   to the \code{safedata} directory structure
   #' @seealso \code{\link{zenodoVersionsApiLookup}}
   #' @export
   
@@ -323,7 +328,7 @@ processSafe <- function (id, dir, updateIndex = TRUE, overwrite = FALSE) {
   #'   'open' dataset associated with the project
   #' @param dir directory into which data will be stored
   #' @param updateIndex \code{boolean}, should the SAFE index file be updated?
-  #' @param overwrite 
+  #' @param overwrite Should existing copies of the data be overwritten.
   #' @return \code{list} object containing information from the Zenodo API call
   #' @seealso \code{\link{zenodoRecordApiLookup}}, \code{\link{updateIndex}}
   #' @export
@@ -448,7 +453,7 @@ printVersions <- function (printVers) {
   #' @seealso \code{\link{processSafe}}
   
   return(paste0(
-    capture.output(print(printVers, row.names = FALSE, right = FALSE)),
+    utils::capture.output(print(printVers, row.names = FALSE, right = FALSE)),
     collapse = '\n'))
 }
 
@@ -457,7 +462,7 @@ downloadSafe <- function (zenodoRecord, dir = NULL) {
   #' 
   #' Attempts to download the data file associated with the supplied Zenodo
   #' record, which should be a part of the SAFE community. The file will be
-  #' downloaded into the specified directory (\code{dir}). \code{safe_data}
+  #' downloaded into the specified directory (\code{dir}). \code{safedata}
   #' version 0.1 currently supports only .xlsx files. Future releases may be
   #' expanded to enable downloading of other file types.
   #' 
@@ -478,7 +483,7 @@ downloadSafe <- function (zenodoRecord, dir = NULL) {
     } else {
       message(paste0('\nDownloading file ', basename(fileName), '... '), 
               appendLF = FALSE)
-      download.file(bucket$contents$links$self, destfile = fileName, quiet = TRUE)
+      utils::download.file(bucket$contents$links$self, destfile = fileName, quiet = TRUE)
       message('complete!\n')
     }
   }

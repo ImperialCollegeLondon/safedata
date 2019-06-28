@@ -2,29 +2,29 @@
 % Please edit documentation in R/importSAFE.R
 \name{addTaxonHeirarchies}
 \alias{addTaxonHeirarchies}
-\title{Add taxonomic heirarchies to SAFE object}
+\title{Add complete taxonomic heirarchies to a \code{safedata} object}
 \usage{
-addTaxonHeirarchies(safeObj, ...)
+addTaxonHeirarchies(obj, ...)
 }
 \arguments{
-\item{safeObj}{An existing SAFE data object}
+\item{obj}{An existing object of class \code{safedata}}
 
 \item{...}{Optional arguments to pass to \code{\link[rgbif]{name_backbone}}}
 }
 \value{
-The updated SAFE object \code{safeObj} with a dataframe of
-  taxonomic heirarchies for all taxa listed in the Taxa worksheet of the
-  data file. This is accessed using the reference \code{TaxaTree}
+The updated \code{safedata} object with a dataframe of taxonomic
+  heirarchies for all taxa listed in the Taxa worksheet of the SAFE dataset.
+  This is accessed using the reference \code{TaxonHeirarchy}
 }
 \description{
 Adds a dataframe of taxonomic heirarchies for all taxa reported in the SAFE
-Taxa worksheet to the supplied SAFE object. When no Taxa worksheet has been
-supplied, this function flags a warning.
+dataset Taxa worksheet to the supplied \code{safedata} object. When no
+Taxa worksheet exists, this function flags a warning.
 }
 \note{
-Not all SAFE data files contain the Taxa worksheet. In this case, a
-  value of \code{NA} will be assigned to the \code{TaxaTree}
+Not all SAFE datasets contain the Taxa worksheet. In this case, a
+  value of \code{NA} will be assigned to the \code{TaxonHeirarchy}
 }
 \seealso{
-\code{\link{getNameBackbone}}
+\code{\link{addTaxa}}, \code{\link{getNameBackbone}}
 }

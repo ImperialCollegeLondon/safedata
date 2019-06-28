@@ -73,7 +73,7 @@
       <h1>Using the safe_data package</h1>
                         <h4 class="author">Andy Aldersley and David Orme</h4>
             
-            <h4 class="date">2019-05-29</h4>
+            <h4 class="date">2019-06-27</h4>
       
       
       <div class="hidden name"><code>using_safe_data.Rmd</code></div>
@@ -82,16 +82,108 @@
 
     
     
-<div id="welcome" class="section level1">
+<div id="about-the-package" class="section level1">
 <h1 class="hasAnchor">
-<a href="#welcome" class="anchor"></a>Welcome</h1>
+<a href="#about-the-package" class="anchor"></a>About the package</h1>
+<p><code>safe_data</code> is an R package designed to access and interact with data from the Stability of Altered Forest Ecosystems (SAFE) Project. The SAFE Project is one of the largest ecological experiments in the world, investigating the effects of human activities on biodiversity and ecosystem function in the Malaysian rainforest. Further information can be found at our <a href="https://www.safeproject.net/">website</a>.</p>
+<p>Research conducted at the SAFE Project encompasses expertise from many disciplines and institutions, each running interlinked projects that help to develop our understanding of ecology within changing environments. Data from the many activities conducted through the SAFE Project are curated and made available at the <a href="https://zenodo.org/communities/safe/">SAFE Zenodo repository</a>, a cloud-storage platform. The <code>safe_data</code> package is intended to enable researchers to quickly and easily interface with these datasets. This document provides an introduction to the core functionalities of the package and describes the concepts supporting its development.</p>
 <div id="data-format" class="section level2">
 <h2 class="hasAnchor">
 <a href="#data-format" class="anchor"></a>Data format</h2>
+<p>All researchers working at the SAFE Project are asked to submit their project data to the <a href="https://zenodo.org/communities/safe/">SAFE Zenodo repository</a>. Submitted data must meet strict formatting requirements and pass a validation check before acceptance. Full details of this process can be found on the <a href="https://safe-dataset-checker.readthedocs.io/">SAFE Project data</a> webpages.</p>
+<p>In most cases, data are provided as tabular datasets stored in Excel spreadsheets (note that v0.1 of <code>safe_data</code> only provides support for .xlsx imports). Briefly, these datasets comprise the following worksheets:</p>
+<ul>
+<li>
+<strong>Summary</strong>: simple metadata (authors, access rights) about the dataset</li>
+<li>
+<strong>Taxa</strong>: a description of the Taxa reported in the dataset</li>
+<li>
+<strong>Locations</strong>: a description of all sampling locations in the dataset</li>
+<li>
+<strong>Data worksheets</strong>: the actual data tables, described in the <strong>Summary</strong> sheet</li>
+</ul>
+<p>The <code>safe_data</code> package allows users to import and interrogate these datasets within the R environment.</p>
 </div>
 <div id="data-repository" class="section level2">
 <h2 class="hasAnchor">
 <a href="#data-repository" class="anchor"></a>Data repository</h2>
+<p>The <a href="https://zenodo.org/communities/safe/">SAFE Zenodo repository</a> provides a searchable cloud-based data storage facility for research outputs from the SAFE Project. Zenodo uses a <a href="https://help.zenodo.org/">DOI versioning</a> system for file storage. When uploads are published on Zenodo for the first time, two DOIs are registered:</p>
+<ul>
+<li>a DOI representing the <em>specific version</em> of the record: the <strong>version ID</strong>
+</li>
+<li>a DOI representing <em>all versions</em> of the record: the <strong>concept ID</strong>
+</li>
+</ul>
+<p>Subsequent versions of an upload are then logged under a new DOI.</p>
+<p>In practice, this means that multiple versions of a project’s data (or multiple datasets associated with a single research project) can be stored and referenced separately under a single identifier. The <strong>concept</strong> DOI allows users to cite the <em>entire</em> project, while the <strong>version</strong> DOI refers to a <em>particular</em> instance.</p>
+<p>Datasets published on Zenodo can have differing access rights:</p>
+<ul>
+<li>
+<strong>Open</strong>: the dataset is open for download</li>
+<li>
+<strong>Embargoed</strong>: the dataset is currently unavailable for download, but will be opened in the future</li>
+<li>
+<strong>Closed</strong>: the dataset is no longer available</li>
+</ul>
+<p><code>safe_data</code> enables downloading of SAFE project datasets using either a specific version ID or concept ID (in which case the latest <strong>open</strong> version of the project records is returned). More detail on this can be found in the sections below.</p>
+</div>
+</div>
+<div id="get-safe_data" class="section level1">
+<h1 class="hasAnchor">
+<a href="#get-safe_data" class="anchor"></a>Get safe_data</h1>
+<p>The latest stable version of <code>safe_data</code> can be installed from CRAN</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"safe_data"</span>)</a></code></pre></div>
+<p>Alternatively, the current development version can be installed from GitHub</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"ImperialCollegeLondon/safe_data"</span>)</a></code></pre></div>
+</div>
+<div id="access-a-safe-project-dataset" class="section level1">
+<h1 class="hasAnchor">
+<a href="#access-a-safe-project-dataset" class="anchor"></a>Access a SAFE Project dataset</h1>
+<p>SAFE project datasets can be downloaded to a local directory.</p>
+<div id="the-safe-directory" class="section level2">
+<h2 class="hasAnchor">
+<a href="#the-safe-directory" class="anchor"></a>The SAFE directory</h2>
+<p>Information on how to set the <code>SAFE_data_dir</code> in R.</p>
+</div>
+<div id="local-directory-structure" class="section level2">
+<h2 class="hasAnchor">
+<a href="#local-directory-structure" class="anchor"></a>Local directory structure</h2>
+<p>SAFE Project datasets are stored locally within the <code>SAFE_data_dir</code>. Each SAFE Project has a master folder named according to the concept DOI. Separate versions of this project are then created as subfolders within the main project folder according to their version DOI. All datasets associated with this upload are then stored within the version subfolder.</p>
+<pre><code>index.rds
+concept_DOI/
+concept_DOI/versions.rds
+concept_DOI/record_DOI_1/file.xlsx
+concept_DOI/record_DOI_1/external_file1.xlsx
+concept_DOI/record_DOI_2/file.xlsx</code></pre>
+<p>The <code>index.rds</code> and <code>versions.rds</code> are local caches containing up-to-date offline records of files accessed and version statuses for all concept DOIs requested by the user. These files are described in more detail below.</p>
+</div>
+<div id="versioning" class="section level2">
+<h2 class="hasAnchor">
+<a href="#versioning" class="anchor"></a>Versioning</h2>
+<p>The <code>versions.rds</code> file is always</p>
+</div>
+</div>
+<div id="load-a-safe-project-dataset" class="section level1">
+<h1 class="hasAnchor">
+<a href="#load-a-safe-project-dataset" class="anchor"></a>Load a SAFE Project dataset</h1>
+<div id="importing-a-safe-data-object" class="section level2">
+<h2 class="hasAnchor">
+<a href="#importing-a-safe-data-object" class="anchor"></a>Importing a SAFE data object</h2>
+<p>Using <code><a href="../reference/importSafe.html">importSafe()</a></code></p>
+</div>
+<div id="the-safe-data-object-structure" class="section level2">
+<h2 class="hasAnchor">
+<a href="#the-safe-data-object-structure" class="anchor"></a>The SAFE data object structure</h2>
+<p>Description of different features within the object and how to access them (e.g. <code><a href="https://www.rdocumentation.org/packages/base/topics/print">print()</a></code>)</p>
+</div>
+<div id="building-taxonomic-heirarchies" class="section level2">
+<h2 class="hasAnchor">
+<a href="#building-taxonomic-heirarchies" class="anchor"></a>Building taxonomic heirarchies</h2>
+<p>Using <code><a href="../reference/addTaxonHeirarchies.html">addTaxonHeirarchies()</a></code> to build a taxonomic tree</p>
+</div>
+<div id="visualising-locational-information" class="section level2">
+<h2 class="hasAnchor">
+<a href="#visualising-locational-information" class="anchor"></a>Visualising locational information</h2>
 </div>
 </div>
   </div>
@@ -102,9 +194,25 @@
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li>
-<a href="#welcome">Welcome</a><ul class="nav nav-pills nav-stacked">
+<a href="#about-the-package">About the package</a><ul class="nav nav-pills nav-stacked">
 <li><a href="#data-format">Data format</a></li>
       <li><a href="#data-repository">Data repository</a></li>
+      </ul>
+</li>
+      <li><a href="#get-safe_data">Get safe_data</a></li>
+      <li>
+<a href="#access-a-safe-project-dataset">Access a SAFE Project dataset</a><ul class="nav nav-pills nav-stacked">
+<li><a href="#the-safe-directory">The SAFE directory</a></li>
+      <li><a href="#local-directory-structure">Local directory structure</a></li>
+      <li><a href="#versioning">Versioning</a></li>
+      </ul>
+</li>
+      <li>
+<a href="#load-a-safe-project-dataset">Load a SAFE Project dataset</a><ul class="nav nav-pills nav-stacked">
+<li><a href="#importing-a-safe-data-object">Importing a SAFE data object</a></li>
+      <li><a href="#the-safe-data-object-structure">The SAFE data object structure</a></li>
+      <li><a href="#building-taxonomic-heirarchies">Building taxonomic heirarchies</a></li>
+      <li><a href="#visualising-locational-information">Visualising locational information</a></li>
       </ul>
 </li>
       </ul>

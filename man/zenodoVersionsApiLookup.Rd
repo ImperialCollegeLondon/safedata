@@ -8,8 +8,7 @@ for all versions of the specified id.}
 zenodoVersionsApiLookup(id)
 }
 \arguments{
-\item{id}{the data ID number, which in this instance should be a concept
-record ID}
+\item{id}{the data ID number, which in this instance should be a concept ID}
 }
 \value{
 \code{list} object containing information on all versions of the ID
