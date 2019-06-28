@@ -73,7 +73,7 @@
       <h1>Using the safe_data package</h1>
                         <h4 class="author">Andy Aldersley and David Orme</h4>
             
-            <h4 class="date">2019-06-27</h4>
+            <h4 class="date">2019-06-28</h4>
       
       
       <div class="hidden name"><code>using_safe_data.Rmd</code></div>
@@ -86,46 +86,46 @@
 <h1 class="hasAnchor">
 <a href="#about-the-package" class="anchor"></a>About the package</h1>
 <p><code>safe_data</code> is an R package designed to access and interact with data from the Stability of Altered Forest Ecosystems (SAFE) Project. The SAFE Project is one of the largest ecological experiments in the world, investigating the effects of human activities on biodiversity and ecosystem function in the Malaysian rainforest. Further information can be found at our <a href="https://www.safeproject.net/">website</a>.</p>
-<p>Research conducted at the SAFE Project encompasses expertise from many disciplines and institutions, each running interlinked projects that help to develop our understanding of ecology within changing environments. Data from the many activities conducted through the SAFE Project are curated and made available at the <a href="https://zenodo.org/communities/safe/">SAFE Zenodo repository</a>, a cloud-storage platform. The <code>safe_data</code> package is intended to enable researchers to quickly and easily interface with these datasets. This document provides an introduction to the core functionalities of the package and describes the concepts supporting its development.</p>
+<p>Research conducted at the SAFE Project encompasses expertise from many disciplines and institutions, each running interlinked projects that help to develop our understanding of ecology within changing environments. Data from the many activities conducted through the SAFE Project are curated and made available at the <a href="https://zenodo.org/communities/safe/">SAFE Zenodo repository</a>, a cloud-storage platform. The <code>safe_data</code> package enables researchers to interface with SAFE datasets in the Zenodo database. This document provides an introduction to the core functionalities of the package and describes the concepts supporting its development.</p>
 <div id="data-format" class="section level2">
 <h2 class="hasAnchor">
 <a href="#data-format" class="anchor"></a>Data format</h2>
-<p>All researchers working at the SAFE Project are asked to submit their project data to the <a href="https://zenodo.org/communities/safe/">SAFE Zenodo repository</a>. Submitted data must meet strict formatting requirements and pass a validation check before acceptance. Full details of this process can be found on the <a href="https://safe-dataset-checker.readthedocs.io/">SAFE Project data</a> webpages.</p>
+<p>All researchers working at the SAFE Project are required to submit their project data to the <a href="https://zenodo.org/communities/safe/">SAFE Zenodo repository</a>. Submitted data must meet strict formatting requirements and pass a validation check before acceptance. Full details of this process can be found on the <a href="https://safe-dataset-checker.readthedocs.io/">SAFE Project data</a> webpages.</p>
 <p>In most cases, data are provided as tabular datasets stored in Excel spreadsheets (note that v0.1 of <code>safe_data</code> only provides support for .xlsx imports). Briefly, these datasets comprise the following worksheets:</p>
 <ul>
 <li>
-<strong>Summary</strong>: simple metadata (authors, access rights) about the dataset</li>
+<strong>Summary</strong>: dataset metadata (authors, access rights)</li>
 <li>
 <strong>Taxa</strong>: a description of the Taxa reported in the dataset</li>
 <li>
 <strong>Locations</strong>: a description of all sampling locations in the dataset</li>
 <li>
-<strong>Data worksheets</strong>: the actual data tables, described in the <strong>Summary</strong> sheet</li>
+<strong>Data worksheets</strong>: the actual data tables, outlined in the <strong>Summary</strong> sheet</li>
 </ul>
-<p>The <code>safe_data</code> package allows users to import and interrogate these datasets within the R environment.</p>
+<p>The <code>safe_data</code> package provides functionality to search, download, and import these datasets within the R environment.</p>
 </div>
 <div id="data-repository" class="section level2">
 <h2 class="hasAnchor">
 <a href="#data-repository" class="anchor"></a>Data repository</h2>
-<p>The <a href="https://zenodo.org/communities/safe/">SAFE Zenodo repository</a> provides a searchable cloud-based data storage facility for research outputs from the SAFE Project. Zenodo uses a <a href="https://help.zenodo.org/">DOI versioning</a> system for file storage. When uploads are published on Zenodo for the first time, two DOIs are registered:</p>
+<p>The <a href="https://zenodo.org/communities/safe/">SAFE Zenodo repository</a> is a searchable cloud-based data storage facility for research outputs from the SAFE Project. Zenodo uses a <a href="https://help.zenodo.org/">DOI versioning</a> system for file storage. When uploads are published on Zenodo for the first time, two DOIs are registered:</p>
 <ul>
 <li>a DOI representing the <em>specific version</em> of the record: the <strong>version ID</strong>
 </li>
 <li>a DOI representing <em>all versions</em> of the record: the <strong>concept ID</strong>
 </li>
 </ul>
-<p>Subsequent versions of an upload are then logged under a new DOI.</p>
-<p>In practice, this means that multiple versions of a project’s data (or multiple datasets associated with a single research project) can be stored and referenced separately under a single identifier. The <strong>concept</strong> DOI allows users to cite the <em>entire</em> project, while the <strong>version</strong> DOI refers to a <em>particular</em> instance.</p>
-<p>Datasets published on Zenodo can have differing access rights:</p>
+<p>Subsequent versions of an upload are then logged under a new DOI (for the version) under the same concept.</p>
+<p>In practice, this means that multiple versions of a project’s data (or multiple datasets associated with a single research project) can be stored and referenced separately with a single unique identifier. The <strong>concept</strong> DOI allows users to cite the <em>entire</em> project, while the <strong>version</strong> DOI refers to a <em>particular</em> instance.</p>
+<p>Datasets published on Zenodo can also have differing access rights:</p>
 <ul>
 <li>
 <strong>Open</strong>: the dataset is open for download</li>
 <li>
-<strong>Embargoed</strong>: the dataset is currently unavailable for download, but will be opened in the future</li>
+<strong>Embargoed</strong>: the dataset is currently unavailable for download, but will be opened in the future (on some defined date)</li>
 <li>
 <strong>Closed</strong>: the dataset is no longer available</li>
 </ul>
-<p><code>safe_data</code> enables downloading of SAFE project datasets using either a specific version ID or concept ID (in which case the latest <strong>open</strong> version of the project records is returned). More detail on this can be found in the sections below.</p>
+<p><code>safe_data</code> enables downloading of SAFE project datasets using either a specific version ID or concept ID (in which case the latest <strong>open</strong> version of the project records is returned).</p>
 </div>
 </div>
 <div id="get-safe_data" class="section level1">
@@ -136,54 +136,168 @@
 <p>Alternatively, the current development version can be installed from GitHub</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"ImperialCollegeLondon/safe_data"</span>)</a></code></pre></div>
 </div>
+<div id="search-the-safe-database" class="section level1">
+<h1 class="hasAnchor">
+<a href="#search-the-safe-database" class="anchor"></a>Search the SAFE database</h1>
+<p><code>safe_data</code> provides functions to search for SAFE datasets on the Zenodo database using varied criteria, allowing users to index particular projects using different metadata. Full details of the SAFE API tool can be found on the <a href="https://www.safeproject.net/api/">SAFE website</a>. Searching for SAFE datasets in <code>safe_data</code> returns a list of individual record IDs matching the search criteria specified, which may then be downloaded or imported by the user. A brief description of the different search functions provided in <code>safe_data</code> are described below.</p>
+<div id="search-by-date" class="section level2">
+<h2 class="hasAnchor">
+<a href="#search-by-date" class="anchor"></a>Search by date</h2>
+<p>SAFE datasets can be searched by temporal extent. Users can search for a single date, returning the IDs of all datasets whose reporting period includes that date:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="../reference/searchDates.html">searchDates</a></span>(<span class="st">'2014-06-12'</span>)</a></code></pre></div>
+<p>Alternatively, users may specify a date range to search over. When a date range is supplied, users can additionally pass a keyword <code>matchType</code> to constrain the matching criteria. The default <code>matchType</code> is <code>intersect</code>, which will return a set of IDs for any datasets whose date range overlaps with the range queried:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="../reference/searchDates.html">searchDates</a></span>(<span class="st">'2014-06-12,2015-06-11'</span>, <span class="dt">matchType =</span> <span class="st">'intersect'</span>)</a></code></pre></div>
+<p>Setting <code>matchType</code> to <code>contain</code> returns a set of IDs for any datasets whose date range is entirely contained by the query range:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">searchDate</span>(<span class="st">'2014-06-12,2015-06-11'</span>, <span class="dt">matchType =</span> <span class="st">'contain'</span>)</a></code></pre></div>
+<p>Finally, <code>matchType</code> can also be set to <code>within</code>, which returns a set of IDs for any datasets whose date range completely encompasses the query range:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">searchDate</span>(<span class="st">'2014-06-12,2015-06-11'</span>, <span class="dt">matchType =</span> <span class="st">'within'</span>)</a></code></pre></div>
+<p>Note that in <code>searchDates</code> all dates must be passed in ISO format (yyyy-mm-dd). Date ranges must be specified as a <strong>comma-separated</strong> character string.</p>
+</div>
+<div id="search-by-author" class="section level2">
+<h2 class="hasAnchor">
+<a href="#search-by-author" class="anchor"></a>Search by author</h2>
+<p>SAFE datasets can also be searched by author name. Passing all or part of an author’s name to <code>searchAuthor</code> will return IDs for all projects whose author list contains the queried string.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw"><a href="../reference/searchAuthor.html">searchAuthor</a></span>(<span class="st">'Orme'</span>)</a></code></pre></div>
+</div>
+<div id="search-by-data-field-description" class="section level2">
+<h2 class="hasAnchor">
+<a href="#search-by-data-field-description" class="anchor"></a>Search by data field description</h2>
+<p>Users can query the SAFE database using descriptors of the data types reported in a particular dataset. For example, a list of IDs for all datasets recording temperature data can be extracted using the following search example:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw"><a href="../reference/searchFields.html">searchFields</a></span>(<span class="dt">fieldText =</span> <span class="st">'temperature'</span>)</a></code></pre></div>
+<p><code>searchFields</code> accepts both a <code>fieldText</code> (a description of the data field) and <code>fieldType</code> (the <a href="https://safe-dataset-checker.readthedocs.io/en/latest/data_format/data/#field-types">SAFE field type</a>, e.g. <code>numeric</code>) argument, which can be provided separately, or together, in a query.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="co"># datasets containing numeric temperature data</span></a>
+<a class="sourceLine" id="cb9-2" title="2"><span class="kw"><a href="../reference/searchFields.html">searchFields</a></span>(<span class="dt">fieldText =</span> <span class="st">'temperature'</span>, <span class="dt">fieldType =</span> <span class="st">'numeric'</span>)</a>
+<a class="sourceLine" id="cb9-3" title="3"></a>
+<a class="sourceLine" id="cb9-4" title="4"><span class="co"># datasets containing locational data</span></a>
+<a class="sourceLine" id="cb9-5" title="5"><span class="kw"><a href="../reference/searchFields.html">searchFields</a></span>(<span class="dt">fieldType =</span> <span class="st">'location'</span>)</a></code></pre></div>
+</div>
+<div id="search-by-taxa" class="section level2">
+<h2 class="hasAnchor">
+<a href="#search-by-taxa" class="anchor"></a>Search by taxa</h2>
+<p>SAFE datasets can be searched by taxon information using several indices:</p>
+<ul>
+<li>
+<code>name</code> - the Taxon name</li>
+<li>
+<code>gbif_id</code> - the Taxon ID number on the <a href="https://www.gbif.org/">GBIF database</a>
+</li>
+<li>
+<code>rank</code> - the Taxon rank</li>
+</ul>
+<p>These indices are passed to <code>searchTaxa</code> using the named variable <code>searchType</code>, with the associated query value passed using the named variable <code>searchValue</code>, to return a set of IDs for datasets containing the matching taxa, as in the following examples:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="kw"><a href="../reference/searchTaxa.html">searchTaxa</a></span>(<span class="dt">searchType =</span> <span class="st">'name'</span>, <span class="dt">searchVal =</span> <span class="st">'Formicidae'</span>)</a>
+<a class="sourceLine" id="cb10-2" title="2"><span class="kw"><a href="../reference/searchTaxa.html">searchTaxa</a></span>(<span class="dt">searchType =</span> <span class="st">'gbif_id'</span>, <span class="dt">searchVal =</span> <span class="dv">4342</span>)</a>
+<a class="sourceLine" id="cb10-3" title="3"><span class="kw"><a href="../reference/searchTaxa.html">searchTaxa</a></span>(<span class="dt">searchType =</span> <span class="st">'rank'</span>, <span class="dt">searchVal =</span> <span class="st">'Family'</span>)</a></code></pre></div>
+</div>
+<div id="search-by-location" class="section level2">
+<h2 class="hasAnchor">
+<a href="#search-by-location" class="anchor"></a>Search by location</h2>
+<p>Users can search SAFE datasets by location (i.e. by the locations from which data were recorded) using either known, named locations on the <a href="https://www.safeproject.net/info/gazetteer">SAFE gazetteer</a> (a complete list of which are provided in JSON format <a href="https://www.safeproject.net/call/json/get_locations">here</a>), or by defining their own spatial area to query. The sampling locations provided in each dataset are tested to see if they intersect the search geometry.</p>
+<p>User-defined geometries must be submitted as character strings in the format of a <a href="https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry#Geometric_objects">well-known text geometry</a> using latitude and longitude coordinates in <a href="https://en.wikipedia.org/wiki/World_Geodetic_System">WGS84 (EPSG:4326)</a>. Examples of these constructs are given below.</p>
+<p>A final (optional) buffer <code>distance</code> (defined in metres) can be provided to search around the query location/geometry.</p>
+<p>Search SAFE datasets by named location <code>A_1</code>:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw"><a href="../reference/searchSpatial.html">searchSpatial</a></span>(<span class="dt">location =</span> <span class="st">'A_1'</span>)</a></code></pre></div>
+<p>Search SAFE datasets intersecting a user-defined polygon:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="kw"><a href="../reference/searchSpatial.html">searchSpatial</a></span>(<span class="dt">wkt =</span> <span class="st">'Polygon((110 0, 110 10,120 10,120 0,110 0))'</span>)</a></code></pre></div>
+<p>Search SAFE datasets intersecting a specific point with a buffer distance of 10km:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="kw"><a href="../reference/searchSpatial.html">searchSpatial</a></span>(<span class="dt">wkt =</span> <span class="st">'Point(116.5 4.75)'</span>, <span class="dt">distance =</span> <span class="dv">10000</span>)</a></code></pre></div>
+</div>
+<div id="search-by-free-text" class="section level2">
+<h2 class="hasAnchor">
+<a href="#search-by-free-text" class="anchor"></a>Search by free text</h2>
+<p>A final search option allows users to query SAFE datasets using a free-text search, which matches character strings across dataset, worksheet, and data field descriptions, as well as withinin titles and keywords.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="kw"><a href="../reference/searchText.html">searchText</a></span>(<span class="st">'forest'</span>)</a>
+<a class="sourceLine" id="cb14-2" title="2"><span class="kw"><a href="../reference/searchText.html">searchText</a></span>(<span class="st">'ant'</span>)</a></code></pre></div>
+</div>
+<div id="additional-search-parameters" class="section level2">
+<h2 class="hasAnchor">
+<a href="#additional-search-parameters" class="anchor"></a>Additional search parameters</h2>
+<p>The above search functions can each be supplemented by two additional optional parameters: <code>mostRecent</code> and <code>ids</code>.</p>
+<p>When <code>mostRecent</code> (a <code>logical</code>) is set to <code>TRUE</code>, the search query will only return record IDs for the most recent version of a concept. For example:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="kw"><a href="../reference/searchTaxa.html">searchTaxa</a></span>(<span class="st">'Formicidae'</span>, <span class="dt">mostRecent =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<p>The <code>ids</code> parameter is intended to provide users with the capability to refine previous search results. <code>ids</code> is an array of SAFE record IDs that is used to filter the output from a previous query, for example:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="kw"><a href="../reference/searchTaxa.html">searchTaxa</a></span>(<span class="dt">searchType =</span> <span class="st">'name'</span>, <span class="dt">searchVal =</span> <span class="st">'Formicidae'</span>, <span class="dt">ids =</span> <span class="kw"><a href="../reference/searchFields.html">searchFields</a></span>(<span class="dt">fieldType =</span> <span class="st">'location'</span>))</a></code></pre></div>
+<p>will return a set of record IDs for SAFE datasets containing location data types including the taxon name Formicidae.</p>
+</div>
+</div>
 <div id="access-a-safe-project-dataset" class="section level1">
 <h1 class="hasAnchor">
 <a href="#access-a-safe-project-dataset" class="anchor"></a>Access a SAFE Project dataset</h1>
-<p>SAFE project datasets can be downloaded to a local directory.</p>
+<p>SAFE project datasets can be downloaded to a local directory using <code>getSafe</code>.</p>
 <div id="the-safe-directory" class="section level2">
 <h2 class="hasAnchor">
 <a href="#the-safe-directory" class="anchor"></a>The SAFE directory</h2>
-<p>Information on how to set the <code>SAFE_data_dir</code> in R.</p>
+<p>It is good practice that users should use a common directory, known as the <code>SAFE_data_dir</code>, to store SAFE datasets. Upon importing <code>safe_data</code> into R one receives the following message reminding the user to set the <code>SAFE_data_dir</code> in the local environment:</p>
+<pre class="text"><code>SAFE package reminder: Please set SAFE_data_dir using setSafeDir()</code></pre>
+<p>Setting the <code>SAFE_data_dir</code> is a simple case of calling <code>setSafeDir</code> with the desired directory path passed as an argument. If the <code>SAFE_data_dir</code> is not set, and no alternative directory is supplied as an argument, then <code>safe_data</code> will process all downloads to the current working directory. This can create issues with tracking versions and files associated with requested SAFE Project files.</p>
 </div>
 <div id="local-directory-structure" class="section level2">
 <h2 class="hasAnchor">
 <a href="#local-directory-structure" class="anchor"></a>Local directory structure</h2>
-<p>SAFE Project datasets are stored locally within the <code>SAFE_data_dir</code>. Each SAFE Project has a master folder named according to the concept DOI. Separate versions of this project are then created as subfolders within the main project folder according to their version DOI. All datasets associated with this upload are then stored within the version subfolder.</p>
-<pre><code>index.rds
+<p>Usually, SAFE Project datasets will be stored locally within the <code>SAFE_data_dir</code>. Each SAFE Project has a master folder named according to the concept DOI. Separate versions of this project are then created as subfolders within the main project folder according to their version DOI. All datasets associated with this upload are then stored within the version subfolder.</p>
+<pre class="text"><code>index.rds
 concept_DOI/
-concept_DOI/versions.rds
 concept_DOI/record_DOI_1/file.xlsx
 concept_DOI/record_DOI_1/external_file1.xlsx
 concept_DOI/record_DOI_2/file.xlsx</code></pre>
-<p>The <code>index.rds</code> and <code>versions.rds</code> are local caches containing up-to-date offline records of files accessed and version statuses for all concept DOIs requested by the user. These files are described in more detail below.</p>
+<p>The <code>index.rds</code> file is a local cache containing an up-to-date record of concept IDs and versions accessed by the user.</p>
 </div>
 <div id="versioning" class="section level2">
 <h2 class="hasAnchor">
 <a href="#versioning" class="anchor"></a>Versioning</h2>
-<p>The <code>versions.rds</code> file is always</p>
+<p><code>safe_data</code> keeps track of the dataset versions associated specifically with the concept IDs accessed by a user in the <code>index.rds</code> file. Essentially, this is a dataframe containing metadata such as <code>concept ID</code>, <code>record ID</code>, <code>embargo status</code>, <code>open date</code>, and <code>download status</code> for each version of a project. <code>safe_data</code> uses this information to notify or warn the user of problematic download requests, such as if the user attempts to download an embargoed project file (in which case an alternative version - if available - is suggested), or attempts to download a dataset for which a local version already exists (in which case an error message appears). The effective purpose of <code>index.rds</code> is to maintain an offline bank of SAFE dataset information to support user productivity in <code>safe_data</code>.</p>
+<p>Each time a Zenodo ID (whether a record ID or a concept ID) is passed to <code>getSafe</code>, the <code>index.rds</code> is updated.</p>
+</div>
+<div id="downloading-a-safe-project-dataset" class="section level2">
+<h2 class="hasAnchor">
+<a href="#downloading-a-safe-project-dataset" class="anchor"></a>Downloading a SAFE Project dataset</h2>
+<p>SAFE datasets are downloaded using the <code>getSafe</code> function. Users can pass either concept IDs - in which case <code>getSafe</code> will attempt to download the dataset associated with the latest version of the project - or specific record IDs. IDs can be also processed ‘in bulk’, for example <code>getSafe</code> will accept the output of a SAFE search query.</p>
+<p>Assuming that the <code>SAFE_data_dir</code> has been set, downloading a SAFE file is as simple as:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1"><span class="kw"><a href="../reference/getSafe.html">getSafe</a></span>(<span class="dv">1216039</span>)</a></code></pre></div>
+<p><strong>Note</strong> that if the <code>SAFE_data_dir</code> has not been set, <code>getSafe</code> will set the current working directory as the <code>SAFE_data_dir</code>, meaning that all file downloads performed during the active R session will be saved to this directory. If no <code>index.rds</code> file exists at this location, it will be created.</p>
+<p>Alternatively, users can specify a separate download location using the <code>dir</code> variable:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1"><span class="kw"><a href="../reference/getSafe.html">getSafe</a></span>(<span class="dv">1216039</span>, <span class="dt">dir =</span> <span class="st">'path/to/files)</span></a></code></pre></div>
+<p>Again this is not advised, as it invites the possibility for multiple versions of the same datasets to be stored in different locations on the user’s local machine.</p>
+<p>By default datasets will not be overwritten if they have already been downloaded, although this behaviour can be overridden by setting <code>overwrite = TRUE</code> when calling <code>getSafe</code>.</p>
+<p>Downloaded data files are named according to the project name on the Zenodo database.</p>
 </div>
 </div>
-<div id="load-a-safe-project-dataset" class="section level1">
+<div id="load-a-safe-project-dataset-into-an-r-session" class="section level1">
 <h1 class="hasAnchor">
-<a href="#load-a-safe-project-dataset" class="anchor"></a>Load a SAFE Project dataset</h1>
+<a href="#load-a-safe-project-dataset-into-an-r-session" class="anchor"></a>Load a SAFE Project dataset into an R session</h1>
+<p>Local copies of SAFE Project datasets can be loaded into an R session using the <code>importSafe</code> function. This tool imports an object of class <code>safe_data</code> into R, and adds project metadata, taxa, location, and data worksheets from an existing record file (assumed to be an Excel .xlsx workbook).</p>
 <div id="importing-a-safe-data-object" class="section level2">
 <h2 class="hasAnchor">
 <a href="#importing-a-safe-data-object" class="anchor"></a>Importing a SAFE data object</h2>
-<p>Using <code><a href="../reference/importSafe.html">importSafe()</a></code></p>
+<p>To import a SAFE dataset simply pass the full (or relative) file path to the <code>importSafe</code> function:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1">safe &lt;-<span class="st"> </span><span class="kw"><a href="../reference/importSafe.html">importSafe</a></span>(<span class="st">'path/to/SAFE_file.xlsx'</span>)</a></code></pre></div>
+<p>The resulting object (class <code>safe_data</code>) - based on a <code>list</code> structure - has varied attributes that can be accessed using the <code>$</code> notation, for example:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1">safe<span class="op">$</span>title <span class="co"># project name</span></a>
+<a class="sourceLine" id="cb22-2" title="2">safe<span class="op">$</span>startDate <span class="co"># project start date</span></a></code></pre></div>
+<p>A simple summary of the imported project file can be shown using <code>print</code>, e.g.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(safe)</a></code></pre></div>
 </div>
-<div id="the-safe-data-object-structure" class="section level2">
+<div id="adding-taxa-location-and-data-worksheets" class="section level2">
 <h2 class="hasAnchor">
-<a href="#the-safe-data-object-structure" class="anchor"></a>The SAFE data object structure</h2>
-<p>Description of different features within the object and how to access them (e.g. <code><a href="https://www.rdocumentation.org/packages/base/topics/print">print()</a></code>)</p>
+<a href="#adding-taxa-location-and-data-worksheets" class="anchor"></a>Adding Taxa, Location, and data worksheets</h2>
+<p>Once imported into the R environment, additional worksheets from the record .xlsx can be added to the <code>safe_data</code> object using simple <code>add</code> commands, for instance:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1">safe &lt;-<span class="st"> </span><span class="kw"><a href="../reference/addTaxa.html">addTaxa</a></span>(safe) <span class="co"># add Taxa dataframe to an existing SAFE object</span></a>
+<a class="sourceLine" id="cb24-2" title="2">safe &lt;-<span class="st"> </span><span class="kw">addLocation</span>(safe) <span class="co"># add Locations dataframe to an existing SAFE object</span></a></code></pre></div>
+<p>These functions add dataframes of Taxa (<code>safe$Taxa</code>) and Locations (<code>safe$Locations</code>) that mirror the respective tables in the Excel dataset. Note that as both the Taxa and Locations worksheets are optional inclusions for a SAFE dataset (not all records include this information), <code>addTaxa</code> and <code>addLocations</code> will return an error in the event that they do not exist.</p>
+<p>Each <code>safe_data</code> object created on calling <code>importSafe</code> includes, by default, a list of named data tables in the workbook under <code>safe$workSheets</code>. A empty list structure taking the name of each data table (e.g. workSheet1, workSheet2, …) is also added to the object (<code>safe$workSheet1</code>).</p>
+<p>The <code>addData</code> function is then used to populate these lists, adding data and header information for each data worksheet in the SAFE dataset:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1">safe &lt;-<span class="st"> </span><span class="kw"><a href="../reference/addData.html">addData</a></span>(safe)</a>
+<a class="sourceLine" id="cb25-2" title="2">safe<span class="op">$</span>workSheet1<span class="op">$</span>description <span class="co"># prints a description of the data contained in workSheet1</span></a>
+<a class="sourceLine" id="cb25-3" title="3">safe<span class="op">$</span>workSheet1<span class="op">$</span>data <span class="co"># access the data (tabular) contained in worksheet1</span></a>
+<a class="sourceLine" id="cb25-4" title="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/attributes">attributes</a></span>(safe<span class="op">$</span>workSheet1<span class="op">$</span>data) <span class="co"># print header information (field types and descriptions)</span></a></code></pre></div>
 </div>
 <div id="building-taxonomic-heirarchies" class="section level2">
 <h2 class="hasAnchor">
 <a href="#building-taxonomic-heirarchies" class="anchor"></a>Building taxonomic heirarchies</h2>
-<p>Using <code><a href="../reference/addTaxonHeirarchies.html">addTaxonHeirarchies()</a></code> to build a taxonomic tree</p>
-</div>
-<div id="visualising-locational-information" class="section level2">
-<h2 class="hasAnchor">
-<a href="#visualising-locational-information" class="anchor"></a>Visualising locational information</h2>
+<p>Users can build a complete taxonomic heirarchy for all Taxa listed in a given SAFE Project dataset. This function makes use of the R package <a href="https://cran.r-project.org/web/packages/rgbif/index.html">rgbif</a>, which provides a programmatic interface to the (Global Biodiversity Information Facility)[<a href="https://www.gbif.org/developer/summary" class="uri">https://www.gbif.org/developer/summary</a>]. Once taxon information has been added to an existing <code>safe_data</code> object (<code>safe</code>) using <code>addTaxa</code>, run:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1">safe &lt;-<span class="st"> </span><span class="kw"><a href="../reference/addTaxonHeirarchies.html">addTaxonHeirarchies</a></span>(safe)</a></code></pre></div>
+<p>to build the taxonomic tree. This is stored as a dataframe (<code>safe$TaxonHeirarchy</code>) with full rank details for each taxon in the dataset (from the named taxon level up to Kingdom), and includes the <code>rgbif</code> match type - a measure of the confidence of the heirarchy structure - for user information.</p>
+<p><strong>Note</strong> <code>addTaxonHeirarchies</code> performs repeated lookups to the GBIF API, and as a consequence will run slowly on datasets containing a large volume (&gt;1000) of unique taxon records.</p>
 </div>
 </div>
   </div>
@@ -201,18 +315,29 @@ concept_DOI/record_DOI_2/file.xlsx</code></pre>
 </li>
       <li><a href="#get-safe_data">Get safe_data</a></li>
       <li>
+<a href="#search-the-safe-database">Search the SAFE database</a><ul class="nav nav-pills nav-stacked">
+<li><a href="#search-by-date">Search by date</a></li>
+      <li><a href="#search-by-author">Search by author</a></li>
+      <li><a href="#search-by-data-field-description">Search by data field description</a></li>
+      <li><a href="#search-by-taxa">Search by taxa</a></li>
+      <li><a href="#search-by-location">Search by location</a></li>
+      <li><a href="#search-by-free-text">Search by free text</a></li>
+      <li><a href="#additional-search-parameters">Additional search parameters</a></li>
+      </ul>
+</li>
+      <li>
 <a href="#access-a-safe-project-dataset">Access a SAFE Project dataset</a><ul class="nav nav-pills nav-stacked">
 <li><a href="#the-safe-directory">The SAFE directory</a></li>
       <li><a href="#local-directory-structure">Local directory structure</a></li>
       <li><a href="#versioning">Versioning</a></li>
+      <li><a href="#downloading-a-safe-project-dataset">Downloading a SAFE Project dataset</a></li>
       </ul>
 </li>
       <li>
-<a href="#load-a-safe-project-dataset">Load a SAFE Project dataset</a><ul class="nav nav-pills nav-stacked">
+<a href="#load-a-safe-project-dataset-into-an-r-session">Load a SAFE Project dataset into an R session</a><ul class="nav nav-pills nav-stacked">
 <li><a href="#importing-a-safe-data-object">Importing a SAFE data object</a></li>
-      <li><a href="#the-safe-data-object-structure">The SAFE data object structure</a></li>
+      <li><a href="#adding-taxa-location-and-data-worksheets">Adding Taxa, Location, and data worksheets</a></li>
       <li><a href="#building-taxonomic-heirarchies">Building taxonomic heirarchies</a></li>
-      <li><a href="#visualising-locational-information">Visualising locational information</a></li>
       </ul>
 </li>
       </ul>

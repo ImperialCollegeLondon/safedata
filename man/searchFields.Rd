@@ -45,5 +45,7 @@ This function returns Zenodo record IDs. On the Zenodo database each
   searchFields(fieldText = 'temperature', ids = c(3238498, 3247485, 3251900))
 }
 \seealso{
-\code{\link{getSafe}} for downloading SAFE datasets.
+\code{\link{getSafe}} for downloading SAFE datasets,
+  \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/data/#field-types}
+  for accepted SAFE field types.
 }
