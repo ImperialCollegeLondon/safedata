@@ -72,20 +72,21 @@ get_data_dir <- function(){
 		stop('SAFE data directory not set.')
 	}
 	
-	return(options('safedata.dir'))
+	return(options('safedata.dir')$safedata.dir)
 }
 
 get_index <- function(){
-	#' Handler to retrieve the index from the package cache environment
+	#' Handler to retrieve the local loaded copy of the index from the
+	#' package cache environment
 	#' @keywords internal
 	
 	local <- try(get('index', safedata.env), silent=TRUE)
 	
-	if(inherits(index, 'try-error')){
+	if(inherits(local, 'try-error')){
 		stop('Failed to load cached index.')
 	}
 	
-	return(index)
+	return(local)
 }
 
 update_safe_data_index <- function(){
@@ -107,15 +108,16 @@ update_safe_data_index <- function(){
 	# It is conceivable that entries could change after being created,
 	# so maybe need a more complex reset at some point to look for 
 	# datasets that have changed.
-	if(set.equal(local$zenodo_record_id, current$zenodo_record_id)) {
+	if(setequal(local$zenodo_record_id, current$zenodo_record_id)) {
 		message('Index up to date')
 	} else if(length(setdiff(local$zenodo_record_id, current$zenodo_record_id)) > 0){
-		message('Local index contains retracted records, contact data@safeproject.net')
+		message('Local index contains retracted or unknown records, contact data@safeproject.net')
 	} else {
+		message('Updating index')
 		# merge in the information on local copies and set local copy 
 		# for new rows to FALSE
 		local <- subset(local, select=c(zenodo_record_id, local_copy))
-		current <- merge(current, local, by='zenodo_record_id'))
+		current <- merge(current, local, by='zenodo_record_id')
 		current$local_copy[is.na(current$local_copy)] <- FALSE
 		
 		# Update the index cache and RDS file
