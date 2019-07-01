@@ -1,0 +1,11 @@
+reference:
+- title: User functions
+  desc: These are the main functions that are used by the package
+  contents:
+  -
+- title: Internal functions
+  desc: The following internal functions are not included in the package namespace but are documented here briefly.
+  contents:
+  - get_data_dir
+  - get_index
+  - get_record_metadata   
