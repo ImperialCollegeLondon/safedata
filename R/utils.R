@@ -65,6 +65,8 @@ setSafeDir <- function(dir, init=FALSE) {
 }
 
 get_data_dir <- function(){
+	#' Get SAFE data directory
+	#' 
 	#' Internal handler to check the data directory is set and return it.
 	#' @keywords internal
 	
@@ -76,6 +78,8 @@ get_data_dir <- function(){
 }
 
 get_index <- function(){
+	#' Get SAFE datasets index
+	#'
 	#' Internal handler to retrieve the local loaded copy of the index from the
 	#' package cache environment
 	#' @keywords internal
@@ -91,6 +95,8 @@ get_index <- function(){
 
 
 get_record_metadata <- function(record_id){
+	#' Get SAFE dataset metadata
+	#'
 	#' Internal handler to load a local copy of the record metadata or retrieve
 	#' it from the SAFE project website if there is no local copy. Much of this
 	#' data is also available from Zenodo, but the SAFE API includes taxon and
