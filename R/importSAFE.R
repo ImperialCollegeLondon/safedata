@@ -1,3 +1,98 @@
+
+
+build_taxonomy <- function(record_id){
+    
+    #' Build a taxonomy data frame for a dataset
+    #'
+    #' The record metadata from the SAFE Project website API includes
+    #' the taxon index for the dataset: a set taxon entries with 
+    #' GBIF taxon ID, GBIF parent ID,  GBIF name, GBIF level, GBIF_status, ..., ...
+    #' 
+    #' This function turns that set of entries into a data frame, containing
+    #' the backbone taxonomy used within GBIF and the taxon name used within 
+    #' the dataset to make it easy to merge onto data tables from the dataset.
+    #'
+    #' Note that the \code{ape} function \code{as.phylo.formula} can be used
+    #' to turn this structure into a 'phylogeny'.
+    #' @exports
+
+
+    # TODO. This might be faster and easier with a graph library, but that is
+    # quite a lot of overhead for the conversion.
+    
+    taxa <- get_record_metadata(record_id)$taxa
+    
+    if(length(rec) == 0){
+        return NA
+    } else {
+        taxa <- data.frame(taxa, stringsAsFactors=FALSE)
+        names(taxa) <- c('id','pid','name','level','status','asname','aslevel')
+        
+        # Note which rows are leaves - their ID does not appear in the parent ID column
+        taxa$leaf <- ! taxa$id %in% taxa$pid
+        total_leaves <- sum(taxa$leaf)
+        
+        # Generate the asname column - this should merge on to the taxon names
+        # provided in the dataset.
+        taxa$asname <- ifelse(is.na(taxa$asname), taxa$name, taxa$asname)
+        
+        # Divide the data frame up into a list giving the descendants from each parent id
+        taxa <- split(as.data.frame(taxa), f=taxa[,2])
+        
+        # Now, starting with the parent index of -1 for the root, work through that
+        # list of descendants. Get a set of descdendants, add any leaves to the final
+        # output and then split what is left into the current top and remaining taxa.
+        # These sets are stored in a stack with more specific taxa getting pushed onto
+        # the top at index 1. The current name at each level is used as the stack list
+        # name, so that names(stack) gives the hierarchy.
+        
+        # start the stack off
+        push <- taxa[["-1"]]
+        stack <- list(list(top=push[1,], up_next=push[-1,]))
+        names(stack) <- stack[[1]]$top$name
+        
+        # create a leaf table to fill in
+        leaf_table <- matrix(NA, ncol=8, nrow=total_leaves)
+        leaf_idx <- 0
+        
+        while(length(stack)){
+
+            if(stack[[1]]$top$leaf){
+                # If the top of the stack is a leaf, write it out into the leaf table
+                hierarchy <- c(rev(names(stack)), rep(NA, 7 - length(stack)))
+                leaf_idx <- leaf_idx + 1
+                leaf_table[leaf_idx, ] <- c(hierarchy, stack[[1]]$top$asname)
+                
+                # Now work back down the stack to find the next level with something
+                # left in the up_next slot.
+                while(length(stack)){
+                    push <- stack[[1]]$up_next
+                    if(nrow(push)){
+                        # ii) If there is anything left in up_next, bring one up and replace the stack top
+                        push <- list(list(top=push[1,], up_next=push[-1,]))
+                        names(push) <- push[[1]]$top$name
+                        stack <- c(push , stack[-1])
+                        break
+                    } else {
+                        # iii) Otherwise pop off the top of the stack
+                        stack <- stack[-1]
+                    }
+                }
+            } else {
+                # Otherwise stick the descendants of the current top onto the stack
+                push <- taxa[[stack[[1]]$top$id]]
+                push <- list(list(top=push[1,], up_next=push[-1,]))
+                names(push) <- push[[1]]$top$name
+                stack <- c(push , stack)
+            }
+        }
+
+        leaf_table <- as.data.frame(leaf_table, stringsAsFactors=FALSE)
+        names(leaf_table) <- c("kingdom", "phylum", "class", "order", "family", "genus", "species", "taxon_name")
+        return(leaf_table)
+    }
+}
+
 getSafeDataClassType <- function (safeType) {
   #' Get the R data type from the SAFE \code{field_type} variable
   #' 
@@ -189,7 +284,7 @@ addTaxa <- function (obj, filePath = NULL) {
   #' @export
   
   if(! inherits(obj, 'safedata')){
-	  stop("addTaxa requires an object of class 'safedata'")
+      stop("addTaxa requires an object of class 'safedata'")
   }
   
   # check file path
@@ -354,7 +449,7 @@ addTaxonHeirarchies <- function (obj, ...) {
   #' @export
   
   if(! inherits(obj, 'safedata')){
-	  stop("addTaxonHeirarchies requires an object of class 'safedata'")
+      stop("addTaxonHeirarchies requires an object of class 'safedata'")
   }
   
   if (is.null(obj$Taxa)){
@@ -405,7 +500,7 @@ addLocations <- function (obj, filePath = NULL) {
   #' @export
   
   if(! inherits(obj, 'safedata')){
-	  stop("addLocations requires an object of class 'safedata'")
+      stop("addLocations requires an object of class 'safedata'")
   }
   # check file path
   if (is.null(filePath)) {
@@ -470,7 +565,7 @@ addData <- function (obj, filePath = NULL) {
   #' @export
   
   if(! inherits(obj, 'safedata')){
-	  stop("addData requires an object of class 'safedata'")
+      stop("addData requires an object of class 'safedata'")
   }
   
   # check file path
