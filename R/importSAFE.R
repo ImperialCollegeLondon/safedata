@@ -5,25 +5,22 @@ build_taxonomy <- function(record_id){
     #' Build a taxonomy data frame for a dataset
     #'
     #' The record metadata from the SAFE Project website API includes
-    #' the taxon index for the dataset: a set taxon entries with 
-    #' GBIF taxon ID, GBIF parent ID,  GBIF name, GBIF level, GBIF_status, ..., ...
-    #' 
-    #' This function turns that set of entries into a data frame, containing
-    #' the backbone taxonomy used within GBIF and the taxon name used within 
-    #' the dataset to make it easy to merge onto data tables from the dataset.
+    #' the taxon index for the dataset. This function turns that set of entries
+	#' into a data frame, containing the backbone taxonomy used within GBIF and
+	#' the taxon name used within the dataset to make it easy to merge onto data 
+	#' tables from the dataset. 
+	#'
+	#' Note that the taxon name used in the dataset is not necessarily the same
+	#' as the canonical GBIF ID for the taxon.
     #'
     #' Note that the \code{ape} function \code{as.phylo.formula} can be used
     #' to turn this structure into a 'phylogeny'.
-    #' @exports
-
-
-    # TODO. This might be faster and easier with a graph library, but that is
-    # quite a lot of overhead for the conversion.
+    #' @export
     
     taxa <- get_record_metadata(record_id)$taxa
     
-    if(length(rec) == 0){
-        return NA
+    if(length(taxa) == 0){
+        return(NA)
     } else {
         taxa <- data.frame(taxa, stringsAsFactors=FALSE)
         names(taxa) <- c('id','pid','name','level','status','asname','aslevel')
@@ -44,7 +41,7 @@ build_taxonomy <- function(record_id){
         # output and then split what is left into the current top and remaining taxa.
         # These sets are stored in a stack with more specific taxa getting pushed onto
         # the top at index 1. The current name at each level is used as the stack list
-        # name, so that names(stack) gives the hierarchy.
+        # name, so that names(stack) gives the current hierarchy.
         
         # start the stack off
         push <- taxa[["-1"]]
@@ -79,7 +76,7 @@ build_taxonomy <- function(record_id){
                     }
                 }
             } else {
-                # Otherwise stick the descendants of the current top onto the stack
+                # Otherwise, if the top of the stack isn't a leaf,  stick its descendants onto the stack
                 push <- taxa[[stack[[1]]$top$id]]
                 push <- list(list(top=push[1,], up_next=push[-1,]))
                 names(push) <- push[[1]]$top$name
