@@ -1,4 +1,4 @@
-# This creates an environment within the package that is used to 
+# Create an environment within the package namespace that is used to 
 # keep a copy of the index, rather than needing to repeatedly read
 # from file.
 
@@ -65,7 +65,7 @@ setSafeDir <- function(dir, init=FALSE) {
 }
 
 get_data_dir <- function(){
-	#' Handler to check the data directory is set and return it.
+	#' Internal handler to check the data directory is set and return it.
 	#' @keywords internal
 	
 	if(is.null(options('safedata.dir'))){
@@ -76,7 +76,7 @@ get_data_dir <- function(){
 }
 
 get_index <- function(){
-	#' Handler to retrieve the local loaded copy of the index from the
+	#' Internal handler to retrieve the local loaded copy of the index from the
 	#' package cache environment
 	#' @keywords internal
 	
@@ -89,6 +89,42 @@ get_index <- function(){
 	return(local)
 }
 
+
+get_record_metadata <- function(record_id){
+	#' Internal handler to load a local copy of the record metadata or retrieve
+	#' it from the SAFE project website if there is no local copy. Much of this
+	#' data is also available from Zenodo, but the SAFE API includes taxon and
+	#' location metadata.
+	#' @keywords internal
+	
+	# Check the record id is in the index and get the concept id
+	dir <- get_data_dir()
+	index <- get_index()
+	if(! record_id %in% index$zenodo_record_id){
+		stop('Unknown record id')
+	} else {
+		concept_id <- with(index, zenodo_concept_id[zenodo_record_id == record_id][1])
+	}
+	
+	# Don't redownload if it is already local, and cache a copy if it does need
+	# to be downloaded.
+	local_path <- file.path(dir, concept_id, record_id, sprintf('%i.rds', record_id))
+	if(file.exists(local_path)){
+		record <- readRDS(local_path)
+	} else {
+		record <- jsonlite::fromJSON(sprintf('https://www.safeproject.net/api/record/%i', record_id))
+		if(! dir.exists(dirname(local_path))){
+			dir.create(dirname(local_path), recursive=TRUE)
+		}
+		saveRDS(record, local_path)
+	}
+	
+	return(record)
+}
+
+
+
+
 update_safe_data_index <- function(){
 	
 	#' Updates the SAFE data index
@@ -99,7 +135,7 @@ update_safe_data_index <- function(){
 	#' @export
 	
 	dir <- get_data_dir()
-	index <- get_index()
+	local <- get_index()
 	
 	# Get the local current index from the website
 	current <- jsonlite::fromJSON('https://www.safeproject.net/api/files')
