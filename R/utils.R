@@ -52,7 +52,7 @@ get_index <- function(){
 	
 	index <- try(get('index', safedata.env), silent=TRUE)
 	
-	if(inherits(local, 'try-error')){
+	if(inherits(index, 'try-error')){
 		stop('Failed to load cached index.')
 	}
 	
@@ -251,7 +251,7 @@ set_safe_dir <- function(safedir, update=TRUE, create=FALSE, validate=TRUE){
 	}
 	
 	# set the directory in options and cache the index 
-	options(safedata.dir = dir)
+	options(safedata.dir = safedir)
 	index <- set_index_availability(index)
 	assign('index', index, safedata.env)
 	
@@ -270,14 +270,15 @@ validate_record_ids <- function(record_ids){
 	#' 
 	#' The function is largely intended for internal use but can be used to 
 	#' validate records before giving them to a function - the function returns
-	#' an object with class \code{safe_record_set} that allows other functions
-	#' to skip revalidation.
+	#' an data frame with class \code{safe_record_set} that shows the values
+	#' have been validated.
 	#'
 	#' @param record_ids A vector of record_id values
-	#' @return An object of class 'safe_record_set': a dataframe with rownames
-	#'   giving the user provided values and columns \code{concept} and \code{record}
-	#'   indicating the matching records. Note that \code{record} will be NA when the
-	#'   value is a concept id and both fields will be NA if no match is found.
+	#' @return An object of class 'safe_record_set': a dataframe with columns
+	#'   \code{concept} and \code{record} indicating the matching records. Note
+	#'   that \code{record} will be NA when thevalue is a concept id and both fields
+	#'   will be NA if no match is found. The data frame rownames are used to 
+	#'   record the original values provided.
 	#' @examples
 	#'   validate_record_ids(c(3247631, 3266827, 3266821, -1000))
 	#'   validate_record_ids(c('https://doi.org/10.5281/zenodo.3247631', 
@@ -285,8 +286,15 @@ validate_record_ids <- function(record_ids){
 	#'						   'https://zenodo.org/record/3266821',
 	#'						   'not_this_one/3266821'))
 	#' @export
-		
+	
+	# Don't revalidate
+	if(inherits(record_ids, 'safe_record_set')){
+		return(record_ids)
+	}
+	
+	# Otherwise validate
 	id_mode <- mode(record_ids)
+	
 	if(! (is.vector(record_ids) && id_mode %in% c('character', 'numeric'))){
 		stop('record_ids must be a character or numeric vector')
 	}
@@ -299,7 +307,7 @@ validate_record_ids <- function(record_ids){
 		# If numbers, look for positive integers
 		not_int <- record_ids %% 1 != 0
 		not_pos <- record_ids <= 0
-		valid <- record_ids[(! not_int) & (! not_pos)]
+		valid <- (! not_int) & (! not_pos)
 
 		if(any(! valid)){
 			warning('Some record ids are not positive integers')
@@ -343,107 +351,159 @@ validate_record_ids <- function(record_ids){
 								 index$zenodo_concept_id[match(record_ids$record, index$zenodo_record_id)],
 								 record_ids$concept)
 								 
-	attr(record_ids, 'validated') <- TRUE
+	class(record_ids) <- c('data.frame', 'safe_record_set')
 	rownames(record_ids) <- user
 	return(record_ids)	
 }
 
 
-get_record_metadata <- function(record_id){
+fetch_record_metadata <- function(record_set){
 	
 	#' Get SAFE dataset metadata
 	#'
-	#' Internal handler to load a local copy of the record metadata or retrieve
-	#' it from the SAFE project website if there is no local copy. Much of this
-	#' data is also available from Zenodo, but the SAFE API includes taxon and
-	#' location metadata.
+	#' Internal handler to ensure there are local copies of record metadata,
+	#' fetching it from the SAFE project website if needed. This is the same
+	#' data used to populate the Zenodo description but is machine readable
+	#' and contains additional taxon and location indexing.
 	#'
+	#' @param record_set An object of class \code{safe_record_set}.
+	#' @return NULL
+	#' @examples
+	#'   recs <- c('https://doi.org/10.5281/zenodo.3247631', '10.5281/zenodo.3266827', 
+	#'	           'https://zenodo.org/record/3266821', 'not_this_one/3266821')
+	#'   recs <- validate_record_ids(recs)
+	#'   fetch_record_metadata(recs)
 	#' @keywords internal
 	
-	# Check the record id is in the index and get the concept id
-	
-	dir <- get_data_dir()
-	index <- get_index()
-	if(! record_id %in% index$zenodo_record_id){
-		stop('Unknown record id')
-	} else {
-		concept_id <- with(index, zenodo_concept_id[zenodo_record_id == record_id][1])
+	# Check the input class
+	if(! inherits(record_set, 'safe_record_set')){
+		stop('Expects a safe_record_set object.')
 	}
 	
-	# Don't redownload if it is already local, and cache a copy if it does need
-	# to be downloaded.
-	local_path <- file.path(dir, concept_id, record_id, sprintf('%i.rds', record_id))
-	if(file.exists(local_path)){
-		record <- readRDS(local_path)
-	} else {
-		record <- jsonlite::fromJSON(sprintf('https://www.safeproject.net/api/record/%i', record_id))
-		if(! dir.exists(dirname(local_path))){
-			dir.create(dirname(local_path), recursive=TRUE)
+	# Look for zenodo_record_id files only
+	record_set <- unique(subset(record_set, ! is.na(record)))
+
+	if(nrow(record_set)){
+		
+		safedir <- get_data_dir()
+	
+		# Find missing RDS files
+		record_set$local_path <- with(record_set, file.path(safedir, concept, record, sprintf('%i.rds', record)))
+		record_set$to_download <- ! file.exists(record_set$local_path)
+		
+		record_set <- subset(record_set, to_download)
+		
+		for(idx in seq_along(record_set$record)){
+			to_get <- record_set[idx,]
+			
+			record <- jsonlite::fromJSON(sprintf('https://www.safeproject.net/api/record/%i', to_get$record))
+			if(! dir.exists(dirname(to_get$local_path))){
+				dir.create(dirname(to_get$local_path), recursive=TRUE)
+			}
+			saveRDS(record, to_get$local_path)
 		}
-		saveRDS(record, local_path)
 	}
 	
-	return(record)
+	return(invisible())
 }
 
-concept_summary <- function(record_id){
+
+load_record_metadata <- function(record_set){
 	
-	#' Show a summary for a dataset concept.
+	#' Loads the metadata for a record
 	#'
-	#' This function prints out summary information on a SAFE dataset 
-	#' concept and the set of records associated with it. If the record_id
-	#' is not itself a concept id, then the function looks up the relevant 
-	#' concept. The version table indicates which versions are still under
-	#' embargo ('---'), the most recent available version ('>>>') and outdated
-	#' version ('+++').
-	#'
-	#' @param record_id A reference to a SAFE concept record
-	#' @export
+	#' @param record_set An object of class \code{safe_record_set} containing a single
+	#'   row with complete concept and record data.
+	#' @keywords internal
 
-	index <- get_index()
-	record <- extract_record_id(record_id)
-
-	# convert record to concept id and trap unknowns
- 	if(record_id %in% index$zenodo_record_id){
-		record_id <- with(index, zenodo_concept_id[zenodo_record_id == record_id][1])
-	} else if(! record_id %in% index$zenodo_concept_id){
-		stop('Unknown record id')
+	if((! inherits(record_set, 'safe_record_set')) && 
+	   (nrow(record_set) == 1) && 
+	   (! any(is.na(record_set)))
+	  ){
+		stop('Expects a single row safe_record_set object with complete concept and record id.')
 	}
+
+	# Ensure it is locally available 
+	fetch_record_metadata(record_set)
+	
+	# load it and return it
+	safedir <- get_data_dir()
+	rds_file <- with(record_set, file.path(safedir, concept, record, sprintf('%i.rds', record)))
+	return(readRDS(rds_file))
+}
+
+
+show_concepts <- function(record_ids){
+	
+	#' Show summary information on dataset concepts.
+	#'
+	#' This function takes a set of record ids and prints out summary information
+	#' on the dataset concepts and the set of records associated with each one. 
+	#'
+	#' If the record_i
+	#' is not itself a concept id, then the function looks up the relevant 
+	#' concept. The version table indicates which versions are available ('<<<' 
+	#' for the most recent available version and 'o' for older available versions),
+	#' and which are unavailable due to embargo or retriction ('x').
+	#'
+	#' @param record_ids References to a SAFE dataset records or concepts or an
+	#'   object of class \code{safe_record_set}.
+	#' @return NULL
+	#' @export
+	
+	# validate the record ids
+	record_set <- validate_record_ids(record_ids)
 	
 	# get the rows to report, sort by publication date and cut into record chunks
-	rows <- subset(index, zenodo_concept_id == record_id)
-	rows <- rows[order(rows$publication_date, decreasing=TRUE),]
+	index <- get_index()
 	
-	# Assuming only ever one xlsx file associated with a record - almost certainly true
-	xl_files <- rows[grepl('.xlsx$', rows$filename),]
+	rows <- subset(index, zenodo_concept_id %in% record_set$concept,
+				   select=c(zenodo_concept_id, zenodo_record_id, dataset_title,
+					   		publication_date, available, most_recent_available, 
+							dataset_embargo))
 	
-	# Use first row (most recent) to print general header.
-	cat('\nConcept summary\n')
-	cat(sprintf('Title: %s\n', xl_files$dataset_title[1]))
-	cat(sprintf('Concept ID: %i\n\n', xl_files$zenodo_concept_id[1]))
+	rows <- unique(rows)	
 	
-	# Version availability
-	unavailable <- xl_files$dataset_embargo >= Sys.time()
-	n_unavailable <- sum(unavailable, na.rm=TRUE)
-	cat(sprintf('Versions: %i available, %i embargoed\n', nrow(xl_files) - n_unavailable, n_unavailable))
+	concepts <- split(rows, f=rows$zenodo_concept_id)
 	
-	# Version summary
-	version_available <- ifelse(unavailable, '---', '+++')
-	version_available[which(! unavailable)[1]] <- '>>>'
+	print_fun <- function(concept){
 		
-	version_table <- data.frame(latest_available = version_available,
-								record_id = xl_files$zenodo_record_id,
-								published = format(xl_files$publication_date, '%Y-%m-%d'),
-								embargo = ifelse(is.na(xl_files$dataset_embargo) | 
-												 xl_files$dataset_embargo < Sys.time(),
-												 '--', format(xl_files$dataset_embargo, '%Y-%m-%d')),
-								local_data = xl_files$local_copy)
+		concept <- concept[order(concept$publication_date, decreasing=TRUE),]
+		
+		# compile a list of lines
+		text <- sprintf('\nConcept ID: %i', concept$zenodo_concept_id[1])
+		text <- c(text, sprintf('Title: %s', concept$dataset_title[1]))
+		
+		# Version availability
+		n_avail <- sum(concept$available)
+		n_unavail <- nrow(concept) - n_avail 
+		
+		text <- c(text, sprintf('Versions: %i available, %i embargoed or restricted\n', n_avail, n_unavail))
 	
-	print(version_table, row.names=FALSE)
-	cat('\n')
+		# Version summary
+		version_available <- ifelse(concept$available, 'o', 'x')
+		version_available[which(concept$most_recent_available)[1]] <- '<<<'
+		
+		version_table <- data.frame(record_id = concept$zenodo_record_id,
+									published = format(concept$publication_date, '%Y-%m-%d'),
+									embargo = ifelse(is.na(concept$dataset_embargo) | 
+													 concept$dataset_embargo < Sys.time(),
+													 '--', format(concept$dataset_embargo, '%Y-%m-%d')),
+									available = version_available)
+	
+		text <- c(text, utils::capture.output(print(version_table, row.names=FALSE)), '\n')
+		return(text)
+	}
+	
+	text <- lapply(concepts, print_fun)
+	text <- sapply(text, paste0, collapse='\n')
+	
+	cat(paste0(text, collapse='-------------\n'))
+
+	return(invisible())
 }
 
-record_summary <- function(record_id){
+show_record <- function(record_id){
 	
 	#' Show a summary for a dataset record ID.
 	#'
@@ -453,60 +513,61 @@ record_summary <- function(record_id){
 	#' The function return an error if a concept ID is provided.
 	#' 
 	#' @param record_id A reference to a SAFE record ID.
+	#' @return NULL
 	#' @export
 	
-	index <- get_index()
-	record_id <- extract_record_id(record_id)
-
-	# convert record to concept id and trap unknowns
- 	if(record_id %in% index$zenodo_concept_id){
-		stop('record_summary requires a record ID not a concept ID')
-	} else if(! record_id %in% index$zenodo_record_id){
-		stop('Unknown record id')
+	record_set <- validate_record_ids(record_id)
+	
+	if(nrow(record_set) != 1){
+		stop('show_record requires a single record id')
 	}
 	
-	# grab the xlsx row from the index for this record
-	row <- subset(index, zenodo_record_id == record_id & grepl('.xlsx$', filename))
-	
-	# Get the record metadata
-	metadata <- get_record_metadata(row$zenodo_record_id)
+	if(all(is.na(record_set))){
+		stop('Unknown record id')
+	} else if(is.na(record_set$record)){
+		stop('show_record requires record id not a concept id')		
+	}
+			
+	# Get the record metadata and a single row for the record
+	metadata <- load_record_metadata(record_set)$metadata
+	index <- get_index()
+	row <- index[match(record_set$record, index$zenodo_record_id),]
 	
 	# Print out a summary
 	cat('\nRecord summary\n')
-	cat(sprintf('Title: %s\n', row$dataset_title))
+	cat(sprintf('Title: %s\n', metadata$title))
 	
-	authors <- metadata[[c('metadata','authors')]]
-	surnames <- sapply(strsplit(authors$name, ','), '[', 1)
+	surnames <- sapply(strsplit(metadata$authors$name, ','), '[', 1)
 	cat(sprintf('Authors: %s\n', paste(surnames, collapse=', ')))
 
 	cat(sprintf('Publication date: %s\n', format(row$publication_date, '%Y-%m-%d')))
 	cat(sprintf('Record ID: %i;\nConcept ID: %i\n', row$zenodo_record_id, row$zenodo_concept_id))
 
-	status <- metadata[[c('metadata', 'access')]]
+	status <- metadata$access
 	if(status == 'embargo' & row$dataset_embargo < Sys.time()){
 		status <- 'open'
 	}
 	cat(sprintf('Status: %s\n', status))
 	
-	ext_files <- metadata[[c('metadata', 'external_files')]]
+	ext_files <- metadata$external_files
 	if(! is.null(ext_files)){
-		cat(sprintf('External files: %s\n', paste(ext_files, collapse=' ,')))
+		cat(sprintf('External files: %s\n', paste(ext_files$file, collapse=' ,')))
 	}
 	
 	# Taxa reporting
-	taxa <- metadata[['taxa']]
+	taxa <- metadata$taxa
 	if(length(taxa) > 0){
 		cat(sprintf('Taxa: %i taxa reported\n', nrow(taxa)))
 	}
 
 	# Locations reporting
-	locs <- metadata[['locations']]
+	locs <- metadata$locations
 	if(length(locs) > 0){
 		cat(sprintf('Locations: %i locations reported\n', nrow(locs)))
 	}
 	
 	# Data worksheets
-	dwksh <- metadata[[c('metadata', 'dataworksheets')]]
+	dwksh <- metadata$dataworksheets
 	nm_nch <- max(nchar(dwksh$name))
 	cl_nch <- max(ceiling(log10(dwksh$max_col)), 4)
 	rw_nch <- max(ceiling(log10(dwksh$n_data_row)), 4)
@@ -518,9 +579,10 @@ record_summary <- function(record_id){
 	cat(with(dwksh, sprintf('%*s %*i %*i %s', nm_nch, name, cl_nch, max_col, 
 							rw_nch, n_data_row, description)), sep='\n')
 	cat('\n')
+	return(invisible())
 }
 
-data_worksheet_summary <- function(record_id, name){
+show_worksheet <- function(record_id, name){
 	
 	#' Show a summary for a data worksheet within a record.
 	#'
@@ -531,24 +593,26 @@ data_worksheet_summary <- function(record_id, name){
 	#' 
 	#' @param record_id A reference to a SAFE record ID.
 	#' @param name The name of the data worksheet
+	#' @return NULL
 	#' @export
 	
-	index <- get_index()
-	record_id <- extract_record_id(record_id)
-
-	# convert record to concept id and trap unknowns
- 	if(record_id %in% index$zenodo_concept_id){
-		stop('record_summary requires a record ID not a concept ID')
-	} else if(! record_id %in% index$zenodo_record_id){
-		stop('Unknown record id')
+	record_set <- validate_record_ids(record_id)
+	
+	if(nrow(record_set) != 1){
+		stop('show_worksheet requires a single record id')
 	}
 	
-	# grab the xlsx row from the index for this record
-	row <- subset(index, zenodo_record_id == record_id & grepl('.xlsx$', filename))
-	
-	# Get the record metadata
-	metadata <- get_record_metadata(row$zenodo_record_id)$metadata
-	
+	if(all(is.na(record_set))){
+		stop('Unknown record id')
+	} else if(is.na(record_set$record)){
+		stop('show_worksheet requires record id not a concept id')
+	}
+			
+	# Get the record metadata and a single row for the record
+	metadata <- load_record_metadata(record_set)$metadata
+	index <- get_index()
+	row <- index[match(record_set$record, index$zenodo_record_id),]
+		
 	# Find the worksheet
 	dwksh <- metadata$dataworksheets
 	idx <- which(dwksh$name == name)
@@ -577,8 +641,8 @@ data_worksheet_summary <- function(record_id, name){
 	fields <- dwksh['fields'][[1]][[1]]
 	print(subset(fields, select=c(field_name, field_type, description)), row.names=FALSE)
 	cat('\n')
+	return(invisible())
 }
-
 
 
 readTransposedXlsx <- function (path, sheetName, ...) {
