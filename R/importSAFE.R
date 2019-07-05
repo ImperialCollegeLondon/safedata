@@ -1,8 +1,8 @@
 
 
-build_taxonomy <- function(record_id){
+get_taxonomy <- function(record_id){
     
-    #' Build a taxonomy data frame for a dataset
+    #' Get a data frame containing the taxonomy for a dataset
     #'
     #' The record metadata from the SAFE Project website API includes
     #' the taxon index for the dataset. This function turns that set of entries
@@ -15,6 +15,11 @@ build_taxonomy <- function(record_id){
     #'
     #' Note that the \code{ape} function \code{as.phylo.formula} can be used
     #' to turn this structure into a 'phylogeny'.
+    #' @param record_id A SAFE dataset record id 
+    #' @return A dataframe of the taxa used in the dataset, with columns
+	#'   giving the GBIF backbone taxonomic levels (kingdom, phylum, order, class, 
+	#'   family, genus, species) along with the original taxon names used in the
+	#'   dataset.
     #' @export
     
     taxa <- get_record_metadata(record_id)$taxa
