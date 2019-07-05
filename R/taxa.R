@@ -22,8 +22,22 @@ get_taxonomy <- function(record_id){
 	#'   dataset.
     #' @export
     
-    taxa <- get_record_metadata(record_id)$taxa
-    
+	
+	record_set <- validate_record_ids(record_id)
+	
+	if(nrow(record_set) != 1){
+		stop('show_record requires a single record id')
+	}
+	
+	if(all(is.na(record_set))){
+		stop('Unknown record id')
+	} else if(is.na(record_set$record)){
+		stop('show_record requires record id not a concept id')		
+	}
+			
+	# Get the record metadata and a single row for the record
+	taxa <- load_record_metadata(record_set)$taxa
+	
     if(length(taxa) == 0){
         return(NA)
     } else {
@@ -54,16 +68,18 @@ get_taxonomy <- function(record_id){
         names(stack) <- stack[[1]]$top$name
         
         # create a leaf table to fill in
-        leaf_table <- matrix(NA, ncol=8, nrow=total_leaves)
+        leaf_table <- matrix(NA, ncol=10, nrow=total_leaves)
         leaf_idx <- 0
         
+		
         while(length(stack)){
-
+			cat(names(stack), '\n')
+			
             if(stack[[1]]$top$leaf){
                 # If the top of the stack is a leaf, write it out into the leaf table
-                hierarchy <- c(rev(names(stack)), rep(NA, 7 - length(stack)))
+                hierarchy <- c(rev(names(stack)), rep(NA, 8 - length(stack)))
                 leaf_idx <- leaf_idx + 1
-                leaf_table[leaf_idx, ] <- c(hierarchy, stack[[1]]$top$asname)
+                leaf_table[leaf_idx, ] <- c(hierarchy, stack[[1]]$top$asname, stack[[1]]$top$aslevel)
                 
                 # Now work back down the stack to find the next level with something
                 # left in the up_next slot.
@@ -90,7 +106,7 @@ get_taxonomy <- function(record_id){
         }
 
         leaf_table <- as.data.frame(leaf_table, stringsAsFactors=FALSE)
-        names(leaf_table) <- c("kingdom", "phylum", "class", "order", "family", "genus", "species", "taxon_name")
+        names(leaf_table) <- c("kingdom", "phylum", "class", "order", "family", "genus", "species", "subspecies", "taxon_name", "taxon_level")
         return(leaf_table)
     }
 }
