@@ -4,6 +4,7 @@
 #' used to store a copy of the dataset index, rather than needing to 
 #' repeatedly read from file.
 #' @keywords internal
+#' @aliases index
 
 safedata.env <- new.env(parent = emptyenv())
 
@@ -40,6 +41,7 @@ get_data_dir <- function(){
 	
 	return(options('safedata.dir')$safedata.dir)
 }
+
 
 get_index <- function(){
 	
@@ -87,6 +89,7 @@ get_remote_index <- function(){
 	
 }
 
+
 set_index_availability <- function(index){
 	
 	#' Update dataset availability information
@@ -99,13 +102,14 @@ set_index_availability <- function(index){
 	#' @return An updated index data frame with added fields showing
 	#'   available and most recent available records.
 	#' @keywords internal
-		
-	# identify availability and most recent available records
+			
+	
+	# Identify availability and most recent available records
 	index$available <- with(index, 
 							ifelse(dataset_access == 'embargo' & dataset_embargo >= Sys.time(), FALSE, 
 								   ifelse(dataset_access == 'restricted', FALSE, TRUE)))
 	
-	# get the index rows by concept, reduce to the unique set of records (dropping 
+	# Get the index rows by concept, reduce to the unique set of records (dropping 
 	# the multiple files), drop unavailable records, sort by publication date and 
 	# return the first zenodo_record_id.
 	concepts <- split(subset(index, select=c(available, zenodo_record_id, publication_date)), 
@@ -129,7 +133,6 @@ set_index_availability <- function(index){
 }
 
 
-
 verbose_message <- function(str, ...){
 	
 	#' Provide package messages that can be globally muted
@@ -143,6 +146,7 @@ verbose_message <- function(str, ...){
 		message(str, ...)
 	}
 }
+
 
 set_safe_dir <- function(safedir, update=TRUE, create=FALSE, validate=TRUE){
 	
@@ -264,14 +268,17 @@ validate_record_ids <- function(record_ids){
 	#' Validates dataset record ids from user input
 	#'
 	#' This takes a vector of user supplied record identifiers and validates them 
-	#' against the index. It looks up the concept id for individual version 
-	#' record ids. Typically the identifiers are integers, but the function
-	#' will also handle Zenodo URLs and DOIs. 
+	#' against the index. Typically the identifiers are integers, but the function
+	#' will also handle Zenodo URLs and DOIs.
 	#' 
-	#' The function is largely intended for internal use but can be used to 
-	#' validate records before giving them to a function - the function returns
-	#' an data frame with class \code{safe_record_set} that shows the values
-	#' have been validated.
+	#' The function returns a data frame with class \code{safe_record_set}, containing
+	#' the columns \code{concept}, \code{record}, \code{available} and, finally,
+	#' \code{mra} containing the most recent available record (if any). The function can
+	#' be run on an existing \code{safe_record_set} to update this information.
+	#' 
+	#' This function is largely used internally to validate user inputs and to provide
+	#' a common output for the search functions but is exported to allow users to 
+	#' check record ids and display summary information using the print method.
 	#'
 	#' @param record_ids A vector of record_id values
 	#' @return An object of class 'safe_record_set': a dataframe with columns
@@ -287,73 +294,111 @@ validate_record_ids <- function(record_ids){
 	#'						   'not_this_one/3266821'))
 	#' @export
 	
-	# Don't revalidate
-	if(inherits(record_ids, 'safe_record_set')){
-		return(record_ids)
-	}
+	index <- get_index()
 	
-	# Otherwise validate
-	id_mode <- mode(record_ids)
+	# Only run validation if the input isn't already a record set
+	if(! inherits(record_ids, 'safe_record_set')){
 	
-	if(! (is.vector(record_ids) && id_mode %in% c('character', 'numeric'))){
-		stop('record_ids must be a character or numeric vector')
-	}
+		# Otherwise validate
+		id_mode <- mode(record_ids)
 	
-	# store original versions
-	user <- record_ids
-		
-	if(mode(record_ids) == 'numeric'){
-		
-		# If numbers, look for positive integers
-		not_int <- record_ids %% 1 != 0
-		not_pos <- record_ids <= 0
-		valid <- (! not_int) & (! not_pos)
-
-		if(any(! valid)){
-			warning('Some record ids are not positive integers')
+		if(! (is.vector(record_ids) && id_mode %in% c('character', 'numeric'))){
+			stop('record_ids must be a character or numeric vector')
 		}
+	
+		# store original versions
+		user <- record_ids
+		
+		if(mode(record_ids) == 'numeric'){
+		
+			# If numbers, look for positive integers
+			not_int <- record_ids %% 1 != 0
+			not_pos <- record_ids <= 0
+			valid <- (! not_int) & (! not_pos)
+
+			if(any(! valid)){
+				warning('Some record ids are not positive integers')
+			}
 				
-	} else if(mode(record_ids) == 'character'){
+		} else if(mode(record_ids) == 'character'){
 		
-		# If string look for one of the possible string representations
-		# of the record: a straight string of the integer or
-		# could be a DOI (possibly with URL) or a Zenodo URL
-		# - https://www.zenodo.org/record/3247631#.XRreJ9NKgWo
-		# - https://doi.org/10.5281/zenodo.3247631
-		# - 10.5281/zenodo.3247631
+			# If string look for one of the possible string representations
+			# of the record: a straight string of the integer or
+			# could be a DOI (possibly with URL) or a Zenodo URL
+			# - https://www.zenodo.org/record/3247631#.XRreJ9NKgWo
+			# - https://doi.org/10.5281/zenodo.3247631
+			# - 10.5281/zenodo.3247631
 
-		match <- regexpr('^[0-9]+$|(?<=record/)[0-9]+|(?<=zenodo.)[0-9]+', record_ids, perl=TRUE)
-		valid <- match != -1
+			match <- regexpr('^[0-9]+$|(?<=record/)[0-9]+|(?<=zenodo.)[0-9]+', record_ids, perl=TRUE)
+			valid <- match != -1
 		
-		if(any(! valid)){
-			warning('Some record ids do not match known id formats')
+			if(any(! valid)){
+				warning('Some record ids do not match known id formats')
+			}
+		
+			out <- rep(NA,length(record_ids))
+			out[match != -1] <- regmatches(record_ids, match)
+			record_ids <- as.numeric(out)
+			valid <- match != -1
 		}
+			
+		# Do they appear in the index as concept ids or record ids
+		known <- record_ids[valid] %in% c(index$zenodo_record_id, index$zenodo_concept_id)
+	
+		if(! all(known)){
+			warning('Some values are not known concept or record ids')
+		}
+			
+		record_ids <- data.frame(concept=ifelse(record_ids %in% index$zenodo_concept_id, record_ids, NA),
+								 record= ifelse(record_ids %in% index$zenodo_record_id, record_ids, NA))
+	
+		record_ids$concept <- ifelse(is.na(record_ids$concept), 
+									 index$zenodo_concept_id[match(record_ids$record, index$zenodo_record_id)],
+									 record_ids$concept)
 		
-		out <- rep(NA,length(record_ids))
-		out[match != -1] <- regmatches(record_ids, match)
-		record_ids <- as.numeric(out)
-		valid <- match != -1
+	 	class(record_ids) <- c('data.frame', 'safe_record_set')
+	 	rownames(record_ids) <- user
 	}
+	
+	# Now add information on whether records are available and the most recent available for each concept
+	# Options are : available and most recent, available and not most recent (outdated),
+	# not available and most recent is not NA (embargoed copy with open version) and
+	# not available and most recent is NA (embargoed or restricted copies only).
+    record_ids$available <- index$available[match(record_ids$record, index$zenodo_record_id)]
+	mra <- subset(index, most_recent_available, select=c(zenodo_concept_id, zenodo_record_id))
+	record_ids$mra <- mra$zenodo_record_id[match(record_ids$concept, mra$zenodo_concept_id)]
+	
+	return(record_ids)	
+}
+
+
+print.safe_record_set <- function(x, ...){
+	
+	#' A print method for 'safe_record_set' objects, that provides
+	#' a brief summary of the datasets described. 
+	#' @param x An object of class 'safe_record_set'
+	#' @param ... Further arguments to print methods, unused.
+	#' @export
 	
 	index <- get_index()
-		
-	# Do they appear in the index		
-	known <- record_ids[valid] %in% c(index$zenodo_record_id, index$zenodo_concept_id)
+	n_concepts <- length(unique(x$concept))
+	x$flag <- with(x, ifelse(! available, 'x', ifelse(record == mra, '*','o')))
+
+	msg <- paste0('Set includes %i dataset concepts and %i version records: \n',
+				  ' - %i open and most recent (*)\n',
+				  ' - %i open and outdated (o)\n',
+				  ' - %i under embargo or restricted (x)\n')
 	
-	if(! all(known)){
-		warning('Some values are not known concept or record ids')
+	cat(sprintf(msg, length(unique(x$concept)), sum(!is.na(x$record)), 
+					 sum(x$flag == '*'), sum(x$flag == 'o'), sum(x$flag == 'x')))
+	
+	concepts <- split(x, x$concept)	
+	
+	for(cn in concepts){
+		cat(cn$concept[1], ": ", paste(sprintf('%i (%s)', cn$record, cn$flag), collapse=', '), collapse='\n')
 	}
-			
-	record_ids <- data.frame(concept=ifelse(record_ids %in% index$zenodo_concept_id, record_ids, NA),
-							 record= ifelse(record_ids %in% index$zenodo_record_id, record_ids, NA))
 	
-	record_ids$concept <- ifelse(is.na(record_ids$concept), 
-								 index$zenodo_concept_id[match(record_ids$record, index$zenodo_record_id)],
-								 record_ids$concept)
-								 
-	class(record_ids) <- c('data.frame', 'safe_record_set')
-	rownames(record_ids) <- user
-	return(record_ids)	
+	return(invisible())
 }
 
 
@@ -392,6 +437,10 @@ fetch_record_metadata <- function(record_set){
 		record_set$to_download <- ! file.exists(record_set$local_path)
 		
 		record_set <- subset(record_set, to_download)
+		
+		if(nrow(record_set)){
+			verbose_message('Downloading ', nrow(record_set), ' record metadata files\n')
+		}
 		
 		for(idx in seq_along(record_set$record)){
 			to_get <- record_set[idx,]
@@ -440,7 +489,7 @@ show_concepts <- function(record_ids){
 	#' This function takes a set of record ids and prints out summary information
 	#' on the dataset concepts and the set of records associated with each one. 
 	#'
-	#' If the record_i
+	#' If the record_id
 	#' is not itself a concept id, then the function looks up the relevant 
 	#' concept. The version table indicates which versions are available ('<<<' 
 	#' for the most recent available version and 'o' for older available versions),
@@ -502,6 +551,7 @@ show_concepts <- function(record_ids){
 
 	return(invisible())
 }
+
 
 show_record <- function(record_id){
 	
@@ -582,6 +632,7 @@ show_record <- function(record_id){
 	return(invisible())
 }
 
+
 show_worksheet <- function(record_id, name){
 	
 	#' Show a summary for a data worksheet within a record.
@@ -625,9 +676,9 @@ show_worksheet <- function(record_id, name){
 	# Print out a summary
 	cat('\nData worksheet summary\n')
 	cat(sprintf('Record ID: %i\n', metadata$zenodo_record_id))
-	cat(sprintf('Worksheet name: %s\n', dwksh$name))
-	cat(sprintf('Description: %s\n', dwksh$description))
 	cat(sprintf('Number of data rows: %s\n', dwksh$n_data_row))
+	cat(sprintf('Worksheet name: %s\n', dwksh$name))
+	cat(sprintf('Description:\n%s\n', dwksh$description))
 
 	if(metadata$access == 'embargo'){
 		embargo_date <- as.POSIXct(metadata$embargo_date)
