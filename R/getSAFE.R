@@ -1,3 +1,254 @@
+load_safe_data <- function(record_id, name){
+	
+	#' Loads the contents of data worksheet
+	#'
+	#' Currently, this function only loads data from SAFE formatted
+	#' .xlsx files - data stored in external files is not yet handled.
+	#' @param record_id A SAFE dataset record id 
+	#' @param name The name of the worksheet to load
+	#' @export
+
+	# validate the record id
+	safedir <- get_data_dir()
+	record_id <- extract_record_id(record_id)
+	index <- get_index()
+	verbose <- options("safedata.verbose")
+	
+	# Check the name is valid before doing anything that might involve
+	# downloading data files.
+	record_id <- extract_record_id(record_id)
+	
+	
+	download_safe_files()
+	
+	
+	
+	
+	# Is it a real record id
+	if(! record_id %in% index$zenodo_record_id){
+		stop('Unknown record id')
+	}
+	
+	# Check we've got an accessible dataset
+	row <- subset(index, zenodo_record_id == record_id & grepl('.xlsx$', filename))
+	if(!is.na(row$dataset_embargo) && row$dataset_embargo >= Sys.time()){
+		stop(sprintf('Dataset is embargoed until %s', format(row$dataset_embargo, '%Y-%m-%d')))
+	}
+	
+	# Now get the metadata and find the target worksheet
+	metadata <- get_record_metadata(record_id)
+	if(! name %in% metadata$metadata$dataworksheets$name){
+		stop('Unknown data worksheet name')
+	}
+
+	dwksh <- metadata$metadata$dataworksheets[metadata$metadata$dataworksheets$name == name, ]
+	
+	# Look for a local copy of the file. If it doesn't exist, download it if possible
+	local_path <- file.path(safedir, row$zenodo_concept_id, row$zenodo_record_id, row$filename)
+	
+	if(! file.exists(local_path)){
+		# Need the remote URL from the Zenodo API - the download link is currently included
+		# in the the index but the URLs contain a non-persistent component.
+		remote_url <- sprintf('https://zenodo.org/api/records/%i', record_id)
+		zenodo_record <- try(jsonlite::fromJSON(remote_url), silent=TRUE) 
+		
+		if(inherits(zenodo_record, 'try-error')){
+			stop('Unable to retrieve remote file details.')
+		}
+		
+		# Get the row that matches the index (and check!)
+		remote_file <- zenodo_record$files[zenodo_record$files$filename == row$filename, ]
+		
+		if(nrow(remote_file) != 1){
+			stop('Mismatch between local index and remote file details')
+		}
+		
+		# Now placed to download it
+		result <- try(curl::curl_download(remote_file$links$download, dest=local_path), silent=TRUE)
+		
+		if(inherits(result, 'try-error')){
+			stop('Failed to download remote file.')
+		}
+	}
+	
+	# Validate the local copy
+	local_md5 <- tools::md5sum(path.expand(local_path))
+	if(local_md5 != row$checksum){
+		stop('Local file has been modified - do not edit files within the SAFE data directory')
+	}
+	
+	# Now load the data
+	data <- openxlsx::read.xlsx(local_path, name, startRow=dwksh$field_name_row, detectDates=TRUE)
+	
+	# Now do field type conversions
+	
+	
+	
+	class(data) <- 'safedata'
+	return(data)
+}
+
+download_safe_files <- function(record_ids, confirm=TRUE, xlsx_only=TRUE, 
+							    download_metadata=TRUE, refresh=FALSE, token=NULL){
+	
+	#' Download SAFE dataset files
+	#'
+	#' This downloads files associated with SAFE datasets, either all of the files 
+	#' included in a set of records (\code{xlsx_only=FALSE}) or just the core .xlsx
+	#' files (\code{xlsx_only=FALSE}), and stores them in the SAFE data directory.
+	#' Currently, there is no mechanism for importing restricted datasets. 
+	#'
+	#' By default, the function will also download the dataset metadata. This 
+	#' information is required by many of the functions in the package but users
+	#' can turn off automatic metadata download.
+	#'
+	#' @section Warning:
+	#' Using \code{refresh=TRUE} will \strong{overwrite locally modified files} and 
+	#' replace them with the versions of record from Zenodo.
+	#'
+	#' @param record_ids A vector of SAFE dataset record ids 
+	#' @param confirm Requires the user to confirm before download (logical)	
+	#' @param xlsx_only Should all files be downloaded or just the core .xslx file (logical)
+	#' @param download_metadata Should the metadata record for the file be downloaded (logical)
+	#' @param refresh Should the function check if local copies have been modified and 
+	#'   download fresh copies. This is useful if the local copies have unintentionally 
+	#'   been modified but note the warning above.
+	#' @param token An access token for restricted datasets. Not currently implemented.
+	#' @export
+	
+	# validate the record ids
+	record_set <- validate_record_ids(record_ids)
+	
+	records_to_get <- record_set$record[! is.na(record_set$record)]
+	
+	if(! length(records_to_get)){
+		verbose_message('No valid record ids provided')
+		return(invisible())
+	} 
+	
+	# Get the target files
+	index <- get_index()
+	safedir <- get_data_dir()
+	
+	# Get the set of files
+	if(xlsx_only){
+		targets <- subset(index, zenodo_record_id %in% records_to_get & grepl('.xlsx$', filename))
+	} else {
+		targets <- subset(index, zenodo_record_id %in% records_to_get)
+	}
+	
+	# reduce to accessible files
+	if(sum(! targets$available)){
+		verbose_message('Includes ', sum(! targets$available), ' record(s) that are under embargo or restricted')
+		targets <- subset(targets, available)
+	}
+	
+	
+	# See what is stored locally
+	targets$local_path <- path.expand(file.path(safedir, targets$path))
+	targets$local_exists <- file.exists(targets$local_path)
+	
+	# Check which files are already local and optionally which have bad MD5 sums
+	if(refresh){
+		# If refreshing, grab missing files and local files with mismatched md5 sums
+		targets$local_md5 <- tools::md5sum(targets$local_path)
+		targets <- subset(targets, (! local_exists) | (local_exists & (local_md5 != checksum))) 
+	} else {
+		# Grab missing files
+		targets <- subset(targets, ! local_exists) 
+	}
+	
+	# Slightly naughtily using an unexported function call from utils
+	msg <- sprintf(' %s in %i availablefiles from %i records ', 
+				   utils:::format.object_size(sum(targets$filesize), "auto"),
+				   nrow(targets), length(records_to_get))
+	
+	if(confirm){
+		# Don't mute the message if the function is called to report this!
+		confirm_response <- utils::menu(c('Yes', 'No'), title=paste('Would download', msg))
+		if(confirm_response != 1){
+			message('Aborting download')
+			return(invisible())
+		}
+	} else {
+		verbose_message('Downloading', msg)
+	}
+	
+	# download metadata if requested
+	if(download_metadata){
+		fetch_record_metadata(record_set)
+	}
+	
+	# split by records
+	targets <- split(targets, targets$zenodo_record_id)
+	
+	for(target in targets){
+		
+		if(nrow(target)){
+		
+			# For restricted datasets, users can request access via Zenodo and get a link 
+			# with an access token but the token does not work with the Zenodo API and using 
+			# it with the standard file URLs is not trivial - ? needs cookies
+			# e.g. https://zenodo.org/records/315677/files/test.xlsx?download=1
+	
+			# If there are any files to download we need to get the remote URL from the 
+			# Zenodo API - the 'bucket' id in the URLs is not persistent, so can't be indexed
+			
+			current_record <- target$zenodo_record_id[1]
+			
+			verbose_message(sprintf('Retrieving %i files for record %i', nrow(target), current_record))
+			remote_url <- sprintf('https://zenodo.org/api/records/%i', current_record)
+			zenodo_record <- try(jsonlite::fromJSON(remote_url), silent=TRUE)
+		
+			if(inherits(zenodo_record, 'try-error')){
+				warning(' - Unable to retrieve remote file details for record ', current_record)
+			} else {
+		
+				# Match zenodo files to local file list 
+				zenodo_files <- data.frame(filename=zenodo_record$files$filename,
+										   download=zenodo_record$files$links$download,
+										   stringsAsFactors=FALSE)
+		
+				target <- merge(target, zenodo_files, by='filename', all.x=TRUE)
+		
+				if(any(is.na(target$download))){
+					warning(' - Mismatch between local index and remote file details for record ', current_record)
+				} else {
+		
+					# Now download the required files
+					for(row_idx in seq_along(target$filename)){
+			
+						this_file <- target[row_idx,]
+						
+						# Look to see if the target directory exists.
+						if(! file.exists(dirname(this_file$local_path))){
+							dir.create(dirname(this_file$local_path), recursive=TRUE)
+						}
+						
+						# Download the target file to the directory
+						result <- with(this_file, try(curl::curl_download(download, dest=local_path), silent=TRUE))
+		
+						if(inherits(result, 'try-error')){
+							if(this_file$local_exists){
+								verbose_message(' - Failed to refresh: ', this_file$filename)
+							} else {
+								verbose_message(' - Failed to download: ', this_file$filename)
+							}
+						} else {
+							if(this_file$local_exists){
+								verbose_message(' - Refreshed: ', this_file$filename)
+							} else {
+								verbose_message(' - Downloaded: ', this_file$filename)
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+}
+
 zenodoRecordApiLookup <- function (id) {
   #' Return information of the given id using the Zenodo record API
   #' 
