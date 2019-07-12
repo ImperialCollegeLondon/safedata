@@ -108,8 +108,16 @@ load_safe_data <- function(record_id, worksheet){
 			data[fld$field_name] <- values
 		}
 	}
-
-	class(data) <- c('data.frame', 'safe_data')
+	
+	# Design notes on methods: we want safe_data to behave as much as possible
+	# like a data frame. The attributes are used to record provenance and the
+	# safe_data class is primarily used to allow loaded data frames to be passed
+	# to the show_* metadata functions. With S3 generics, the set of classes is
+	# used in order, so we only need to provide safe_data S3 methods where we want
+	# to modify the default dataframe methods - this is only str, where hiding the
+	# attributes and displaying that information at top is aesthetically nicer.
+	
+	class(data) <- c('safe_data', 'data.frame')
 	attr(data, 'safe_data') <- list(safe_record_set=record_set, worksheet=worksheet)
 	return(data)
 }
@@ -118,18 +126,16 @@ load_safe_data <- function(record_id, worksheet){
 str.safe_data <- function(object, ...){
 	
 	#' @describeIn load_safe_data Display structure of a safedata data frame
-	#'
-	#' 
-	#' @method str safedata
+	#' @export
 	
 	object_attr <- attr(object, 'safe_data')
-	with(object_attr, cat(sprintf('SAFE Concept: %i; SAFE Record %i; Worksheet: %s\n', 
+	with(object_attr, cat(sprintf('SAFE dataset\nConcept: %i; Record %i; Worksheet: %s\n', 
 								  safe_record_set$concept, safe_record_set$record, worksheet)))
 	
-	# reduce the safedata object to a simple data frame and recall str(x, ...)
-	attributes(object) <- NULL
-	class(object_attr) <- 'data.frame'
-	invisible(str.data.frame(object_attr, ...))
+	# reduce the safedata object to a simple data frame and pass back to str(x, ...)
+	attr(object, 'safe_data') <- NULL
+	class(object) <- 'data.frame'
+	invisible(str(object, ...))
 
 }
 
