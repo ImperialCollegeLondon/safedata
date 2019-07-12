@@ -1,8 +1,11 @@
 #' Dataset index cache
 #'
 #' The \code{safedata.env} environment within the package namespace is 
-#' used to store a copy of the dataset index, rather than needing to 
-#' repeatedly read from file.
+#' used to cache a copy of the dataset index, rather than needing to 
+#' repeatedly read from file. This index is used internally by functions
+#' through the internal \code{get_index} function and is not intended
+#' for the end user.
+#'
 #' @keywords internal
 #' @aliases index
 
@@ -356,7 +359,7 @@ validate_record_ids <- function(record_ids){
 									 index$zenodo_concept_id[match(record_ids$record, index$zenodo_record_id)],
 									 record_ids$concept)
 		
-	 	class(record_ids) <- c('data.frame', 'safe_record_set')
+	 	class(record_ids) <- c('safe_record_set', 'data.frame')
 	 	rownames(record_ids) <- user
 	}
 	
@@ -482,27 +485,48 @@ load_record_metadata <- function(record_set){
 }
 
 
-show_concepts <- function(record_ids){
+show_concepts <- function(obj){
 	
-	#' Show summary information on dataset concepts.
+	#' Show SAFE dataset metadata
 	#'
-	#' This function takes a set of record ids and prints out summary information
-	#' on the dataset concepts and the set of records associated with each one. 
-	#'
-	#' If the record_id
+	#' These functions provide access to the metadata associated with SAFE
+	#' datasets. The functions provide three levels of information: 
+	#' \describe{
+	#'	  \item{\code{show_concepts}}{displays the record versions grouped under 
+	#'          dataset concepts,}
+	#'	  \item{\code{show_record}}{displays summary information about a 
+	#'	        specific record, and }
+	#'	  \item{\code{show_worksheet}}{displays metadata about data worksheet
+	#'	        fields within a record.}
+	#' }
+	#' All three functions accept a first argument \code{obj}, which can be one 
+	#' of three things:
+	#' \enumerate{
+	#'    \item A character or numeric vector of SAFE dataset records or concepts, 
+	#'          which will be validated using \code{validate_record_ids}, or
+	#'    \item An already validated \code{safe_record_set} object, or
+	#'    \item A \code{safedata} data frame loaded using \code{load_safe_data}.
+	#' }
 	#' is not itself a concept id, then the function looks up the relevant 
 	#' concept. The version table indicates which versions are available ('<<<' 
 	#' for the most recent available version and 'o' for older available versions),
 	#' and which are unavailable due to embargo or retriction ('x').
 	#'
-	#' @param record_ids References to a SAFE dataset records or concepts or an
-	#'   object of class \code{safe_record_set}.
-	#' @return NULL
+	#' @param obj A reference to SAFE records or a loaded worksheet (see above)
+	#' @param worksheet The name of a worksheet to show. Obviously, if \code{obj} 
+	#'    is a loaded worksheet, that will be the worksheet described and this can
+	#'    be left as NULL.
+	#' @return Invisibly, a SAFE metadata object or a list of such objects. These
+	#'    are not really intended for end user consumption.
+	#' @describeIn show_concepts Show the records associated with a dataset concept  
 	#' @export
 	
-	# validate the record ids
-	record_set <- validate_record_ids(record_ids)
-	
+	if(inherits(obj, 'safe_data')){
+		record_set <- attr(obj, 'safe_data')$safe_record_set
+	} else {
+		record_set <- validate_record_ids(obj)
+	}
+		
 	# get the rows to report, sort by publication date and cut into record chunks
 	index <- get_index()
 	
@@ -553,21 +577,17 @@ show_concepts <- function(record_ids){
 }
 
 
-show_record <- function(record_id){
-	
-	#' Show a summary for a dataset record ID.
-	#'
-	#' This function prints out summary information on a SAFE dataset 
-	#' record ID. 
-	#'
-	#' The function return an error if a concept ID is provided.
-	#' 
-	#' @param record_id A reference to a SAFE record ID.
-	#' @return NULL
+show_record <- function(obj){
+
+	#' @describeIn show_concepts Show details of a specific dataset
 	#' @export
 	
-	record_set <- validate_record_ids(record_id)
-	
+	if(inherits(obj, 'safe_data')){
+		record_set <- attr(obj, 'safe_data')$safe_record_set
+	} else {
+		record_set <- validate_record_ids(obj)
+	}
+		
 	if(nrow(record_set) != 1){
 		stop('show_record requires a single record id')
 	}
@@ -579,27 +599,26 @@ show_record <- function(record_id){
 	}
 			
 	# Get the record metadata and a single row for the record
-	metadata <- load_record_metadata(record_set)$metadata
-	index <- get_index()
-	row <- index[match(record_set$record, index$zenodo_record_id),]
+	metadata <- load_record_metadata(record_set)
 	
 	# Print out a summary
 	cat('\nRecord summary\n')
-	cat(sprintf('Title: %s\n', metadata$title))
+	cat(sprintf('Title: %s\n', metadata$metadata$title))
 	
-	surnames <- sapply(strsplit(metadata$authors$name, ','), '[', 1)
+	surnames <- sapply(strsplit(metadata$metadata$authors$name, ','), '[', 1)
 	cat(sprintf('Authors: %s\n', paste(surnames, collapse=', ')))
 
-	cat(sprintf('Publication date: %s\n', format(row$publication_date, '%Y-%m-%d')))
-	cat(sprintf('Record ID: %i;\nConcept ID: %i\n', row$zenodo_record_id, row$zenodo_concept_id))
+	cat(sprintf('Publication date: %s\n', format(metadata$publication_date, '%Y-%m-%d')))
+	cat(sprintf('Record ID: %i\n', record_set$zenodo_record_id))
+	cat(sprintf('Concept ID: %i\n', record_set$zenodo_concept_id))
 
 	status <- metadata$access
-	if(status == 'embargo' & row$dataset_embargo < Sys.time()){
+	if(status == 'embargo' & metadata$metadata$embargo_date < Sys.time()){
 		status <- 'open'
 	}
 	cat(sprintf('Status: %s\n', status))
 	
-	ext_files <- metadata$external_files
+	ext_files <- metadata$metadata$external_files
 	if(! is.null(ext_files)){
 		cat(sprintf('External files: %s\n', paste(ext_files$file, collapse=' ,')))
 	}
@@ -617,7 +636,7 @@ show_record <- function(record_id){
 	}
 	
 	# Data worksheets
-	dwksh <- metadata$dataworksheets
+	dwksh <- metadata$metadata$dataworksheets
 	nm_nch <- max(nchar(dwksh$name))
 	cl_nch <- max(ceiling(log10(dwksh$max_col)), 4)
 	rw_nch <- max(ceiling(log10(dwksh$n_data_row)), 4)
@@ -633,51 +652,45 @@ show_record <- function(record_id){
 }
 
 
-show_worksheet <- function(record_id, name){
-	
-	#' Show a summary for a data worksheet within a record.
-	#'
-	#' This function prints out summary information on a data worksheet
-	#' contained in one the worksheets of SAFE dataset Excel file.
-	#'
-	#' The function return an error if a concept ID is provided.
-	#' 
-	#' @param record_id A reference to a SAFE record ID.
-	#' @param name The name of the data worksheet
-	#' @return NULL
+show_worksheet <- function(obj, worksheet){
+
+	#' @describeIn show_concepts Show details of a data worksheet
 	#' @export
+		
+	if(inherits(obj, 'safe_data')){
+		record_set <- attr(obj, 'safe_data')$safe_record_set
+		worksheet <-  attr(obj, 'safe_data')$worksheet
+	} else {
+		record_set <- validate_record_ids(record_id)
 	
-	record_set <- validate_record_ids(record_id)
+		if(nrow(record_set) != 1){
+			stop('show_worksheet requires a single record id')
+		}
 	
-	if(nrow(record_set) != 1){
-		stop('show_worksheet requires a single record id')
+		if(all(is.na(record_set))){
+			stop('Unknown record id')
+		} else if(is.na(record_set$record)){
+			stop('show_worksheet requires record id not a concept id')
+		}
 	}
-	
-	if(all(is.na(record_set))){
-		stop('Unknown record id')
-	} else if(is.na(record_set$record)){
-		stop('show_worksheet requires record id not a concept id')
-	}
-			
-	# Get the record metadata and a single row for the record
+		
+	# Get the record metadata
 	metadata <- load_record_metadata(record_set)$metadata
-	index <- get_index()
-	row <- index[match(record_set$record, index$zenodo_record_id),]
 		
 	# Find the worksheet
 	dwksh <- metadata$dataworksheets
-	idx <- which(dwksh$name == name)
+	idx <- which(dwksh$name == worksheet)
 	if(! length(idx)){
-		stop('Data worksheet not found')
+		stop('Data worksheet not found. Worksheets available are: ', 
+			 paste(dwksh$name, collapse=','))
 	}
 	
 	dwksh <- dwksh[idx,]
 	
 	# Print out a summary
-	cat('\nData worksheet summary\n')
 	cat(sprintf('Record ID: %i\n', metadata$zenodo_record_id))
-	cat(sprintf('Number of data rows: %s\n', dwksh$n_data_row))
 	cat(sprintf('Worksheet name: %s\n', dwksh$name))
+	cat(sprintf('Number of data rows: %s\n', dwksh$n_data_row))
 	cat(sprintf('Description:\n%s\n', dwksh$description))
 
 	if(metadata$access == 'embargo'){
@@ -686,13 +699,22 @@ show_worksheet <- function(record_id, name){
 			cat(sprintf('Data embargoed until %s, only metadata available\n', 
 				    	format(embargo_date, '%Y-%m-%d')))
 		}
+	} else if(metadata$access == 'restricted') {
+		cat('Dataset restricted , only metadata available\n') 
 	}
 	
 	cat('\nFields:\n')
 	fields <- dwksh['fields'][[1]][[1]]
-	print(subset(fields, select=c(field_name, field_type, description)), row.names=FALSE)
+	
+	for(field_idx in seq_along(fields$field_name)){
+		fld <- fields[field_idx,]
+		cat(fld$field_name, ':\n')
+		other_descriptors <- subset(fld, select=-c(field_name, col_idx, range))
+		descriptors <- paste0(' - ', names(other_descriptors), ': ', other_descriptors, '\n')
+		cat(descriptors[!is.na(fld)])
+	}
 	cat('\n')
-	return(invisible())
+	return(invisible(dwksh))
 }
 
 
