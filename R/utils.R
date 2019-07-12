@@ -606,11 +606,11 @@ show_record <- function(obj){
 	cat(sprintf('Title: %s\n', metadata$metadata$title))
 	
 	surnames <- sapply(strsplit(metadata$metadata$authors$name, ','), '[', 1)
-	cat(sprintf('Authors: %s\n', paste(surnames, collapse=', ')))
-
-	cat(sprintf('Publication date: %s\n', format(metadata$publication_date, '%Y-%m-%d')))
-	cat(sprintf('Record ID: %i\n', record_set$zenodo_record_id))
-	cat(sprintf('Concept ID: %i\n', record_set$zenodo_concept_id))
+	cat(sprintf('Authors: %s\nPublication date: %s\n,Record ID: %i\nConcept ID: %i\n',
+				paste(surnames, collapse=', '),
+				format(as.POISXct(metadata$publication_date), '%Y-%m-%d'),
+				record_set$zenodo_record_id,
+				record_set$zenodo_concept_id))
 
 	status <- metadata$access
 	if(status == 'embargo' & metadata$metadata$embargo_date < Sys.time()){
@@ -648,11 +648,11 @@ show_record <- function(obj){
 	cat(with(dwksh, sprintf('%*s %*i %*i %s', nm_nch, name, cl_nch, max_col, 
 							rw_nch, n_data_row, description)), sep='\n')
 	cat('\n')
-	return(invisible())
+	return(invisible(metadata))
 }
 
 
-show_worksheet <- function(obj, worksheet){
+show_worksheet <- function(obj, worksheet, extended_fields=FALSE){
 
 	#' @describeIn show_concepts Show details of a data worksheet
 	#' @export
@@ -691,6 +691,7 @@ show_worksheet <- function(obj, worksheet){
 	cat(sprintf('Record ID: %i\n', metadata$zenodo_record_id))
 	cat(sprintf('Worksheet name: %s\n', dwksh$name))
 	cat(sprintf('Number of data rows: %s\n', dwksh$n_data_row))
+	cat(sprintf('Number of data fields: %s\n', dwksh$max_col - 1))
 	cat(sprintf('Description:\n%s\n', dwksh$description))
 
 	if(metadata$access == 'embargo'){
@@ -702,19 +703,33 @@ show_worksheet <- function(obj, worksheet){
 	} else if(metadata$access == 'restricted') {
 		cat('Dataset restricted , only metadata available\n') 
 	}
+	if(extended_fields){
+		# print a long list of fields and non NA descriptor metadata
+		cat('\nFields:\n')
+		fields <- dwksh['fields'][[1]][[1]]
 	
-	cat('\nFields:\n')
-	fields <- dwksh['fields'][[1]][[1]]
-	
-	for(field_idx in seq_along(fields$field_name)){
-		fld <- fields[field_idx,]
-		cat(fld$field_name, ':\n')
-		other_descriptors <- subset(fld, select=-c(field_name, col_idx, range))
-		descriptors <- paste0(' - ', names(other_descriptors), ': ', other_descriptors, '\n')
-		cat(descriptors[!is.na(fld)])
+		for(field_idx in seq_along(fields$field_name)){
+			fld <- fields[field_idx,]
+			cat(fld$field_name, ':\n')
+			other_descriptors <- subset(fld, select=-c(field_name, col_idx, range))
+			descriptor_string <- paste0(' - ', names(other_descriptors), ': ', other_descriptors)
+			cat(descriptor_string[!is.na(other_descriptors)], sep='\n')
+		}
+		cat('\n')
+	} else {
+		# print a table of name, type and description (truncated to width)
+		descriptors <- subset(fields, select=c(field_name, field_type, description))
+		
+		nc <- apply(descriptors, 2, nchar)
+		max_desc <- options('width')$width - (max(rowSums(nc[, 1:2])) + 8)
+		
+		descriptors$description <- ifelse(nc[, 3] < max_desc, 
+										  descriptors$description,
+										  paste0(substr(descriptors$description, 0, max_desc - 3), "..."))		
+		
+		print(descriptors, right=FALSE)
 	}
-	cat('\n')
-	return(invisible(dwksh))
+	return(invisible(metadata))
 }
 
 
