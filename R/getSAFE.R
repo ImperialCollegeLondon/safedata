@@ -1,74 +1,54 @@
-load_safe_data <- function(record_id, name){
+load_safe_data <- function(record_id, worksheet){
 	
-	#' Loads the contents of data worksheet
+	#' Loads data from a SAFE dataset.
+	#'
+	#' This function returns a data frame containing the data from a data 
+	#' worksheet in a SAFE dataset. Note that SAFE dataset .xlsx files include
+	#' the other (non-data) worksheets Summary, Taxa, Locations that contain 
+	#' metadata: see  \code{get_taxa}, \code{get_locations}, \code{add_taxa} 
+	#' and \code{add_locations} for accessing and using this metadata.
+	#' 
+	#' In particular, the large amount of data worksheet summary metadata is
+	#' not attached as attributes to the data frame returned by this function.
+	#' This is largely to avoid spamming the screen during normal use of the
+	#' data frame: an extended description of a worksheet can be displayed using
+	#' \code{show_worksheet}.
 	#'
 	#' Currently, this function only loads data from SAFE formatted
 	#' .xlsx files - data stored in external files is not yet handled.
+	#'
 	#' @param record_id A SAFE dataset record id 
 	#' @param name The name of the worksheet to load
+	#' @return A data frame with the additional 'safedata' class
 	#' @export
 
 	# validate the record id
+	record_set <- validate_record_ids(record_id)
+
+	if((nrow(record_set) != 1) | is.na(record_set$record)){
+		stop("record_id does not consist of a single record version id")
+	} else if (! record_set$available){
+		stop("The record is under embargo or restricted")
+	}
+	
 	safedir <- get_data_dir()
-	record_id <- extract_record_id(record_id)
 	index <- get_index()
-	verbose <- options("safedata.verbose")
-	
-	# Check the name is valid before doing anything that might involve
-	# downloading data files.
-	record_id <- extract_record_id(record_id)
-	
-	
-	download_safe_files()
-	
-	
-	
-	
-	# Is it a real record id
-	if(! record_id %in% index$zenodo_record_id){
-		stop('Unknown record id')
-	}
-	
-	# Check we've got an accessible dataset
-	row <- subset(index, zenodo_record_id == record_id & grepl('.xlsx$', filename))
-	if(!is.na(row$dataset_embargo) && row$dataset_embargo >= Sys.time()){
-		stop(sprintf('Dataset is embargoed until %s', format(row$dataset_embargo, '%Y-%m-%d')))
-	}
 	
 	# Now get the metadata and find the target worksheet
-	metadata <- get_record_metadata(record_id)
-	if(! name %in% metadata$metadata$dataworksheets$name){
+	metadata <- load_record_metadata(record_set)
+	if(! worksheet %in% metadata$metadata$dataworksheets$name){
 		stop('Unknown data worksheet name')
 	}
 
-	dwksh <- metadata$metadata$dataworksheets[metadata$metadata$dataworksheets$name == name, ]
+	dwksh <- metadata$metadata$dataworksheets[metadata$metadata$dataworksheets$name == worksheet, ]
 	
 	# Look for a local copy of the file. If it doesn't exist, download it if possible
+	row <- subset(index, zenodo_record_id == record_set$record)
 	local_path <- file.path(safedir, row$zenodo_concept_id, row$zenodo_record_id, row$filename)
 	
 	if(! file.exists(local_path)){
-		# Need the remote URL from the Zenodo API - the download link is currently included
-		# in the the index but the URLs contain a non-persistent component.
-		remote_url <- sprintf('https://zenodo.org/api/records/%i', record_id)
-		zenodo_record <- try(jsonlite::fromJSON(remote_url), silent=TRUE) 
-		
-		if(inherits(zenodo_record, 'try-error')){
-			stop('Unable to retrieve remote file details.')
-		}
-		
-		# Get the row that matches the index (and check!)
-		remote_file <- zenodo_record$files[zenodo_record$files$filename == row$filename, ]
-		
-		if(nrow(remote_file) != 1){
-			stop('Mismatch between local index and remote file details')
-		}
-		
-		# Now placed to download it
-		result <- try(curl::curl_download(remote_file$links$download, dest=local_path), silent=TRUE)
-		
-		if(inherits(result, 'try-error')){
-			stop('Failed to download remote file.')
-		}
+		verbose_message('Downloading datafile: ', row$filename)
+		download_safe_files(record_set)
 	}
 	
 	# Validate the local copy
@@ -77,16 +57,82 @@ load_safe_data <- function(record_id, name){
 		stop('Local file has been modified - do not edit files within the SAFE data directory')
 	}
 	
-	# Now load the data
-	data <- openxlsx::read.xlsx(local_path, name, startRow=dwksh$field_name_row, detectDates=TRUE)
+	# Now load the data - using readxl, openxlsx is also possible but seems
+	# to be orphaned and has some date time handling issues, but don't use tibbles
+	data <- readxl::read_xlsx(local_path, worksheet, 
+							  skip = dwksh$field_name_row - 1, 
+							  n_max = dwksh$n_data_row, na='NA')
+							  
+	# drop tibble class and first column of row numbers
+	class(data) <- 'data.frame'
+	data <- data[,-1]
 	
 	# Now do field type conversions
+	fields <- dwksh$fields[[1]]
 	
+	if(! all.equal(fields$field_name, names(data))){
+		stop('Mismatch between data field names and local metadata')
+	}
 	
-	
-	class(data) <- 'safedata'
+	for(idx in seq_along(names(data))){
+		
+		fld <- fields[idx, ]
+		
+		# Factors
+		if(grepl('Categorical', fld$field_type)){
+			data[fld$field_name] <- as.factor(data[[fld$field_name]])
+			
+		}
+		
+		# Dates, Datetimes and Times 
+		if(fld$field_type %in% c('Date','Datetime', 'Time')){
+			
+			values <- data[[fld$field_name]]
+			# if they haven't been converted already, then the user has supplied
+			# POSIX strings not Excel Date/Time
+			if(! inherits(values, 'POSIXt')){
+				values <- try(as.POSIXct(values, tryFormats = 
+										 c("%Y-%m-%d %H:%M:%OS", "%Y-%m-%d %H:%M",
+										   "%Y-%m-%d", "%H:%M:%OS", "%H:%M")))
+				if(inherits(values, 'try-error')){
+					stop('Failed to convert date/times in field ', fld$field_name)
+				}
+			}
+			# Use chron time - could use chron date + chron but they provide a 
+			# ugly pile of attributes in the data frame display and have to be 
+			# beaten with a stick to stop them using month/day/year formats.
+			
+			if(fld$field_type == 'Time'){
+				values <- chron::times(format(values, '%H:%M:%S'))
+			}
+			data[fld$field_name] <- values
+		}
+	}
+
+	class(data) <- c('data.frame', 'safe_data')
+	attr(data, 'safe_data') <- list(safe_record_set=record_set, worksheet=worksheet)
 	return(data)
 }
+
+
+str.safe_data <- function(object, ...){
+	
+	#' @describeIn load_safe_data Display structure of a safedata data frame
+	#'
+	#' 
+	#' @method str safedata
+	
+	object_attr <- attr(object, 'safe_data')
+	with(object_attr, cat(sprintf('SAFE Concept: %i; SAFE Record %i; Worksheet: %s\n', 
+								  safe_record_set$concept, safe_record_set$record, worksheet)))
+	
+	# reduce the safedata object to a simple data frame and recall str(x, ...)
+	attributes(object) <- NULL
+	class(object_attr) <- 'data.frame'
+	invisible(str.data.frame(object_attr, ...))
+
+}
+
 
 download_safe_files <- function(record_ids, confirm=TRUE, xlsx_only=TRUE, 
 							    download_metadata=TRUE, refresh=FALSE, token=NULL){
@@ -136,42 +182,42 @@ download_safe_files <- function(record_ids, confirm=TRUE, xlsx_only=TRUE,
 	} else {
 		targets <- subset(index, zenodo_record_id %in% records_to_get)
 	}
-	
-	# reduce to accessible files
-	if(sum(! targets$available)){
-		verbose_message('Includes ', sum(! targets$available), ' record(s) that are under embargo or restricted')
-		targets <- subset(targets, available)
-	}
-	
-	
+		
 	# See what is stored locally
 	targets$local_path <- path.expand(file.path(safedir, targets$path))
 	targets$local_exists <- file.exists(targets$local_path)
 	
 	# Check which files are already local and optionally which have bad MD5 sums
 	if(refresh){
-		# If refreshing, grab missing files and local files with mismatched md5 sums
-		targets$local_md5 <- tools::md5sum(targets$local_path)
-		targets <- subset(targets, (! local_exists) | (local_exists & (local_md5 != checksum))) 
+		targets$refresh <- targets$checksum != tools::md5sum(targets$local_path)	
 	} else {
-		# Grab missing files
-		targets <- subset(targets, ! local_exists) 
+		targets$refresh <- FALSE
 	}
 	
 	# Slightly naughtily using an unexported function call from utils
-	msg <- sprintf(' %s in %i availablefiles from %i records ', 
-				   utils:::format.object_size(sum(targets$filesize), "auto"),
-				   nrow(targets), length(records_to_get))
+	msg <- paste0('%i files requested from %i records\n',
+				  ' - %i local (%s)\n',
+				  ' - %i embargoed or restricted (%s)\n',
+				  ' - %i to download (%s)')
+
+	local <- subset(targets, (! refresh) & local_exists)
+	unavail <- subset(targets, ! available)
+	to_download <- subset(targets, (refresh | (! local_exists)) & available)
+	
+	msg <- sprintf(msg, nrow(targets), length(unique(targets$zenodo_record_id)),
+				   nrow(local), utils:::format.object_size(sum(local$filesize), "auto"),
+				   nrow(unavail), utils:::format.object_size(sum(unavail$filesize), "auto"),
+				   nrow(to_download), utils:::format.object_size(sum(to_download$filesize), "auto"))
 	
 	if(confirm){
 		# Don't mute the message if the function is called to report this!
-		confirm_response <- utils::menu(c('Yes', 'No'), title=paste('Would download', msg))
+		confirm_response <- utils::menu(c('Yes', 'No'), title=msg)
 		if(confirm_response != 1){
 			message('Aborting download')
 			return(invisible())
 		}
 	} else {
-		verbose_message('Downloading', msg)
+		verbose_message(msg)
 	}
 	
 	# download metadata if requested
@@ -180,11 +226,25 @@ download_safe_files <- function(record_ids, confirm=TRUE, xlsx_only=TRUE,
 	}
 	
 	# split by records
-	targets <- split(targets, targets$zenodo_record_id)
+	files_by_record <- split(targets, targets$zenodo_record_id)
 	
-	for(target in targets){
+	for(these_files in files_by_record){
 		
-		if(nrow(target)){
+		current_record <- these_files$zenodo_record_id[1]
+		
+		if(! these_files$available[1]){
+			verbose_message(sprintf('%i files for record %i: under embargo or restricted', 
+									nrow(these_files), current_record))
+			next
+		} 
+			
+		verbose_message(sprintf('%i files for record %i: %i to download', 
+								nrow(these_files), current_record, 
+								sum((! these_files$local_exists) | these_files$refresh)))
+								
+		these_files <- subset(these_files, (! local_exists) | refresh)
+
+		if(nrow(these_files)){
 		
 			# For restricted datasets, users can request access via Zenodo and get a link 
 			# with an access token but the token does not work with the Zenodo API and using 
@@ -194,9 +254,6 @@ download_safe_files <- function(record_ids, confirm=TRUE, xlsx_only=TRUE,
 			# If there are any files to download we need to get the remote URL from the 
 			# Zenodo API - the 'bucket' id in the URLs is not persistent, so can't be indexed
 			
-			current_record <- target$zenodo_record_id[1]
-			
-			verbose_message(sprintf('Retrieving %i files for record %i', nrow(target), current_record))
 			remote_url <- sprintf('https://zenodo.org/api/records/%i', current_record)
 			zenodo_record <- try(jsonlite::fromJSON(remote_url), silent=TRUE)
 		
@@ -209,16 +266,16 @@ download_safe_files <- function(record_ids, confirm=TRUE, xlsx_only=TRUE,
 										   download=zenodo_record$files$links$download,
 										   stringsAsFactors=FALSE)
 		
-				target <- merge(target, zenodo_files, by='filename', all.x=TRUE)
+				these_files <- merge(these_files, zenodo_files, by='filename', all.x=TRUE)
 		
-				if(any(is.na(target$download))){
+				if(any(is.na(these_files$download))){
 					warning(' - Mismatch between local index and remote file details for record ', current_record)
 				} else {
 		
 					# Now download the required files
-					for(row_idx in seq_along(target$filename)){
+					for(row_idx in seq_along(these_files$filename)){
 			
-						this_file <- target[row_idx,]
+						this_file <- these_files[row_idx,]
 						
 						# Look to see if the target directory exists.
 						if(! file.exists(dirname(this_file$local_path))){
@@ -246,7 +303,6 @@ download_safe_files <- function(record_ids, confirm=TRUE, xlsx_only=TRUE,
 			}
 		}
 	}
-	
 }
 
 zenodoRecordApiLookup <- function (id) {
