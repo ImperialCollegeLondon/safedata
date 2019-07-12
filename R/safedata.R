@@ -20,4 +20,5 @@
 #'
 #' @docType package
 #' @name safedata
+
 NULL
