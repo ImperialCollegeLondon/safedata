@@ -18,32 +18,57 @@ load_safe_data <- function(record_id, worksheet){
 	#' .xlsx files - data stored in external files is not yet handled.
 	#'
 	#' @param record_id A SAFE dataset record id 
-	#' @param name The name of the worksheet to load
+	#' @param worksheet The name of the worksheet to load
 	#' @return A data frame with the additional 'safedata' class
 	#' @export
 
 	# validate the record id
 	record_set <- validate_record_ids(record_id)
 
-	if((nrow(record_set) != 1) | is.na(record_set$record)){
-		stop("record_id does not consist of a single record version id")
-	} else if (! record_set$available){
-		stop("The record is under embargo or restricted")
+	# Logic of what to load.
+	# a) If a record is provided, return that unless it is unavailable, in 
+	#    which case suggest an alternative.
+	# b) If a concept is provided, load MRA if there is one.
+	
+	if((nrow(record_set) != 1) || is.na(record_set$concept)){
+		stop("Requires a single valid record or concept id")
+	} else if(is.na(record_set$record)){
+		# concept provided
+		if(is.na(record_set$mra)){
+			stop("Concept ID provided: all records under embargo or restricted")
+		} else {
+			verbose_message("Concept ID provided: loading most recent available record")
+			record_set <- validate_record_ids(record_set$mra)
+		}
+	} else {
+		# record provided
+		if(! record_set$available){
+			if(is.na(record_set$mra)){
+				stop("Record ID provided: this and all other versions of this dataset concept are under embargo or restricted")
+			} else {
+				stop("Record ID provided: version is under embargo or restricted. Most recent available is ", record_set$mra)
+			}
+		} else {
+			if(! (record_set$record ==  record_set$mra)){
+				verbose_message("Outdated record: the most recent available version is ", record_set$mra)
+			}
+		}
 	}
 	
+	# Find the row information and check the most recently available data
 	safedir <- get_data_dir()
 	index <- get_index()
+	row <- subset(index, zenodo_record_id == record_set$record)
 	
 	# Now get the metadata and find the target worksheet
 	metadata <- load_record_metadata(record_set)
 	if(! worksheet %in% metadata$metadata$dataworksheets$name){
-		stop('Unknown data worksheet name')
+		stop('Data worksheet name not one of: ', paste(metadata$metadata$dataworksheets$name, collapse=', '))
 	}
 
 	dwksh <- metadata$metadata$dataworksheets[metadata$metadata$dataworksheets$name == worksheet, ]
 	
 	# Look for a local copy of the file. If it doesn't exist, download it if possible
-	row <- subset(index, zenodo_record_id == record_set$record)
 	local_path <- file.path(safedir, row$zenodo_concept_id, row$zenodo_record_id, row$filename)
 	
 	if(! file.exists(local_path)){
