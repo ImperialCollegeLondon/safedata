@@ -608,12 +608,12 @@ show_record <- function(obj){
 	surnames <- sapply(strsplit(metadata$metadata$authors$name, ','), '[', 1)
 	cat(sprintf('Authors: %s\nPublication date: %s\n,Record ID: %i\nConcept ID: %i\n',
 				paste(surnames, collapse=', '),
-				format(as.POISXct(metadata$publication_date), '%Y-%m-%d'),
+				format(as.POSIXct(metadata$publication_date), '%Y-%m-%d'),
 				record_set$zenodo_record_id,
 				record_set$zenodo_concept_id))
 
-	status <- metadata$access
-	if(status == 'embargo' & metadata$metadata$embargo_date < Sys.time()){
+	status <- metadata$metadata$access
+	if(status == 'embargo' && metadata$metadata$embargo_date < Sys.time()){
 		status <- 'open'
 	}
 	cat(sprintf('Status: %s\n', status))
@@ -648,7 +648,7 @@ show_record <- function(obj){
 	cat(with(dwksh, sprintf('%*s %*i %*i %s', nm_nch, name, cl_nch, max_col, 
 							rw_nch, n_data_row, description)), sep='\n')
 	cat('\n')
-	return(invisible(metadata))
+	return(invisible(metadata$metadata))
 }
 
 
@@ -703,11 +703,12 @@ show_worksheet <- function(obj, worksheet, extended_fields=FALSE){
 	} else if(metadata$access == 'restricted') {
 		cat('Dataset restricted , only metadata available\n') 
 	}
+
+	cat('\nFields:\n')
+	fields <- dwksh['fields'][[1]][[1]]
+
 	if(extended_fields){
 		# print a long list of fields and non NA descriptor metadata
-		cat('\nFields:\n')
-		fields <- dwksh['fields'][[1]][[1]]
-	
 		for(field_idx in seq_along(fields$field_name)){
 			fld <- fields[field_idx,]
 			cat(fld$field_name, ':\n')
