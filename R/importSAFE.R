@@ -145,26 +145,6 @@ processSafeSummary <- function (obj, filePath = NULL) {
   return(obj)
 }
 
-print.safedata <- function (x, ...) {
-  #' Print summary of information for a \code{safedata} object to the console
-  #' 
-  #' Prints a summary of metadata for the given SAFE project object to the
-  #' command line. Includes the project title, project ID number, start and end
-  #' dates, and data worksheet names.
-  #' 
-  #' @param x An object of class \code{safedata}
-  #' @param ... Further arguments to print generic, ignored
-  #' @seealso \code{\link{createSafe}}, \code{\link{processSafeSummary}}
-  #' @export
-  
-  cat('Project name:', x$title, '\n')
-  cat('Project ID:', x$projectID, '\n')
-  cat('Dates:', paste0(x$startDate), 'to', paste(x$endDate), '\n')
-  cat('Contains', length(x$workSheets), 'data worksheet(s):', '\n')
-  cat('  ', paste0(x$workSheets, collapse = ', '))
-}
-
-
 
 addLocations <- function (obj, filePath = NULL) {
   #' Add location information to a \code{safedata} object
