@@ -109,7 +109,9 @@ show_record <- function(obj){
 	if(all(is.na(record_set))){
 		stop('Unknown record id')
 	} else if(is.na(record_set$record)){
-		stop('show_record requires record id not a concept id')		
+		warning('Concept ID provided: showing available versions')
+		show_concepts(record_set)
+		return(invisible())		
 	}
 			
 	# Get the record metadata and a single row for the record
@@ -175,7 +177,7 @@ show_worksheet <- function(obj, worksheet, extended_fields=FALSE){
 		record_set <- attr(obj, 'safe_data')$safe_record_set
 		worksheet <-  attr(obj, 'safe_data')$worksheet
 	} else {
-		record_set <- validate_record_ids(record_id)
+		record_set <- validate_record_ids(obj)
 	
 		if(nrow(record_set) != 1){
 			stop('show_worksheet requires a single record id')
