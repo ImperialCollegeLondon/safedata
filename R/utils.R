@@ -143,7 +143,7 @@ set_safe_dir <- function(safedir, update=TRUE, create=FALSE, validate=TRUE){
 }
 
 
-validate_record_ids <- function(ids){
+validate_record_ids <- function(record_set){
 	
 	#' Validates dataset record ids from user input
 	#'
@@ -160,7 +160,7 @@ validate_record_ids <- function(ids){
 	#' a common output for the search functions but is exported to allow users to 
 	#' check record ids and display summary information using the print method.
 	#'
-	#' @param ids A vector of values containing Zenodo concept or record ids.
+	#' @param record_set A vector of values containing Zenodo concept or record ids.
 	#' @param x An object of class 'safe_record_set'
 	#' @param ... Further arguments to print methods, unused.
 	#' @return An object of class 'safe_record_set': a dataframe with columns
@@ -179,28 +179,28 @@ validate_record_ids <- function(ids){
 	index <- get_index()
 	
 	# Only run validation if the input isn't already a record set
-	if(! inherits(ids, 'safe_record_set')){
+	if(! inherits(record_set, 'safe_record_set')){
 	
 		# Otherwise validate
-		if(! (is.vector(ids) && mode(ids) %in% c('character', 'numeric'))){
-			stop('ids must be a character or numeric vector')
+		if(! (is.vector(record_set) && mode(record_set) %in% c('character', 'numeric'))){
+			stop('record_set must be a character or numeric vector')
 		}
 	
 		# store original versions
-		user <- ids
+		user <- record_set
 		
-		if(mode(ids) == 'numeric'){
+		if(mode(record_set) == 'numeric'){
 		
 			# If numbers, look for positive integers
-			not_int <- ids %% 1 != 0
-			not_pos <- ids <= 0
+			not_int <- record_set %% 1 != 0
+			not_pos <- record_set <= 0
 			valid <- (! not_int) & (! not_pos)
 
 			if(any(! valid)){
 				warning('Some record ids are not positive integers')
 			}
 				
-		} else if(mode(ids) == 'character'){
+		} else if(mode(record_set) == 'character'){
 		
 			# If string look for one of the possible string representations
 			# of the record: a straight string of the integer or
@@ -209,28 +209,28 @@ validate_record_ids <- function(ids){
 			# - https://doi.org/10.5281/zenodo.3247631
 			# - 10.5281/zenodo.3247631
 
-			match <- regexpr('^[0-9]+$|(?<=record/)[0-9]+|(?<=zenodo.)[0-9]+', ids, perl=TRUE)
+			match <- regexpr('^[0-9]+$|(?<=record/)[0-9]+|(?<=zenodo.)[0-9]+', record_set, perl=TRUE)
 			valid <- match != -1
 		
 			if(any(! valid)){
 				warning('Some record ids do not match known id formats')
 			}
 		
-			out <- rep(NA,length(ids))
-			out[match != -1] <- regmatches(ids, match)
-			ids <- as.numeric(out)
+			out <- rep(NA,length(record_set))
+			out[match != -1] <- regmatches(record_set, match)
+			record_set <- as.numeric(out)
 			valid <- match != -1
 		}
 			
 		# Do they appear in the index as concept ids or record ids
-		known <- ids %in% c(index$zenodo_record_id, index$zenodo_concept_id)
+		known <- record_set %in% c(index$zenodo_record_id, index$zenodo_concept_id)
 	
 		if(! all(known)){
 			warning('Some values are not known concept or record ids')
 		}
 			
-		record_set <- data.frame(concept = ifelse(ids %in% index$zenodo_concept_id, ids, NA),
-								 record = ifelse(ids %in% index$zenodo_record_id, ids, NA))
+		record_set <- data.frame(concept = ifelse(record_set %in% index$zenodo_concept_id, record_set, NA),
+								 record = ifelse(record_set %in% index$zenodo_record_id, record_set, NA))
 	
 		record_set$concept <- ifelse(is.na(record_set$concept), 
 									 index$zenodo_concept_id[match(record_set$record, index$zenodo_record_id)],
@@ -257,6 +257,11 @@ validate_record_ids <- function(ids){
 	mra <- subset(index, most_recent_available, select=c(zenodo_concept_id, zenodo_record_id))
 	record_set$mra <- mra$zenodo_record_id[match(record_set$concept, mra$zenodo_concept_id)]
 	
+	# Sort by concept id (increasing from earliest) and then by record id (decreasing from 
+	# most recent) and keep NAs at the top, so concept ids come first.
+	record_set <- record_set[order(record_set$concept, record_set$record, 
+									decreasing=c(FALSE, TRUE), method='radix', na.last=FALSE), ]
+	
 	return(record_set)	
 }
 
@@ -272,27 +277,22 @@ print.safe_record_set <- function(x, ...){
 				  ' - %i under embargo or restricted (x)\n\n')
 	
 	# record availability flags and counts 
-	x$flag <- with(x, ifelse(! available, 'x', ifelse(record == mra, '*','o')))
+	x$available <- with(x, ifelse(is.na(record), '', ifelse(! available, 'x', ifelse(record == mra, '*','o'))))
 	n_status <- c('*'=0, 'x'=0, 'o'=0)
-	counts <- table(x$flag)
+	counts <- table(x$available)
 	n_status[names(counts)] <- counts
 	n_records <- sum(!is.na(x$record))
 		
 	cat(sprintf(msg, nrow(x) - n_records, n_records, 
 					 n_status['*'], n_status['o'], n_status['x']))
 	
-	concepts <- split(x, x$concept)	
+	# This relies on the sort order set in validate_record_ids
+	x$concept <- ifelse(duplicated(x$concept), '-------', x$concept)
+	x$record <- ifelse(is.na(x$record), '-------', x$record)
 	
-	for(cn in concepts){
-		# sort the records in order of zenodo record (should mirror publication order)
-		# and put any concept IDs (record = NA) first
-		cn <- cn[order(cn$record, decreasing=TRUE, na.last=FALSE),]
-		concept_str <- ifelse(seq_along(cn$concept) == 1, cn$concept, '-------')
-		record_str <- ifelse(is.na(cn$record), '-------', sprintf('%i (%s)', cn$record, cn$flag))
-		
-		
-		cat(paste0(concept_str, " : ", record_str), sep='\n')
-	}
+	class(x) <- 'data.frame'
+	print(subset(x, select=c(concept, record, available)))
+
 	
 	if(! is.null(attr(x, 'mismatches'))){
 		cat('\nUnmatched record ids:', paste(attr(x, 'mismatches'), sep=', '), '\n')
