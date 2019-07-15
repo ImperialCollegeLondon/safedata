@@ -249,14 +249,17 @@ validate_record_ids <- function(record_set){
 		}
 	}
 	
-	# Now add information on whether records are available and the most recent available for each concept
-	# Options are : available and most recent, available and not most recent (outdated),
-	# not available and most recent is not NA (embargoed copy with open version) and
-	# not available and most recent is NA (embargoed or restricted copies only).
+	# Now add information on whether individual records are available and then, for the concept,
+	# the most recent record (which might not be available) and the most recent available if there 
+	# is one
     record_set$available <- index$available[match(record_set$record, index$zenodo_record_id)]
+
+	most_recent <- subset(index, most_recent, select=c(zenodo_concept_id, zenodo_record_id))
+	record_set$most_recent <- mra$zenodo_record_id[match(record_set$concept, mra$zenodo_concept_id)]
+	
 	mra <- subset(index, most_recent_available, select=c(zenodo_concept_id, zenodo_record_id))
 	record_set$mra <- mra$zenodo_record_id[match(record_set$concept, mra$zenodo_concept_id)]
-	
+
 	# Sort by concept id (increasing from earliest) and then by record id (decreasing from 
 	# most recent) and keep NAs at the top, so concept ids come first.
 	record_set <- record_set[order(record_set$concept, record_set$record, 
