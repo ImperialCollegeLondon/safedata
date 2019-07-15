@@ -1,3 +1,52 @@
+load_safe_worksheet <- function(record_set,  worksheet, skip, n_max){
+	
+	#' Loads data from a SAFE worksheet
+	#'
+	#' This is an internal function shared between load_safe_data (data worksheets)
+	#' get_taxa (Taxa sheets) and get_locations (Locations sheets). 
+	#'
+	#' @param index_row A row selected from the index data frame, identifying the
+	#'    workbook path.
+	#' @param worksheet The name of the worksheet to load (str).
+	#' @param skip The number of initial rows to skip (integer)
+	#' @param n_max The number of rows to load (integer)
+	#' @return A data frame of the worksheet, 
+	#' @keywords internal
+	
+	# Look for a local copy of the file. If it doesn't exist, download it if possible
+	
+	index <- get_index()
+	index_row <- subset(index, zenodo_record_id == record_set$record)
+	
+	local_path <- file.path(get_data_dir(), record_set$concept, record_set$record, index_row$filename)
+	local_copy <- file.exists(local_path)
+	
+	if(! local_copy){
+		verbose_message('Downloading datafile: ', index_row$filename)
+		downloaded <- download_safe_files(index_row$zenodo_record_id)
+		if(length(downloaded)){
+			stop('Data file unavailable')
+		}
+	}
+	
+	# Validate the local copy
+	local_md5 <- tools::md5sum(path.expand(local_path))
+	if(local_md5 != index_row$checksum){
+		stop('Local file has been modified - do not edit files within the SAFE data directory')
+	}
+
+	# Now load the data - using readxl, openxlsx is also possible but seems
+	# to be orphaned and has some date time handling issues
+	data <- readxl::read_xlsx(local_path, worksheet, skip = skip, n_max = n_max, na='NA')
+						  
+	# Discard the tibble class and first column of row numbers
+	class(data) <- 'data.frame'
+	data <- data[,-1]
+
+	return(data)
+}
+
+
 load_safe_data <- function(record_id, worksheet){
 	
 	#' Loads data from a SAFE dataset.
@@ -24,13 +73,14 @@ load_safe_data <- function(record_id, worksheet){
 
 	# validate the record id
 	record_set <- validate_record_ids(record_id)
-
+	
 	# Logic of what to load.
 	# a) If a record is provided, return that unless it is unavailable, in 
 	#    which case suggest an alternative.
 	# b) If a concept is provided, load MRA if there is one.
 	
-	if((nrow(record_set) != 1) || is.na(record_set$concept)){
+	
+	if(nrow(record_set) != 1){
 		stop("Requires a single valid record or concept id")
 	} else if(is.na(record_set$record)){
 		# concept provided
@@ -55,42 +105,15 @@ load_safe_data <- function(record_id, worksheet){
 		}
 	}
 	
-	# Find the row information and check the most recently available data
-	safedir <- get_data_dir()
-	index <- get_index()
-	row <- subset(index, zenodo_record_id == record_set$record)
-	
 	# Now get the metadata and find the target worksheet
 	metadata <- load_record_metadata(record_set)
 	if(! worksheet %in% metadata$metadata$dataworksheets$name){
 		stop('Data worksheet name not one of: ', paste(metadata$metadata$dataworksheets$name, collapse=', '))
 	}
 
+	# If successful get the worksheet metadata and load the data
 	dwksh <- metadata$metadata$dataworksheets[metadata$metadata$dataworksheets$name == worksheet, ]
-	
-	# Look for a local copy of the file. If it doesn't exist, download it if possible
-	local_path <- file.path(safedir, row$zenodo_concept_id, row$zenodo_record_id, row$filename)
-	
-	if(! file.exists(local_path)){
-		verbose_message('Downloading datafile: ', row$filename)
-		download_safe_files(record_set)
-	}
-	
-	# Validate the local copy
-	local_md5 <- tools::md5sum(path.expand(local_path))
-	if(local_md5 != row$checksum){
-		stop('Local file has been modified - do not edit files within the SAFE data directory')
-	}
-	
-	# Now load the data - using readxl, openxlsx is also possible but seems
-	# to be orphaned and has some date time handling issues, but don't use tibbles
-	data <- readxl::read_xlsx(local_path, worksheet, 
-							  skip = dwksh$field_name_row - 1, 
-							  n_max = dwksh$n_data_row, na='NA')
-							  
-	# drop tibble class and first column of row numbers
-	class(data) <- 'data.frame'
-	data <- data[,-1]
+	data <- load_safe_worksheet(record_set, worksheet, skip=dwksh$field_name_row - 1, n_max = dwksh$n_data_row)
 	
 	# Now do field type conversions
 	fields <- dwksh$fields[[1]]
@@ -191,6 +214,7 @@ download_safe_files <- function(record_ids, confirm=TRUE, xlsx_only=TRUE,
 	#'   download fresh copies. This is useful if the local copies have unintentionally 
 	#'   been modified but note the warning above.
 	#' @param token An access token for restricted datasets. Not currently implemented.
+	#' @return Invisibly, a vector of paths for successfully downloaded files.
 	#' @export
 	
 	# validate the record ids
@@ -256,8 +280,10 @@ download_safe_files <- function(record_ids, confirm=TRUE, xlsx_only=TRUE,
 		fetch_record_metadata(record_set)
 	}
 	
+	
 	# split by records
 	files_by_record <- split(targets, targets$zenodo_record_id)
+	downloaded <- character()
 	
 	for(these_files in files_by_record){
 		
@@ -328,12 +354,15 @@ download_safe_files <- function(record_ids, confirm=TRUE, xlsx_only=TRUE,
 							} else {
 								verbose_message(' - Downloaded: ', this_file$filename)
 							}
+							downloaded <- c(downloaded, this_file$local_path)
 						}
 					}
 				}
 			}
 		}
 	}
+	
+	return(invisible(downloaded))
 }
 
 zenodoRecordApiLookup <- function (id) {
