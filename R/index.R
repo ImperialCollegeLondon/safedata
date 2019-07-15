@@ -11,6 +11,7 @@
 
 safedata.env <- new.env(parent = emptyenv())
 
+
 get_index <- function(){
 	
 	#' Get the cached SAFE dataset index

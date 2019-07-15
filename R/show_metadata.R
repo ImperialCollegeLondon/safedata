@@ -22,7 +22,7 @@ show_concepts <- function(obj){
 	#'    \item A \code{safedata} data frame loaded using \code{load_safe_data}.
 	#' }
 	#' is not itself a concept id, then the function looks up the relevant 
-	#' concept. The version table indicates which versions are available ('<<<' 
+	#' concept. The version table indicates which versions are available ('*' 
 	#' for the most recent available version and 'o' for older available versions),
 	#' and which are unavailable due to embargo or retriction ('x').
 	#'
@@ -69,7 +69,7 @@ show_concepts <- function(obj){
 	
 		# Version summary
 		version_available <- ifelse(concept$available, 'o', 'x')
-		version_available[which(concept$most_recent_available)[1]] <- '<<<'
+		version_available[which(concept$most_recent_available)[1]] <- '*'
 		
 		version_table <- data.frame(record_id = concept$zenodo_record_id,
 									published = format(concept$publication_date, '%Y-%m-%d'),
@@ -106,9 +106,7 @@ show_record <- function(obj){
 		stop('show_record requires a single record id')
 	}
 	
-	if(all(is.na(record_set))){
-		stop('Unknown record id')
-	} else if(is.na(record_set$record)){
+	if(is.na(record_set$record)){
 		warning('Concept ID provided: showing available versions')
 		show_concepts(record_set)
 		return(invisible())		
