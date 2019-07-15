@@ -1,6 +1,6 @@
 
 
-get_taxonomy <- function(record_id){
+get_taxonomy <- function(obj, taxon_labels=TRUE){
     
     #' Get a data frame containing the taxonomy for a dataset
     #'
@@ -15,100 +15,151 @@ get_taxonomy <- function(record_id){
     #'
     #' Note that the \code{ape} function \code{as.phylo.formula} can be used
     #' to turn this structure into a 'phylogeny'.
-    #' @param record_id A SAFE dataset record id 
+    #' @param obj A SAFE dataset record id or a loaded safedata object.
+    #' @param taxon_labels Should the taxon labels used in the data worksheets
+	#    be loaded, if the record is not under embargo or restricted.
     #' @return A dataframe of the taxa used in the dataset, with columns
 	#'   giving the GBIF backbone taxonomic levels (kingdom, phylum, order, class, 
-	#'   family, genus, species) along with the original taxon names used in the
-	#'   dataset.
+	#'   family, genus, species, subspecies) along with the original taxon names used 
+	#'   in the dataset and the taxon labels if available.
     #' @export
     
 	
-	record_set <- validate_record_ids(record_id)
+	if(inherits(obj, 'safe_data')){
+		record_set <- attr(obj, 'safe_data')$safe_record_set
+	} else {
+		record_set <- validate_record_ids(obj)
+	}
 	
 	if(nrow(record_set) != 1){
-		stop('show_record requires a single record id')
+		stop('get_taxonomy requires a single id')
 	}
+
+	# Logic of what to load.
+	# a) If a record is provided, return that unless it is unavailable, in 
+	#    which case suggest an alternative.
+	# b) If a concept is provided, load MRA if there is one.
 	
-	if(all(is.na(record_set))){
-		stop('Unknown record id')
+	
+	if(nrow(record_set) != 1){
+		stop("Requires a single valid record or concept id")
 	} else if(is.na(record_set$record)){
-		stop('show_record requires record id not a concept id')		
+		# concept provided
+		if(is.na(record_set$mra)){
+			stop("Concept ID provided: all records under embargo or restricted")
+		} else {
+			verbose_message("Concept ID provided: loading most recent available record")
+			record_set <- validate _record_ids(record_set$mra)
+		}
+	} else {
+		# record provided
+		if(! record_set$available){
+			if(is.na(record_set$mra)){
+				stop("Record ID provided: this and all other versions of this dataset concept are under embargo or restricted")
+			} else {
+				stop("Record ID provided: version is under embargo or restricted. Most recent available is ", record_set$mra)
+			}
+		} else {
+			if(! (record_set$record ==  record_set$mra)){
+				verbose_message("Outdated record: the most recent available version is ", record_set$mra)
+			}
+		}
 	}
-			
-	# Get the record metadata and a single row for the record
+
+	# Get the record metadata containing the taxon index and if possible the taxon worksheet,
+	# which provides the matching of taxon names to datasets
 	taxa <- load_record_metadata(record_set)$taxa
-	
+
     if(length(taxa) == 0){
         return(NA)
-    } else {
-        taxa <- data.frame(taxa, stringsAsFactors=FALSE)
-        names(taxa) <- c('id','pid','name','level','status','asname','aslevel')
-        
-        # Note which rows are leaves - their ID does not appear in the parent ID column
-        taxa$leaf <- ! taxa$id %in% taxa$pid
-        total_leaves <- sum(taxa$leaf)
-        
-        # Generate the asname column - this should merge on to the taxon names
-        # provided in the dataset.
-        taxa$asname <- ifelse(is.na(taxa$asname), taxa$name, taxa$asname)
-        
-        # Divide the data frame up into a list giving the descendants from each parent id
-        taxa <- split(as.data.frame(taxa), f=taxa[,2])
-        
-        # Now, starting with the parent index of -1 for the root, work through that
-        # list of descendants. Get a set of descdendants, add any leaves to the final
-        # output and then split what is left into the current top and remaining taxa.
-        # These sets are stored in a stack with more specific taxa getting pushed onto
-        # the top at index 1. The current name at each level is used as the stack list
-        # name, so that names(stack) gives the current hierarchy.
-        
-        # start the stack off
-        push <- taxa[["-1"]]
-        stack <- list(list(top=push[1,], up_next=push[-1,]))
-        names(stack) <- stack[[1]]$top$name
-        
-        # create a leaf table to fill in
-        leaf_table <- matrix(NA, ncol=10, nrow=total_leaves)
-        leaf_idx <- 0
-        
+    } 
+	
+    taxa <- data.frame(taxa, stringsAsFactors=FALSE)
+    names(taxa) <- c('id','pid','name','level','status','asname','aslevel')
+    
+    # Note which rows are leaves - their ID does not appear in the parent ID column
+    taxa$leaf <- ! taxa$id %in% taxa$pid
+    total_leaves <- sum(taxa$leaf)
+    
+    # Generate the asname column - this should merge on to the taxon names
+    # provided in the dataset.
+    taxa$asname <- ifelse(is.na(taxa$asname), taxa$name, taxa$asname)
+    
+	# Identify the root - this is the set of taxa that have NA as parent id, which
+	# should all be kingdoms
+	is_root <- is.na(taxa[,2])
+	root <- taxa[is_root,]
+	taxa <- taxa[! is_root,]
+	
+    # Divide the remaining data frame up into a list giving the descendants from each parent id
+    taxa <- split(as.data.frame(taxa), f=taxa[,2])
+    
+    # Now, starting with the root, work through the list of descendents.
+	# The codes uses a stack with each layer representing a taxonomic level. 
+    # These sets are stored in a stack with more specific taxa getting pushed onto
+    # the top at index 1. The current name at each level is used as the stack list
+    # name, so that names(stack) gives the current hierarchy. 
+	
+	# As items are added on to the stack, as the descendants of a lower level, then leaf 
+	# taxa (no descendants of their own) are pushed to the final data frame and anything 
+	# left is added to the stack. Stack entries at each level are split into two - the current
+	# taxon at that level and then other descendants from the same parent that will
+	# be considered as up_next.
+	
+    # start the stack off
+    stack <- list(list(top=root[1,], up_next=root[-1,]))
+    names(stack) <- stack[[1]]$top$name
+    
+    # create a leaf table to fill in
+    leaf_table <- matrix(NA, ncol=10, nrow=total_leaves)
+    leaf_idx <- 0
+	
+    while(length(stack)){
 		
-        while(length(stack)){
-			cat(names(stack), '\n')
-			
-            if(stack[[1]]$top$leaf){
-                # If the top of the stack is a leaf, write it out into the leaf table
-                hierarchy <- c(rev(names(stack)), rep(NA, 8 - length(stack)))
-                leaf_idx <- leaf_idx + 1
-                leaf_table[leaf_idx, ] <- c(hierarchy, stack[[1]]$top$asname, stack[[1]]$top$aslevel)
-                
-                # Now work back down the stack to find the next level with something
-                # left in the up_next slot.
-                while(length(stack)){
-                    push <- stack[[1]]$up_next
-                    if(nrow(push)){
-                        # ii) If there is anything left in up_next, bring one up and replace the stack top
-                        push <- list(list(top=push[1,], up_next=push[-1,]))
-                        names(push) <- push[[1]]$top$name
-                        stack <- c(push , stack[-1])
-                        break
-                    } else {
-                        # iii) Otherwise pop off the top of the stack
-                        stack <- stack[-1]
-                    }
+        if(stack[[1]]$top$leaf){
+            # If the top of the stack is a leaf, write it out into the leaf table
+            hierarchy <- c(rev(names(stack)), rep(NA, 8 - length(stack)))
+            leaf_idx <- leaf_idx + 1
+            leaf_table[leaf_idx, ] <- c(hierarchy, stack[[1]]$top$asname, stack[[1]]$top$aslevel)
+            
+            # Now work back down the stack to find the next level with something
+            # left in the up_next slot.
+            while(length(stack)){
+                push <- stack[[1]]$up_next
+                if(nrow(push)){
+                    # ii) If there is anything left in up_next, bring one up and replace the stack top
+                    push <- list(list(top=push[1,], up_next=push[-1,]))
+                    names(push) <- push[[1]]$top$name
+                    stack <- c(push , stack[-1])
+                    break
+                } else {
+                    # iii) Otherwise pop off the top of the stack
+                    stack <- stack[-1]
                 }
-            } else {
-                # Otherwise, if the top of the stack isn't a leaf,  stick its descendants onto the stack
-                push <- taxa[[stack[[1]]$top$id]]
-                push <- list(list(top=push[1,], up_next=push[-1,]))
-                names(push) <- push[[1]]$top$name
-                stack <- c(push , stack)
             }
+        } else {
+            # Otherwise, if the top of the stack isn't a leaf,  stick its descendants onto the stack
+            push <- taxa[[stack[[1]]$top$id]]
+            push <- list(list(top=push[1,], up_next=push[-1,]))
+            names(push) <- push[[1]]$top$name
+            stack <- c(push , stack)
         }
-
-        leaf_table <- as.data.frame(leaf_table, stringsAsFactors=FALSE)
-        names(leaf_table) <- c("kingdom", "phylum", "class", "order", "family", "genus", "species", "subspecies", "taxon_name", "taxon_level")
-        return(leaf_table)
     }
+
+    leaf_table <- as.data.frame(leaf_table, stringsAsFactors=FALSE)
+    names(leaf_table) <- c("kingdom", "phylum", "class", "order", "family", "genus", 
+						   "species", "subspecies", "taxon_name", "taxon_level")
+
+	# Now match on the taxon labels if possible
+	if(taxon_labels && ! record_set$avail){
+		verbose_message("Dataset under embargo or restricted: cannot load taxon labels")
+	} else if(taxon_labels){
+		taxon_sheet <- load_safe_worksheet(record_set, 'Taxa', 1, nrow(leaf_table))
+	}
+	
+
+
+    return(leaf_table)
 }
 
 
