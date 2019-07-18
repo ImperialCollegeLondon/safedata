@@ -255,7 +255,7 @@ validate_record_ids <- function(record_set){
     record_set$available <- index$available[match(record_set$record, index$zenodo_record_id)]
 
 	most_recent <- subset(index, most_recent, select=c(zenodo_concept_id, zenodo_record_id))
-	record_set$most_recent <- mra$zenodo_record_id[match(record_set$concept, mra$zenodo_concept_id)]
+	record_set$most_recent <- most_recent$zenodo_record_id[match(record_set$concept, most_recent$zenodo_concept_id)]
 	
 	mra <- subset(index, most_recent_available, select=c(zenodo_concept_id, zenodo_record_id))
 	record_set$mra <- mra$zenodo_record_id[match(record_set$concept, mra$zenodo_concept_id)]
