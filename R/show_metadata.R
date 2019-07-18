@@ -117,22 +117,22 @@ show_record <- function(obj){
 	
 	# Print out a summary
 	cat('\nRecord summary\n')
-	cat(sprintf('Title: %s\n', metadata$metadata$title))
+	cat(sprintf('Title: %s\n', metadata$title))
 	
-	surnames <- sapply(strsplit(metadata$metadata$authors$name, ','), '[', 1)
+	surnames <- sapply(strsplit(metadata$authors$name, ','), '[', 1)
 	cat(sprintf('Authors: %s\nPublication date: %s\n,Record ID: %i\nConcept ID: %i\n',
 				paste(surnames, collapse=', '),
 				format(as.POSIXct(metadata$publication_date), '%Y-%m-%d'),
 				record_set$zenodo_record_id,
 				record_set$zenodo_concept_id))
 
-	status <- metadata$metadata$access
-	if(status == 'embargo' && metadata$metadata$embargo_date < Sys.time()){
+	status <- metadata$access
+	if(status == 'embargo' && metadata$embargo_date < Sys.time()){
 		status <- 'open'
 	}
 	cat(sprintf('Status: %s\n', status))
 	
-	ext_files <- metadata$metadata$external_files
+	ext_files <- metadata$external_files
 	if(! is.null(ext_files)){
 		cat(sprintf('External files: %s\n', paste(ext_files$file, collapse=' ,')))
 	}
@@ -150,7 +150,7 @@ show_record <- function(obj){
 	}
 	
 	# Data worksheets
-	dwksh <- metadata$metadata$dataworksheets
+	dwksh <- metadata$dataworksheets
 	nm_nch <- max(nchar(dwksh$name))
 	cl_nch <- max(ceiling(log10(dwksh$max_col)), 4)
 	rw_nch <- max(ceiling(log10(dwksh$n_data_row)), 4)
@@ -162,7 +162,7 @@ show_record <- function(obj){
 	cat(with(dwksh, sprintf('%*s %*i %*i %s', nm_nch, name, cl_nch, max_col, 
 							rw_nch, n_data_row, description)), sep='\n')
 	cat('\n')
-	return(invisible(metadata$metadata))
+	return(invisible(metadata))
 }
 
 
@@ -189,7 +189,7 @@ show_worksheet <- function(obj, worksheet, extended_fields=FALSE){
 	}
 		
 	# Get the record metadata
-	metadata <- load_record_metadata(record_set)$metadata
+	metadata <- load_record_metadata(record_set)
 		
 	# Find the worksheet
 	dwksh <- metadata$dataworksheets

@@ -107,12 +107,12 @@ load_safe_data <- function(record_id, worksheet){
 	
 	# Now get the metadata and find the target worksheet
 	metadata <- load_record_metadata(record_set)
-	if(! worksheet %in% metadata$metadata$dataworksheets$name){
-		stop('Data worksheet name not one of: ', paste(metadata$metadata$dataworksheets$name, collapse=', '))
+	if(! worksheet %in% metadata$dataworksheets$name){
+		stop('Data worksheet name not one of: ', paste(metadata$dataworksheets$name, collapse=', '))
 	}
 
 	# If successful get the worksheet metadata and load the data
-	dwksh <- metadata$metadata$dataworksheets[metadata$metadata$dataworksheets$name == worksheet, ]
+	dwksh <- metadata$dataworksheets[metadata$dataworksheets$name == worksheet, ]
 	data <- load_safe_worksheet(record_set, worksheet, skip=dwksh$field_name_row - 1, n_max = dwksh$n_data_row)
 	
 	# Now do field type conversions
