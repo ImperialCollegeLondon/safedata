@@ -166,19 +166,21 @@ load_safe_data <- function(record_id, worksheet){
 	# attributes and displaying that information at top is aesthetically nicer.
 	
 	class(data) <- c('safe_data', 'data.frame')
-	attr(data, 'safe_data') <- list(safe_record_set=record_set, worksheet=worksheet)
+	dwksh <- as.list(dwksh)
+	dwksh$safe_record_set <- record_set
+	attr(data, 'safe_data') <- dwksh
 	return(data)
 }
 
 
 str.safe_data <- function(object, ...){
 	
-	#' @describeIn load_safe_data Display structure of a safedata data frame
+	#' @describeIn load_safe_data Display structure of a safe_data data frame
 	#' @export
 	
 	object_attr <- attr(object, 'safe_data')
 	with(object_attr, cat(sprintf('SAFE dataset\nConcept: %i; Record %i; Worksheet: %s\n', 
-								  safe_record_set$concept, safe_record_set$record, worksheet)))
+								  safe_record_set$concept, safe_record_set$record, name)))
 	
 	# reduce the safedata object to a simple data frame and pass back to str(x, ...)
 	attr(object, 'safe_data') <- NULL
