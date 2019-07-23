@@ -1,6 +1,6 @@
 
 
-get_taxonomy <- function(record){
+get_taxonomy <- function(obj){
     
     #' Obtaining taxonomy for a SAFE dataset.
     #'
@@ -29,8 +29,7 @@ get_taxonomy <- function(record){
 	#' and are used to match a taxonomy table to a loaded data worksheet (see
 	#' \code{\link{add_taxa}}).
 	#'
-	#' @param record A single record id, or an existing safe_data dataframe.
-	#' 
+	#' @param obj A single record id, or an existing safe_data dataframe.
     #' @return A taxonomy table of classes 'safe_taxa' and 'data.frame'.
     #' @note Not all SAFE project datasets contain taxonomic observations. In
 	#'    this case \code{get_taxonomy} will return NULL.
@@ -39,10 +38,10 @@ get_taxonomy <- function(record){
     #'   for information on the Taxa worksheet
     #' @export
     
-    if(inherits(record, 'safe_data')){
-        record_set <- attr(record, 'safe_data')$safe_record_set
+    if(inherits(obj, 'safe_data')){
+        record_set <- attr(obj, 'safe_data')$safe_record_set
     } else {
-        record_set <- validate_record_ids(record)
+        record_set <- validate_record_ids(obj)
     }
         
     if(nrow(record_set) != 1){
@@ -178,7 +177,9 @@ add_taxa <- function (obj, taxon_field=NULL, taxon_table=NULL, prefix=NULL, whic
 	#' for a dataset for a given taxon field in a data worksheet and inserts fields
 	#' to show that hierarchy.
     #' 
-	#' If a data worksheet only contains a single taxon field, that will be used
+	#' An existing taxon table can be provided to the function, but the table
+	#' will be automatically loaded if no table is provided. If a data worksheet 
+	#' only contains a single taxon field, then that field will be used
 	#' automatically, otherwise users have to specify which taxon field to use.
 	#' A prefix can be added to taxon fields in order to discrimate between fields
 	#' from multuple taxon fields. By default, the function adds all of the fields
@@ -266,4 +267,139 @@ add_taxa <- function (obj, taxon_field=NULL, taxon_table=NULL, prefix=NULL, whic
     class(ret) <- c('safe_data', 'data.frame')
     
     return(ret)
+}
+
+get_phylogeny <- function(record){
+	
+	#' Get a phylogeny for a dataset
+	#'
+	#' This function laods the taxa reported in a dataset (see \code{\link{get_taxonomy}})
+	#' and creates a \code{\link{[ape]phylo}} phylogeny for those taxa. Equal branch 
+	#' lengths are used. This function differs from \code{\link{[ape]as.phylo.formula} 
+	#' in that it does not expect all taxonomic levels to be non NA: tips can
+	#' be at different taxonomic depths.
+	#'
+	#' @param record A single dataset record id
+	#' @return An \code{ape} \code{phylo} object.
+	#' @export
+	
+	stop('Not yet implemented')
+	
+    record_set <- validate_record_ids(record)
+	        
+    if(nrow(record_set) != 1){
+        stop("Requires a single valid record or concept id")
+    } else if(is.na(record_set$record)){
+        stop("Concept ID provided, please indicate a specific version")
+    } 
+
+    # Get the record metadata containing the taxon index and if possible the taxon worksheet,
+    # which provides the matching of taxon names to datasets
+    taxa <- load_record_metadata(record_set)$taxa
+
+    if(length(taxa) == 0){
+        return(NULL)
+    }
+    
+	# Need to work out the number of tips and nodes to get the branch numbering
+	# correct in the edge matrix. This is awkward because named worksheet taxa
+	# may not be tips and, with user defined taxa (gbif_id == -1), the number of
+	# unique gbif ids isn't the answer either.
+	unique_taxa <-  unique(subset(taxa, select=c(worksheet_name, gbif_id)))
+	unique_taxa$tip <- ! unique_taxa$gbif_id %in% taxa$gbif_parent_id
+	taxa$tip <- 
+	
+	# Get the internal vs tip node counts, a set of indices to be assigned to
+	# internal and tip nodes and internal pop functions to consume them
+	Nnode <- sum(! unique_taxa$tip) + 1
+	Ntip <- sum(unique_taxa$tip)
+
+	tips <- 1:Ntip
+	nodes <- (Ntip + 1):(Ntip + 1 + Nnode)
+	
+	pop_tip <- function(){v <- tips[1]; tips <<- tips[-1]; return(v)}
+	pop_node <- function(){v <- nodes[1]; nodes <<- nodes[-1]; return(v)}
+	
+    # See get_taxa for notes on stack code   
+    is_root <- is.na(taxa$gbif_parent_id)
+    root <- taxa[is_root,]
+    taxa <- taxa[! is_root,]
+    taxa <- split(as.data.frame(taxa), f=taxa$gbif_parent_id)
+    stack <- list(list(top=root[1,], up_next=root[-1,], node_id=pop_node()))
+    
+    while(length(stack)){
+        
+        current <- stack[[1]]$top
+        current_wn <- current$worksheet_name
+                
+        # If the top of the stack has a worksheet name, add that to the taxon table
+        if(! is.na(current_wn)){
+            
+            # set the taxon name, rank and status to put in the table
+            txn <- current$taxon_name
+            rnk <- current$taxon_rank
+            sts <- current$gbif_status
+            
+            # Look for other taxa in up_next with the same worksheet name - these
+            # are taxa which have a different GBIF canonical name to the one the
+            # dataset provider used. Figure out which is which and update, otherwise
+            # just use the singleton.
+            pair_idx <- match(current_wn, stack[[1]]$up_next$worksheet_name)
+            
+            if(! is.na(pair_idx)){
+                # remove the row from up next
+                paired_taxon <- stack[[1]]$up_next[pair_idx,]
+                stack[[1]]$up_next <- stack[[1]]$up_next[- pair_idx,]
+                
+                # If the current taxon is the GBIF accepted record, replace the 
+                # taxon details with those provided in the dataset, else rename
+                # the top of the stack with the accepted details
+                if(current$gbif_status == 'accepted'){
+                    txn <- paired_taxon$taxon_name
+                    rnk <- paired_taxon$taxon_rank
+                    sts <- paired_taxon$gbif_status
+                } else {
+                    names(stack)[1] <- paired_taxon$taxon_name
+                }
+            }
+            
+            hierarchy <- c(rev(names(stack)), rep(NA, 8 - length(stack)))
+            taxon_table[current_wn, ] <- c(hierarchy, txn, rnk, sts)
+        }
+        
+        
+        # Does this taxon have descendents? If so, they move on to the top of the stack
+        # otherwise, work back down the stack to find the next level with something
+        # left in the up_next slot.
+        descendants <- taxa[[as.character(current$gbif_id)]]
+        
+        if(! is.null(descendants)){
+            descendants <- list(list(top=descendants[1,], up_next=descendants[-1,]))
+            names(descendants) <- descendants[[1]]$top$taxon_name
+            stack <- c(descendants , stack)
+            
+        } else {
+            while(length(stack)){
+                up_next <- stack[[1]]$up_next
+                if(nrow(up_next)){
+                    # If there is anything left in up_next, bring one up and replace the stack top
+                    up_next <- list(list(top=up_next[1,], up_next=up_next[-1,]))
+                    names(up_next) <- up_next[[1]]$top$taxon_name
+                    stack <- c(up_next , stack[-1])
+                    break
+                } else {
+                    # Otherwise pop off the top of the stack
+                    stack <- stack[-1]
+                }
+            }
+        } 
+    }
+
+    taxon_table <- as.data.frame(taxon_table, stringsAsFactors=FALSE)
+    class(taxon_table) <- c('safe_taxa', 'data.frame')
+
+    return(taxon_table)
+	
+	
+	
 }
