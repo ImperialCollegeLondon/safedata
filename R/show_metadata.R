@@ -42,7 +42,7 @@ show_concepts <- function(obj){
 	}
 		
 	# get the rows to report, sort by publication date and cut into record chunks
-	index <- get_index()
+	index <- retrieve_index()
 	
 	rows <- subset(index, zenodo_concept_id %in% record_set$concept,
 				   select=c(zenodo_concept_id, zenodo_record_id, dataset_title,

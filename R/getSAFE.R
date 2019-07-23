@@ -15,7 +15,7 @@ load_safe_worksheet <- function(record_set,  worksheet, skip, n_max){
 	
 	# Look for a local copy of the file. If it doesn't exist, download it if possible
 	
-	index <- get_index()
+	index <- retrieve_index()
 	index_row <- subset(index, zenodo_record_id == record_set$record)
 	
 	local_path <- file.path(get_data_dir(), record_set$concept, record_set$record, index_row$filename)
@@ -24,13 +24,13 @@ load_safe_worksheet <- function(record_set,  worksheet, skip, n_max){
 	if(! local_copy){
 		verbose_message('Downloading datafile: ', index_row$filename)
 		downloaded <- download_safe_files(index_row$zenodo_record_id)
-		if(length(downloaded)){
+		if(! length(downloaded)){
 			stop('Data file unavailable')
 		}
 	}
 	
 	# Validate the local copy
-	local_md5 <- tools::md5sum(path.expand(local_path))
+	local_md5 <- tools::md5sum(local_path)
 	if(local_md5 != index_row$checksum){
 		stop('Local file has been modified - do not edit files within the SAFE data directory')
 	}
@@ -230,7 +230,7 @@ download_safe_files <- function(record_ids, confirm=TRUE, xlsx_only=TRUE,
 	} 
 	
 	# Get the target files
-	index <- get_index()
+	index <- retrieve_index()
 	safedir <- get_data_dir()
 	
 	# Get the set of files
@@ -241,7 +241,7 @@ download_safe_files <- function(record_ids, confirm=TRUE, xlsx_only=TRUE,
 	}
 		
 	# See what is stored locally
-	targets$local_path <- path.expand(file.path(safedir, targets$path))
+	targets$local_path <- file.path(safedir, targets$path)
 	targets$local_exists <- file.exists(targets$local_path)
 	
 	# Check which files are already local and optionally which have bad MD5 sums
