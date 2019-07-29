@@ -168,7 +168,7 @@ set_safe_dir <- function(safedir, update=TRUE, create=FALSE, validate=TRUE){
 		index_files <- c(basename(index_path), basename(gazetteer_path), 
 						 basename(location_aliases_path))
 						 
-		metadata_json <- local_files[grepl('[0-9]+/[0-9]+/[0-9]+.rds$', local_files)]	
+		metadata_json <- local_files[grepl('[0-9]+/[0-9]+/[0-9]+.json$', local_files)]	
 		local_files <- setdiff(local_files, c(index_files, metadata_json))
 	
 		local_unexpected <- setdiff(local_files, index$path)
@@ -490,6 +490,7 @@ validate_record_ids <- function(record_set){
 	record_set <- record_set[order(record_set$concept, record_set$record, 
 									decreasing=c(FALSE, TRUE), method='radix', na.last=FALSE), ]
 	
+	rownames(record_set) <- seq_along(record_set$record)
 	return(record_set)	
 }
 
@@ -511,7 +512,7 @@ print.safe_record_set <- function(x, ...){
 	n_status[names(counts)] <- counts
 	n_records <- sum(!is.na(x$record))
 		
-	cat(sprintf(msg, nrow(x) - n_records, n_records, 
+	cat(sprintf(msg, length(unique(x$concept)), n_records, 
 					 n_status['*'], n_status['o'], n_status['x']))
 	
 	# This relies on the sort order set in validate_record_ids
