@@ -2,14 +2,14 @@
 #' 
 #' In addition to the datasets stored on Zenodo, the SAFE Project website
 #' provides an API to search dataset metadata in more depth. The search functions
-#' access this API and return \code{safe_record_set} objects identifying datasets
+#' access this API and return \code{\link{safe_record_set}} objects identifying datasets
 #' that match a particular query.
 #'
 #' The API provides endpoints to search datasets by date extents, data worksheet fields,
 #' authors, taxa, free text and by spatial query. All of the functions accept
 #' the argument \code{most_recent}, which restricts the returned datasets to the
 #' most recent versions of each matching dataset concept. The functions can also
-#' be passed an existing \code{safe_record_set} object to search within the results
+#' be passed an existing \code{\link{safe_record_set}} object to search within the results
 #' of a previous search.
 #' 
 #' The \code{match_type} parameter specifies how to match date ranges and must
@@ -21,7 +21,7 @@
 #' 
 #' @section Spatial searches:
 #' For spatial searches, users can select a location name from the SAFE gazetteer
-#' (see \url{https://www.safeproject.net/info/gazetteer} or \code{load_gazetteer})
+#' (see \url{https://www.safeproject.net/info/gazetteer} or \code{\link{load_gazetteer}})
 #' or provide a WKT geometry. The sampling locations provided in each SAFE dataset
 #' are tested to see if they intersect the search geometry.
 #'
@@ -39,7 +39,7 @@
 #' \describe{
 #'    \item{SAFE API}{\url{https://www.safeproject.net/api}}
 #'    \item{Worksheet field types}{\url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/data/#field-types}}
-#'    \item{SAFE gazetteer}{See \code{load_gazetteer} and \url{https://www.safeproject.net/info/gazetteer}}
+#'    \item{SAFE gazetteer}{See \code{\link{load_gazetteer}} and \url{https://www.safeproject.net/info/gazetteer}}
 #'    \item{WKT}{\url{https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry}}
 #' } 
 #'
@@ -62,13 +62,13 @@
 #' @param distance A buffer distance for spatial searches, giving the distance
 #'    in metres within which to match either location or wkt searches.
 #' @param ids A set of SAFE dataset record IDs to restrict a search. This will
-#'    typically be a \code{safe_record_set} object returned by another search 
+#'    typically be a \code{\link{safe_record_set}} object returned by another search 
 #'    but can also be a vector of record ids in any of the formats accepted by 
 #'    \code{\link{validate_record_ids}}.
 #' @param most_recent Logical indicating whether to restrict the API to
 #'    returning only the most recent versions of the datasets found. By default
 #'    all versions of matching dataset concepts are returned.
-#' @return An object of class \code{safe_record_set} of datasets that match 
+#' @return An object of class \code{\link{safe_record_set}} of datasets that match 
 #'    the query.
 #' @examples 
 #'    search_dates('2014-06-12')
@@ -228,14 +228,14 @@ safe_api_search <- function (endpoint, params, ids = NULL, most_recent=FALSE) {
 	#' @param length Accepted input lengths
 	#' @inheritParams search_dates
     #' @return The \code{safe_api_search} function returns an object of class 
-	#'    \code{safe_record_set} of datasets that match the submitted query. The
+	#'    \code{\link{safe_record_set}} of datasets that match the submitted query. The
 	#'    \code{validate_query_param} function either returns NULL on success or
 	#'    raises an error.
 	#' @describeIn safe_api_search Constructs, submits and formats calls to the SAFE API.
     #' @keywords internal
     
 	# All of the search_* functions ultimately need the data index to construct
-	# the safe_record_set, so ensure the safe_data_dir is set:
+	# the safe_record_set, so ensure the safedata_dir is set:
 	safedir <- get_data_dir()
 	    
     # construct query string - note that the use in the search_* functions

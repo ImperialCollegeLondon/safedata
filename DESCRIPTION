@@ -15,10 +15,10 @@ Description: The SAFE Project is a large scale ecological experiment
 License: GPL-3
 Imports: 
     readxl,
-    rgbif,
-    dplyr,
     jsonlite,
-    RCurl
+	chron,
+	curl,
+	sf
 Suggests:
     knitr,
     rmarkdown

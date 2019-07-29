@@ -11,24 +11,25 @@ validate_record_ids <- function(record_set){
 	#' \code{mra} containing the most recent available record (if any). The function can
 	#' be run on an existing \code{safe_record_set} to update this information.
 	#' 
+	#' Note that \code{record} will be NA when a value represents a concept id. Inputs
+	#' that do not match a record or concept ids are returned in the attribute 
+	#' \code{mismatches} of the record set.
+	#'
 	#' This function is largely used internally to validate user inputs and to provide
 	#' a common output for the search functions but is exported to allow users to 
 	#' check record ids and display summary information using the print method.
 	#'
 	#' @param record_set A vector of values containing Zenodo concept or record ids.
-	#' @param x An object of class 'safe_record_set'
+	#' @param x An object of class \code{safe_record_set}
 	#' @param ... Further arguments to print methods, unused.
-	#' @return An object of class 'safe_record_set': a dataframe with columns
-	#'   \code{concept} and \code{record} indicating the matching records. Note
-	#'   that \code{record} will be NA when the value is a concept id. Inputs
-	#'   that do not match a record or concept ids are returned as an attribute of
-	#'   the record set.
+	#' @return An object of class \code{safe_record_set} (see Details)
 	#' @examples
 	#'   validate_record_ids(c(3247631, 3266827, 3266821, -1000))
 	#'   validate_record_ids(c('https://doi.org/10.5281/zenodo.3247631', 
 	#'						   '10.5281/zenodo.3266827', 
 	#'						   'https://zenodo.org/record/3266821',
 	#'						   'not_this_one/3266821'))
+	#' @aliases safe_record_set
 	#' @export
 	
 	index <- retrieve_index()
@@ -170,7 +171,7 @@ fetch_record_metadata <- function(record_set){
 	#' data used to populate the Zenodo description but is machine readable
 	#' and contains additional taxon and location indexing.
 	#'
-	#' @param record_set An object of class \code{safe_record_set}.
+	#' @param record_set An object of class \code{\link{safe_record_set}}.
 	#' @return NULL
 	#' @examples
 	#'   recs <- c('https://doi.org/10.5281/zenodo.3247631', '10.5281/zenodo.3266827', 
@@ -221,7 +222,7 @@ load_record_metadata <- function(record_set){
 	
 	#' Loads the metadata for a record
 	#'
-	#' @param record_set An object of class \code{safe_record_set} containing a single
+	#' @param record_set An object of class \code{\link{safe_record_set}} containing a single
 	#'   row with complete concept and record data.
 	#' @keywords internal
 
@@ -260,9 +261,9 @@ show_concepts <- function(obj){
 	#' of three things:
 	#' \enumerate{
 	#'    \item A character or numeric vector of SAFE dataset records or concepts, 
-	#'          which will be validated using \code{validate_record_ids}, or
-	#'    \item An already validated \code{safe_record_set} object, or
-	#'    \item A \code{safedata} data frame loaded using \code{load_safe_data}.
+	#'          which will be validated using \code{\link{validate_record_ids}}, or
+	#'    \item An already validated \code{\link{safe_record_set}} object, or
+	#'    \item A \code{safedata} data frame loaded using \code{\link{load_safe_data}}.
 	#' }
 	#' If \code{show_concepts} is passed a record id, then the function looks up the
 	#' relevant concept. The version table indicates which versions are available ('*' 
@@ -273,13 +274,15 @@ show_concepts <- function(obj){
 	#' @param worksheet The name of a worksheet to show. Obviously, if \code{obj} 
 	#'    is a loaded worksheet, that will be the worksheet described and this can
 	#'    be left as NULL.
+	#' @param extended_fields Logical - show a compact description of worksheet
+	#'    fields or a longer output including full metadata descriptors.
 	#' @return Invisibly, a SAFE metadata object or a list of such objects. These
 	#'    are not really intended for end user consumption.
 	#' @describeIn show_concepts Show the records associated with a dataset concept  
 	#' @export
 	
-	if(inherits(obj, 'safe_data')){
-		record_set <- attr(obj, 'safe_data')$safe_record_set
+	if(inherits(obj, 'safedata')){
+		record_set <- attr(obj, 'metadata')$safe_record_set
 	} else {
 		record_set <- validate_record_ids(obj)
 	}
@@ -339,8 +342,8 @@ show_record <- function(obj){
 	#' @describeIn show_concepts Show details of a specific dataset
 	#' @export
 	
-	if(inherits(obj, 'safe_data')){
-		record_set <- attr(obj, 'safe_data')$safe_record_set
+	if(inherits(obj, 'safedata')){
+		record_set <- attr(obj, 'metadata')$safe_record_set
 	} else {
 		record_set <- validate_record_ids(obj)
 	}
@@ -414,9 +417,9 @@ show_worksheet <- function(obj, worksheet, extended_fields=FALSE){
 	#' @describeIn show_concepts Show details of a data worksheet
 	#' @export
 		
-	if(inherits(obj, 'safe_data')){
-		record_set <- attr(obj, 'safe_data')$safe_record_set
-		worksheet <-  attr(obj, 'safe_data')$worksheet
+	if(inherits(obj, 'safedata')){
+		record_set <- attr(obj, 'metadata')$safe_record_set
+		worksheet <-  attr(obj, 'metadata')$worksheet
 	} else {
 		record_set <- validate_record_ids(obj)
 	

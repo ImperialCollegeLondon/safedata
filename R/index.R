@@ -1,16 +1,14 @@
 #' Dataset index cache
 #'
 #' The \code{safedata.env} environment within the package namespace is 
-#' used to cache a copy of the dataset index, rather than needing to 
-#' repeatedly read from file. This index is used internally by functions
-#' through the internal \code{get_index} function and is not intended
-#' for the end user.
+#' used to cache a copy of the dataset index, gazetteer and location aliases
+#' rather than needing to repeatedly read these from file. This environment
+#' is accessed by internal functions and is not intended for the end user.
 #'
 #' @keywords internal
 #' @aliases index
 
 safedata.env <- new.env(parent = emptyenv())
-
 
 set_safe_dir <- function(safedir, update=TRUE, create=FALSE, validate=TRUE){
 	

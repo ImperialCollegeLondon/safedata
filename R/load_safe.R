@@ -3,7 +3,7 @@ load_safe_worksheet <- function(record_set,  worksheet, skip, n_max){
 	#' Loads data from a SAFE worksheet
 	#'
 	#' This is an internal function shared between load_safe_data (data worksheets)
-	#' get_taxa (Taxa sheets) and get_locations (Locations sheets). 
+	#' get_taxonomy (Taxa sheets) and get_locations (Locations sheets). 
 	#'
 	#' @param index_row A row selected from the index data frame, identifying the
 	#'    workbook path.
@@ -54,21 +54,25 @@ load_safe_data <- function(record_id, worksheet){
 	#' This function returns a data frame containing the data from a data 
 	#' worksheet in a SAFE dataset. Note that SAFE dataset .xlsx files include
 	#' the other (non-data) worksheets Summary, Taxa, Locations that contain 
-	#' metadata: see  \code{get_taxa}, \code{get_locations}, \code{add_taxa} 
-	#' and \code{add_locations} for accessing and using this metadata.
+	#' metadata: see  \code{\link{get_taxonomy}}, \code{\link{get_locations}}, 
+	#' \code{\link{add_taxa}} and \code{\link{add_locations}} for accessing 
+	#' and using this metadata.
 	#' 
 	#' In particular, the large amount of data worksheet summary metadata is
 	#' not attached as attributes to the data frame returned by this function.
-	#' This is largely to avoid spamming the screen during normal use of the
-	#' data frame: an extended description of a worksheet can be displayed using
-	#' \code{show_worksheet}.
+	#' This is largely to avoid excessive output to the console during normal use 
+	#' of the data frame: an extended description of a worksheet can be displayed
+	#' using \code{\link{show_worksheet}}.
 	#'
-	#' Currently, this function only loads data from SAFE formatted
-	#' .xlsx files - data stored in external files is not yet handled.
+	#' Currently, this function only loads data from SAFE formatted \code{.xlsx}
+	#' files - data stored in external files is not yet handled.
 	#'
 	#' @param record_id A SAFE dataset record id 
 	#' @param worksheet The name of the worksheet to load
-	#' @return A data frame with the additional 'safedata' class
+	#' @param object A \code{safedata} object.
+	#' @param \dots Further arguments to \code{str} methods.
+	#' @return A data frame with the additional \code{safedata} class and
+	#'    additional attribute data containing metadata for the data.
 	#' @export
 	
 	# TODO - provide a path argument and then mechanisms to support a standalone file download?
@@ -159,39 +163,39 @@ load_safe_data <- function(record_id, worksheet){
 		}
 	}
 	
-	# Design notes on methods: we want safe_data to behave as much as possible
+	# Design notes on methods: we want safedata to behave as much as possible
 	# like a data frame. The attributes are used to record provenance and the
-	# safe_data class is primarily used to allow loaded data frames to be passed
+	# safedata class is primarily used to allow loaded data frames to be passed
 	# to the show_* metadata functions. With S3 generics, the set of classes is
-	# used in order, so we only need to provide safe_data S3 methods where we want
+	# used in order, so we only need to provide safedata S3 methods where we want
 	# to modify the default dataframe methods - this is only str, where hiding the
 	# attributes and displaying that information at top is aesthetically nicer.
 	
-	class(data) <- c('safe_data', 'data.frame')
+	class(data) <- c('safedata', 'data.frame')
 	dwksh <- as.list(dwksh)
 	dwksh$safe_record_set <- record_set
-	attr(data, 'safe_data') <- dwksh
+	attr(data, 'metadata') <- dwksh
 	return(data)
 }
 
 
-str.safe_data <- function(object, ...){
+str.safedata <- function(object, ...){
 	
-	#' @describeIn load_safe_data Display structure of a safe_data data frame
+	#' @describeIn load_safe_data Display structure of a safedata data frame
 	#' @export
 	
-	object_attr <- attr(object, 'safe_data')
+	object_attr <- attr(object, 'metadata')
 	with(object_attr, cat(sprintf('SAFE dataset\nConcept: %i; Record %i; Worksheet: %s\n', 
 								  safe_record_set$concept, safe_record_set$record, name)))
 	
 	# reduce the safedata object to a simple data frame and pass back to str(x, ...)
-	attr(object, 'safe_data') <- NULL
+	attr(object, 'metadata') <- NULL
 	class(object) <- 'data.frame'
 	invisible(str(object, ...))
 
 }
 
-# TODO - sf safe_data objects - fix print method to handle data frame and sf object and
+# TODO - sf safedata objects - fix print method to handle data frame and sf object and
 #       adapt str to use NextMethod for the same reason.
 
 
