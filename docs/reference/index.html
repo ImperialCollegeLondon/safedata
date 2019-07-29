@@ -117,228 +117,108 @@
     <tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
+          <h2 id="section-user-functions" class="hasAnchor"><a href="#section-user-functions" class="anchor"></a>User functions</h2>
+          <p class="section-desc"><p>These are the main functions that are used by the package</p></p>
         </th>
       </tr>
       <tr>
         
         <td>
-          <p><code><a href="addData.html">addData()</a></code> </p>
+          <p><code><a href="add_locations.html">add_locations()</a></code> </p>
         </td>
-        <td><p>Add data worksheets to a <code>safedata</code> object</p></td>
+        <td><p>Adds location data to a SAFE data worksheet.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="addLocations.html">addLocations()</a></code> </p>
+          <p><code><a href="add_taxa.html">add_taxa()</a></code> </p>
         </td>
-        <td><p>Add location information to a <code>safedata</code> object</p></td>
+        <td><p>Add a taxonomic hierarchy to a SAFE data worksheet.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="addTaxa.html">addTaxa()</a></code> </p>
+          <p><code><a href="download_safe_files.html">download_safe_files()</a></code> </p>
         </td>
-        <td><p>Add taxonomic observations to a <code>safedata</code> object</p></td>
+        <td><p>Download SAFE dataset files</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="addTaxonHeirarchies.html">addTaxonHeirarchies()</a></code> </p>
+          <p><code><a href="get_locations.html">get_locations()</a></code> </p>
         </td>
-        <td><p>Add complete taxonomic heirarchies to a <code>safedata</code> object</p></td>
+        <td><p>Obtaining locations for a SAFE dataset.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="apiSearch.html">apiSearch()</a></code> </p>
+          <p><code><a href="get_phylogeny.html">get_phylogeny()</a></code> </p>
         </td>
-        <td><p>Run an API call using the constructed <code>api</code> URL.</p></td>
+        <td><p>Get a phylogeny for a dataset</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="buildFilePathFromVersions.html">buildFilePathFromVersions()</a></code> </p>
+          <p><code><a href="get_taxonomy.html">get_taxonomy()</a></code> </p>
         </td>
-        <td><p>Builds a list of file paths to SAFE datasets in the versions list</p></td>
+        <td><p>Obtaining taxonomy for a SAFE dataset.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="buildVersionsDataframe.html">buildVersionsDataframe()</a></code> </p>
+          <p><code><a href="load_gazetteer.html">load_gazetteer()</a></code> </p>
         </td>
-        <td><p>Build a "versions" dataframe of a SAFE concept ID</p></td>
+        <td><p>Loads the SAFE gazetteer</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="checkApiCall.html">checkApiCall()</a></code> </p>
+          <p><code><a href="load_location_aliases.html">load_location_aliases()</a></code> </p>
         </td>
-        <td><p>Check a SAFE search API call for errors.</p></td>
+        <td><p>Loads the SAFE location aliases</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="checkRecordDownloaded.html">checkRecordDownloaded()</a></code> </p>
+          <p><code><a href="load_safe_data.html">load_safe_data()</a></code> <code><a href="load_safe_data.html">str(<i>&lt;safe_data&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Check if the record (file) at the specified path has been downloaded</p></td>
+        <td><p>Loads data from a SAFE dataset.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="createSafe.html">createSafe()</a></code> </p>
+          <p><code><a href="safedata.html">safedata</a></code> </p>
         </td>
-        <td><p>Initiate a new <code>safedata</code> object</p></td>
+        <td><p>safedata: Finding and using data from the SAFE Project.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="downloadSafe.html">downloadSafe()</a></code> </p>
+          <p><code><a href="search_safe.html">search_dates()</a></code> <code><a href="search_safe.html">search_fields()</a></code> <code><a href="search_safe.html">search_authors()</a></code> <code><a href="search_safe.html">search_taxa()</a></code> <code><a href="search_safe.html">search_text()</a></code> <code><a href="search_safe.html">search_spatial()</a></code> </p>
         </td>
-        <td><p>Download SAFE project data file associated with the supplied record</p></td>
+        <td><p>SAFE dataset search functions.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="getNameBackbone.html">getNameBackbone()</a></code> </p>
-        </td>
-        <td><p>Return taxonomic heirarchy for a SAFE taxonomic entry</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="getRecordIdFromDoi.html">getRecordIdFromDoi()</a></code> </p>
-        </td>
-        <td><p>Extracts record ID from Zenodo DOI link</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="getSafe.html">getSafe()</a></code> </p>
-        </td>
-        <td><p>Get the SAFE files with the specified IDs</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="getSafeDataClassType.html">getSafeDataClassType()</a></code> </p>
-        </td>
-        <td><p>Get the R data type from the SAFE <code>field_type</code> variable</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="getTaxonWrapper.html">getTaxonWrapper()</a></code> </p>
-        </td>
-        <td><p>Extract taxonomic heirarchy from the GBIF database for the given taxa</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="importSafe.html">importSafe()</a></code> </p>
-        </td>
-        <td><p>Import a SAFE data file</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="isSafeRecord.html">isSafeRecord()</a></code> </p>
-        </td>
-        <td><p>Checks whether the supplied zenodo record is from the SAFE community</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="isSafeTypeCategorical.html">isSafeTypeCategorical()</a></code> </p>
-        </td>
-        <td><p>Check if the SAFE data type is of R type <code>categorical</code>/<code>factor</code></p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="nameBackboneToDf.html">nameBackboneToDf()</a></code> </p>
-        </td>
-        <td><p>Convert RGBIF name_backbone list to dataframe</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="print.safedata.html">print(<i>&lt;safedata&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Print summary of information for a <code>safedata</code> object to the console</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="printVersions.html">printVersions()</a></code> </p>
-        </td>
-        <td><p>Returns print-friendly table displaying versions information for a given
-SAFE concept ID</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="processSafe.html">processSafe()</a></code> </p>
-        </td>
-        <td><p>Get record info for specified SAFE project ID from the Zenodo database</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="processSafeSummary.html">processSafeSummary()</a></code> </p>
-        </td>
-        <td><p>Process summary 'meta' information for SAFE project data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="readTransposedXlsx.html">readTransposedXlsx()</a></code> </p>
-        </td>
-        <td><p>Read a transposed .xlsx file into a dataframe</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="searchAuthor.html">searchAuthor()</a></code> </p>
-        </td>
-        <td><p>Search SAFE projects by author name.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="searchDates.html">searchDates()</a></code> </p>
-        </td>
-        <td><p>Search SAFE projects by date.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="searchFields.html">searchFields()</a></code> </p>
-        </td>
-        <td><p>Search SAFE projects by data field information.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="searchSpatial.html">searchSpatial()</a></code> </p>
-        </td>
-        <td><p>Search SAFE projects by spatial sampling area/named location.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="searchTaxa.html">searchTaxa()</a></code> </p>
-        </td>
-        <td><p>Search SAFE projects by taxa.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="searchText.html">searchText()</a></code> </p>
-        </td>
-        <td><p>Search SAFE projects by free text search.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="setSafeDir.html">setSafeDir()</a></code> </p>
+          <p><code><a href="set_safe_dir.html">set_safe_dir()</a></code> </p>
         </td>
         <td><p>Set the local SAFE data directory</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="simpleCap.html">simpleCap()</a></code> </p>
+          <p><code><a href="show_concepts.html">show_concepts()</a></code> <code><a href="show_concepts.html">show_record()</a></code> <code><a href="show_concepts.html">show_worksheet()</a></code> </p>
         </td>
-        <td><p>Capitalize the first letter of each word in a string</p></td>
+        <td><p>Show SAFE dataset metadata</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="updateIndex.html">updateIndex()</a></code> </p>
+          <p><code><a href="validate_record_ids.html">validate_record_ids()</a></code> <code><a href="validate_record_ids.html">print(<i>&lt;safe_record_set&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Update the SAFE index file</p></td>
-      </tr><tr>
+        <td><p>Validates dataset record ids from user input</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-internal-functions" class="hasAnchor"><a href="#section-internal-functions" class="anchor"></a>Internal functions</h2>
+          <p class="section-desc"><p>The following internal functions are not included in the package namespace but are documented here briefly.</p></p>
+        </th>
+      </tr>
+      <tr>
         
         <td>
-          <p><code><a href="zenodoRecordApiLookup.html">zenodoRecordApiLookup()</a></code> </p>
+          <p><code><a href="get_data_dir.html">get_data_dir()</a></code> </p>
         </td>
-        <td><p>Return information of the given id using the Zenodo record API</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="zenodoVersionsApiLookup.html">zenodoVersionsApiLookup()</a></code> </p>
-        </td>
-        <td><p>Perform a lookup on the Zenodo database with an API to access information
-for all versions of the specified id.</p></td>
+        <td><p>Get SAFE data directory</p></td>
       </tr>
     </tbody>
     </table>
@@ -347,7 +227,8 @@ for all versions of the specified id.</p></td>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
+      <li><a href="#section-user-functions">User functions</a></li>
+      <li><a href="#section-internal-functions">Internal functions</a></li>
     </ul>
   </div>
 </div>

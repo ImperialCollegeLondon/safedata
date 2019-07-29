@@ -101,7 +101,7 @@
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(safe_data)</a>
 <a class="sourceLine" id="cb1-2" title="2">SAFE_dir &lt;-<span class="st"> 'C:/Users/User/Documents/SAFE/'</span></a>
 <a class="sourceLine" id="cb1-3" title="3">record_ID &lt;-<span class="st"> </span><span class="dv">3081059</span></a>
-<a class="sourceLine" id="cb1-4" title="4"><span class="kw"><a href="reference/getSafe.html">getSafe</a></span>(record_ID, SAFE_dir)</a></code></pre></div>
+<a class="sourceLine" id="cb1-4" title="4"><span class="kw">getSafe</span>(record_ID, SAFE_dir)</a></code></pre></div>
 </div>
 <div id="2-import-safe-project-data-into-r" class="section level3">
 <h3 class="hasAnchor">
@@ -111,7 +111,7 @@
 <a class="sourceLine" id="cb2-2" title="2">SAFE_dir &lt;-<span class="st"> 'C:/Users/User/Documents/SAFE/'</span></a>
 <a class="sourceLine" id="cb2-3" title="3">file_name &lt;-<span class="st"> 'LiDAR_Aboveground_Carbon.xlsx'</span></a>
 <a class="sourceLine" id="cb2-4" title="4">path_to_file &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/file.path">file.path</a></span>(SAFE_dir, concept_ID, record_ID, file_name)</a>
-<a class="sourceLine" id="cb2-5" title="5">record &lt;-<span class="st"> </span><span class="kw"><a href="reference/importSafe.html">importSafe</a></span>(path_to_file)</a>
+<a class="sourceLine" id="cb2-5" title="5">record &lt;-<span class="st"> </span><span class="kw">importSafe</span>(path_to_file)</a>
 <a class="sourceLine" id="cb2-6" title="6"><span class="kw">printSummary</span>(path_to_file)</a></code></pre></div>
 </div>
 </div>
@@ -125,13 +125,17 @@
 <a href="#building-the-package-from-source" class="anchor"></a>Building the package from source</h2>
 <p>The package uses <a href="https://cran.r-project.org/web/packages/roxygen2/index.html">roxygen2</a> to maintain package documentation, so the build process is:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># Make sure the documentation is up to date</span></a>
-<a class="sourceLine" id="cb3-2" title="2"><span class="bu">cd</span> safe_data</a>
-<a class="sourceLine" id="cb3-3" title="3"><span class="ex">Rscript</span> -e <span class="st">'devtools::document()'</span> </a>
-<a class="sourceLine" id="cb3-4" title="4"><span class="co"># Build the package</span></a>
-<a class="sourceLine" id="cb3-5" title="5"><span class="bu">cd</span> ../</a>
-<a class="sourceLine" id="cb3-6" title="6"><span class="ex">R</span> CMD BUILD safe_data</a>
-<a class="sourceLine" id="cb3-7" title="7"><span class="co"># Check the resulting package </span></a>
-<a class="sourceLine" id="cb3-8" title="8"><span class="ex">R</span> CMD check safedata_0.1.tar.gz</a></code></pre></div>
+<a class="sourceLine" id="cb3-2" title="2"><span class="co">#  - create the .Rd files from roxygen2 docstrings </span></a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="bu">cd</span> safe_data</a>
+<a class="sourceLine" id="cb3-4" title="4"><span class="ex">Rscript</span> -e <span class="st">'devtools::document()'</span> </a>
+<a class="sourceLine" id="cb3-5" title="5"><span class="co"># - build the website using pkgdown</span></a>
+<a class="sourceLine" id="cb3-6" title="6"><span class="ex">Rscript</span> -e <span class="st">" pkgdown::build_site()"</span></a>
+<a class="sourceLine" id="cb3-7" title="7"></a>
+<a class="sourceLine" id="cb3-8" title="8"><span class="co"># Build the package</span></a>
+<a class="sourceLine" id="cb3-9" title="9"><span class="bu">cd</span> ../</a>
+<a class="sourceLine" id="cb3-10" title="10"><span class="ex">R</span> CMD BUILD safe_data</a>
+<a class="sourceLine" id="cb3-11" title="11"><span class="co"># Check the resulting package </span></a>
+<a class="sourceLine" id="cb3-12" title="12"><span class="ex">R</span> CMD check safedata_0.1.tar.gz</a></code></pre></div>
 </div>
 </div>
   </div>

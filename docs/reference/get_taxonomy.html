@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Set the local SAFE data directory — setSafeDir • safedata</title>
+<title>Obtaining taxonomy for a SAFE dataset. — get_taxonomy • safedata</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,11 +30,12 @@
 
 
 
-<meta property="og:title" content="Set the local SAFE data directory — setSafeDir" />
+<meta property="og:title" content="Obtaining taxonomy for a SAFE dataset. — get_taxonomy" />
 
-<meta property="og:description" content="Validate and sets the local SAFE data directory in options('safedata.dir').
-The named directory must contain the index file ('safe_data_index.rds'),
-although this will be created if init is set to true." />
+<meta property="og:description" content="This function generates a taxonomy table for a specified SAFE dataset 
+record. Each row represent a taxon used in the data worksheets in the
+dataset and the table fields show the taxonomic hierarchy, taken from
+GBIF, for those taxa." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -108,39 +109,65 @@ although this will be created if init is set to true." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Set the local SAFE data directory</h1>
+    <h1>Obtaining taxonomy for a SAFE dataset.</h1>
     
-    <div class="hidden name"><code>setSafeDir.Rd</code></div>
+    <div class="hidden name"><code>get_taxonomy.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Validate and sets the local SAFE data directory in options('safedata.dir').
-The named directory must contain the index file ('safe_data_index.rds'),
-although this will be created if <code>init</code> is set to true.</p>
+    <p>This function generates a taxonomy table for a specified SAFE dataset 
+record. Each row represent a taxon used in the data worksheets in the
+dataset and the table fields show the taxonomic hierarchy, taken from
+GBIF, for those taxa.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>setSafeDir</span>(<span class='no'>dir</span>, <span class='kw'>init</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>get_taxonomy</span>(<span class='no'>obj</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>dir</th>
-      <td><p>A path to the directory to set as the SAFE data directory.</p></td>
-    </tr>
-    <tr>
-      <th>init</th>
-      <td><p>A boolean to indicate whether to initialise the directory
-as a SAFE data directory.</p></td>
+      <th>obj</th>
+      <td><p>A single record id, or an existing safe_data dataframe.</p></td>
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A taxonomy table of classes 'safe_taxa' and 'data.frame'.</p>
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function requires access to the internet to query the SAFE Project
-website API.</p>
+    <p>All SAFE datasets containing taxa must include a Taxa worksheet, which
+must contain all of the taxa referred to in taxon fields in data
+worksheets. All entries in this worksheet are  validated against the  
+GBIF database before publication and are used to populate the taxonomic
+index for the SAFE datasets. The validated taxonomic hierarchy for the
+data is also available in the metadata for a record and this function
+converts the metadata into a taxonomy table.</p>
+<p>The taxonomy table includes the eight 'backbone' taxonomic ranks used
+in the GBIF database: Kingdom, Phylum, Class, Order, Family, Genus, 
+Species and Subspecies. It also includes three further fields:
+<code>taxon_name</code>, <code>taxon_rank</code> and <code>gbif_status</code>. These 
+record the original taxa provided in the Taxa worksheet and show
+where the taxonomic name used in a dataset differs from the canonical
+name used in GBIF.</p>
+<p>The row names of the taxon table are the labels used in data worksheets
+and are used to match a taxonomy table to a loaded data worksheet (see
+<code><a href='add_taxa.html'>add_taxa</a></code>).</p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p>Not all SAFE project datasets contain taxonomic observations. In
+   this case <code>get_taxonomy</code> will return NULL.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='add_taxa.html'>add_taxa</a></code> and 
+  <a href='https://safe-dataset-checker.readthedocs.io/en/latest/data_format/taxa/'>https://safe-dataset-checker.readthedocs.io/en/latest/data_format/taxa/</a>
+  for information on the Taxa worksheet</p></div>
     
 
   </div>
@@ -149,7 +176,13 @@ website API.</p>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#value">Value</a></li>
+
       <li><a href="#details">Details</a></li>
+
+      <li><a href="#note">Note</a></li>
+
+      <li><a href="#see-also">See also</a></li>
           </ul>
 
   </div>

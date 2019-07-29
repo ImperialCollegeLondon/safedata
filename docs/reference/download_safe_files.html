@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Set the local SAFE data directory — setSafeDir • safedata</title>
+<title>Download SAFE dataset files — download_safe_files • safedata</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,11 +30,12 @@
 
 
 
-<meta property="og:title" content="Set the local SAFE data directory — setSafeDir" />
+<meta property="og:title" content="Download SAFE dataset files — download_safe_files" />
 
-<meta property="og:description" content="Validate and sets the local SAFE data directory in options('safedata.dir').
-The named directory must contain the index file ('safe_data_index.rds'),
-although this will be created if init is set to true." />
+<meta property="og:description" content="This downloads files associated with SAFE datasets, either all of the files 
+included in a set of records (xlsx_only=FALSE) or just the core .xlsx
+files (xlsx_only=FALSE), and stores them in the SAFE data directory.
+Currently, there is no mechanism for importing restricted datasets." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -108,39 +109,69 @@ although this will be created if init is set to true." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Set the local SAFE data directory</h1>
+    <h1>Download SAFE dataset files</h1>
     
-    <div class="hidden name"><code>setSafeDir.Rd</code></div>
+    <div class="hidden name"><code>download_safe_files.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Validate and sets the local SAFE data directory in options('safedata.dir').
-The named directory must contain the index file ('safe_data_index.rds'),
-although this will be created if <code>init</code> is set to true.</p>
+    <p>This downloads files associated with SAFE datasets, either all of the files 
+included in a set of records (<code>xlsx_only=FALSE</code>) or just the core .xlsx
+files (<code>xlsx_only=FALSE</code>), and stores them in the SAFE data directory.
+Currently, there is no mechanism for importing restricted datasets.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>setSafeDir</span>(<span class='no'>dir</span>, <span class='kw'>init</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>download_safe_files</span>(<span class='no'>record_ids</span>, <span class='kw'>confirm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>xlsx_only</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>download_metadata</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>refresh</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>token</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>dir</th>
-      <td><p>A path to the directory to set as the SAFE data directory.</p></td>
+      <th>record_ids</th>
+      <td><p>A vector of SAFE dataset record ids</p></td>
     </tr>
     <tr>
-      <th>init</th>
-      <td><p>A boolean to indicate whether to initialise the directory
-as a SAFE data directory.</p></td>
+      <th>confirm</th>
+      <td><p>Requires the user to confirm before download (logical)</p></td>
+    </tr>
+    <tr>
+      <th>xlsx_only</th>
+      <td><p>Should all files be downloaded or just the core .xslx file (logical)</p></td>
+    </tr>
+    <tr>
+      <th>download_metadata</th>
+      <td><p>Should the metadata record for the file be downloaded (logical)</p></td>
+    </tr>
+    <tr>
+      <th>refresh</th>
+      <td><p>Should the function check if local copies have been modified and 
+download fresh copies. This is useful if the local copies have unintentionally 
+been modified but note the warning above.</p></td>
+    </tr>
+    <tr>
+      <th>token</th>
+      <td><p>An access token for restricted datasets. Not currently implemented.</p></td>
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Invisibly, a vector of paths for successfully downloaded files.</p>
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function requires access to the internet to query the SAFE Project
-website API.</p>
+    <p>By default, the function will also download the dataset metadata. This 
+information is required by many of the functions in the package but users
+can turn off automatic metadata download.</p>
+    
+    <h2 class="hasAnchor" id="warning"><a class="anchor" href="#warning"></a>Warning</h2>
+
+    
+    <p>Using <code>refresh=TRUE</code> will <strong>overwrite locally modified files</strong> and 
+replace them with the versions of record from Zenodo.</p>
     
 
   </div>
@@ -149,7 +180,11 @@ website API.</p>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#value">Value</a></li>
+
       <li><a href="#details">Details</a></li>
+
+      <li><a href="#warning">Warning</a></li>
           </ul>
 
   </div>

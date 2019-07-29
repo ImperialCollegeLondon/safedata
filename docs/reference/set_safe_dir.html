@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Set the local SAFE data directory — setSafeDir • safedata</title>
+<title>Set the local SAFE data directory — set_safe_dir • safedata</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,11 +30,14 @@
 
 
 
-<meta property="og:title" content="Set the local SAFE data directory — setSafeDir" />
+<meta property="og:title" content="Set the local SAFE data directory — set_safe_dir" />
 
-<meta property="og:description" content="Validate and sets the local SAFE data directory in options('safedata.dir').
-The named directory must contain the index file ('safe_data_index.rds'),
-although this will be created if init is set to true." />
+<meta property="og:description" content="This function sets the local directory used to store SAFE dataset
+files along with record and index metadata. The function can also
+initialise a new data directory, downloading the required index 
+files. By default, it will update indices if needed and will 
+validate the directory contents. Once set, the location of the 
+directory is stored in options('safedata.dir')." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -110,37 +113,75 @@ although this will be created if init is set to true." />
     <div class="page-header">
     <h1>Set the local SAFE data directory</h1>
     
-    <div class="hidden name"><code>setSafeDir.Rd</code></div>
+    <div class="hidden name"><code>set_safe_dir.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Validate and sets the local SAFE data directory in options('safedata.dir').
-The named directory must contain the index file ('safe_data_index.rds'),
-although this will be created if <code>init</code> is set to true.</p>
+    <p>This function sets the local directory used to store SAFE dataset
+files along with record and index metadata. The function can also
+initialise a new data directory, downloading the required index 
+files. By default, it will update indices if needed and will 
+validate the directory contents. Once set, the location of the 
+directory is stored in options('safedata.dir').</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>setSafeDir</span>(<span class='no'>dir</span>, <span class='kw'>init</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>set_safe_dir</span>(<span class='no'>safedir</span>, <span class='kw'>update</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>create</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>validate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>dir</th>
-      <td><p>A path to the directory to set as the SAFE data directory.</p></td>
+      <th>safedir</th>
+      <td><p>A path to the directory to set as the SAFE data 
+directory (str).</p></td>
     </tr>
     <tr>
-      <th>init</th>
-      <td><p>A boolean to indicate whether to initialise the directory
-as a SAFE data directory.</p></td>
+      <th>update</th>
+      <td><p>Should the local dataset index be updated (logical)?</p></td>
+    </tr>
+    <tr>
+      <th>create</th>
+      <td><p>Should a new data directory be created at the provided
+path (logical)?</p></td>
+    </tr>
+    <tr>
+      <th>validate</th>
+      <td><p>Should the directory structure be validated (logical)?</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function requires access to the internet to query the SAFE Project
-website API.</p>
+    <p>The safedata package uses a data directory to store local copies of 
+dataset files along with index files. Files for a dataset record are
+stored in subdirectories using the zenodo concept id for the record 
+and then record id: <code>3342494/3342495</code>, for example. In addition 
+to data files from these records, these folders can also contain a
+JSON file containing record metadata (e.g. <code>3342495.json</code>): this
+is a structured version of the summary information shown on the 
+Zenodo page.</p>
+<p>The root of the data directory also holds three index files:</p><dl class='dl-horizontal'>
+  <dt><code>index.json</code></dt><dd><p>, containing a full list of the
+	    files and dataset records available in the SAFE data 
+		repository;</p></dd>
+  <dt><code>gazetteer.geojson</code></dt><dd><p>, containing the official list of 
+	    known sampling locations and GIS data; and</p></dd>
+  <dt><code>location_aliases.csv</code></dt><dd><p>, a list of alternative names 
+	    permitted for some locations.</p></dd>
+</dl>
+    <p>If <code>create=TRUE</code>, the function will try to create the named
+directory and populate it with the three index files. This requires
+an internet connection.</p>
+<p>By default, the function also needs an internet connection to check
+for updates to the three index files. Updating can be turned off for 
+offline use.</p>
+<p>The default behaviour is also to validate the directory structure. The
+function will warn when files other than those found in datasets are 
+present within the data structure and when any dataset files that are
+present have been modified. Although this can be turned off, it is 
+not recommended to modify or add files within a SAFE data directory.</p>
     
 
   </div>

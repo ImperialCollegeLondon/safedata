@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Set the local SAFE data directory — setSafeDir • safedata</title>
+<title>Validates dataset record ids from user input — validate_record_ids • safedata</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,11 +30,11 @@
 
 
 
-<meta property="og:title" content="Set the local SAFE data directory — setSafeDir" />
+<meta property="og:title" content="Validates dataset record ids from user input — validate_record_ids" />
 
-<meta property="og:description" content="Validate and sets the local SAFE data directory in options('safedata.dir').
-The named directory must contain the index file ('safe_data_index.rds'),
-although this will be created if init is set to true." />
+<meta property="og:description" content="This takes a vector of user supplied record identifiers and validates them 
+against the index. Typically the identifiers are provided as integers, but
+the function will also handle Zenodo URLs and DOIs." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -108,49 +108,85 @@ although this will be created if init is set to true." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Set the local SAFE data directory</h1>
+    <h1>Validates dataset record ids from user input</h1>
     
-    <div class="hidden name"><code>setSafeDir.Rd</code></div>
+    <div class="hidden name"><code>validate_record_ids.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Validate and sets the local SAFE data directory in options('safedata.dir').
-The named directory must contain the index file ('safe_data_index.rds'),
-although this will be created if <code>init</code> is set to true.</p>
+    <p>This takes a vector of user supplied record identifiers and validates them 
+against the index. Typically the identifiers are provided as integers, but
+the function will also handle Zenodo URLs and DOIs.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>setSafeDir</span>(<span class='no'>dir</span>, <span class='kw'>init</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>validate_record_ids</span>(<span class='no'>record_set</span>)
+
+<span class='co'># S3 method for safe_record_set</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>dir</th>
-      <td><p>A path to the directory to set as the SAFE data directory.</p></td>
+      <th>record_set</th>
+      <td><p>A vector of values containing Zenodo concept or record ids.</p></td>
     </tr>
     <tr>
-      <th>init</th>
-      <td><p>A boolean to indicate whether to initialise the directory
-as a SAFE data directory.</p></td>
+      <th>x</th>
+      <td><p>An object of class 'safe_record_set'</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Further arguments to print methods, unused.</p></td>
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>An object of class 'safe_record_set': a dataframe with columns
+  <code>concept</code> and <code>record</code> indicating the matching records. Note
+  that <code>record</code> will be NA when the value is a concept id. Inputs
+  that do not match a record or concept ids are returned as an attribute of
+  the record set.</p>
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function requires access to the internet to query the SAFE Project
-website API.</p>
+    <p>The function returns a data frame with class <code>safe_record_set</code>, containing
+the columns <code>concept</code>, <code>record</code>, <code>available</code> and, finally,
+<code>mra</code> containing the most recent available record (if any). The function can
+be run on an existing <code>safe_record_set</code> to update this information.</p>
+<p>This function is largely used internally to validate user inputs and to provide
+a common output for the search functions but is exported to allow users to 
+check record ids and display summary information using the print method.</p>
+    
+    <h2 class="hasAnchor" id="methods-by-generic-"><a class="anchor" href="#methods-by-generic-"></a>Methods (by generic)</h2>
+
+    <ul>
+<li><p><code>print</code>: Print a brief summary of 'safe_record_set' objects.</p></li>
+</ul>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>  <span class='fu'>validate_record_ids</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>3247631</span>, <span class='fl'>3266827</span>, <span class='fl'>3266821</span>, -<span class='fl'>1000</span>))</div><div class='output co'>#&gt; <span class='error'>Error in retrieve_index(): Failed to load cached index.</span></div><div class='input'>  <span class='fu'>validate_record_ids</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'https://doi.org/10.5281/zenodo.3247631'</span>,
+                                           <span class='st'>'10.5281/zenodo.3266827'</span>,
+                                           <span class='st'>'https://zenodo.org/record/3266821'</span>,
+                                           <span class='st'>'not_this_one/3266821'</span>))</div><div class='output co'>#&gt; <span class='error'>Error in retrieve_index(): Failed to load cached index.</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#value">Value</a></li>
+
       <li><a href="#details">Details</a></li>
-          </ul>
+
+      <li><a href="#methods-by-generic-">Methods (by generic)</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

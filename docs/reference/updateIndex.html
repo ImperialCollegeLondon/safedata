@@ -182,13 +182,13 @@ user is attempting to access a dataset that already exists within the
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='zenodoVersionsApiLookup.html'>zenodoVersionsApiLookup</a></code>, <code><a href='setSafeDir.html'>setSafeDir</a></code>,
+    <div class='dont-index'><p><code><a href='zenodoVersionsApiLookup.html'>zenodoVersionsApiLookup</a></code>, <code>setSafeDir</code>,
   <code><a href='buildVersionsDataframe.html'>buildVersionsDataframe</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>  <span class='co'># add version information for concept ID 3081058</span>
-  <span class='fu'><a href='setSafeDir.html'>setSafeDir</a></span>(<span class='st'>"C:/Users/User/SAFE_data/"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in setSafeDir("C:/Users/User/SAFE_data/"): could not find function "setSafeDir"</span></div><div class='input'>  <span class='fu'>updateIndex</span>(<span class='fl'>3081058</span>)</div><div class='output co'>#&gt; <span class='error'>Error in updateIndex(3081058): Directory not supplied and SAFE_data_dir not set! See setSafeDir() function</span></div><div class='input'>
+  <span class='fu'>setSafeDir</span>(<span class='st'>"C:/Users/User/SAFE_data/"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in setSafeDir("C:/Users/User/SAFE_data/"): could not find function "setSafeDir"</span></div><div class='input'>  <span class='fu'>updateIndex</span>(<span class='fl'>3081058</span>)</div><div class='output co'>#&gt; <span class='error'>Error in updateIndex(3081058): Directory not supplied and SAFE_data_dir not set! See setSafeDir() function</span></div><div class='input'>
   <span class='co'># update download status of record 3081059 to TRUE</span>
   <span class='fu'>updateIndex</span>(<span class='fl'>3081059</span>, <span class='kw'>isConceptId</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in updateIndex(3081059, isConceptId = FALSE): Directory not supplied and SAFE_data_dir not set! See setSafeDir() function</span></div></pre>
   </div>

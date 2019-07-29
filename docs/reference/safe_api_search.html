@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Set the local SAFE data directory — setSafeDir • safedata</title>
+<title>Internal SAFE dataset API search functions — safe_api_search • safedata</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,11 +30,11 @@
 
 
 
-<meta property="og:title" content="Set the local SAFE data directory — setSafeDir" />
+<meta property="og:title" content="Internal SAFE dataset API search functions — safe_api_search" />
 
-<meta property="og:description" content="Validate and sets the local SAFE data directory in options('safedata.dir').
-The named directory must contain the index file ('safe_data_index.rds'),
-although this will be created if init is set to true." />
+<meta property="og:description" content="The two internal functions described here handle validating the parameters
+passed to the exported search functions and then constructing API calls from
+the parameters and the common ids and most_recent arguments." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -108,39 +108,79 @@ although this will be created if init is set to true." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Set the local SAFE data directory</h1>
+    <h1>Internal SAFE dataset API search functions</h1>
     
-    <div class="hidden name"><code>setSafeDir.Rd</code></div>
+    <div class="hidden name"><code>safe_api_search.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Validate and sets the local SAFE data directory in options('safedata.dir').
-The named directory must contain the index file ('safe_data_index.rds'),
-although this will be created if <code>init</code> is set to true.</p>
+    <p>The two internal functions described here handle validating the parameters
+passed to the exported search functions and then constructing API calls from
+the parameters and the common <code>ids</code> and <code>most_recent</code> arguments.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>setSafeDir</span>(<span class='no'>dir</span>, <span class='kw'>init</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>safe_api_search</span>(<span class='no'>endpoint</span>, <span class='no'>params</span>, <span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>most_recent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
+<span class='fu'>validate_query_param</span>(<span class='no'>name</span>, <span class='no'>val</span>, <span class='kw'>class</span> <span class='kw'>=</span> <span class='st'>"character"</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>dir</th>
-      <td><p>A path to the directory to set as the SAFE data directory.</p></td>
+      <th>endpoint</th>
+      <td><p>The name of the search API endpoint to be used.</p></td>
     </tr>
     <tr>
-      <th>init</th>
-      <td><p>A boolean to indicate whether to initialise the directory
-as a SAFE data directory.</p></td>
+      <th>params</th>
+      <td><p>A character vector of the query parameters to be passed  to
+the API endpoint.</p></td>
+    </tr>
+    <tr>
+      <th>ids</th>
+      <td><p>A set of SAFE dataset record IDs to restrict a search. This will
+typically be a <code>safe_record_set</code> object returned by another search 
+but can also be a vector of record ids in any of the formats accepted by 
+<code><a href='validate_record_ids.html'>validate_record_ids</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>most_recent</th>
+      <td><p>Logical indicating whether to restrict the API to
+returning only the most recent versions of the datasets found. By default
+all versions of matching dataset concepts are returned.</p></td>
+    </tr>
+    <tr>
+      <th>name</th>
+      <td><p>The parameter name</p></td>
+    </tr>
+    <tr>
+      <th>val</th>
+      <td><p>The user provided input</p></td>
+    </tr>
+    <tr>
+      <th>class</th>
+      <td><p>Accepted input classes</p></td>
+    </tr>
+    <tr>
+      <th>length</th>
+      <td><p>Accepted input lengths</p></td>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>This function requires access to the internet to query the SAFE Project
-website API.</p>
+    <p>The <code>safe_api_search</code> function returns an object of class 
+   <code>safe_record_set</code> of datasets that match the submitted query. The
+   <code>validate_query_param</code> function either returns NULL on success or
+   raises an error.</p>
+    
+    <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
+
+    <ul>
+<li><p><code>safe_api_search</code>: Constructs, submits and formats calls to the SAFE API.</p></li>
+<li><p><code>validate_query_param</code>: A basic query parameter validation handler</p></li>
+</ul>
     
 
   </div>
@@ -149,7 +189,9 @@ website API.</p>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#details">Details</a></li>
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#functions">Functions</a></li>
           </ul>
 
   </div>
