@@ -33,7 +33,7 @@ load_gazetteer <- function(){
 	#' 
 	#' @return An \code{\link[sf]{sf}} object containing the SAFE gazetteer locations.
     #' @seealso \code{\link{load_location_aliases}}
-	#' @example
+	#' @examples
 	#'    safedir <- system.file('example_data_dir', package='safedata')
 	#'    set_safe_dir(safedir)
 	#'    gazetteer <- load_gazetteer()
@@ -66,7 +66,7 @@ load_location_aliases <- function(){
 	#'
 	#' @return A data frame containing the SAFE location aliases.
     #' @seealso \code{\link{load_gazetteer}}
-	#' @example
+	#' @examples
 	#'    safedir <- system.file('example_data_dir', package='safedata')
 	#'    set_safe_dir(safedir)
 	#'    aliases <- load_location_aliases()
@@ -122,7 +122,7 @@ get_locations <- function(obj, gazetteer_info=FALSE){
 	#'   \code{\link{get_locations}} will return NULL.
     #' @seealso \code{\link{add_locations}}, \code{\link{load_gazetteer}}, 
 	#'    \code{\link{load_location_aliases}}
-	#' @example
+	#' @examples
 	#'    safedir <- system.file('example_data_dir', package='safedata')
 	#'    set_safe_dir(safedir)
 	#'    locations <- get_locations(1400562)

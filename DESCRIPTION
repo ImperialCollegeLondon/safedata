@@ -1,8 +1,8 @@
 Package: safedata
 Type: Package
 Title: R interface to data from the SAFE Project 
-Version: 0.1
-Date: 2019-04-08
+Version: 0.2
+Date: 2019-07-30
 Authors@R: c(
     person('Andy', 'Aldersley', email='a.aldersley@imperial.ac.uk', role=c('aut','cre')),
     person('David', 'Orme', email='d.orme@imperial.ac.uk', role='aut'))
@@ -16,9 +16,9 @@ License: GPL-3
 Imports: 
     readxl,
     jsonlite,
-	chron,
-	curl,
-	sf
+    chron,
+    curl,
+    sf
 Suggests:
     knitr,
     rmarkdown
