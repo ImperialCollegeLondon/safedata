@@ -32,7 +32,11 @@ load_gazetteer <- function(){
 	#' object is cached for re-use (see \code{\link{safedata.env}}).
 	#' 
 	#' @return An \code{\link[sf]{sf}} object containing the SAFE gazetteer locations.
-    #' @seealso \code{\link{load_location_aliases}}, 
+    #' @seealso \code{\link{load_location_aliases}}
+	#' @example
+	#'    safedir <- system.file('example_data_dir', package='safedata')
+	#'    set_safe_dir(safedir)
+	#'    gazetteer <- load_gazetteer()
 	#' @export
 	
 	gazetteer <- try(get('gazetteer', safedata.env), silent=TRUE)
@@ -62,6 +66,10 @@ load_location_aliases <- function(){
 	#'
 	#' @return A data frame containing the SAFE location aliases.
     #' @seealso \code{\link{load_gazetteer}}
+	#' @example
+	#'    safedir <- system.file('example_data_dir', package='safedata')
+	#'    set_safe_dir(safedir)
+	#'    aliases <- load_location_aliases()
 	#' @export
 	
 	location_aliases <- try(get('location_aliases', safedata.env), silent=TRUE)
@@ -113,7 +121,11 @@ get_locations <- function(obj, gazetteer_info=FALSE){
     #' @note Not all SAFE project datasets contain locations. In this case
 	#'   \code{\link{get_locations}} will return NULL.
     #' @seealso \code{\link{add_locations}}, \code{\link{load_gazetteer}}, 
-	#'    \code{\link{load_location_aliases}} 
+	#'    \code{\link{load_location_aliases}}
+	#' @example
+	#'    safedir <- system.file('example_data_dir', package='safedata')
+	#'    set_safe_dir(safedir)
+	#'    locations <- get_locations(1400562)
     #' @export
     
     if(inherits(obj, 'safedata')){
@@ -241,6 +253,11 @@ add_locations <- function (obj, location_field=NULL, location_table=NULL, gazett
     #' @return A modified \code{safedata} 
     #' @seealso \code{\link{get_locations}}, \code{\link{load_gazetteer}}, 
 	#'    \code{\link{load_location_aliases}}
+	#' @examples
+	#'    safedir <- system.file('example_data_dir', package='safedata')
+	#'    set_safe_dir(safedir)
+	#'    ant_abund <- load_safe_data(1400562, 'Ant-Psel')
+	#'    ant_abund <- add_locations(ant_abund)
     #' @export
     
     if(! inherits(obj, 'safedata')){
@@ -286,7 +303,7 @@ add_locations <- function (obj, location_field=NULL, location_table=NULL, gazett
       
     # combine and copy across attributes (could create a method for cbind, but seems excessive!)
     ret <- sf::st_sf(data.frame(obj, location_table))
-    attr(ret, 'metadata') <- attr(obj, 'metadata')
+    attr(ret, 'metadata') <- obj_attr
     class(ret) <- c('safedata', class(ret))
     
     return(ret)

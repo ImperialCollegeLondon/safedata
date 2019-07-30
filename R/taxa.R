@@ -36,6 +36,10 @@ get_taxonomy <- function(obj){
     #' @note Not all SAFE project datasets contain taxonomic observations. In
 	#'    this case \code{get_taxonomy} will return NULL.
     #' @seealso \code{\link{add_taxa}}
+	#' @examples
+	#'    safedir <- system.file('example_data_dir', package='safedata')
+	#'    set_safe_dir(safedir)
+	#'    taxa <- get_taxonomy(1400562)
     #' @export
     
     if(inherits(obj, 'safedata')){
@@ -195,6 +199,11 @@ add_taxa <- function (obj, taxon_field=NULL, taxon_table=NULL, prefix=NULL, whic
 	#' @param which A vector specifying a subset of taxonomy table field names to add.
     #' @return A modified \code{safedata} object with added taxonomic columns.
     #' @seealso \code{\link{get_taxonomy}}
+	#' @examples
+	#'    safedir <- system.file('example_data_dir', package='safedata')
+	#'    set_safe_dir(safedir)
+	#'    ant_morph <- load_safe_data(1400562, 'MorphFunctTraits')
+	#'    ant_morph <- add_taxa(ant_morph)
     #' @export
     
     if(! inherits(obj, 'safedata')){

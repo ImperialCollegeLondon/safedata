@@ -73,6 +73,13 @@ load_safe_data <- function(record_id, worksheet){
 	#' @param \dots Further arguments to \code{str} methods.
 	#' @return A data frame with the additional \code{safedata} class and
 	#'    additional attribute data containing metadata for the data.
+	#' @examples
+	#'    safedir <- system.file('example_data_dir', package='safedata')
+	#'    set_safe_dir(safedir)
+	#'    ant_abund <- load_safe_data(1400562, 'Ant-Psel')
+	#'    str(ant_abund)
+	#'    # See also the show_worksheet function for further worksheet metadata
+	#'    show_worksheet(ant_abund)
 	#' @export
 	
 	# TODO - provide a path argument and then mechanisms to support a standalone file download?
@@ -217,7 +224,8 @@ download_safe_files <- function(record_ids, confirm=TRUE, xlsx_only=TRUE,
 	#' Using \code{refresh=TRUE} will \strong{overwrite locally modified files} and 
 	#' replace them with the versions of record from Zenodo.
 	#'
-	#' @param record_ids A vector of SAFE dataset record ids 
+	#' @param record_ids A vector of SAFE dataset record ids or a 
+	#'    \code{\link{safe_record_set}} object.
 	#' @param confirm Requires the user to confirm before download (logical)	
 	#' @param xlsx_only Should all files be downloaded or just the core .xslx file (logical)
 	#' @param download_metadata Should the metadata record for the file be downloaded (logical)
@@ -226,6 +234,11 @@ download_safe_files <- function(record_ids, confirm=TRUE, xlsx_only=TRUE,
 	#'   been modified but note the warning above.
 	#' @param token An access token for restricted datasets. Not currently implemented.
 	#' @return Invisibly, a vector of paths for successfully downloaded files.
+	#' @examples
+	#'    \donttest{
+	#'    recs <- validate_record_ids(c(3247631, 3266827, 3266821))
+	#'    download_safe_files(recs)
+	#'    }
 	#' @export
 	
 	# validate the record ids

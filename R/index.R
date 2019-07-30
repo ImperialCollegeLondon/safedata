@@ -62,6 +62,9 @@ set_safe_dir <- function(safedir, update=TRUE, create=FALSE, validate=TRUE){
 	#'    path (logical)?
 	#' @param validate Should the directory structure be validated (logical)?
 	#' @return NULL
+	#' @example
+	#'    safedir <- system.file('example_data_dir', package='safedata')
+	#'    set_safe_dir(safedir)
 	#' @export
 	
 	# path expand to make paths work in md5sum, which fails with ~/.

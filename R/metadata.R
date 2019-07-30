@@ -24,11 +24,13 @@ validate_record_ids <- function(record_set){
 	#' @param ... Further arguments to print methods, unused.
 	#' @return An object of class \code{safe_record_set} (see Details)
 	#' @examples
-	#'   validate_record_ids(c(3247631, 3266827, 3266821, -1000))
-	#'   validate_record_ids(c('https://doi.org/10.5281/zenodo.3247631', 
-	#'						   '10.5281/zenodo.3266827', 
-	#'						   'https://zenodo.org/record/3266821',
-	#'						   'not_this_one/3266821'))
+	#'    safedir <- system.file('example_data_dir', package='safedata')
+	#'    set_safe_dir(safedir)
+	#'    validate_record_ids(c(3247631, 3266827, 3266821, -1000))
+	#'    validate_record_ids(c('https://doi.org/10.5281/zenodo.3247631', 
+	#'						    '10.5281/zenodo.3266827', 
+	#'						    'https://zenodo.org/record/3266821',
+	#'						    'not_this_one/3266821'))
 	#' @aliases safe_record_set
 	#' @export
 	
@@ -164,20 +166,28 @@ print.safe_record_set <- function(x, ...){
 
 fetch_record_metadata <- function(record_set){
 	
-	#' Get SAFE dataset metadata
+	#' Get and load SAFE dataset metadata
 	#'
-	#' Internal handler to ensure there are local copies of record metadata,
-	#' fetching it from the SAFE project website if needed. This is the same
-	#' data used to populate the Zenodo description but is machine readable
-	#' and contains additional taxon and location indexing.
+	#' Internal handlers to i) ensure there are local copies of record metadata,
+	#' fetching it from the SAFE project website if needed and ii) load that 
+	#' data from file.
+	#'
+	#' This is the same metadata used to populate the Zenodo description but is 
+	#' downloaded as JSON format and stored within the record directory in the
+	#' SAFE data directory for reuse.
 	#'
 	#' @param record_set An object of class \code{\link{safe_record_set}}.
-	#' @return NULL
+	#' @return The \code{fetch_record_metadata} function returns NULL and 
+	#'    \code{load_record_metadata} returns a list object containing record metadata
+	#' @describeIn fetch_record_metadata Download and store JSON metadata for a record
 	#' @examples
-	#'   recs <- c('https://doi.org/10.5281/zenodo.3247631', '10.5281/zenodo.3266827', 
-	#'	           'https://zenodo.org/record/3266821', 'not_this_one/3266821')
-	#'   recs <- validate_record_ids(recs)
-	#'   fetch_record_metadata(recs)
+	#'    \donttest{
+	#'    safedir <- system.file('example_data_dir', package='safedata')
+	#'    set_safe_dir(safedir)
+	#'    rec <- validate_record_ids(1400562)
+	#'    safedata:::fetch_record_metadata(rec)
+	#'    metadata <- safedata:::load_record_metadata(rec)
+	#'    }
 	#' @keywords internal
 	
 	# Check the input class
@@ -220,10 +230,7 @@ fetch_record_metadata <- function(record_set){
 
 load_record_metadata <- function(record_set){
 	
-	#' Loads the metadata for a record
-	#'
-	#' @param record_set An object of class \code{\link{safe_record_set}} containing a single
-	#'   row with complete concept and record data.
+	#' @describeIn fetch_record_metadata Load JSON metadata for a record
 	#' @keywords internal
 
 	if((! inherits(record_set, 'safe_record_set')) && 
@@ -278,7 +285,17 @@ show_concepts <- function(obj){
 	#'    fields or a longer output including full metadata descriptors.
 	#' @return Invisibly, a SAFE metadata object or a list of such objects. These
 	#'    are not really intended for end user consumption.
-	#' @describeIn show_concepts Show the records associated with a dataset concept  
+	#' @describeIn show_concepts Show the records associated with a dataset concept.
+	#' @examples
+	#'    safedir <- system.file('example_data_dir', package='safedata')
+	#'    set_safe_dir(safedir)
+	#'    recs <- validate_record_ids(c(1400562, 3266827, 3266821))
+	#'    show_concepts(recs)
+	#'    show_record(recs[1,])
+	#'    # Show worksheet metadata from a record or from a loaded worksheet
+	#'    show_worksheet(1400562, 'EnvironVariables')
+	#'    ant_abund <- load_safe_data(1400562, 'Ant-Psel')
+	#'    show_worksheet(ant_abund, extended_fields=TRUE)
 	#' @export
 	
 	if(inherits(obj, 'safedata')){
@@ -412,14 +429,14 @@ show_record <- function(obj){
 }
 
 
-show_worksheet <- function(obj, worksheet, extended_fields=FALSE){
+show_worksheet <- function(obj, worksheet=NULL, extended_fields=FALSE){
 
 	#' @describeIn show_concepts Show details of a data worksheet
 	#' @export
 		
 	if(inherits(obj, 'safedata')){
 		record_set <- attr(obj, 'metadata')$safe_record_set
-		worksheet <-  attr(obj, 'metadata')$worksheet
+		worksheet <-  attr(obj, 'metadata')$name
 	} else {
 		record_set <- validate_record_ids(obj)
 	
@@ -431,6 +448,10 @@ show_worksheet <- function(obj, worksheet, extended_fields=FALSE){
 			stop('Unknown record id')
 		} else if(is.na(record_set$record)){
 			stop('show_worksheet requires record id not a concept id')
+		}
+		
+		if(is.null(worksheet)){
+			stop('No worksheet name supplied.')
 		}
 	}
 		
