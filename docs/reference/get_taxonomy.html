@@ -66,7 +66,7 @@ GBIF, for those taxa." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2</span>
       </span>
     </div>
 
@@ -130,7 +130,7 @@ GBIF, for those taxa.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>obj</th>
-      <td><p>A single record id, or an existing safe_data dataframe.</p></td>
+      <td><p>A single record id, or an existing safedata dataframe.</p></td>
     </tr>
     </table>
     
@@ -146,30 +146,29 @@ worksheets. All entries in this worksheet are  validated against the
 GBIF database before publication and are used to populate the taxonomic
 index for the SAFE datasets. The validated taxonomic hierarchy for the
 data is also available in the metadata for a record and this function
-converts the metadata into a taxonomy table.</p>
+converts the metadata into a taxonomy table. If the Taxa worksheet for 
+a SAFE project dataset is empty, because the data does not contain 
+observations on taxa, <code>get_taxonomy</code> will return NULL.</p>
 <p>The taxonomy table includes the eight 'backbone' taxonomic ranks used
 in the GBIF database: Kingdom, Phylum, Class, Order, Family, Genus, 
 Species and Subspecies. It also includes three further fields:
 <code>taxon_name</code>, <code>taxon_rank</code> and <code>gbif_status</code>. These 
 record the original taxa provided in the Taxa worksheet and show
 where the taxonomic name used in a dataset differs from the canonical
-name used in GBIF.</p>
-<p>The row names of the taxon table are the labels used in data worksheets
-and are used to match a taxonomy table to a loaded data worksheet (see
-<code><a href='add_taxa.html'>add_taxa</a></code>).</p>
-    
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    <p>Not all SAFE project datasets contain taxonomic observations. In
-   this case <code>get_taxonomy</code> will return NULL.</p>
+name used in GBIF. The row names of the taxon table are the labels
+used in data worksheets and are used to match a taxonomy table to a 
+loaded data worksheet (see <code><a href='add_taxa.html'>add_taxa</a></code>).</p>
+<p>For more details on the structure of the Taxa worksheet see:</p>
+<p><a href='https://safe-dataset-checker.readthedocs.io/en/latest/data_format/taxa/'>https://safe-dataset-checker.readthedocs.io/en/latest/data_format/taxa/</a></p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='add_taxa.html'>add_taxa</a></code> and 
-  <a href='https://safe-dataset-checker.readthedocs.io/en/latest/data_format/taxa/'>https://safe-dataset-checker.readthedocs.io/en/latest/data_format/taxa/</a>
-  for information on the Taxa worksheet</p></div>
+    <div class='dont-index'><p><code><a href='add_taxa.html'>add_taxa</a></code></p></div>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>   <span class='no'>safedir</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>'example_data_dir'</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>'safedata'</span>)
+   <span class='fu'><a href='set_safe_dir.html'>set_safe_dir</a></span>(<span class='no'>safedir</span>)</div><div class='output co'>#&gt; <span class='message'>Checking for updates</span></div><div class='output co'>#&gt; <span class='message'> - Index up to date</span></div><div class='output co'>#&gt; <span class='message'> - Gazetteer up to date</span></div><div class='output co'>#&gt; <span class='message'> - Location aliases up to date</span></div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div><div class='input'>   <span class='no'>taxa</span> <span class='kw'>&lt;-</span> <span class='fu'>get_taxonomy</span>(<span class='fl'>1400562</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -180,10 +179,10 @@ and are used to match a taxonomy table to a loaded data worksheet (see
 
       <li><a href="#details">Details</a></li>
 
-      <li><a href="#note">Note</a></li>
-
       <li><a href="#see-also">See also</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

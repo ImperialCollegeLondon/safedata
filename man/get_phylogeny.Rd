@@ -10,8 +10,16 @@ get_phylogeny(record)
 \item{record}{A single dataset record id}
 }
 \value{
-An \code{ape} \code{phylo} object.
+An \code{\link[ape]{phylo}} object.
 }
 \description{
-Get a phylogeny for a dataset
+This function has not yet been fully implemented.
 }
+\details{
+This function laods the taxa reported in a dataset (see \code{\link{get_taxa}})
+and creates a \code{\link[ape]{phylo}} phylogeny for those taxa. Equal branch 
+lengths are used. This function differs from \code{\link[ape]{as.phylo.formula}} 
+in that it does not expect all taxonomic levels to be non NA: tips can
+be at different taxonomic depths.
+}
+\keyword{internal}

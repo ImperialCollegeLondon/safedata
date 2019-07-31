@@ -32,7 +32,7 @@
 
 <meta property="og:title" content="Get a phylogeny for a dataset — get_phylogeny" />
 
-<meta property="og:description" content="Get a phylogeny for a dataset" />
+<meta property="og:description" content="This function has not yet been fully implemented." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2</span>
       </span>
     </div>
 
@@ -113,7 +113,7 @@
 
     <div class="ref-description">
     
-    <p>Get a phylogeny for a dataset</p>
+    <p>This function has not yet been fully implemented.</p>
     
     </div>
 
@@ -130,7 +130,15 @@
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An <code>ape</code> <code>phylo</code> object.</p>
+    <p>An <code><a href='https://www.rdocumentation.org/packages/ape/topics/read.tree'>phylo</a></code> object.</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>This function laods the taxa reported in a dataset (see <code><a href='get_taxa.html'>get_taxa</a></code>)
+and creates a <code><a href='https://www.rdocumentation.org/packages/ape/topics/read.tree'>phylo</a></code> phylogeny for those taxa. Equal branch 
+lengths are used. This function differs from <code><a href='https://www.rdocumentation.org/packages/ape/topics/as.phylo.formula'>as.phylo.formula</a></code> 
+in that it does not expect all taxonomic levels to be non NA: tips can
+be at different taxonomic depths.</p>
     
 
   </div>
@@ -140,6 +148,8 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
           </ul>
 
   </div>

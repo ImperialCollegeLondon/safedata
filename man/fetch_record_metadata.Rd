@@ -2,23 +2,44 @@
 % Please edit documentation in R/metadata.R
 \name{fetch_record_metadata}
 \alias{fetch_record_metadata}
-\title{Get SAFE dataset metadata}
+\alias{load_record_metadata}
+\title{Get and load SAFE dataset metadata}
 \usage{
 fetch_record_metadata(record_set)
+
+load_record_metadata(record_set)
 }
 \arguments{
-\item{record_set}{An object of class \code{safe_record_set}.}
+\item{record_set}{An object of class \code{\link{safe_record_set}}.}
+}
+\value{
+The \code{fetch_record_metadata} function returns NULL and 
+   \code{load_record_metadata} returns a list object containing record metadata
 }
 \description{
-Internal handler to ensure there are local copies of record metadata,
-fetching it from the SAFE project website if needed. This is the same
-data used to populate the Zenodo description but is machine readable
-and contains additional taxon and location indexing.
+Internal handlers to i) ensure there are local copies of record metadata,
+fetching it from the SAFE project website if needed and ii) load that 
+data from file.
 }
+\details{
+This is the same metadata used to populate the Zenodo description but is 
+downloaded as JSON format and stored within the record directory in the
+SAFE data directory for reuse.
+}
+\section{Functions}{
+\itemize{
+\item \code{fetch_record_metadata}: Download and store JSON metadata for a record
+
+\item \code{load_record_metadata}: Load JSON metadata for a record
+}}
+
 \examples{
-  recs <- c('https://doi.org/10.5281/zenodo.3247631', '10.5281/zenodo.3266827', 
-           'https://zenodo.org/record/3266821', 'not_this_one/3266821')
-  recs <- validate_record_ids(recs)
-  fetch_record_metadata(recs)
+   \donttest{
+   safedir <- system.file('example_data_dir', package='safedata')
+   set_safe_dir(safedir)
+   rec <- validate_record_ids(1400562)
+   safedata:::fetch_record_metadata(rec)
+   metadata <- safedata:::load_record_metadata(rec)
+   }
 }
 \keyword{internal}

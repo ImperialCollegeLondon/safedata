@@ -2,6 +2,7 @@
 % Please edit documentation in R/metadata.R
 \name{validate_record_ids}
 \alias{validate_record_ids}
+\alias{safe_record_set}
 \alias{print.safe_record_set}
 \title{Validates dataset record ids from user input}
 \usage{
@@ -12,16 +13,12 @@ validate_record_ids(record_set)
 \arguments{
 \item{record_set}{A vector of values containing Zenodo concept or record ids.}
 
-\item{x}{An object of class 'safe_record_set'}
+\item{x}{An object of class \code{safe_record_set}}
 
 \item{...}{Further arguments to print methods, unused.}
 }
 \value{
-An object of class 'safe_record_set': a dataframe with columns
-  \code{concept} and \code{record} indicating the matching records. Note
-  that \code{record} will be NA when the value is a concept id. Inputs
-  that do not match a record or concept ids are returned as an attribute of
-  the record set.
+An object of class \code{safe_record_set} (see Details)
 }
 \description{
 This takes a vector of user supplied record identifiers and validates them 
@@ -34,6 +31,10 @@ the columns \code{concept}, \code{record}, \code{available} and, finally,
 \code{mra} containing the most recent available record (if any). The function can
 be run on an existing \code{safe_record_set} to update this information.
 
+Note that \code{record} will be NA when a value represents a concept id. Inputs
+that do not match a record or concept ids are returned in the attribute 
+\code{mismatches} of the record set.
+
 This function is largely used internally to validate user inputs and to provide
 a common output for the search functions but is exported to allow users to 
 check record ids and display summary information using the print method.
@@ -44,9 +45,11 @@ check record ids and display summary information using the print method.
 }}
 
 \examples{
-  validate_record_ids(c(3247631, 3266827, 3266821, -1000))
-  validate_record_ids(c('https://doi.org/10.5281/zenodo.3247631', 
-					   '10.5281/zenodo.3266827', 
-					   'https://zenodo.org/record/3266821',
-					   'not_this_one/3266821'))
+   safedir <- system.file('example_data_dir', package='safedata')
+   set_safe_dir(safedir)
+   validate_record_ids(c(3247631, 3266827, 3266821, -1000))
+   validate_record_ids(c('https://doi.org/10.5281/zenodo.3247631', 
+					    '10.5281/zenodo.3266827', 
+					    'https://zenodo.org/record/3266821',
+					    'not_this_one/3266821'))
 }

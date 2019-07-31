@@ -4,16 +4,15 @@
 \name{safedata.env}
 \alias{safedata.env}
 \alias{index}
-\title{Dataset index cache}
+\title{Index file memory cache}
 \format{An object of class \code{environment} of length 0.}
 \usage{
 safedata.env
 }
 \description{
 The \code{safedata.env} environment within the package namespace is 
-used to cache a copy of the dataset index, rather than needing to 
-repeatedly read from file. This index is used internally by functions
-through the internal \code{get_index} function and is not intended
-for the end user.
+used to cache a copy of the dataset index, gazetteer and location aliases
+rather than needing to repeatedly read these from file. This environment
+is accessed by internal functions and is not intended for the end user.
 }
 \keyword{internal}

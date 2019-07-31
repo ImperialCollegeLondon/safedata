@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get SAFE dataset metadata — fetch_record_metadata • safedata</title>
+<title>Get and load SAFE dataset metadata — fetch_record_metadata • safedata</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,12 +30,11 @@
 
 
 
-<meta property="og:title" content="Get SAFE dataset metadata — fetch_record_metadata" />
+<meta property="og:title" content="Get and load SAFE dataset metadata — fetch_record_metadata" />
 
-<meta property="og:description" content="Internal handler to ensure there are local copies of record metadata,
-fetching it from the SAFE project website if needed. This is the same
-data used to populate the Zenodo description but is machine readable
-and contains additional taxon and location indexing." />
+<meta property="og:description" content="Internal handlers to i) ensure there are local copies of record metadata,
+fetching it from the SAFE project website if needed and ii) load that 
+data from file." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -66,7 +65,7 @@ and contains additional taxon and location indexing." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2</span>
       </span>
     </div>
 
@@ -109,42 +108,68 @@ and contains additional taxon and location indexing." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get SAFE dataset metadata</h1>
+    <h1>Get and load SAFE dataset metadata</h1>
     
     <div class="hidden name"><code>fetch_record_metadata.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Internal handler to ensure there are local copies of record metadata,
-fetching it from the SAFE project website if needed. This is the same
-data used to populate the Zenodo description but is machine readable
-and contains additional taxon and location indexing.</p>
+    <p>Internal handlers to i) ensure there are local copies of record metadata,
+fetching it from the SAFE project website if needed and ii) load that 
+data from file.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>fetch_record_metadata</span>(<span class='no'>record_set</span>)</pre>
+    <pre class="usage"><span class='fu'>fetch_record_metadata</span>(<span class='no'>record_set</span>)
+
+<span class='fu'>load_record_metadata</span>(<span class='no'>record_set</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>record_set</th>
-      <td><p>An object of class <code>safe_record_set</code>.</p></td>
+      <td><p>An object of class <code><a href='validate_record_ids.html'>safe_record_set</a></code>.</p></td>
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>The <code>fetch_record_metadata</code> function returns NULL and 
+   <code>load_record_metadata</code> returns a list object containing record metadata</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>This is the same metadata used to populate the Zenodo description but is 
+downloaded as JSON format and stored within the record directory in the
+SAFE data directory for reuse.</p>
+    
+    <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
+
+    <ul>
+<li><p><code>fetch_record_metadata</code>: Download and store JSON metadata for a record</p></li>
+<li><p><code>load_record_metadata</code>: Load JSON metadata for a record</p></li>
+</ul>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>  <span class='no'>recs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'https://doi.org/10.5281/zenodo.3247631'</span>, <span class='st'>'10.5281/zenodo.3266827'</span>,
-           <span class='st'>'https://zenodo.org/record/3266821'</span>, <span class='st'>'not_this_one/3266821'</span>)
-  <span class='no'>recs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='validate_record_ids.html'>validate_record_ids</a></span>(<span class='no'>recs</span>)</div><div class='output co'>#&gt; <span class='error'>Error in retrieve_index(): Failed to load cached index.</span></div><div class='input'>  <span class='fu'>fetch_record_metadata</span>(<span class='no'>recs</span>)</div><div class='output co'>#&gt; <span class='error'>Error in fetch_record_metadata(recs): could not find function "fetch_record_metadata"</span></div></pre>
+    <pre class="examples"><div class='input'>   </div><div class='input'>   <span class='no'>safedir</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>'example_data_dir'</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>'safedata'</span>)
+   <span class='fu'><a href='set_safe_dir.html'>set_safe_dir</a></span>(<span class='no'>safedir</span>)</div><div class='output co'>#&gt; <span class='message'>Checking for updates</span></div><div class='output co'>#&gt; <span class='message'> - Index up to date</span></div><div class='output co'>#&gt; <span class='message'> - Gazetteer up to date</span></div><div class='output co'>#&gt; <span class='message'> - Location aliases up to date</span></div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div><div class='input'>   <span class='no'>rec</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='validate_record_ids.html'>validate_record_ids</a></span>(<span class='fl'>1400562</span>)
+   <span class='kw pkg'>safedata</span><span class='kw ns'>:::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/safedata/topics/fetch_record_metadata'>fetch_record_metadata</a></span>(<span class='no'>rec</span>)
+   <span class='no'>metadata</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>safedata</span><span class='kw ns'>:::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/safedata/topics/fetch_record_metadata'>load_record_metadata</a></span>(<span class='no'>rec</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-            
+      
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
+
+      <li><a href="#functions">Functions</a></li>
+      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

@@ -2,11 +2,11 @@
 % Please edit documentation in R/index.R
 \name{get_data_dir}
 \alias{get_data_dir}
-\title{Get SAFE data directory}
+\title{Checks the data directory is set and returns it}
 \usage{
 get_data_dir()
 }
 \description{
-Internal handler to check the data directory is set and return it.
+Checks the data directory is set and returns it
 }
 \keyword{internal}

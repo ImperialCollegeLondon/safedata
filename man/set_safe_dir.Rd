@@ -60,3 +60,7 @@ present within the data structure and when any dataset files that are
 present have been modified. Although this can be turned off, it is 
 not recommended to modify or add files within a SAFE data directory.
 }
+\examples{
+   safedir <- system.file('example_data_dir', package='safedata')
+   set_safe_dir(safedir)
+}

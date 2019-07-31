@@ -2,7 +2,7 @@
 % Please edit documentation in R/index.R
 \name{verbose_message}
 \alias{verbose_message}
-\title{Provide package messages that can be globally muted}
+\title{Message function that can be globally muted}
 \usage{
 verbose_message(str, ...)
 }

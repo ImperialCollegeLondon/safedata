@@ -60,7 +60,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2</span>
       </span>
     </div>
 
@@ -117,76 +117,16 @@
     <tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-user-functions" class="hasAnchor"><a href="#section-user-functions" class="anchor"></a>User functions</h2>
-          <p class="section-desc"><p>These are the main functions that are used by the package</p></p>
+          <h2 id="section-indexing-and-download-functions" class="hasAnchor"><a href="#section-indexing-and-download-functions" class="anchor"></a>Indexing and download functions</h2>
+          <p class="section-desc"><p>The <code>safedata</code> package maintains a local index of the datasets available in the SAFE dataset repository, used to check the availability of datasets and to download and verify dataset files. These commands are used to generate the local index, validate record ids against the index and to download data.</p></p>
         </th>
       </tr>
       <tr>
         
         <td>
-          <p><code><a href="add_locations.html">add_locations()</a></code> </p>
-        </td>
-        <td><p>Adds location data to a SAFE data worksheet.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="add_taxa.html">add_taxa()</a></code> </p>
-        </td>
-        <td><p>Add a taxonomic hierarchy to a SAFE data worksheet.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="download_safe_files.html">download_safe_files()</a></code> </p>
-        </td>
-        <td><p>Download SAFE dataset files</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_locations.html">get_locations()</a></code> </p>
-        </td>
-        <td><p>Obtaining locations for a SAFE dataset.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_phylogeny.html">get_phylogeny()</a></code> </p>
-        </td>
-        <td><p>Get a phylogeny for a dataset</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_taxonomy.html">get_taxonomy()</a></code> </p>
-        </td>
-        <td><p>Obtaining taxonomy for a SAFE dataset.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="load_gazetteer.html">load_gazetteer()</a></code> </p>
-        </td>
-        <td><p>Loads the SAFE gazetteer</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="load_location_aliases.html">load_location_aliases()</a></code> </p>
-        </td>
-        <td><p>Loads the SAFE location aliases</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="load_safe_data.html">load_safe_data()</a></code> <code><a href="load_safe_data.html">str(<i>&lt;safe_data&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Loads data from a SAFE dataset.</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="safedata.html">safedata</a></code> </p>
         </td>
-        <td><p>safedata: Finding and using data from the SAFE Project.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="search_safe.html">search_dates()</a></code> <code><a href="search_safe.html">search_fields()</a></code> <code><a href="search_safe.html">search_authors()</a></code> <code><a href="search_safe.html">search_taxa()</a></code> <code><a href="search_safe.html">search_text()</a></code> <code><a href="search_safe.html">search_spatial()</a></code> </p>
-        </td>
-        <td><p>SAFE dataset search functions.</p></td>
+        <td><p>Finding and using data from the SAFE Project.</p></td>
       </tr><tr>
         
         <td>
@@ -196,15 +136,95 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="show_concepts.html">show_concepts()</a></code> <code><a href="show_concepts.html">show_record()</a></code> <code><a href="show_concepts.html">show_worksheet()</a></code> </p>
-        </td>
-        <td><p>Show SAFE dataset metadata</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="validate_record_ids.html">validate_record_ids()</a></code> <code><a href="validate_record_ids.html">print(<i>&lt;safe_record_set&gt;</i>)</a></code> </p>
         </td>
         <td><p>Validates dataset record ids from user input</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="download_safe_files.html">download_safe_files()</a></code> </p>
+        </td>
+        <td><p>Download SAFE dataset files</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-data-discovery" class="hasAnchor"><a href="#section-data-discovery" class="anchor"></a>Data discovery</h2>
+          <p class="section-desc"><p>These functions provide an interface to the dataset metadata search API provided by the SAFE Project website</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="search_safe.html">search_dates()</a></code> <code><a href="search_safe.html">search_fields()</a></code> <code><a href="search_safe.html">search_authors()</a></code> <code><a href="search_safe.html">search_taxa()</a></code> <code><a href="search_safe.html">search_text()</a></code> <code><a href="search_safe.html">search_spatial()</a></code> </p>
+        </td>
+        <td><p>SAFE dataset search functions.</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-data-discovery" class="hasAnchor"><a href="#section-data-discovery" class="anchor"></a>Data discovery</h2>
+          <p class="section-desc"><p>SAFE datasets contain a considerable amount of metadata about at the dataset, data worksheet and field level. These functions display the metadata available at each of these levels.</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="show_concepts.html">show_concepts()</a></code> <code><a href="show_concepts.html">show_record()</a></code> <code><a href="show_concepts.html">show_worksheet()</a></code> </p>
+        </td>
+        <td><p>Show SAFE dataset metadata</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-metadata-display" class="hasAnchor"><a href="#section-metadata-display" class="anchor"></a>Metadata display</h2>
+          <p class="section-desc"><p>SAFE datasets contain a considerable amount of metadata about at the dataset, data worksheet and field level. These functions display the metadata available at each of these levels.</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="show_concepts.html">show_concepts()</a></code> <code><a href="show_concepts.html">show_record()</a></code> <code><a href="show_concepts.html">show_worksheet()</a></code> </p>
+        </td>
+        <td><p>Show SAFE dataset metadata</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-loading-data" class="hasAnchor"><a href="#section-loading-data" class="anchor"></a>Loading data</h2>
+          <p class="section-desc"><p>These functions load data from a SAFE dataset and allow users to explore the taxa and locations associated with a dataset and to match taxa and locations into a loaded data worksheet.</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="load_safe_data.html">load_safe_data()</a></code> <code><a href="load_safe_data.html">str(<i>&lt;safedata&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Loads data from a SAFE dataset.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_taxa.html">get_taxa()</a></code> </p>
+        </td>
+        <td><p>Obtaining taxonomy for a SAFE dataset.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="add_taxa.html">add_taxa()</a></code> </p>
+        </td>
+        <td><p>Add a taxonomic hierarchy to a SAFE data worksheet.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_locations.html">get_locations()</a></code> </p>
+        </td>
+        <td><p>Obtaining locations for a SAFE dataset.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="add_locations.html">add_locations()</a></code> </p>
+        </td>
+        <td><p>Adds location data to a SAFE data worksheet.</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -216,9 +236,75 @@
       <tr>
         
         <td>
+          <p><code><a href="safedata.env.html">safedata.env</a></code> </p>
+        </td>
+        <td><p>Index file memory cache</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="get_data_dir.html">get_data_dir()</a></code> </p>
         </td>
-        <td><p>Get SAFE data directory</p></td>
+        <td><p>Checks the data directory is set and returns it</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="verbose_message.html">verbose_message()</a></code> </p>
+        </td>
+        <td><p>Message function that can be globally muted</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="download_index.html">download_index()</a></code> </p>
+        </td>
+        <td><p>Downloads the current dataset index</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="download_gazetteer.html">download_gazetteer()</a></code> </p>
+        </td>
+        <td><p>Downloads the current SAFE gazetteer</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="download_location_aliases.html">download_location_aliases()</a></code> </p>
+        </td>
+        <td><p>Downloads the current SAFE location aliases</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="load_index.html">load_index()</a></code> </p>
+        </td>
+        <td><p>Load and cache the dataset index</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="load_gazetteer.html">load_gazetteer()</a></code> </p>
+        </td>
+        <td><p>Load and cache the SAFE gazetteer</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="load_location_aliases.html">load_location_aliases()</a></code> </p>
+        </td>
+        <td><p>Load and cache the SAFE location aliases</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="fetch_record_metadata.html">fetch_record_metadata()</a></code> <code><a href="fetch_record_metadata.html">load_record_metadata()</a></code> </p>
+        </td>
+        <td><p>Get and load SAFE dataset metadata</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="load_safe_worksheet.html">load_safe_worksheet()</a></code> </p>
+        </td>
+        <td><p>Internal data loading function</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="safe_api_search.html">safe_api_search()</a></code> <code><a href="safe_api_search.html">validate_query_param()</a></code> </p>
+        </td>
+        <td><p>Internal SAFE dataset API search functions</p></td>
       </tr>
     </tbody>
     </table>
@@ -227,7 +313,11 @@
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-user-functions">User functions</a></li>
+      <li><a href="#section-indexing-and-download-functions">Indexing and download functions</a></li>
+      <li><a href="#section-data-discovery">Data discovery</a></li>
+      <li><a href="#section-data-discovery">Data discovery</a></li>
+      <li><a href="#section-metadata-display">Metadata display</a></li>
+      <li><a href="#section-loading-data">Loading data</a></li>
       <li><a href="#section-internal-functions">Internal functions</a></li>
     </ul>
   </div>

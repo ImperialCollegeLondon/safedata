@@ -37,7 +37,7 @@ returning only the most recent versions of the datasets found. By default
 all versions of matching dataset concepts are returned.}
 
 \item{ids}{A set of SAFE dataset record IDs to restrict a search. This will
-typically be a \code{safe_record_set} object returned by another search 
+typically be a \code{\link{safe_record_set}} object returned by another search 
 but can also be a vector of record ids in any of the formats accepted by 
 \code{\link{validate_record_ids}}.}
 
@@ -67,13 +67,13 @@ longitude in WGS84 (EPSG:4326).}
 in metres within which to match either location or wkt searches.}
 }
 \value{
-An object of class \code{safe_record_set} of datasets that match 
+An object of class \code{\link{safe_record_set}} of datasets that match 
    the query.
 }
 \description{
 In addition to the datasets stored on Zenodo, the SAFE Project website
 provides an API to search dataset metadata in more depth. The search functions
-access this API and return \code{safe_record_set} objects identifying datasets
+access this API and return \code{\link{safe_record_set}} objects identifying datasets
 that match a particular query.
 }
 \details{
@@ -81,7 +81,7 @@ The API provides endpoints to search datasets by date extents, data worksheet fi
 authors, taxa, free text and by spatial query. All of the functions accept
 the argument \code{most_recent}, which restricts the returned datasets to the
 most recent versions of each matching dataset concept. The functions can also
-be passed an existing \code{safe_record_set} object to search within the results
+be passed an existing \code{\link{safe_record_set}} object to search within the results
 of a previous search.
 
 The \code{match_type} parameter specifies how to match date ranges and must
@@ -109,7 +109,7 @@ is provided.
 \section{Spatial searches}{
 
 For spatial searches, users can select a location name from the SAFE gazetteer
-(see \url{https://www.safeproject.net/info/gazetteer} or \code{load_gazetteer})
+(see \url{https://www.safeproject.net/info/gazetteer} or \code{\link{load_gazetteer}})
 or provide a WKT geometry. The sampling locations provided in each SAFE dataset
 are tested to see if they intersect the search geometry.
 
@@ -129,7 +129,7 @@ coordinate information.
 \describe{
    \item{SAFE API}{\url{https://www.safeproject.net/api}}
    \item{Worksheet field types}{\url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/data/#field-types}}
-   \item{SAFE gazetteer}{See \code{load_gazetteer} and \url{https://www.safeproject.net/info/gazetteer}}
+   \item{SAFE gazetteer}{See \code{\link{load_gazetteer}} and \url{https://www.safeproject.net/info/gazetteer}}
    \item{WKT}{\url{https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry}}
 }
 }

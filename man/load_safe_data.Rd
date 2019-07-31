@@ -2,40 +2,54 @@
 % Please edit documentation in R/load_safe.R
 \name{load_safe_data}
 \alias{load_safe_data}
-\alias{str.safe_data}
+\alias{str.safedata}
 \title{Loads data from a SAFE dataset.}
 \usage{
 load_safe_data(record_id, worksheet)
 
-\method{str}{safe_data}(object, ...)
+\method{str}{safedata}(object, ...)
 }
 \arguments{
 \item{record_id}{A SAFE dataset record id}
 
 \item{worksheet}{The name of the worksheet to load}
+
+\item{object}{A \code{safedata} object.}
+
+\item{\dots}{Further arguments to \code{str} methods.}
 }
 \value{
-A data frame with the additional 'safedata' class
+A data frame with the additional \code{safedata} class and
+   additional attribute data containing metadata for the data.
 }
 \description{
 This function returns a data frame containing the data from a data 
 worksheet in a SAFE dataset. Note that SAFE dataset .xlsx files include
 the other (non-data) worksheets Summary, Taxa, Locations that contain 
-metadata: see  \code{get_taxa}, \code{get_locations}, \code{add_taxa} 
-and \code{add_locations} for accessing and using this metadata.
+metadata: see  \code{\link{get_taxa}}, \code{\link{get_locations}}, 
+\code{\link{add_taxa}} and \code{\link{add_locations}} for accessing 
+and using this metadata.
 }
 \details{
 In particular, the large amount of data worksheet summary metadata is
 not attached as attributes to the data frame returned by this function.
-This is largely to avoid spamming the screen during normal use of the
-data frame: an extended description of a worksheet can be displayed using
-\code{show_worksheet}.
+This is largely to avoid excessive output to the console during normal use 
+of the data frame: an extended description of a worksheet can be displayed
+using \code{\link{show_worksheet}}.
 
-Currently, this function only loads data from SAFE formatted
-.xlsx files - data stored in external files is not yet handled.
+Currently, this function only loads data from SAFE formatted \code{.xlsx}
+files - data stored in external files is not yet handled.
 }
 \section{Methods (by generic)}{
 \itemize{
-\item \code{str}: Display structure of a safe_data data frame
+\item \code{str}: Display structure of a safedata data frame
 }}
 
+\examples{
+   safedir <- system.file('example_data_dir', package='safedata')
+   set_safe_dir(safedir)
+   ant_abund <- load_safe_data(1400562, 'Ant-Psel')
+   str(ant_abund)
+   # See also the show_worksheet function for further worksheet metadata
+   show_worksheet(ant_abund)
+}

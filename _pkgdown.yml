@@ -1,11 +1,55 @@
 reference:
-- title: User functions
-  desc: These are the main functions that are used by the package
+- title: Indexing and download functions
+  desc: >
+    The `safedata` package maintains a local index of the datasets available in the SAFE dataset repository,
+    used to check the availability of datasets and to download and verify dataset files. These commands are
+    used to generate the local index, validate record ids against the index and to download data.
   contents:
-  -
+  - safedata
+  - set_safe_dir
+  - validate_record_ids
+  - download_safe_files
+- title: Data discovery
+  desc: These functions provide an interface to the dataset metadata search API provided by the SAFE Project website
+  contents:
+  - search_safe
+- title: Data discovery
+  desc: >
+    SAFE datasets contain a considerable amount of metadata about at the dataset, data worksheet and field 
+    level. These functions display the metadata available at each of these levels.
+  contents:
+  - show_concepts
+- title: Metadata display
+  desc: >
+    SAFE datasets contain a considerable amount of metadata about at the dataset, data worksheet and field 
+    level. These functions display the metadata available at each of these levels.
+  contents:
+  - show_concepts
+- title: Loading data
+  desc: >
+    These functions load data from a SAFE dataset and allow users to explore the taxa and locations associated
+    with a dataset and to match taxa and locations into a loaded data worksheet.
+  contents:
+  - load_safe_data
+  - get_taxa
+  - add_taxa
+  - get_locations
+  - add_locations
 - title: Internal functions
   desc: The following internal functions are not included in the package namespace but are documented here briefly.
   contents:
+  - index
   - get_data_dir
-  - get_index
-  - get_record_metadata   
+  - verbose_message
+  - download_index
+  - download_gazetteer
+  - download_location_aliases
+  - load_index
+  - load_gazetteer
+  - load_location_aliases
+  - fetch_record_metadata   
+  - load_safe_worksheet
+  - safe_api_search
+  - validate_query_param
+
+

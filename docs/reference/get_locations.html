@@ -32,7 +32,7 @@
 
 <meta property="og:title" content="Obtaining locations for a SAFE dataset. — get_locations" />
 
-<meta property="og:description" content="This function returns a spatial 'simple features' ([sf]sf)
+<meta property="og:description" content="This function returns a spatial 'simple features' (sf)
 object for a dataset record, including basic information about locations
 for the SAFE gazetteer if requested." />
 <meta name="twitter:card" content="summary" />
@@ -65,7 +65,7 @@ for the SAFE gazetteer if requested." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2</span>
       </span>
     </div>
 
@@ -115,7 +115,7 @@ for the SAFE gazetteer if requested." />
 
     <div class="ref-description">
     
-    <p>This function returns a spatial 'simple features' (<code>[sf]sf</code>)
+    <p>This function returns a spatial 'simple features' (<code><a href='https://www.rdocumentation.org/packages/sf/topics/sf'>sf</a></code>)
 object for a dataset record, including basic information about locations
 for the SAFE gazetteer if requested.</p>
     
@@ -128,12 +128,12 @@ for the SAFE gazetteer if requested.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>obj</th>
-      <td><p>A single record id, or an existing safe_data dataframe.</p></td>
+      <td><p>A single record id, or an existing safedata dataframe.</p></td>
     </tr>
     <tr>
       <th>gazetteer_info</th>
       <td><p>Should all the gazetteer fields be included in the 
-returned <code>sf</code> object. See <code><a href='load_gazetteer.html'>load_gazetteer</a></code> for details.</p></td>
+returned <code><a href='https://www.rdocumentation.org/packages/sf/topics/sf'>sf</a></code> object.</p></td>
     </tr>
     </table>
     
@@ -169,9 +169,13 @@ existing location names in the SAFE gazetteer. Users can also include
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='add_locations.html'>add_locations</a></code></p></div>
+    <div class='dont-index'><p><code><a href='add_locations.html'>add_locations</a></code>, <code><a href='load_gazetteer.html'>load_gazetteer</a></code>, 
+   <code><a href='load_location_aliases.html'>load_location_aliases</a></code></p></div>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>   <span class='no'>safedir</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>'example_data_dir'</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>'safedata'</span>)
+   <span class='fu'><a href='set_safe_dir.html'>set_safe_dir</a></span>(<span class='no'>safedir</span>)</div><div class='output co'>#&gt; <span class='message'>Checking for updates</span></div><div class='output co'>#&gt; <span class='message'> - Index up to date</span></div><div class='output co'>#&gt; <span class='message'> - Gazetteer up to date</span></div><div class='output co'>#&gt; <span class='message'> - Location aliases up to date</span></div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div><div class='input'>   <span class='no'>locations</span> <span class='kw'>&lt;-</span> <span class='fu'>get_locations</span>(<span class='fl'>1400562</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -185,7 +189,9 @@ existing location names in the SAFE gazetteer. Users can also include
       <li><a href="#note">Note</a></li>
 
       <li><a href="#see-also">See also</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

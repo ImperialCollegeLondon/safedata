@@ -10,7 +10,7 @@ show_concepts(obj)
 
 show_record(obj)
 
-show_worksheet(obj, worksheet, extended_fields = FALSE)
+show_worksheet(obj, worksheet = NULL, extended_fields = FALSE)
 }
 \arguments{
 \item{obj}{A reference to SAFE records or a loaded worksheet (see above)}
@@ -18,6 +18,9 @@ show_worksheet(obj, worksheet, extended_fields = FALSE)
 \item{worksheet}{The name of a worksheet to show. Obviously, if \code{obj} 
 is a loaded worksheet, that will be the worksheet described and this can
 be left as NULL.}
+
+\item{extended_fields}{Logical - show a compact description of worksheet
+fields or a longer output including full metadata descriptors.}
 }
 \value{
 Invisibly, a SAFE metadata object or a list of such objects. These
@@ -38,9 +41,9 @@ All three functions accept a first argument \code{obj}, which can be one
 of three things:
 \enumerate{
    \item A character or numeric vector of SAFE dataset records or concepts, 
-         which will be validated using \code{validate_record_ids}, or
-   \item An already validated \code{safe_record_set} object, or
-   \item A \code{safedata} data frame loaded using \code{load_safe_data}.
+         which will be validated using \code{\link{validate_record_ids}}, or
+   \item An already validated \code{\link{safe_record_set}} object, or
+   \item A \code{safedata} data frame loaded using \code{\link{load_safe_data}}.
 }
 If \code{show_concepts} is passed a record id, then the function looks up the
 relevant concept. The version table indicates which versions are available ('*' 
@@ -49,10 +52,21 @@ and which are unavailable due to embargo or retriction ('x').
 }
 \section{Functions}{
 \itemize{
-\item \code{show_concepts}: Show the records associated with a dataset concept
+\item \code{show_concepts}: Show the records associated with a dataset concept.
 
 \item \code{show_record}: Show details of a specific dataset
 
 \item \code{show_worksheet}: Show details of a data worksheet
 }}
 
+\examples{
+   safedir <- system.file('example_data_dir', package='safedata')
+   set_safe_dir(safedir)
+   recs <- validate_record_ids(c(1400562, 3266827, 3266821))
+   show_concepts(recs)
+   show_record(recs[1,])
+   # Show worksheet metadata from a record or from a loaded worksheet
+   show_worksheet(1400562, 'EnvironVariables')
+   ant_abund <- load_safe_data(1400562, 'Ant-Psel')
+   show_worksheet(ant_abund, extended_fields=TRUE)
+}

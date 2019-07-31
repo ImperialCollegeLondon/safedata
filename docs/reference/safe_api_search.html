@@ -65,7 +65,7 @@ the parameters and the common ids and most_recent arguments." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2</span>
       </span>
     </div>
 
@@ -140,7 +140,7 @@ the API endpoint.</p></td>
     <tr>
       <th>ids</th>
       <td><p>A set of SAFE dataset record IDs to restrict a search. This will
-typically be a <code>safe_record_set</code> object returned by another search 
+typically be a <code><a href='validate_record_ids.html'>safe_record_set</a></code> object returned by another search 
 but can also be a vector of record ids in any of the formats accepted by 
 <code><a href='validate_record_ids.html'>validate_record_ids</a></code>.</p></td>
     </tr>
@@ -171,7 +171,7 @@ all versions of matching dataset concepts are returned.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>The <code>safe_api_search</code> function returns an object of class 
-   <code>safe_record_set</code> of datasets that match the submitted query. The
+   <code><a href='validate_record_ids.html'>safe_record_set</a></code> of datasets that match the submitted query. The
    <code>validate_query_param</code> function either returns NULL on success or
    raises an error.</p>
     

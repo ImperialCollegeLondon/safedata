@@ -2,7 +2,7 @@
 % Please edit documentation in R/load_safe.R
 \name{load_safe_worksheet}
 \alias{load_safe_worksheet}
-\title{Loads data from a SAFE worksheet}
+\title{Internal data loading function}
 \usage{
 load_safe_worksheet(record_set, worksheet, skip, n_max)
 }

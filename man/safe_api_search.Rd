@@ -16,7 +16,7 @@ validate_query_param(name, val, class = "character", length = 1)
 the API endpoint.}
 
 \item{ids}{A set of SAFE dataset record IDs to restrict a search. This will
-typically be a \code{safe_record_set} object returned by another search 
+typically be a \code{\link{safe_record_set}} object returned by another search 
 but can also be a vector of record ids in any of the formats accepted by 
 \code{\link{validate_record_ids}}.}
 
@@ -34,7 +34,7 @@ all versions of matching dataset concepts are returned.}
 }
 \value{
 The \code{safe_api_search} function returns an object of class 
-   \code{safe_record_set} of datasets that match the submitted query. The
+   \code{\link{safe_record_set}} of datasets that match the submitted query. The
    \code{validate_query_param} function either returns NULL on success or
    raises an error.
 }

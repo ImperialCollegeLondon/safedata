@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Loads the SAFE location aliases — load_location_aliases • safedata</title>
+<title>Load and cache the SAFE location aliases — load_location_aliases • safedata</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,7 +30,7 @@
 
 
 
-<meta property="og:title" content="Loads the SAFE location aliases — load_location_aliases" />
+<meta property="og:title" content="Load and cache the SAFE location aliases — load_location_aliases" />
 
 <meta property="og:description" content="This function loads the SAFE locations alias, stored as a csv file in
 the root of the SAFE data directory, as data frame." />
@@ -64,7 +64,7 @@ the root of the SAFE data directory, as data frame." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2</span>
       </span>
     </div>
 
@@ -107,7 +107,7 @@ the root of the SAFE data directory, as data frame." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Loads the SAFE location aliases</h1>
+    <h1>Load and cache the SAFE location aliases</h1>
     
     <div class="hidden name"><code>load_location_aliases.Rd</code></div>
     </div>
@@ -128,7 +128,11 @@ the root of the SAFE data directory, as data frame.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>When this function is first called in a session, the loaded data frame 
-object is cached in the internal safedata environment for re-use..</p>
+object is cached for re-use (see <code><a href='load_index.html'>load_index</a></code>).</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='load_gazetteer.html'>load_gazetteer</a></code>, <code><a href='load_index.html'>load_index</a></code></p></div>
     
 
   </div>
@@ -139,6 +143,8 @@ object is cached in the internal safedata environment for re-use..</p>
       <li><a href="#value">Value</a></li>
 
       <li><a href="#details">Details</a></li>
+
+      <li><a href="#see-also">See also</a></li>
           </ul>
 
   </div>

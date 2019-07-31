@@ -35,8 +35,9 @@
 <meta property="og:description" content="This function returns a data frame containing the data from a data 
 worksheet in a SAFE dataset. Note that SAFE dataset .xlsx files include
 the other (non-data) worksheets Summary, Taxa, Locations that contain 
-metadata: see  get_taxa, get_locations, add_taxa 
-and add_locations for accessing and using this metadata." />
+metadata: see  get_taxa, get_locations, 
+add_taxa and add_locations for accessing 
+and using this metadata." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -67,7 +68,7 @@ and add_locations for accessing and using this metadata." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2</span>
       </span>
     </div>
 
@@ -120,14 +121,15 @@ and add_locations for accessing and using this metadata." />
     <p>This function returns a data frame containing the data from a data 
 worksheet in a SAFE dataset. Note that SAFE dataset .xlsx files include
 the other (non-data) worksheets Summary, Taxa, Locations that contain 
-metadata: see  <code>get_taxa</code>, <code>get_locations</code>, <code>add_taxa</code> 
-and <code>add_locations</code> for accessing and using this metadata.</p>
+metadata: see  <code><a href='get_taxa.html'>get_taxa</a></code>, <code><a href='get_locations.html'>get_locations</a></code>, 
+<code><a href='add_taxa.html'>add_taxa</a></code> and <code><a href='add_locations.html'>add_locations</a></code> for accessing 
+and using this metadata.</p>
     
     </div>
 
     <pre class="usage"><span class='fu'>load_safe_data</span>(<span class='no'>record_id</span>, <span class='no'>worksheet</span>)
 
-<span class='co'># S3 method for safe_data</span>
+<span class='co'># S3 method for safedata</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/str'>str</a></span>(<span class='no'>object</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -141,29 +143,59 @@ and <code>add_locations</code> for accessing and using this metadata.</p>
       <th>worksheet</th>
       <td><p>The name of the worksheet to load</p></td>
     </tr>
+    <tr>
+      <th>object</th>
+      <td><p>A <code>safedata</code> object.</p></td>
+    </tr>
+    <tr>
+      <th>&#8230;</th>
+      <td><p>Further arguments to <code>str</code> methods.</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data frame with the additional 'safedata' class</p>
+    <p>A data frame with the additional <code>safedata</code> class and
+   additional attribute data containing metadata for the data.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>In particular, the large amount of data worksheet summary metadata is
 not attached as attributes to the data frame returned by this function.
-This is largely to avoid spamming the screen during normal use of the
-data frame: an extended description of a worksheet can be displayed using
-<code>show_worksheet</code>.</p>
-<p>Currently, this function only loads data from SAFE formatted
-.xlsx files - data stored in external files is not yet handled.</p>
+This is largely to avoid excessive output to the console during normal use 
+of the data frame: an extended description of a worksheet can be displayed
+using <code><a href='show_concepts.html'>show_worksheet</a></code>.</p>
+<p>Currently, this function only loads data from SAFE formatted <code>.xlsx</code>
+files - data stored in external files is not yet handled.</p>
     
     <h2 class="hasAnchor" id="methods-by-generic-"><a class="anchor" href="#methods-by-generic-"></a>Methods (by generic)</h2>
 
     <ul>
-<li><p><code>str</code>: Display structure of a safe_data data frame</p></li>
+<li><p><code>str</code>: Display structure of a safedata data frame</p></li>
 </ul>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>   <span class='no'>safedir</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>'example_data_dir'</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>'safedata'</span>)
+   <span class='fu'><a href='set_safe_dir.html'>set_safe_dir</a></span>(<span class='no'>safedir</span>)</div><div class='output co'>#&gt; <span class='message'>Checking for updates</span></div><div class='output co'>#&gt; <span class='message'> - Index up to date</span></div><div class='output co'>#&gt; <span class='message'> - Gazetteer up to date</span></div><div class='output co'>#&gt; <span class='message'> - Location aliases up to date</span></div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div><div class='input'>   <span class='no'>ant_abund</span> <span class='kw'>&lt;-</span> <span class='fu'>load_safe_data</span>(<span class='fl'>1400562</span>, <span class='st'>'Ant-Psel'</span>)
+   <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/str'>str</a></span>(<span class='no'>ant_abund</span>)</div><div class='output co'>#&gt; SAFE dataset
+#&gt; Concept: 1400561; Record 1400562; Worksheet: Ant-Psel
+#&gt; 'data.frame':	20 obs. of  3 variables:
+#&gt;  $ Site                : chr  "SAFE_E" "SAFE_D" "SAFE_F" "SAFE_C" ...
+#&gt;  $ ant species richness: num  31 31 27 29 31 21 31 25 32 26 ...
+#&gt;  $ ant abundance       : num  561 713 392 481 1036 ...</div><div class='input'>   <span class='co'># See also the show_worksheet function for further worksheet metadata</span>
+   <span class='fu'><a href='show_concepts.html'>show_worksheet</a></span>(<span class='no'>ant_abund</span>)</div><div class='output co'>#&gt; Record ID: 1400562
+#&gt; Worksheet name: Ant-Psel
+#&gt; Number of data rows: 20
+#&gt; Number of data fields: 3
+#&gt; Description:
+#&gt; Ant-Pselaphine data
+#&gt; 
+#&gt; Fields:
+#&gt;   field_name           field_type description                    
+#&gt; 1 Site                 Location   Site where sample was collected
+#&gt; 2 ant species richness Numeric    Number of ant species in sample
+#&gt; 3 ant abundance        Abundance  Total number of ants in sample </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -175,7 +207,9 @@ data frame: an extended description of a worksheet can be displayed using
       <li><a href="#details">Details</a></li>
 
       <li><a href="#methods-by-generic-">Methods (by generic)</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

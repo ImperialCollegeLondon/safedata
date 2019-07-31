@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Message function that can be globally muted — verbose_message • safedata</title>
+<title>Load and cache the dataset index — load_index • safedata</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,11 +30,11 @@
 
 
 
-<meta property="og:title" content="Message function that can be globally muted — verbose_message" />
+<meta property="og:title" content="Load and cache the dataset index — load_index" />
 
-<meta property="og:description" content="Prints a message if  option('safedata.verbose')  is set to TRUE.
-Note that individual expressions can be muted using suppressMessages()
-but this mutes them globally." />
+<meta property="og:description" content="This function loads the dataset record index from the JSON file in the SAFE
+data directory and sets which datasets are currently available and which 
+records are the most recent available under a given concept." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -108,27 +108,48 @@ but this mutes them globally." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Message function that can be globally muted</h1>
+    <h1>Load and cache the dataset index</h1>
     
-    <div class="hidden name"><code>verbose_message.Rd</code></div>
+    <div class="hidden name"><code>load_index.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Prints a message if  <code><a href='https://www.rdocumentation.org/packages/base/topics/options'>option('safedata.verbose')</a></code>  is set to TRUE.
-Note that individual expressions can be muted using <code><a href='https://www.rdocumentation.org/packages/base/topics/message'>suppressMessages()</a></code>
-but this mutes them globally.</p>
+    <p>This function loads the dataset record index from the JSON file in the SAFE
+data directory and sets which datasets are currently available and which 
+records are the most recent available under a given concept.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>verbose_message</span>(<span class='no'>str</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>load_index</span>()</pre>
         
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A data frame containing the dataset index details.</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>When any of the three index files (<code>index.json</code>, <code>gazetteer.geojson</code>
+and <code>location_aliases.csv</code>) are loaded, the file contents are cached in
+memory to reduce load times. The cache is within an environment that is not
+exported in the package namespace and is not intended to be user accessible.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='load_location_aliases.html'>load_location_aliases</a></code>, <code><a href='load_gazetteer.html'>load_gazetteer</a></code></p></div>
+    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-                </ul>
+      
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+          </ul>
 
   </div>
 </div>

@@ -2,7 +2,7 @@
 % Please edit documentation in R/index.R
 \name{download_index}
 \alias{download_index}
-\title{Download the current dataset index}
+\title{Downloads the current dataset index}
 \usage{
 download_index()
 }

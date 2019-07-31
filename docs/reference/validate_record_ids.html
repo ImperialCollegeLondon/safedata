@@ -65,7 +65,7 @@ the function will also handle Zenodo URLs and DOIs." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2</span>
       </span>
     </div>
 
@@ -135,7 +135,7 @@ the function will also handle Zenodo URLs and DOIs.</p>
     </tr>
     <tr>
       <th>x</th>
-      <td><p>An object of class 'safe_record_set'</p></td>
+      <td><p>An object of class <code>safe_record_set</code></p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -145,11 +145,7 @@ the function will also handle Zenodo URLs and DOIs.</p>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of class 'safe_record_set': a dataframe with columns
-  <code>concept</code> and <code>record</code> indicating the matching records. Note
-  that <code>record</code> will be NA when the value is a concept id. Inputs
-  that do not match a record or concept ids are returned as an attribute of
-  the record set.</p>
+    <p>An object of class <code>safe_record_set</code> (see Details)</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
@@ -157,6 +153,9 @@ the function will also handle Zenodo URLs and DOIs.</p>
 the columns <code>concept</code>, <code>record</code>, <code>available</code> and, finally,
 <code>mra</code> containing the most recent available record (if any). The function can
 be run on an existing <code>safe_record_set</code> to update this information.</p>
+<p>Note that <code>record</code> will be NA when a value represents a concept id. Inputs
+that do not match a record or concept ids are returned in the attribute 
+<code>mismatches</code> of the record set.</p>
 <p>This function is largely used internally to validate user inputs and to provide
 a common output for the search functions but is exported to allow users to 
 check record ids and display summary information using the print method.</p>
@@ -169,10 +168,31 @@ check record ids and display summary information using the print method.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>  <span class='fu'>validate_record_ids</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>3247631</span>, <span class='fl'>3266827</span>, <span class='fl'>3266821</span>, -<span class='fl'>1000</span>))</div><div class='output co'>#&gt; <span class='error'>Error in retrieve_index(): Failed to load cached index.</span></div><div class='input'>  <span class='fu'>validate_record_ids</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'https://doi.org/10.5281/zenodo.3247631'</span>,
-                                           <span class='st'>'10.5281/zenodo.3266827'</span>,
-                                           <span class='st'>'https://zenodo.org/record/3266821'</span>,
-                                           <span class='st'>'not_this_one/3266821'</span>))</div><div class='output co'>#&gt; <span class='error'>Error in retrieve_index(): Failed to load cached index.</span></div></pre>
+    <pre class="examples"><div class='input'>   <span class='no'>safedir</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>'example_data_dir'</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>'safedata'</span>)
+   <span class='fu'><a href='set_safe_dir.html'>set_safe_dir</a></span>(<span class='no'>safedir</span>)</div><div class='output co'>#&gt; <span class='message'>Checking for updates</span></div><div class='output co'>#&gt; <span class='message'> - Index up to date</span></div><div class='output co'>#&gt; <span class='message'> - Gazetteer up to date</span></div><div class='output co'>#&gt; <span class='message'> - Location aliases up to date</span></div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div><div class='input'>   <span class='fu'>validate_record_ids</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>3247631</span>, <span class='fl'>3266827</span>, <span class='fl'>3266821</span>, -<span class='fl'>1000</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Some record ids are not positive integers</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Some values are not known concept or record ids</span></div><div class='output co'>#&gt; Set includes 3 concept ids and 2 record ids: 
+#&gt;  - 1 open and most recent (*)
+#&gt;  - 0 open and outdated (o)
+#&gt;  - 1 under embargo or restricted (x)
+#&gt; 
+#&gt;   concept  record available
+#&gt; 1 3247630 3247631         x
+#&gt; 2 3266821 -------          
+#&gt; 3 3266826 3266827         *
+#&gt; 
+#&gt; Unmatched record ids: -1000 </div><div class='input'>   <span class='fu'>validate_record_ids</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'https://doi.org/10.5281/zenodo.3247631'</span>,
+                                            <span class='st'>'10.5281/zenodo.3266827'</span>,
+                                            <span class='st'>'https://zenodo.org/record/3266821'</span>,
+                                            <span class='st'>'not_this_one/3266821'</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Some record ids do not match known id formats</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Some values are not known concept or record ids</span></div><div class='output co'>#&gt; Set includes 3 concept ids and 2 record ids: 
+#&gt;  - 1 open and most recent (*)
+#&gt;  - 0 open and outdated (o)
+#&gt;  - 1 under embargo or restricted (x)
+#&gt; 
+#&gt;   concept  record available
+#&gt; 1 3247630 3247631         x
+#&gt; 2 3266821 -------          
+#&gt; 3 3266826 3266827         *
+#&gt; 
+#&gt; Unmatched record ids: not_this_one/3266821 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

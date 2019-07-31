@@ -8,7 +8,8 @@ download_safe_files(record_ids, confirm = TRUE, xlsx_only = TRUE,
   download_metadata = TRUE, refresh = FALSE, token = NULL)
 }
 \arguments{
-\item{record_ids}{A vector of SAFE dataset record ids}
+\item{record_ids}{A vector of SAFE dataset record ids or a 
+\code{\link{safe_record_set}} object.}
 
 \item{confirm}{Requires the user to confirm before download (logical)}
 
@@ -42,3 +43,9 @@ Using \code{refresh=TRUE} will \strong{overwrite locally modified files} and
 replace them with the versions of record from Zenodo.
 }
 
+\examples{
+   \donttest{
+   recs <- validate_record_ids(c(3247631, 3266827, 3266821))
+   download_safe_files(recs)
+   }
+}

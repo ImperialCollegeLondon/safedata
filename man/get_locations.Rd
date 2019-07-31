@@ -7,16 +7,16 @@
 get_locations(obj, gazetteer_info = FALSE)
 }
 \arguments{
-\item{obj}{A single record id, or an existing safe_data dataframe.}
+\item{obj}{A single record id, or an existing safedata dataframe.}
 
 \item{gazetteer_info}{Should all the gazetteer fields be included in the 
-returned \code{sf} object. See \code{\link{load_gazetteer}} for details.}
+returned \code{\link[sf]{sf}} object.}
 }
 \value{
 An object of classes 'safe_locations', 'sf' and 'data.frame'.
 }
 \description{
-This function returns a spatial 'simple features' (\code{\link{[sf]sf}})
+This function returns a spatial 'simple features' (\code{\link[sf]{sf}})
 object for a dataset record, including basic information about locations
 for the SAFE gazetteer if requested.
 }
@@ -43,8 +43,14 @@ existing location names in the SAFE gazetteer. Users can also include
 }
 \note{
 Not all SAFE project datasets contain locations. In this case
-  \code{get_locations} will return NULL.
+  \code{\link{get_locations}} will return NULL.
+}
+\examples{
+   safedir <- system.file('example_data_dir', package='safedata')
+   set_safe_dir(safedir)
+   locations <- get_locations(1400562)
 }
 \seealso{
-\code{\link{add_locations}}
+\code{\link{add_locations}}, \code{\link{load_gazetteer}}, 
+   \code{\link{load_location_aliases}}
 }
