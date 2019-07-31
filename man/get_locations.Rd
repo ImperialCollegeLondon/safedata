@@ -47,7 +47,7 @@ Not all SAFE project datasets contain locations. In this case
 }
 \examples{
    safedir <- system.file('example_data_dir', package='safedata')
-   set_safe_dir(safedir)
+   set_safe_dir(safedir, update=FALSE, validate=FALSE)
    locations <- get_locations(1400562)
 }
 \seealso{

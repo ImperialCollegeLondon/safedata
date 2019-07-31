@@ -30,7 +30,7 @@ be provided.
 }
 \examples{
    safedir <- system.file('example_data_dir', package='safedata')
-   set_safe_dir(safedir)
+   set_safe_dir(safedir, update=FALSE, validate=FALSE)
    ant_abund <- load_safe_data(1400562, 'Ant-Psel')
    ant_abund <- add_locations(ant_abund)
 }

@@ -46,7 +46,7 @@ check record ids and display summary information using the print method.
 
 \examples{
    safedir <- system.file('example_data_dir', package='safedata')
-   set_safe_dir(safedir)
+   set_safe_dir(safedir, update=FALSE, validate=FALSE)
    validate_record_ids(c(3247631, 3266827, 3266821, -1000))
    validate_record_ids(c('https://doi.org/10.5281/zenodo.3247631', 
 					    '10.5281/zenodo.3266827', 

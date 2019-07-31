@@ -36,7 +36,7 @@ SAFE data directory for reuse.
 \examples{
    \donttest{
    safedir <- system.file('example_data_dir', package='safedata')
-   set_safe_dir(safedir)
+   set_safe_dir(safedir, update=FALSE, validate=FALSE)
    rec <- validate_record_ids(1400562)
    safedata:::fetch_record_metadata(rec)
    metadata <- safedata:::load_record_metadata(rec)

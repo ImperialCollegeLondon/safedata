@@ -64,7 +64,7 @@ set_safe_dir <- function(safedir, update=TRUE, create=FALSE, validate=TRUE){
 	#' @return NULL
 	#' @examples
 	#'    safedir <- system.file('example_data_dir', package='safedata')
-	#'    set_safe_dir(safedir)
+	#'    set_safe_dir(safedir, update=FALSE, validate=FALSE)
 	#' @export
 	
 	# path expand to make paths work in md5sum, which fails with ~/.

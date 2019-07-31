@@ -61,7 +61,7 @@ and which are unavailable due to embargo or retriction ('x').
 
 \examples{
    safedir <- system.file('example_data_dir', package='safedata')
-   set_safe_dir(safedir)
+   set_safe_dir(safedir, update=FALSE, validate=FALSE)
    recs <- validate_record_ids(c(1400562, 3266827, 3266821))
    show_concepts(recs)
    show_record(recs[1,])

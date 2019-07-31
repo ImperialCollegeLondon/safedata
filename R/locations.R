@@ -35,7 +35,7 @@ get_locations <- function(obj, gazetteer_info=FALSE){
 	#'    \code{\link{load_location_aliases}}
 	#' @examples
 	#'    safedir <- system.file('example_data_dir', package='safedata')
-	#'    set_safe_dir(safedir)
+	#'    set_safe_dir(safedir, update=FALSE, validate=FALSE)
 	#'    locations <- get_locations(1400562)
     #' @export
     
@@ -167,7 +167,7 @@ add_locations <- function (obj, location_field=NULL, location_table=NULL, gazett
 	#'    \code{\link{load_location_aliases}}
 	#' @examples
 	#'    safedir <- system.file('example_data_dir', package='safedata')
-	#'    set_safe_dir(safedir)
+	#'    set_safe_dir(safedir, update=FALSE, validate=FALSE)
 	#'    ant_abund <- load_safe_data(1400562, 'Ant-Psel')
 	#'    ant_abund <- add_locations(ant_abund)
     #' @export

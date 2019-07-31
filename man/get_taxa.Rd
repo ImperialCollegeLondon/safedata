@@ -45,7 +45,7 @@ For more details on the structure of the Taxa worksheet see:
 }
 \examples{
    safedir <- system.file('example_data_dir', package='safedata')
-   set_safe_dir(safedir)
+   set_safe_dir(safedir, update=FALSE, validate=FALSE)
    taxa <- get_taxa(1400562)
 }
 \seealso{

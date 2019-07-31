@@ -43,7 +43,7 @@ allows a subset of field names to be used.
 }
 \examples{
    safedir <- system.file('example_data_dir', package='safedata')
-   set_safe_dir(safedir)
+   set_safe_dir(safedir, update=FALSE, validate=FALSE)
    ant_morph <- load_safe_data(1400562, 'MorphFunctTraits')
    ant_morph <- add_taxa(ant_morph)
 }

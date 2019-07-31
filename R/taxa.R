@@ -37,7 +37,7 @@ get_taxa <- function(obj){
     #' @seealso \code{\link{add_taxa}}
 	#' @examples
 	#'    safedir <- system.file('example_data_dir', package='safedata')
-	#'    set_safe_dir(safedir)
+	#'    set_safe_dir(safedir, update=FALSE, validate=FALSE)
 	#'    taxa <- get_taxa(1400562)
     #' @export
     
@@ -200,7 +200,7 @@ add_taxa <- function (obj, taxon_field=NULL, taxon_table=NULL, prefix=NULL, whic
     #' @seealso \code{\link{get_taxa}}
 	#' @examples
 	#'    safedir <- system.file('example_data_dir', package='safedata')
-	#'    set_safe_dir(safedir)
+	#'    set_safe_dir(safedir, update=FALSE, validate=FALSE)
 	#'    ant_morph <- load_safe_data(1400562, 'MorphFunctTraits')
 	#'    ant_morph <- add_taxa(ant_morph)
     #' @export

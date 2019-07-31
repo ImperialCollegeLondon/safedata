@@ -62,5 +62,5 @@ not recommended to modify or add files within a SAFE data directory.
 }
 \examples{
    safedir <- system.file('example_data_dir', package='safedata')
-   set_safe_dir(safedir)
+   set_safe_dir(safedir, update=FALSE, validate=FALSE)
 }
