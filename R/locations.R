@@ -1,92 +1,3 @@
-load_gazetteer <- function(){
-	
-	#' Loads the SAFE gazetteer
-	#'
-	#' This function loads the SAFE gazetteer, stored as a geojson file in the
-	#' root of the SAFE data directory, as an \code{\link[sf]{sf}} GIS object.
-	#' The GIS data uses the WGS84 (EPSG:4326) geographic coordinate system.
-	#'
-	#' The gazetteer contains the following fields:
-	#' \describe{
-	#' \item{location}{The official gazetteer name for a sampling site.}
-	#' \item{type}{A short description of location type - typically the project 
-	#'       that created the location}
-	#' \item{plot_size}{Where applicable, the size of the plot at a location. 
-	#'       Note that point locations may define a sampling area with a plot 
-	#'       size.}
-	#' \item{display_order}{DELETE}
-	#' \item{parent}{DELETE}
-	#' \item{region}{One of the four major large scale sampling areas: SAFE, Maliau, 
-	#'       Danum and VJR}
-	#' \item{fractal_order}{Only defined for the SAFE core sampling points, which 
-	#'       follow a fractal layout.}
-	#' \item{transect_order}{Again, for SAFE core sampling points, the location of 
-	#'       a point along the sampling design transect.}
-	#' \item{centroid_x, centroid_y}{The centroid of the feature}
-	#' \item{source}{The original source GIS file that the feature was described in.}
-	#' \item{bbox_xmin, bbox_ymin, bbox_xmax, bbox_ymax}{The bounding box of the feature.}
-	#' \item{geometry}{The GIS geometry for the data - a column of class \code{\link[sf]{sfc}}.}
-	#' }
-	#'
-	#' When this function is first called in a session, the loaded \code{\link[sf]{sf}}
-	#' object is cached for re-use (see \code{\link{safedata.env}}).
-	#' 
-	#' @return An \code{\link[sf]{sf}} object containing the SAFE gazetteer locations.
-    #' @seealso \code{\link{load_location_aliases}}
-	#' @examples
-	#'    safedir <- system.file('example_data_dir', package='safedata')
-	#'    set_safe_dir(safedir)
-	#'    gazetteer <- load_gazetteer()
-	#' @export
-	
-	gazetteer <- try(get('gazetteer', safedata.env), silent=TRUE)
-	
-	if(inherits(gazetteer, 'try-error')){
-		
-		safedir <- get_data_dir()
-		gazetteer <- sf::st_read(file.path(safedir, 'gazetteer.geojson'), 
-								 quiet=TRUE, stringsAsFactors=FALSE)
-		
-		assign('gazetteer', gazetteer, safedata.env)
-	}
-	
-	return(gazetteer)
-}
-
-
-load_location_aliases <- function(){
-	
-	#' Loads the SAFE location aliases
-	#'
-	#' This function loads the SAFE locations alias, stored as a csv file in
-	#' the root of the SAFE data directory, as data frame.
-	#'
-	#' When this function is first called in a session, the loaded data frame 
-	#' object is cached for re-use (see \code{\link{safedata.env}}).
-	#'
-	#' @return A data frame containing the SAFE location aliases.
-    #' @seealso \code{\link{load_gazetteer}}
-	#' @examples
-	#'    safedir <- system.file('example_data_dir', package='safedata')
-	#'    set_safe_dir(safedir)
-	#'    aliases <- load_location_aliases()
-	#' @export
-	
-	location_aliases <- try(get('location_aliases', safedata.env), silent=TRUE)
-	
-	if(inherits(location_aliases, 'try-error')){
-		
-		safedir <- get_data_dir()
-		location_aliases <- read.csv(file.path(safedir, 'location_aliases.csv'), 
-									 na.strings='null', stringsAsFactors=FALSE,
-									 colClasses='character')
-		assign('location_aliases', location_aliases, safedata.env)
-	}
-	
-	return(location_aliases)
-}
-
-
 get_locations <- function(obj, gazetteer_info=FALSE){
     
     #' Obtaining locations for a SAFE dataset.
@@ -234,12 +145,13 @@ get_locations <- function(obj, gazetteer_info=FALSE){
 	
 }
 
+
 add_locations <- function (obj, location_field=NULL, location_table=NULL, gazetteer_info=FALSE) {
       
     #' Adds location data to a SAFE data worksheet.
     #'
     #' This function adds location data to the rows of a SAFE data worksheet, 
-	#' converting it into a \code{\link[sf]{sf} spatial features object. Rows
+	#' converting it into a \code{\link[sf]{sf}} spatial features object. Rows
 	#' are matched to values in a location_field: if there is only one location
 	#' field, it will be used automatically; otherwise, the specific field must
 	#' be provided.
@@ -250,7 +162,7 @@ add_locations <- function (obj, location_field=NULL, location_table=NULL, gazett
 	#'    \code{\link{get_locations}}.
 	#' @param gazetteer_info Should all the gazetteer fields be included in the 
 	#'   returned \code{\link[sf]{sf}}  object. See \code{\link{load_gazetteer}} for details.
-    #' @return A modified \code{safedata} 
+    #' @return A modified \code{safedata} object including geometry data.
     #' @seealso \code{\link{get_locations}}, \code{\link{load_gazetteer}}, 
 	#'    \code{\link{load_location_aliases}}
 	#' @examples

@@ -1,6 +1,6 @@
-#' safedata: Finding and using data from the SAFE Project.
-#'
+#' Finding and using data from the SAFE Project.
 #' 
+#' @description
 #' The SAFE Project is one of the largest ecological experiments in the world.
 #' We are studying how biodiversity and ecosystem function change as forests are 
 #' modified by human activities. As well as studying the change, we also

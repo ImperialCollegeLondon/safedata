@@ -1,9 +1,9 @@
 load_safe_worksheet <- function(record_set,  worksheet, skip, n_max){
 	
-	#' Loads data from a SAFE worksheet
+	#' Internal data loading function
 	#'
 	#' This is an internal function shared between load_safe_data (data worksheets)
-	#' get_taxonomy (Taxa sheets) and get_locations (Locations sheets). 
+	#' get_taxa (Taxa sheets) and get_locations (Locations sheets). 
 	#'
 	#' @param index_row A row selected from the index data frame, identifying the
 	#'    workbook path.
@@ -15,7 +15,7 @@ load_safe_worksheet <- function(record_set,  worksheet, skip, n_max){
 	
 	# Look for a local copy of the file. If it doesn't exist, download it if possible
 	
-	index <- retrieve_index()
+	index <- load_index()
 	index_row <- subset(index, zenodo_record_id == record_set$record)
 	
 	local_path <- file.path(get_data_dir(), record_set$concept, record_set$record, index_row$filename)
@@ -54,7 +54,7 @@ load_safe_data <- function(record_id, worksheet){
 	#' This function returns a data frame containing the data from a data 
 	#' worksheet in a SAFE dataset. Note that SAFE dataset .xlsx files include
 	#' the other (non-data) worksheets Summary, Taxa, Locations that contain 
-	#' metadata: see  \code{\link{get_taxonomy}}, \code{\link{get_locations}}, 
+	#' metadata: see  \code{\link{get_taxa}}, \code{\link{get_locations}}, 
 	#' \code{\link{add_taxa}} and \code{\link{add_locations}} for accessing 
 	#' and using this metadata.
 	#' 
@@ -252,7 +252,7 @@ download_safe_files <- function(record_ids, confirm=TRUE, xlsx_only=TRUE,
 	} 
 	
 	# Get the target files
-	index <- retrieve_index()
+	index <- load_index()
 	safedir <- get_data_dir()
 	
 	# Get the set of files

@@ -34,7 +34,7 @@ validate_record_ids <- function(record_set){
 	#' @aliases safe_record_set
 	#' @export
 	
-	index <- retrieve_index()
+	index <- load_index()
 	
 	# Only run validation if the input isn't already a record set
 	if(! inherits(record_set, 'safe_record_set')){
@@ -305,7 +305,7 @@ show_concepts <- function(obj){
 	}
 		
 	# get the rows to report, sort by publication date and cut into record chunks
-	index <- retrieve_index()
+	index <- load_index()
 	
 	rows <- subset(index, zenodo_concept_id %in% record_set$concept,
 				   select=c(zenodo_concept_id, zenodo_record_id, dataset_title,

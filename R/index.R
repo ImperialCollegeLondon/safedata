@@ -1,4 +1,4 @@
-#' Dataset index cache
+#' Index file memory cache
 #'
 #' The \code{safedata.env} environment within the package namespace is 
 #' used to cache a copy of the dataset index, gazetteer and location aliases
@@ -88,7 +88,7 @@ set_safe_dir <- function(safedir, update=TRUE, create=FALSE, validate=TRUE){
 		
 		# download the index file, then cache it
 		download_index()
-		cache_index()
+		index <- load_index()
 		
 		# download the gazetteer and location aliases
 		download_gazetteer()
@@ -116,10 +116,10 @@ set_safe_dir <- function(safedir, update=TRUE, create=FALSE, validate=TRUE){
 		stop("Location aliases not found.")
 	}
 	
-	# Set the data directory and then load the index file into the cache and retrieve it for use
+	# Set the data directory and then load the index file. Only load the gazetteer
+	# and location aliases if the user starts using locations.
 	options(safedata.dir = safedir)
-	cache_index()
-	index <- retrieve_index()
+	index <- load_index()
 	
 	# Look for updates
 	if(update){
@@ -133,10 +133,9 @@ set_safe_dir <- function(safedir, update=TRUE, create=FALSE, validate=TRUE){
 		# Check the index
 		if(tools::md5sum(index_path) != index_hashes$index){
 			verbose_message(' - Updating index')
-			download_index()
 			# reload the index into the cache and get it
-			cache_index()
-			index <- retrieve_index()
+			download_index()
+			index <- load_index()
 		} else {
 			verbose_message(' - Index up to date')
 		}
@@ -194,7 +193,7 @@ set_safe_dir <- function(safedir, update=TRUE, create=FALSE, validate=TRUE){
 
 download_index <- function(){
 	
-	#' Download the current dataset index
+	#' Downloads the current dataset index
 	#' 
 	#' This function downloads the dataset index from the SAFE project
 	#' index API (\url{https://www.safeproject.net/api/index}) and saves
@@ -265,85 +264,153 @@ download_location_aliases <- function(){
 }
 
 
-cache_index <- function(){
+load_index <- function(){
 	
-	#' Load the record index into memory
+	#' Load and cache the dataset index
 	#' 
-	#' This function loads the dataset record index from the JSON
-	#' file in the SAFE data directory and sets which datasets are
-	#' currently available and which records are the most recent 
-	#' available under a given concept.
+	#' This function loads the dataset record index from the JSON file in the SAFE
+	#' data directory and sets which datasets are currently available and which 
+	#' records are the most recent available under a given concept.
+	#' 
+	#' When any of the three index files (\code{index.json}, \code{gazetteer.geojson}
+	#' and \code{location_aliases.csv}) are loaded, the file contents are cached in
+	#' memory to reduce load times. The cache is within an environment that is not
+	#' exported in the package namespace and is not intended to be user accessible.
 	#'
-	#' @return NULL
+	#' @return A data frame containing the dataset index details.
+	#' @seealso \code{\link{load_location_aliases}}, \code{\link{load_gazetteer}}
 	#' @keywords internal
-			
-	safedir <- get_data_dir()
-	index_path <- file.path(safedir,'index.json')
 	
-	index <- jsonlite::fromJSON(index_path)
-	index <- index$entries
+	if(exists('index', safedata.env)){
+		index <- get('index', safedata.env)
+	} else {
+		safedir <- get_data_dir()
+		index_path <- file.path(safedir,'index.json')
+	
+		index <- jsonlite::fromJSON(index_path)
+		index <- index$entries
 		
-	# format the datetime classes
-	index$publication_date <- as.POSIXct(index$publication_date)
-	index$dataset_embargo <- as.POSIXct(index$dataset_embargo)
+		# format the datetime classes
+		index$publication_date <- as.POSIXct(index$publication_date)
+		index$dataset_embargo <- as.POSIXct(index$dataset_embargo)
 	
-	# Add the path relative to the data directory
-	index$path <- with(index, file.path(zenodo_concept_id, zenodo_record_id, filename))
+		# Add the path relative to the data directory
+		index$path <- with(index, file.path(zenodo_concept_id, zenodo_record_id, filename))
 	
-	# Identify availability and most recent available records
-	index$available <- with(index, 
-							ifelse(dataset_access == 'embargo' & dataset_embargo >= Sys.time(), FALSE, 
-								   ifelse(dataset_access == 'restricted', FALSE, TRUE)))
+		# Identify availability and most recent available records
+		index$available <- with(index, 
+								ifelse(dataset_access == 'embargo' & dataset_embargo >= Sys.time(), FALSE, 
+									   ifelse(dataset_access == 'restricted', FALSE, TRUE)))
 	
-	# Get the index rows by concept, reduce to the unique set of records (dropping 
-	# the multiple files), drop unavailable records, sort by publication date and 
-	# return the first zenodo_record_id.
-	concepts <- split(subset(index, select=c(available, zenodo_record_id, publication_date)), 
-					  f=index$zenodo_concept_id)
+		# Get the index rows by concept, reduce to the unique set of records (dropping 
+		# the multiple files), drop unavailable records, sort by publication date and 
+		# return the first zenodo_record_id.
+		concepts <- split(subset(index, select=c(available, zenodo_record_id, publication_date)), 
+						  f=index$zenodo_concept_id)
 
-	mr_avail <- sapply(concepts, function(recs){
-		recs <- unique(recs)
-		recs <- subset(recs, available)
-		recs <- recs[order(recs$publication_date, decreasing=TRUE),]
+		mr_avail <- sapply(concepts, function(recs){
+			recs <- unique(recs)
+			recs <- subset(recs, available)
+			recs <- recs[order(recs$publication_date, decreasing=TRUE),]
 		
-		if(nrow(recs)){
-			return(recs$zenodo_record_id[1])
-		} else {
-			return(numeric(0))
-		}
-	})
+			if(nrow(recs)){
+				return(recs$zenodo_record_id[1])
+			} else {
+				return(numeric(0))
+			}
+		})
 	
-	index$most_recent_available <- with(index, ifelse(zenodo_record_id %in% unlist(mr_avail), TRUE, FALSE))
+		index$most_recent_available <- with(index, ifelse(zenodo_record_id %in% unlist(mr_avail), TRUE, FALSE))
 	
-	# save the index into the cache
-	assign('index', index, safedata.env)	
-	return(invisible())
+		# save the index into the cache
+		assign('index', index, safedata.env)	
+	}
+	return(index)
+}
+
+load_gazetteer <- function(){
+	
+	#' Load and cache the SAFE gazetteer
+	#'
+	#' This function loads the SAFE gazetteer, stored as a geojson file in the
+	#' root of the SAFE data directory, as an \code{\link[sf]{sf}} GIS object.
+	#' The GIS data uses the WGS84 (EPSG:4326) geographic coordinate system.
+	#'
+	#' The gazetteer contains the following fields:
+	#' \describe{
+	#' \item{location}{The official gazetteer name for a sampling site.}
+	#' \item{type}{A short description of location type - typically the project 
+	#'       that created the location}
+	#' \item{plot_size}{Where applicable, the size of the plot at a location. 
+	#'       Note that point locations may define a sampling area with a plot 
+	#'       size.}
+	#' \item{display_order}{DELETE}
+	#' \item{parent}{DELETE}
+	#' \item{region}{One of the four major large scale sampling areas: SAFE, Maliau, 
+	#'       Danum and VJR}
+	#' \item{fractal_order}{Only defined for the SAFE core sampling points, which 
+	#'       follow a fractal layout.}
+	#' \item{transect_order}{Again, for SAFE core sampling points, the location of 
+	#'       a point along the sampling design transect.}
+	#' \item{centroid_x, centroid_y}{The centroid of the feature}
+	#' \item{source}{The original source GIS file that the feature was described in.}
+	#' \item{bbox_xmin, bbox_ymin, bbox_xmax, bbox_ymax}{The bounding box of the feature.}
+	#' \item{geometry}{The GIS geometry for the data - a column of class \code{\link[sf]{sfc}}.}
+	#' }
+	#'
+	#' When this function is first called in a session, the loaded \code{\link[sf]{sf}}
+	#' object is cached for re-use (see \code{\link{load_index}}).
+	#' 
+	#' @return An \code{\link[sf]{sf}} object containing the SAFE gazetteer locations.
+    #' @seealso \code{\link{load_location_aliases}}, \code{\link{load_index}}
+	#' @keywords internal
+
+	
+	if(exists('gazetteer', safedata.env)){
+		gazetteer <- get('gazetteer', safedata.env)
+	} else {
+		safedir <- get_data_dir()
+		gazetteer <- sf::st_read(file.path(safedir, 'gazetteer.geojson'), 
+								 quiet=TRUE, stringsAsFactors=FALSE)
+		assign('gazetteer', gazetteer, safedata.env)
+	}
+	
+	return(gazetteer)
 }
 
 
-retrieve_index <- function(){
+load_location_aliases <- function(){
 	
-	#' Get the cached SAFE dataset index
+	#' Load and cache the SAFE location aliases
 	#'
-	#' Internal handler to retrieve the local loaded copy of the index from the
-	#' package cache environment
+	#' This function loads the SAFE locations alias, stored as a csv file in
+	#' the root of the SAFE data directory, as data frame.
 	#'
+	#' When this function is first called in a session, the loaded data frame 
+	#' object is cached for re-use (see \code{\link{load_index}}).
+	#'
+	#' @return A data frame containing the SAFE location aliases.
+    #' @seealso \code{\link{load_gazetteer}}, \code{\link{load_index}}
 	#' @keywords internal
 	
-	index <- try(get('index', safedata.env), silent=TRUE)
-	
-	if(inherits(index, 'try-error')){
-		stop('Failed to load cached index.')
+	if(exists('location_aliases', safedata.env)){
+		location_aliases <- get('location_aliases', safedata.env)
+	} else {
+		safedir <- get_data_dir()
+		location_aliases <- utils::read.csv(file.path(safedir, 'location_aliases.csv'), 
+										    na.strings='null', stringsAsFactors=FALSE,
+									        colClasses='character')
+		assign('location_aliases', location_aliases, safedata.env)
 	}
 	
-	return(index)
+	return(location_aliases)
 }
 
 
 get_data_dir <- function(){
-	#' Get SAFE data directory
-	#' 
-	#' Internal handler to check the data directory is set and return it.
+	
+	#' Checks the data directory is set and returns it
+	#'
 	#' @keywords internal
 	
 	if(is.null(options('safedata.dir'))){
@@ -356,11 +423,12 @@ get_data_dir <- function(){
 
 verbose_message <- function(str, ...){
 	
-	#' Provide package messages that can be globally muted
+	#' Message function that can be globally muted
 	#'
 	#' Prints a message if  \code{option('safedata.verbose')}  is set to TRUE.
 	#' Note that individual expressions can be muted using \code{suppressMessages()}
 	#' but this mutes them globally.
+	#'
 	#' @keywords internal
 	
 	if(options("safedata.verbose")[[1]]){
