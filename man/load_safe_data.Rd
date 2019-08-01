@@ -3,20 +3,25 @@
 \name{load_safe_data}
 \alias{load_safe_data}
 \alias{str.safedata}
+\alias{print.safedata}
 \title{Loads data from a SAFE dataset.}
 \usage{
 load_safe_data(record_id, worksheet)
 
 \method{str}{safedata}(object, ...)
+
+\method{print}{safedata}(x, n = 10, ...)
 }
 \arguments{
 \item{record_id}{A SAFE dataset record id}
 
 \item{worksheet}{The name of the worksheet to load}
 
-\item{object}{A \code{safedata} object.}
+\item{\dots}{Further arguments to \code{str} and \code{print} methods.}
 
-\item{\dots}{Further arguments to \code{str} methods.}
+\item{x, object}{A \code{safedata} object.}
+
+\item{n}{The number of rows to show in the \code{print} method.}
 }
 \value{
 A data frame with the additional \code{safedata} class and
@@ -43,6 +48,8 @@ files - data stored in external files is not yet handled.
 \section{Methods (by generic)}{
 \itemize{
 \item \code{str}: Display structure of a safedata data frame
+
+\item \code{print}: Print safedata data frame
 }}
 
 \examples{
