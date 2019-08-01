@@ -69,7 +69,7 @@ load_safe_data <- function(record_id, worksheet){
 	#'
 	#' @param record_id A SAFE dataset record id 
 	#' @param worksheet The name of the worksheet to load
-	#' @param object A \code{safedata} object.
+	#' @param x,object A \code{safedata} object.
 	#' @param n The number of rows to show in the \code{print} method.
 	#' @param \dots Further arguments to \code{str} and \code{print} methods.	
 	#' @return A data frame with the additional \code{safedata} class and
