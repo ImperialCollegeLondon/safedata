@@ -202,8 +202,25 @@ str.safedata <- function(object, ...){
 
 }
 
-# TODO - sf safedata objects - fix print method to handle data frame and sf object and
-#       adapt str to use NextMethod for the same reason.
+print.safedata <- function(x, n=10, ...){
+       
+       #' @describeIn load_safe_data Print safedata data frame
+       #' @export
+       
+       x_attr <- attr(x, 'metadata')
+       with(x_attr, cat(sprintf('SAFE dataset:\nConcept: %i; Record %i; Worksheet: %s\n', 
+                                                         safe_record_set$concept, safe_record_set$record, name)))
+       
+       if(inherits(x, 'sf')){
+               NextMethod()
+       } else if(inherits(x, 'data.frame')){
+               class(x) <- 'data.frame'
+               cat(sprintf('First %i rows:\n', n))
+               print(head(x, n=n))
+       }
+       
+       return(invisible(x))
+}
 
 
 download_safe_files <- function(record_ids, confirm=TRUE, xlsx_only=TRUE, 
