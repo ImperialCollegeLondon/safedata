@@ -70,7 +70,8 @@ load_safe_data <- function(record_id, worksheet){
 	#' @param record_id A SAFE dataset record id 
 	#' @param worksheet The name of the worksheet to load
 	#' @param object A \code{safedata} object.
-	#' @param \dots Further arguments to \code{str} methods.
+	#' @param n The number of rows to show in the \code{print} method.
+	#' @param \dots Further arguments to \code{str} and \code{print} methods.	
 	#' @return A data frame with the additional \code{safedata} class and
 	#'    additional attribute data containing metadata for the data.
 	#' @examples
@@ -204,22 +205,23 @@ str.safedata <- function(object, ...){
 
 print.safedata <- function(x, n=10, ...){
        
-       #' @describeIn load_safe_data Print safedata data frame
-       #' @export
-       
-       x_attr <- attr(x, 'metadata')
-       with(x_attr, cat(sprintf('SAFE dataset:\nConcept: %i; Record %i; Worksheet: %s\n', 
-                                                         safe_record_set$concept, safe_record_set$record, name)))
-       
-       if(inherits(x, 'sf')){
-               NextMethod()
-       } else if(inherits(x, 'data.frame')){
-               class(x) <- 'data.frame'
-               cat(sprintf('First %i rows:\n', n))
-               print(head(x, n=n))
-       }
-       
-       return(invisible(x))
+    #' @describeIn load_safe_data Print safedata data frame
+    #' @export
+    
+    x_attr <- attr(x, 'metadata')
+    with(x_attr, cat(sprintf('SAFE dataset:\nConcept: %i; Record %i; Worksheet: %s\n', 
+                             safe_record_set$concept, safe_record_set$record, name)))
+    
+    if(inherits(x, 'sf')){
+        options(sf_max_print = n)
+        NextMethod()
+    } else if(inherits(x, 'data.frame')){
+        class(x) <- 'data.frame'
+        cat(sprintf('First %i rows:\n', n))
+        print(head(x, n=n))
+    }
+    
+    return(invisible(x))
 }
 
 
