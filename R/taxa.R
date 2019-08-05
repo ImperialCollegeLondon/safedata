@@ -4,41 +4,41 @@ get_taxa <- function(obj){
     #' Obtaining taxonomy for a SAFE dataset.
     #'
     #' This function generates a taxonomy table for a specified SAFE dataset 
-	#' record. Each row represent a taxon used in the data worksheets in the
-	#' dataset and the table fields show the taxonomic hierarchy, taken from
-	#' GBIF, for those taxa. 
-	#'
-	#' All SAFE datasets containing taxa must include a Taxa worksheet, which
-	#' must contain all of the taxa referred to in taxon fields in data
-	#' worksheets. All entries in this worksheet are  validated against the  
-	#' GBIF database before publication and are used to populate the taxonomic
-	#' index for the SAFE datasets. The validated taxonomic hierarchy for the
-	#' data is also available in the metadata for a record and this function
-	#' converts the metadata into a taxonomy table. If the Taxa worksheet for 
-	#' a SAFE project dataset is empty, because the data does not contain 
-	#' observations on taxa, \code{get_taxa} will return NULL.
-	#'
-	#' The taxonomy table includes the eight 'backbone' taxonomic ranks used
-	#' in the GBIF database: Kingdom, Phylum, Class, Order, Family, Genus, 
-	#' Species and Subspecies. It also includes three further fields:
-	#' \code{taxon_name}, \code{taxon_rank} and \code{gbif_status}. These 
-	#' record the original taxa provided in the Taxa worksheet and show
-	#' where the taxonomic name used in a dataset differs from the canonical
-	#' name used in GBIF. The row names of the taxon table are the labels
-	#' used in data worksheets and are used to match a taxonomy table to a 
-	#' loaded data worksheet (see \code{\link{add_taxa}}).
+    #' record. Each row represent a taxon used in the data worksheets in the
+    #' dataset and the table fields show the taxonomic hierarchy, taken from
+    #' GBIF, for those taxa. 
+    #'
+    #' All SAFE datasets containing taxa must include a Taxa worksheet, which
+    #' must contain all of the taxa referred to in taxon fields in data
+    #' worksheets. All entries in this worksheet are  validated against the  
+    #' GBIF database before publication and are used to populate the taxonomic
+    #' index for the SAFE datasets. The validated taxonomic hierarchy for the
+    #' data is also available in the metadata for a record and this function
+    #' converts the metadata into a taxonomy table. If the Taxa worksheet for 
+    #' a SAFE project dataset is empty, because the data does not contain 
+    #' observations on taxa, \code{get_taxa} will return NULL.
+    #'
+    #' The taxonomy table includes the eight 'backbone' taxonomic ranks used
+    #' in the GBIF database: Kingdom, Phylum, Class, Order, Family, Genus, 
+    #' Species and Subspecies. It also includes three further fields:
+    #' \code{taxon_name}, \code{taxon_rank} and \code{gbif_status}. These 
+    #' record the original taxa provided in the Taxa worksheet and show
+    #' where the taxonomic name used in a dataset differs from the canonical
+    #' name used in GBIF. The row names of the taxon table are the labels
+    #' used in data worksheets and are used to match a taxonomy table to a 
+    #' loaded data worksheet (see \code{\link{add_taxa}}).
     #' 
-	#' For more details on the structure of the Taxa worksheet see:
-	#'
-	#' \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/taxa/}
-	#'
-	#' @param obj A single record id, or an existing safedata dataframe.
+    #' For more details on the structure of the Taxa worksheet see:
+    #'
+    #' \url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/taxa/}
+    #'
+    #' @param obj A single record id, or an existing safedata dataframe.
     #' @return A taxonomy table of classes 'safe_taxa' and 'data.frame'.
     #' @seealso \code{\link{add_taxa}}
-	#' @examples
-	#'    safedir <- system.file('example_data_dir', package='safedata')
-	#'    set_safe_dir(safedir, update=FALSE, validate=FALSE)
-	#'    taxa <- get_taxa(1400562)
+    #' @examples
+    #'    safedir <- system.file('example_data_dir', package='safedata')
+    #'    set_safe_dir(safedir, update=FALSE, validate=FALSE)
+    #'    taxa <- get_taxa(1400562)
     #' @export
     
     if(inherits(obj, 'safedata')){
@@ -174,35 +174,35 @@ add_taxa <- function (obj, taxon_field=NULL, taxon_table=NULL, prefix=NULL, whic
     #' Add a taxonomic hierarchy to a SAFE data worksheet.
     #'
     #' All datasets containing taxon observations provide taxonomic data (see
-	#' \code{\link{get_taxa}}) that can be linked to rows in data worksheets 
-	#' that contain 'taxa' fields. This function matches the taxonomic hierarchy 
-	#' for a dataset for a given taxon field in a data worksheet and inserts fields
-	#' to show that hierarchy.
+    #' \code{\link{get_taxa}}) that can be linked to rows in data worksheets 
+    #' that contain 'taxa' fields. This function matches the taxonomic hierarchy 
+    #' for a dataset for a given taxon field in a data worksheet and inserts fields
+    #' to show that hierarchy.
     #' 
-	#' An existing taxon table can be provided to the function, but the table
-	#' will be automatically loaded if no table is provided. If a data worksheet 
-	#' only contains a single taxon field, then that field will be used
-	#' automatically, otherwise users have to specify which taxon field to use.
-	#' A prefix can be added to taxon fields in order to discrimate between fields
-	#' from multuple taxon fields. By default, the function adds all of the fields
-	#' included in the output of \code{\link{get_taxa}}, but \code{which} 
-	#' allows a subset of field names to be used.
-	#' 
+    #' An existing taxon table can be provided to the function, but the table
+    #' will be automatically loaded if no table is provided. If a data worksheet 
+    #' only contains a single taxon field, then that field will be used
+    #' automatically, otherwise users have to specify which taxon field to use.
+    #' A prefix can be added to taxon fields in order to discrimate between fields
+    #' from multuple taxon fields. By default, the function adds all of the fields
+    #' included in the output of \code{\link{get_taxa}}, but \code{which} 
+    #' allows a subset of field names to be used.
+    #' 
     #' @param obj An existing object of class \code{safedata}
-	#' @param taxon_field The name of a taxon field in a \code{safedata} for which
-	#'    to add taxonomic data.
-	#' @param taxon_table An existing taxon table for a dataset, as generated by 
-	#'    \code{\link{get_taxa}}.
-	#' @param prefix A string to be appended to taxon field names, primarily to
-	#'    discriminate between fields of multiple taxonomies are to be added.
-	#' @param which A vector specifying a subset of taxonomy table field names to add.
+    #' @param taxon_field The name of a taxon field in a \code{safedata} for which
+    #'    to add taxonomic data.
+    #' @param taxon_table An existing taxon table for a dataset, as generated by 
+    #'    \code{\link{get_taxa}}.
+    #' @param prefix A string to be appended to taxon field names, primarily to
+    #'    discriminate between fields of multiple taxonomies are to be added.
+    #' @param which A vector specifying a subset of taxonomy table field names to add.
     #' @return A modified \code{safedata} object with added taxonomic columns.
     #' @seealso \code{\link{get_taxa}}
-	#' @examples
-	#'    safedir <- system.file('example_data_dir', package='safedata')
-	#'    set_safe_dir(safedir, update=FALSE, validate=FALSE)
-	#'    ant_morph <- load_safe_data(1400562, 'MorphFunctTraits')
-	#'    ant_morph <- add_taxa(ant_morph)
+    #' @examples
+    #'    safedir <- system.file('example_data_dir', package='safedata')
+    #'    set_safe_dir(safedir, update=FALSE, validate=FALSE)
+    #'    ant_morph <- load_safe_data(1400562, 'MorphFunctTraits')
+    #'    ant_morph <- add_taxa(ant_morph)
     #' @export
     
     if(! inherits(obj, 'safedata')){
@@ -230,12 +230,12 @@ add_taxa <- function (obj, taxon_field=NULL, taxon_table=NULL, prefix=NULL, whic
         stop("'taxon_table' not a 'safe_taxa' object created by 'get_taxa'")
     }
     
-	# This should never happen - would need a taxon field with no taxa worksheet
-	if(is.null(taxon_table)){
-		verbose_message('Dataset contains no taxonomic information.')
-		return(obj)
-	}
-	
+    # This should never happen - would need a taxon field with no taxa worksheet
+    if(is.null(taxon_table)){
+        verbose_message('Dataset contains no taxonomic information.')
+        return(obj)
+    }
+    
     # Match taxon names to the taxon and generate matching table
     idx <- match(obj[, taxon_field], rownames(taxon_table))
     
@@ -270,25 +270,25 @@ add_taxa <- function (obj, taxon_field=NULL, taxon_table=NULL, prefix=NULL, whic
 }
 
 get_phylogeny <- function(record){
-	
-	#' Get a phylogeny for a dataset
-	#'
-	#' This function has not yet been fully implemented.
-	#'
-	#' This function laods the taxa reported in a dataset (see \code{\link{get_taxa}})
-	#' and creates a \code{\link[ape]{phylo}} phylogeny for those taxa. Equal branch 
-	#' lengths are used. This function differs from \code{\link[ape]{as.phylo.formula}} 
-	#' in that it does not expect all taxonomic levels to be non NA: tips can
-	#' be at different taxonomic depths.
-	#'
-	#' @param record A single dataset record id
-	#' @return An \code{\link[ape]{phylo}} object.
-	#' @keywords internal
-	
-	stop('Not yet implemented')
-	
+    
+    #' Get a phylogeny for a dataset
+    #'
+    #' This function has not yet been fully implemented.
+    #'
+    #' This function laods the taxa reported in a dataset (see \code{\link{get_taxa}})
+    #' and creates a \code{\link[ape]{phylo}} phylogeny for those taxa. Equal branch 
+    #' lengths are used. This function differs from \code{\link[ape]{as.phylo.formula}} 
+    #' in that it does not expect all taxonomic levels to be non NA: tips can
+    #' be at different taxonomic depths.
+    #'
+    #' @param record A single dataset record id
+    #' @return An \code{\link[ape]{phylo}} object.
+    #' @keywords internal
+    
+    stop('Not yet implemented')
+    
     record_set <- validate_record_ids(record)
-	        
+            
     if(nrow(record_set) != 1){
         stop("Requires a single valid record or concept id")
     } else if(is.na(record_set$record)){
@@ -303,25 +303,25 @@ get_phylogeny <- function(record){
         return(NULL)
     }
     
-	# Need to work out the number of tips and nodes to get the branch numbering
-	# correct in the edge matrix. This is awkward because named worksheet taxa
-	# may not be tips and, with user defined taxa (gbif_id == -1), the number of
-	# unique gbif ids isn't the answer either.
-	unique_taxa <-  unique(subset(taxa, select=c(worksheet_name, gbif_id)))
-	unique_taxa$tip <- ! unique_taxa$gbif_id %in% taxa$gbif_parent_id
-	taxa$tip <- 
-	
-	# Get the internal vs tip node counts, a set of indices to be assigned to
-	# internal and tip nodes and internal pop functions to consume them
-	Nnode <- sum(! unique_taxa$tip) + 1
-	Ntip <- sum(unique_taxa$tip)
+    # Need to work out the number of tips and nodes to get the branch numbering
+    # correct in the edge matrix. This is awkward because named worksheet taxa
+    # may not be tips and, with user defined taxa (gbif_id == -1), the number of
+    # unique gbif ids isn't the answer either.
+    unique_taxa <-  unique(subset(taxa, select=c(worksheet_name, gbif_id)))
+    unique_taxa$tip <- ! unique_taxa$gbif_id %in% taxa$gbif_parent_id
+    taxa$tip <- 
+    
+    # Get the internal vs tip node counts, a set of indices to be assigned to
+    # internal and tip nodes and internal pop functions to consume them
+    Nnode <- sum(! unique_taxa$tip) + 1
+    Ntip <- sum(unique_taxa$tip)
 
-	tips <- 1:Ntip
-	nodes <- (Ntip + 1):(Ntip + 1 + Nnode)
-	
-	pop_tip <- function(){v <- tips[1]; tips <<- tips[-1]; return(v)}
-	pop_node <- function(){v <- nodes[1]; nodes <<- nodes[-1]; return(v)}
-	
+    tips <- 1:Ntip
+    nodes <- (Ntip + 1):(Ntip + 1 + Nnode)
+    
+    pop_tip <- function(){v <- tips[1]; tips <<- tips[-1]; return(v)}
+    pop_node <- function(){v <- nodes[1]; nodes <<- nodes[-1]; return(v)}
+    
     # See get_taxa for notes on stack code   
     is_root <- is.na(taxa$gbif_parent_id)
     root <- taxa[is_root,]
@@ -401,7 +401,7 @@ get_phylogeny <- function(record){
     class(taxon_table) <- c('safe_taxa', 'data.frame')
 
     return(taxon_table)
-	
-	
-	
+    
+    
+    
 }

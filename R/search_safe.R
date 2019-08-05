@@ -93,208 +93,208 @@ NULL
 
 search_dates <- function(dates, match_type = 'intersect', most_recent = FALSE, ids = NULL) {
 
-	#' @describeIn search_safe Search datasets by date extent
-	#' @export
+    #' @describeIn search_safe Search datasets by date extent
+    #' @export
 
-	match_type <- match.arg(match_type, c('intersect', 'contain', 'within'))
+    match_type <- match.arg(match_type, c('intersect', 'contain', 'within'))
 
-	# check dates passed
-	validate_query_param('dates', dates, c('character', 'POSIXt'), c(1,2))
+    # check dates passed
+    validate_query_param('dates', dates, c('character', 'POSIXt'), c(1,2))
 
-	# Convert character to POSIXt to validate content
-	if(inherits(dates,  'character')){
-		dates <- try(as.POSIXct(dates))
-		if(inherits(dates, 'try-error')){
-			stop('dates not formatted in POSIX format (yyyy-mm-dd).')
-		}
-	}
-	
-	dates <- paste(format(sort(dates), '%Y-%m-%d'), collapse=',')
-	
-	# pass the query string to the api handler
-	params <- c(date=dates, match_type=match_type)
-	return(safe_api_search('dates', params, ids, most_recent))
+    # Convert character to POSIXt to validate content
+    if(inherits(dates,  'character')){
+        dates <- try(as.POSIXct(dates))
+        if(inherits(dates, 'try-error')){
+            stop('dates not formatted in POSIX format (yyyy-mm-dd).')
+        }
+    }
+    
+    dates <- paste(format(sort(dates), '%Y-%m-%d'), collapse=',')
+    
+    # pass the query string to the api handler
+    params <- c(date=dates, match_type=match_type)
+    return(safe_api_search('dates', params, ids, most_recent))
 }
 
 
 search_fields <- function (field_text = NULL, field_type = NULL, ids = NULL, most_recent = FALSE) {
   
     #' @describeIn search_safe Search data worksheet field metadata.
-	#' @export
+    #' @export
     
     # check inputs
-	validate_query_param('field_text', field_text)
-	validate_query_param('field_type', field_type)
-	
-	params <- c(text=field_text, ftype=field_type)
-	return(safe_api_search('fields', params, ids, most_recent))
+    validate_query_param('field_text', field_text)
+    validate_query_param('field_type', field_type)
+    
+    params <- c(text=field_text, ftype=field_type)
+    return(safe_api_search('fields', params, ids, most_recent))
 }
 
 
 search_authors <- function (author, ids = NULL, most_recent = FALSE) {
     
-	#' @describeIn search_safe Search by dataset author
-	#' @export
+    #' @describeIn search_safe Search by dataset author
+    #' @export
   
     # check inputs
-	validate_query_param('author', author)
+    validate_query_param('author', author)
 
-	params <- c(name=author)
-	return(safe_api_search('authors', params, ids, most_recent))
+    params <- c(name=author)
+    return(safe_api_search('authors', params, ids, most_recent))
   
 }
 
 
 search_taxa <- function (taxon_name=NULL, taxon_rank=NULL, gbif_id=NULL, 
-						ids = NULL, most_recent = FALSE) {
-	
-	#' @describeIn search_safe Search by taxon name, rank or GBIF ID.
-	#' @export
+                        ids = NULL, most_recent = FALSE) {
+    
+    #' @describeIn search_safe Search by taxon name, rank or GBIF ID.
+    #' @export
   
-	# check inputs
-	validate_query_param('taxon_name', taxon_name)
-	validate_query_param('taxon_rank', taxon_rank)
-	validate_query_param('gbif_id', gbif_id, class='numeric')
+    # check inputs
+    validate_query_param('taxon_name', taxon_name)
+    validate_query_param('taxon_rank', taxon_rank)
+    validate_query_param('gbif_id', gbif_id, class='numeric')
 
-	params <- c(name=taxon_name, rank=taxon_rank, gbif_id=gbif_id)
-	return(safe_api_search('taxa', params, ids, most_recent))
+    params <- c(name=taxon_name, rank=taxon_rank, gbif_id=gbif_id)
+    return(safe_api_search('taxa', params, ids, most_recent))
 
 }
 
 
 search_text <- function (text, ids = NULL, most_recent = FALSE) {
-	
-	#' @describeIn search_safe Search dataset, worksheet and field titles and descriptions
-	#' @export
+    
+    #' @describeIn search_safe Search dataset, worksheet and field titles and descriptions
+    #' @export
     
     validate_query_param('text', text)
-	
-	params <- c(text=text)
-	return(safe_api_search('text', params, ids, most_recent))
-	
+    
+    params <- c(text=text)
+    return(safe_api_search('text', params, ids, most_recent))
+    
 }
 
 
 search_spatial <- function(wkt = NULL, location = NULL, distance = NULL, 
-		 				   ids = NULL, most_recent = FALSE){
+                            ids = NULL, most_recent = FALSE){
 
-	#' @describeIn search_safe Search by spatial sampling area/named location.
-	#' @export
+    #' @describeIn search_safe Search by spatial sampling area/named location.
+    #' @export
 
-	# check inputs
-	validate_query_param('wkt', wkt)
-	validate_query_param('location', location)
-	validate_query_param('distance', distance, 'numeric')
-	
-	# look for one or other of wkt and locations and do further validation
-	if(! xor(is.null(wkt), is.null(location))){
-		stop('Provide either wkt or location.')
-	} else if(! is.null(wkt)) {
-		ft <- try(sf::st_as_sfc(wkt))
-		if(inherits(ft, 'try-error')){
-			stop('wkt string not valid')
-		}
-		# TODO - check whether passing WGS84 or UTM50N
-	} else {
-		gazetteer <- load_gazetteer()
-		if(! location %in% gazetteer$location){
-			stop('Location name not found in gazetteer')
-		}
-	}
-	
-	# make sure distance is not passed using scientific notation (to metre accuracy)
-	distance <- sprintf('%0.0f', distance)
-	
-	# pass the params to the handler
-	params <- c(wkt=wkt, location=location, distance=distance)
-	return(safe_api_search('spatial', params, ids, most_recent))
+    # check inputs
+    validate_query_param('wkt', wkt)
+    validate_query_param('location', location)
+    validate_query_param('distance', distance, 'numeric')
+    
+    # look for one or other of wkt and locations and do further validation
+    if(! xor(is.null(wkt), is.null(location))){
+        stop('Provide either wkt or location.')
+    } else if(! is.null(wkt)) {
+        ft <- try(sf::st_as_sfc(wkt))
+        if(inherits(ft, 'try-error')){
+            stop('wkt string not valid')
+        }
+        # TODO - check whether passing WGS84 or UTM50N
+    } else {
+        gazetteer <- load_gazetteer()
+        if(! location %in% gazetteer$location){
+            stop('Location name not found in gazetteer')
+        }
+    }
+    
+    # make sure distance is not passed using scientific notation (to metre accuracy)
+    distance <- sprintf('%0.0f', distance)
+    
+    # pass the params to the handler
+    params <- c(wkt=wkt, location=location, distance=distance)
+    return(safe_api_search('spatial', params, ids, most_recent))
 }
 
 
 safe_api_search <- function (endpoint, params, ids = NULL, most_recent=FALSE) {
-  	
+      
     #' Internal SAFE dataset API search functions
     #' 
     #' The two internal functions described here handle validating the parameters
-	#' passed to the exported search functions and then constructing API calls from
-	#' the parameters and the common \code{ids} and \code{most_recent} arguments.
+    #' passed to the exported search functions and then constructing API calls from
+    #' the parameters and the common \code{ids} and \code{most_recent} arguments.
     #'
-	#' @param endpoint The name of the search API endpoint to be used.
-	#' @param params A character vector of the query parameters to be passed  to
-	#'    the API endpoint.
-	#' @param name The parameter name
-	#' @param val The user provided input
-	#' @param class Accepted input classes
-	#' @param length Accepted input lengths
-	#' @inheritParams search_dates
+    #' @param endpoint The name of the search API endpoint to be used.
+    #' @param params A character vector of the query parameters to be passed  to
+    #'    the API endpoint.
+    #' @param name The parameter name
+    #' @param val The user provided input
+    #' @param class Accepted input classes
+    #' @param length Accepted input lengths
+    #' @inheritParams search_dates
     #' @return The \code{safe_api_search} function returns an object of class 
-	#'    \code{\link{safe_record_set}} of datasets that match the submitted query. The
-	#'    \code{validate_query_param} function either returns NULL on success or
-	#'    raises an error.
-	#' @describeIn safe_api_search Constructs, submits and formats calls to the SAFE API.
+    #'    \code{\link{safe_record_set}} of datasets that match the submitted query. The
+    #'    \code{validate_query_param} function either returns NULL on success or
+    #'    raises an error.
+    #' @describeIn safe_api_search Constructs, submits and formats calls to the SAFE API.
     #' @keywords internal
     
-	# All of the search_* functions ultimately need the data index to construct
-	# the safe_record_set, so ensure the safedata_dir is set:
-	safedir <- get_data_dir()
-	    
+    # All of the search_* functions ultimately need the data index to construct
+    # the safe_record_set, so ensure the safedata_dir is set:
+    safedir <- get_data_dir()
+        
     # construct query string - note that the use in the search_* functions
     # of c(name=value, name=value) automatically drops NULL values.
     params <- paste(names(params), params, sep='=', collapse='&')
     
     if (! is.null(ids)) {
-		# convert ids to safe_record_set if needed
-		if(! inherits(ids, 'safe_record_set')){
-			ids <- validate_record_ids(ids)
-			if(! nrow(ids)){
-				stop('No valid record identifiers found in ids')
-			}
-		}
-		
-		# reduce to record ids (not concept ids)
-		ids <- ids$record[! is.na(ids$record)]
-		ids <- paste('ids', ids, sep='=', collapse='&')
-		params <- paste0(params, '&', ids)
+        # convert ids to safe_record_set if needed
+        if(! inherits(ids, 'safe_record_set')){
+            ids <- validate_record_ids(ids)
+            if(! nrow(ids)){
+                stop('No valid record identifiers found in ids')
+            }
+        }
+        
+        # reduce to record ids (not concept ids)
+        ids <- ids$record[! is.na(ids$record)]
+        ids <- paste('ids', ids, sep='=', collapse='&')
+        params <- paste0(params, '&', ids)
     }
-	
-	if(most_recent){
-		params <- paste0(params, '&most_recent=')
-	}
+    
+    if(most_recent){
+        params <- paste0(params, '&most_recent=')
+    }
     
     api <- 'https://www.safeproject.net/api/search'
     url <- sprintf('%s/%s?%s', api, endpoint, params)
-	url <- utils::URLencode(url)
+    url <- utils::URLencode(url)
     content <- jsonlite::fromJSON(url)
-	
+    
     if('error' %in% names(content)){
-		print(url)
-    	stop(sprintf('%s: %s', content$error, content$message))
+        print(url)
+        stop(sprintf('%s: %s', content$error, content$message))
     }
-	
-	verbose_message(sprintf('Search returned %i records', content$count))
-	
-	# convert search results to safe_record_set
-	if(content$count > 0){
-		ret <- validate_record_ids(content$entries$zenodo_record_id)
-	} else {
-		ret <- data.frame(concept = numeric(0), record = numeric(0), 
-						  available = logical(0), most_recent = numeric(0), 
-						  mra = numeric(0))
-		class(ret) <- c('safe_record_set', 'data.frame')
-	}
-	
-	return(ret)
+    
+    verbose_message(sprintf('Search returned %i records', content$count))
+    
+    # convert search results to safe_record_set
+    if(content$count > 0){
+        ret <- validate_record_ids(content$entries$zenodo_record_id)
+    } else {
+        ret <- data.frame(concept = numeric(0), record = numeric(0), 
+                          available = logical(0), most_recent = numeric(0), 
+                          mra = numeric(0))
+        class(ret) <- c('safe_record_set', 'data.frame')
+    }
+    
+    return(ret)
 }
 
 
 validate_query_param <- function(name, val, class='character', length=1){
 
-	#' @describeIn safe_api_search A basic query parameter validation handler
-	#' @keywords internal
-	
-	if(! is.null(val) && (! inherits(val, class) || ! length(val) %in% length)){
-		stop(sprintf("Parameter %s must be of length %s and have one of the following classes: %s", 
-					 name, paste(length, collapse=','), paste(class, collapse=',')))
-	}
-	
+    #' @describeIn safe_api_search A basic query parameter validation handler
+    #' @keywords internal
+    
+    if(! is.null(val) && (! inherits(val, class) || ! length(val) %in% length)){
+        stop(sprintf("Parameter %s must be of length %s and have one of the following classes: %s", 
+                     name, paste(length, collapse=','), paste(class, collapse=',')))
+    }
+    
 }
