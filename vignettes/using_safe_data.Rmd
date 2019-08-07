@@ -1,5 +1,5 @@
 ---
-title: "Using the safe_data package"
+title: "Using the `safedata` package"
 author: "Andy Aldersley and David Orme"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -8,122 +8,389 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
-# About the package
-`safe_data` is an R package designed to access and interact with data from the
-Stability of Altered Forest Ecosystems (SAFE) Project. The SAFE Project is one
-of the largest ecological experiments in the world, investigating the effects
-of human activities on biodiversity and ecosystem function in the Malaysian 
-rainforest. Further information can be found at our
-[website](https://www.safeproject.net/).
 
-Research conducted at the SAFE Project encompasses expertise from many 
-disciplines and institutions, each running interlinked projects that help to 
-develop our understanding of ecology within changing environments. Data from 
-the many activities conducted through the SAFE Project are curated and made
-available at the [SAFE Zenodo repository](https://zenodo.org/communities/safe/),
-a cloud-storage platform. The `safe_data` package is intended to enable 
-researchers to quickly and easily interface with these datasets. This document
-provides an introduction to the core functionalities of the package and
-describes the concepts supporting its development.
+```{r, echo=FALSE}
+library(knitr)
+hook_output <- knit_hooks$get("output")
+knit_hooks$set(output = function(x, options) {
+lines <- options$output.lines
+if (is.null(lines)) {
+    return(hook_output(x, options))  # pass to default hook
+}
+x <- unlist(strsplit(x, "\n"))
+more <- "..."
+if (length(lines)==1) {        # first n lines
+	if (length(x) > lines) {
+		# truncate the output, but add ....
+		x <- c(head(x, lines), more)
+	}
+	} else {
+		x <- c(more, x[lines], more)
+	}
+	# paste these lines together
+	x <- paste(c(x, ""), collapse = "\n")
+	hook_output(x, options)
+})
+```
 
-## Data format
-All researchers working at the SAFE Project are asked to submit their project
-data to the [SAFE Zenodo repository](https://zenodo.org/communities/safe/). 
-Submitted data must meet strict formatting requirements and pass a validation
-check before acceptance. Full details of this process can be found on the
-[SAFE Project data](https://safe-dataset-checker.readthedocs.io/) webpages.
+The `safedata` package makes it easy to search for and use datasets collected at the SAFE Project.
+It provides an interface to download data files and packaged record metadata and then functions to
+load data worksheets and add taxonomic and spatial data where available.
 
-In most cases, data are provided as tabular datasets stored in Excel
-spreadsheets (note that v0.1 of `safe_data` only provides support for .xlsx
-imports). Briefly, these datasets comprise the following worksheets:
+For further information on the publication and structure of data through the SAFE Project and
+within the `safedata` package, see the Overview vignette: `vignette("overview", package =
+"safedata")`.
 
-* **Summary**: simple metadata (authors, access rights) about the dataset
-* **Taxa**: a description of the Taxa reported in the dataset
-* **Locations**: a description of all sampling locations in the dataset
-* **Data worksheets**: the actual data tables, described in the **Summary** sheet
+# Installing `safedata`
 
-The `safe_data` package allows users to import and interrogate these datasets
-within the R environment.
+Currently, `safedata` can only be installed from GitHub:
 
-## Data repository
-The [SAFE Zenodo repository](https://zenodo.org/communities/safe/) provides a
-searchable cloud-based data storage facility for research outputs from the SAFE
-Project. Zenodo uses a [DOI versioning](https://help.zenodo.org/) system for 
-file storage. When uploads are published on Zenodo for the first time, two DOIs 
-are registered:
-
-* a DOI representing the _specific version_ of the record: the **version ID**
-* a DOI representing _all versions_ of the record: the **concept ID**
-
-Subsequent versions of an upload are then logged under a new DOI.
-
-In practice, this means that multiple versions of a project's data (or multiple
-datasets associated with a single research project) can be stored and referenced
-separately under a single identifier. The **concept** DOI allows users to cite
-the _entire_ project, while the **version** DOI refers to a _particular_ instance.
-
-Datasets published on Zenodo can have differing access rights:
-
-* **Open**: the dataset is open for download
-* **Embargoed**: the dataset is currently unavailable for download, but will be
-opened in the future
-* **Closed**: the dataset is no longer available
-
-`safe_data` enables downloading of SAFE project datasets using either a specific
-version ID or concept ID (in which case the latest **open** version of the
-project records is returned). More detail on this can be found in the sections
-below.
-
-# Get safe_data
-The latest stable version of `safe_data` can be installed from CRAN
 ```r
-install.packages("safe_data")
+devtools::install_github("ImperialCollegeLondon/safedata")
 ```
 
-Alternatively, the current development version can be installed from GitHub
+In the future, it should be available from CRAN:
+
 ```r
-devtools::install_github("ImperialCollegeLondon/safe_data")
+install.packages("safedata")
 ```
 
-# Access a SAFE Project dataset
-SAFE project datasets can be downloaded to a local directory.
+## Package dependencies
 
-## The SAFE directory
-Information on how to set the `SAFE_data_dir` in R.
+The `safedata` package requires the following packages: 
 
-## Local directory structure
-SAFE Project datasets are stored locally within the `SAFE_data_dir`. Each SAFE
-Project has a master folder named according to the concept DOI. Separate
-versions of this project are then created as subfolders within the main project
-folder according to their version DOI. All datasets associated with this upload
-are then stored within the version subfolder.
+* `readxl`, to read data directly from Excel datasets,
+* `jsonlite` and `curl`, to communicate with the SAFE API and to read downloaded JSON data,
+* `chron`, to represent time of day data, and
+* `sf`, to handle spatial data about sampling locations.
+
+# The SAFE data directory
+
+The `safedata` package makes use of a local directory to store downloaded data, index and metadata
+files (`vignette("overview", package = "safedata")` for details) . These files are needed for the
+`safedata` functions to work correctly, so the first step in using `safedata` is to set the
+location of the directory and the package will remind you to do this when it is loaded.
+
+```{r, collapse=TRUE}
+library(safedata)
 ```
-index.rds
-concept_DOI/
-concept_DOI/versions.rds
-concept_DOI/record_DOI_1/file.xlsx
-concept_DOI/record_DOI_1/external_file1.xlsx
-concept_DOI/record_DOI_2/file.xlsx
+
+## Initialising a SAFE data directory
+
+If this is the first time you are loading `safedata` -- or if you simply want to have two separate
+SAFE data directories -- then you need to create a new, empty directory.
+
+```{r, eval=FALSE}
+set_safe_dir('my_safe_directory', create=TRUE)
+## Safe data directory created
 ```
 
-The `index.rds` and `versions.rds` are local caches containing up-to-date
-offline records of files accessed and version statuses for all concept DOIs
-requested by the user. These files are described in more detail below.
+This will create the directory and download the current index files. You cannot use an existing
+directory: the package wants to start with a fresh, empty directory. Note that the directory path
+is stored in `options()`:
 
-## Versioning
+```{r, eval=FALSE}
+options('safedata.dir')
+## $safedata.dir
+## [1] "my_safe_directory"
+```
 
-The `versions.rds` file is always 
+## Using an existing SAFE data directory
 
-# Load a SAFE Project dataset
+Once you have a SAFE data directory, the same function is used to tell the `safedata` package where
+to look for index and data files:
 
-## Importing a SAFE data object
-Using `importSafe()`
+```{r, eval=FALSE}
+set_safe_dir('my_safe_directory')
+## Checking for updates
+##  - Index up to date
+##  - Gazetteer up to date
+##  - Location aliases up to date
+## Validating directory
+```
 
-## The SAFE data object structure
-Description of different features within the object and how to access them (e.g.
-`print()`)
+You will see that this function checks with the SAFE Project website for updates to the key index
+files. This can be turned off for offline use (`set_safe_dir('~/my_safe_directory',
+update=FALSE)`). The function also validates local data files: it checks the MD5 hash of local data
+file copies against the MD5 of the published file. You _can_ suppress validation
+(`set_safe_dir('~/my_safe_directory', validate=FALSE)`), but this is not advised: altering the
+contents of a published data file undermines reproducible research.
 
-## Building taxonomic heirarchies
-Using `addTaxonHeirarchies()` to build a taxonomic tree
+```{r, echo=FALSE, include=FALSE}
+safe_dir <- system.file('example_data_dir', package='safedata')
+set_safe_dir(safe_dir)
+```
+# Exploring  record metadata
 
-## Visualising locational information
+You can browse published SAFE dataset at either our [SAFE Zenodo
+community](https://zenodo.org/communities/safe) or on the [SAFE Project
+website](https://www.safeproject.net/datasets/view_datasets). Datasets are identified by their
+Zenodo record number, which is the number included in both the dataset DOI and Zenodo URL. All of
+the following point to the same dataset:
+
+* [https://doi.org/10.5281/zenodo.3247631](https://doi.org/10.5281/zenodo.3247631) 
+* [10.5281/zenodo.3247631](https://doi.org/10.5281/zenodo.3247631) 
+* [https://zenodo.org/record/3266821](https://zenodo.org/record/3247631))
+
+Note that all metadata is *available for all records*, regardless of whether they are open,
+embargoed or restricted. This includes field descriptions and taxon and location sampling so that
+users can assess whether a dataset is going to be useful even if it is not yet openly available.
+
+Once you have found datasets that you want to explore further, then you can use the
+`validate_record_ids()` function. This function does the following:
+
+1. checks that the record is valid,
+2. checks whether the record number is a **record id**, referring to a specific version of a
+    dataset, or a **concept id**, which identifies all the versions of a dataset. In the example 
+    code below, two of the values are record ids, so the appropriate concept id is located and
+    printed, and one is a concept id, so no specific version number is given.
+3. checks whether the data are currently available, and
+4. provides an interface to download and  import the related data files. 
+
+The output is an object of class `safe_record_set`: 
+
+```{r, echo=TRUE}
+recs <- validate_record_ids(c('https://doi.org/10.5281/zenodo.3247631',
+                              '10.5281/zenodo.3266827',
+                              'https://zenodo.org/record/3266821'))
+print(recs)
+```
+
+This object is just a data frame containing validated record ids and access information and so you
+can use the normal data frame indices (e.g. `recs[1,]`) to select particular records. 
+
+In addition, all of the main functions in `safedata` that expect to be passed a dataset id will run
+`validate_record_ids()` on their inputs, so you can simply use those URLs directly with those
+functions without needing to specifically create a `safe_record_set` yourself.
+
+## Displaying dataset metadata
+
+Printing a `safe_record_set` object displays a deliberately compact summary of a set of record
+ids. There are three function that show the detailed metadata for records at three levels: 
+
+* the **concept** level: metadata about all the published versions of a particualar dataset,
+* the **record** level: metadata about a specific version of a dataset, and
+* the **worksheet** level: metadata about the fields available in a particular data worksheet.
+
+### `show_concepts()`
+
+The `show_concepts()` function displays concept level metadata about a set of record ids. This
+includes the (most recent) dataset title and a short summary of the versions available under the 
+dataset concept. Note that the output is not restricted just to the set of record ids given to the function: 
+it shows metadata for all versions for each of the concept  ids included.
+
+```{r}
+show_concepts(recs)
+```
+
+### `show_record()`
+
+This function shows metadata for a specific version of a dataset: if you give it a concept ID then
+it will display the available versions for that concept. Otherwise, the function prints out information
+about the dataset with that record id: it includes the dataset title, status and other dataset level
+metadata and then a summary of the data worksheets contained in the dataset.
+
+Note that - because a `safe_record_set` is just a data frame with some extra information attached - 
+you can use the usual data frame indexing to select a row to pass to other functions. Running 
+`show_record()` also _requires an internet connection_: the package downloads a JSON file of
+the record metadata and stores it in the SAFE data directory.
+
+```{r}
+show_record(recs[3,])
+```
+
+### `show_worksheet()`
+
+This function  shows metadata for a named worksheet within a specific record. The default is to show
+a compact table of field names, field types and truncated descriptions: 
+
+```{r}
+show_worksheet(recs[3,], 'Data')
+```
+
+There is also an extended display (`extended_fields=TRUE`) that will print out a list of all the available
+metadata for each field.
+
+```{r, output.lines=15}
+show_worksheet(recs[3,], 'Data', extended_fields=TRUE)
+```
+
+# Search functions
+
+The `safedata` package also contains a set of search functions to explore datasets. These functions
+make use of a metadata index stored on the SAFE Project website and so need an internet connection
+to work. These search functions provide structured access to the same metadata shown in project
+description text but also provide extended taxonomic and spatial searches.
+
+The functions are:
+
+* `search_text()`:  free text search of dataset and worksheet titles and descriptions.
+* `search_fields()`: searches worksheet field names and descriptions and field types.
+* `search_authors()`: searches dataset authors
+* `search_dates()`:  searches for overlap with the start and end date of a dataset.
+* `search_taxa()`: searches for datasets containing particular taxa.
+* `search_spatial()`: searches for datasets sampling at or near a particular location.
+
+All of these functions return `safe_record_set` objects, which can be used in the metadata display functions shown above as well as for data downloading and use (see below).
+
+```{r}
+print(soil_datasets <- search_text('soil'))
+show_concepts(soil_datasets[2,])
+```
+
+## Taxon search details
+
+Published datasets contain a taxonomic index of any organisms referred to within the data - see
+[here](https://safe-dataset-checker.readthedocs.io/en/latest/data_format/taxa/) for details of the
+Taxa worksheet containing the index.
+
+The taxa in this index, along with all of the parent taxa in the taxonomic hierarchy leading up to
+that those taxa, are added to a taxonomic database on the SAFE Project website. The `search_taxa()`
+function searches that index to identify all the datasets that contain a particular taxon.
+
+```{r, collapse=TRUE}
+print(ants <- search_taxa('Formicidae'))
+```
+
+The taxonomic index is built around the GBIF backbone taxonomic database and include the following
+core taxonomic levels: kingdom, phylum, class, order, family, genus, species and subspecies. It is
+also possible to search by [GBIF ID](https://www.gbif.org/species/4342).
+
+```{r, collapse=TRUE}
+ants <- search_taxa(gbif_id=4342)
+```
+
+## Spatial search details
+
+Datasets also have to provide a full index of sampling locations used in the data. Sampling
+locations are either linked to existing sampling locations included in the [SAFE
+gazetteer](https://www.safeproject.net/info/gazetteer) or users can identify new sampling locations
+and provide location data if possible. 
+
+The `search_spatial()` function allows users to search for datasets by sampling locations. Accepted location names from the gazetteer can be used to search for datasets but users can also provide their own search geometries using the Well Known Text format. The search includes simple GIS capabilities to look for sampling within a  given distance of the query location.
+
+```{r, collapse=TRUE}
+# Datasets that include sampling within experimental block A
+within_a <- search_spatial(location='BL_A')
+# Datasets that sampled within 2 km of the Maliau Basin Field Study Centre
+near_maliau <- search_spatial(wkt='POINT(116.97394 4.73481)', distance=2000)
+```
+
+Note that WKT coordinates should be supplied as WGS84 longitude and latitude - typically the output
+of GPS receivers - but the database uses the local UTM 50N projected coordinate system for all
+distance calculations and GIS operations.
+
+# Downloading data
+
+Once you have found records for which you want to explore the actual data, then you first need to
+download the data files for the dataset from Zenodo. This uses the `download_safe_files()` function
+and you can either give that a URL or number for a dataset or pass it an existing
+`safe_record_set`. The function will check which datasets are currently available and download them
+to the SAFE data directory. The default behaviour is to present a brief report on the number and
+size of available files to be downloaded before actually doing anything:
+
+```{r, eval=FALSE}
+download_safe_files(within_a)
+## 26 files requested from 26 records
+##  - 0 local (0 bytes)
+##  - 4 embargoed or restricted (2.2 Mb)
+##  - 22 to download (43.6 Mb) 
+## 
+## 1: Yes
+## 2: No
+## 
+## Selection:
+```
+
+By default, the `download_safe_files()` function downloads all of the files associated with the
+record. This will include *external* data files which may contain primary data that is not suited
+to the Excel format or additional information. Although many external files are likely to be
+readable in R, the`safedata` does not currently provide a mechanism to load them automatically. The
+function will also download the JSON metadata for the specified datasets.
+
+The function will warn you if the local copies of data files have been altered and the
+`refresh=TRUE` argument can be used to restore data files to the version of record. Note that this
+will **delete local changes**.
+
+# Loading data
+
+The `load_safe_data()` function is used to load a named data worksheet from a dataset into a `safedata` object. This is just a data frame with some additional attribute data and it will in general behave just like any other data frame - the additional attributes are used for further data processing and adding brief metadata to the `str` and `print` methods.
+
+Some data formatting takes place based on [field types](https://safe-dataset-checker.readthedocs.io/en/latest/data_format/data/#field-types): categorical variables are converted to factors; dates and datetimes are converted to `POSIXct` and times are converted to `chron::time` objects. 
+
+```{r}
+beetle_abund <- load_safe_data(1400562, 'Ant-Psel')
+str(beetle_abund)
+print(beetle_abund)
+```
+
+The display of `safedata` objects is kept deliberately simple to avoid cluttering the screen with metadata. You can always view additional metadata for a loaded worksheet by using the `show` functions directly on the loaded `safedata` object:
+
+```{r}
+show_concepts(beetle_abund)
+show_record(beetle_abund)
+show_worksheet(beetle_abund)
+```
+
+## Dataset taxa
+
+There are three functions that can be used to work with the taxa in a dataset:
+
+1. `get_taxa()`:  This function loads a dataframe containing all of the taxa used within a dataset, with fields including the core GBIF taxonomic levels, the taxonomic label used within the dataset and the taxonomic status of the each taxon. You can load a taxonomic dataframe from a `safe_record_set` row or using an existing loaded `safedata` object.
+
+    ```{r}
+    beetle_taxa <- get_taxa(beetle_abund)
+    str(beetle_taxa)
+    ```
+
+2. `add_taxa()`: This function adds taxonomic details to an already loaded data worksheet. 
+
+    ```{r}
+    beetle_morph <- load_safe_data(1400562, 'MorphFunctTraits')
+    beetle_morph <- add_taxa(beetle_morph)
+    str(beetle_morph)
+    ```
+    
+3. `get_phylogeny()`:  This function creates a phylogeny from the taxonomic data in a dataset, returning an object of class `phylo` (see package`ape`).
+
+    ```{r}
+    library(ape)
+    beetle_phylo <- get_phylogeny(1400562)
+    plot(beetle_phylo, show.node.label=TRUE, font=1, no.margin=TRUE)
+    ```
+
+## Dataset locations
+
+Nearly all SAFE datasets will include observations at spatial locations, and these datasets must include a Locations worksheet used as an spatial index for research activities.  There are three functions that can be used to work with locations in a dataset. All of these functions use the `sf` package to represent the GIS geometry of locations and which provides an extensive toolset for further spatial analysis.
+
+
+1. `load_gazetteer()`: The gazetteer is one of the three key index files saved in the SAFE data directory and updated when `set_safe_dir()` is run. It includes sampling locations drawn from across a wide range of projects running at SAFE and is intended to hold all locations that are likely to see repeated sampling. Locations included the gazetteer can be used directly as **known locations** in datasets, although data providers can also include **new locations**.
+
+    ```{r}
+    gazetteer <- load_gazetteer()
+    print(gazetteer)
+    ```
+
+2. `get_locations()`: This function returns an `sf` object containing the locations used within a dataset. For known locations,  the GIS data for the location are taken directly from the gazetteer. If the locations are new sampling sites, then GIS data provided in the dataset is used. Note that it is possible for dataset providers to create a new locations without including GIS data - these will be represented using empty GIS geometries.
+
+    By default, the returned `sf` object will only include the location name used in the dataset, the gazetteer name for known sampling sites and an indication of whether the location is new or known, but `gazetteer_info=TRUE` can be used to include the gazetteer attributes for known locations.
+
+    ```{r}
+    library(sf)
+    beetle_locs <- get_locations(1400562)
+    print(beetle_locs)
+    fragments <- subset(gazetteer, type=='SAFE forest fragment')
+    par(mar=c(3,3,1,1))
+    plot(st_geometry(fragments), col='khaki', graticule=TRUE)
+    plot(st_geometry(beetle_locs), add=TRUE, col='red', pch=4)
+    ```
+	
+3. `add_locations()`: This functions adds location data to an already loaded worksheet. The result is a `safedata` object that is also an `sf` object.
+
+    ```{r}
+    beetle_env <- load_safe_data(1400562, 'EnvironVariables')
+    beetle_env <- add_locations(beetle_env)
+    print(beetle_env)
+    plot(beetle_env['Cover'], key.pos=4, breaks=seq(0,100, by=5))
+    ```
+
