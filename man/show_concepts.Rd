@@ -30,12 +30,12 @@ Invisibly, a SAFE metadata object or a list of such objects. These
 These functions provide access to the metadata associated with SAFE
 datasets. The functions provide three levels of information: 
 \describe{
-  \item{\code{show_concepts}}{displays the record versions grouped under 
+     \item{\code{show_concepts}}{displays the record versions grouped under 
          dataset concepts,}
-  \item{\code{show_record}}{displays summary information about a 
-        specific record, and }
-  \item{\code{show_worksheet}}{displays metadata about data worksheet
-        fields within a record.}
+     \item{\code{show_record}}{displays summary information about a 
+           specific record, and }
+     \item{\code{show_worksheet}}{displays metadata about data worksheet
+           fields within a record.}
 }
 All three functions accept a first argument \code{obj}, which can be one 
 of three things:
@@ -67,6 +67,6 @@ and which are unavailable due to embargo or retriction ('x').
    show_record(recs[1,])
    # Show worksheet metadata from a record or from a loaded worksheet
    show_worksheet(1400562, 'EnvironVariables')
-   ant_abund <- load_safe_data(1400562, 'Ant-Psel')
-   show_worksheet(ant_abund, extended_fields=TRUE)
+   beetle_abund <- load_safe_data(1400562, 'Ant-Psel')
+   show_worksheet(beetle_abund, extended_fields=TRUE)
 }

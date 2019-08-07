@@ -43,4 +43,3 @@ object is cached for re-use (see \code{\link{load_index}}).
 \seealso{
 \code{\link{load_location_aliases}}, \code{\link{load_index}}
 }
-\keyword{internal}

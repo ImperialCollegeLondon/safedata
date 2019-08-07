@@ -38,12 +38,12 @@ Zenodo page.
 The root of the data directory also holds three index files:
 \describe{
   \item{\code{index.json}}{, containing a full list of the
-	    files and dataset records available in the SAFE data 
-		repository;}
+        files and dataset records available in the SAFE data 
+        repository;}
   \item{\code{gazetteer.geojson}}{, containing the official list of 
-	    known sampling locations and GIS data; and}
+        known sampling locations and GIS data; and}
   \item{\code{location_aliases.csv}}{, a list of alternative names 
-	    permitted for some locations.}
+        permitted for some locations.}
 }
 
 If \code{create=TRUE}, the function will try to create the named

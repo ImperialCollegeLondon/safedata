@@ -31,8 +31,8 @@ be provided.
 \examples{
    safedir <- system.file('example_data_dir', package='safedata')
    set_safe_dir(safedir, update=FALSE, validate=FALSE)
-   ant_abund <- load_safe_data(1400562, 'Ant-Psel')
-   ant_abund <- add_locations(ant_abund)
+   beetle_abund <- load_safe_data(1400562, 'Ant-Psel')
+   beetle_abund <- add_locations(beetle_abund)
 }
 \seealso{
 \code{\link{get_locations}}, \code{\link{load_gazetteer}}, 

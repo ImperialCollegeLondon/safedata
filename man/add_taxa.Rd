@@ -44,8 +44,8 @@ allows a subset of field names to be used.
 \examples{
    safedir <- system.file('example_data_dir', package='safedata')
    set_safe_dir(safedir, update=FALSE, validate=FALSE)
-   ant_morph <- load_safe_data(1400562, 'MorphFunctTraits')
-   ant_morph <- add_taxa(ant_morph)
+   beetle_morph <- load_safe_data(1400562, 'MorphFunctTraits')
+   beetle_morph <- add_taxa(beetle_morph)
 }
 \seealso{
 \code{\link{get_taxa}}

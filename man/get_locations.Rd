@@ -37,7 +37,7 @@ existing location names in the SAFE gazetteer. Users can also include
           then used in preference to any new location data within the
           dataset.
     \item Finally, remaining new locations are assigned any feature 
-			 geometry within the dataset. New locations do not necessarily
+             geometry within the dataset. New locations do not necessarily
           have geometry data, so may have null or empty geometries.
 }
 }
