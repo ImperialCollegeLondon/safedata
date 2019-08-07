@@ -273,20 +273,22 @@ get_phylogeny <- function(record){
     
     #' Get a phylogeny for a dataset
     #'
-    #' This function has not yet been fully implemented.
-    #'
-    #' This function laods the taxa reported in a dataset (see \code{\link{get_taxa}})
-    #' and creates a \code{\link[ape]{phylo}} phylogeny for those taxa. Equal branch 
-    #' lengths are used. This function differs from \code{\link[ape]{as.phylo.formula}} 
+    #' This function loads the taxa reported in a dataset (see \code{\link{get_taxa}})
+    #' and creates a phylogeny for those taxa, using the \code{\link[ape]{phylo}} class. 
+	#' Equal branch lengths are used. This function differs from \code{\link[ape]{as.phylo.formula}} 
     #' in that it does not expect all taxonomic levels to be non NA: tips can
-    #' be at different taxonomic depths.
-    #'
+    #' be at different taxonomic depths. The object has internal node labels showing
+	#' the taxonomic hierarchy of the phylogeny.
+	#'
+	#' Note that the phylogeny will contain singleton nodes if an internal taxon has
+	#' a single descendant: the \code{\link{ape}} functions \code{\link[ape]{has.singles}}
+	#' and \code{\link[ape]{collapse.singles}} can be used to detect and remove these if 
+	#' required.
+    #' 
     #' @param record A single dataset record id
     #' @return An \code{\link[ape]{phylo}} object.
-    #' @keywords internal
-    
-    stop('Not yet implemented')
-    
+    #' @export
+        
     record_set <- validate_record_ids(record)
             
     if(nrow(record_set) != 1){
@@ -302,85 +304,67 @@ get_phylogeny <- function(record){
     if(length(taxa) == 0){
         return(NULL)
     }
-    
-    # Need to work out the number of tips and nodes to get the branch numbering
-    # correct in the edge matrix. This is awkward because named worksheet taxa
-    # may not be tips and, with user defined taxa (gbif_id == -1), the number of
-    # unique gbif ids isn't the answer either.
-    unique_taxa <-  unique(subset(taxa, select=c(worksheet_name, gbif_id)))
-    unique_taxa$tip <- ! unique_taxa$gbif_id %in% taxa$gbif_parent_id
-    taxa$tip <- 
-    
-    # Get the internal vs tip node counts, a set of indices to be assigned to
-    # internal and tip nodes and internal pop functions to consume them
-    Nnode <- sum(! unique_taxa$tip) + 1
-    Ntip <- sum(unique_taxa$tip)
 
-    tips <- 1:Ntip
-    nodes <- (Ntip + 1):(Ntip + 1 + Nnode)
-    
-    pop_tip <- function(){v <- tips[1]; tips <<- tips[-1]; return(v)}
-    pop_node <- function(){v <- nodes[1]; nodes <<- nodes[-1]; return(v)}
-    
+	# Need to generate an edge matrix and node labels. The phlyo node numbering
+	# uses 1-N for the tips and (N+1):(N+n_internal) for the internal nodes, with
+	# the numbering of internal nodes showing a nested structure (so N + 1 is the 
+	# root). The number of tips is not known a priori (a taxon with a worksheet 
+	# name is not necessarily a tip), so assign a correctly nested node numbering
+	# and then renumber afterwards
+	
+	external <- logical(nrow(taxa))
+	edge_matrix <- matrix(0, ncol=2, nrow=nrow(taxa) - 1)
+	node_labels <- character(nrow(taxa))
+
+	# This function autoincrements the index, guaranteeing that edges will
+	# always have a smaller number in the parent node and hence providing an
+	# ordering that can be used for renumbering to the ape structue:
+	# 	1-N are the tips and (N+1):(N+n_internal) are the nodes
+	node_index <- 0
+	node_id <- function() {node_index <<- node_index + 1; return(node_index)}
+	edge_index <- 0
+	edge_id <- function() {edge_index <<- edge_index + 1; return(edge_index)}
+
+	# make a slot to store node id in the taxon table, so it can be updated
+	# within the stack
+	taxa$node_id <- 0
+	
     # See get_taxa for notes on stack code   
     is_root <- is.na(taxa$gbif_parent_id)
     root <- taxa[is_root,]
     taxa <- taxa[! is_root,]
     taxa <- split(as.data.frame(taxa), f=taxa$gbif_parent_id)
-    stack <- list(list(top=root[1,], up_next=root[-1,], node_id=pop_node()))
-    
+    stack <- list(list(top=root[1,], up_next=root[-1,]))
+	
+	# Allocate the first node id and node_label
+	root_node_id <- node_id()
+	stack[[1]]$top$node_id <- root_node_id
+    node_labels[root_node_id] <- stack[[1]]$top$taxon_name
+
     while(length(stack)){
         
         current <- stack[[1]]$top
-        current_wn <- current$worksheet_name
-                
-        # If the top of the stack has a worksheet name, add that to the taxon table
-        if(! is.na(current_wn)){
-            
-            # set the taxon name, rank and status to put in the table
-            txn <- current$taxon_name
-            rnk <- current$taxon_rank
-            sts <- current$gbif_status
-            
-            # Look for other taxa in up_next with the same worksheet name - these
-            # are taxa which have a different GBIF canonical name to the one the
-            # dataset provider used. Figure out which is which and update, otherwise
-            # just use the singleton.
-            pair_idx <- match(current_wn, stack[[1]]$up_next$worksheet_name)
-            
-            if(! is.na(pair_idx)){
-                # remove the row from up next
-                paired_taxon <- stack[[1]]$up_next[pair_idx,]
-                stack[[1]]$up_next <- stack[[1]]$up_next[- pair_idx,]
-                
-                # If the current taxon is the GBIF accepted record, replace the 
-                # taxon details with those provided in the dataset, else rename
-                # the top of the stack with the accepted details
-                if(current$gbif_status == 'accepted'){
-                    txn <- paired_taxon$taxon_name
-                    rnk <- paired_taxon$taxon_rank
-                    sts <- paired_taxon$gbif_status
-                } else {
-                    names(stack)[1] <- paired_taxon$taxon_name
-                }
-            }
-            
-            hierarchy <- c(rev(names(stack)), rep(NA, 8 - length(stack)))
-            taxon_table[current_wn, ] <- c(hierarchy, txn, rnk, sts)
-        }
-        
-        
-        # Does this taxon have descendents? If so, they move on to the top of the stack
-        # otherwise, work back down the stack to find the next level with something
-        # left in the up_next slot.
         descendants <- taxa[[as.character(current$gbif_id)]]
-        
+		        
         if(! is.null(descendants)){
+			
+			# fill in the edge matrix, allocating node_ids and setting taxon labels			
+			for(idx in seq(nrow(descendants))){
+				this_node <- node_id()
+				node_labels[this_node] <- descendants[idx,]$taxon_name
+				descendants[idx,]$node_id <- this_node
+				edge_matrix[edge_id(), ] <- c(current$node_id, this_node)
+			}
+			
+			# and then move descendants on to stack
             descendants <- list(list(top=descendants[1,], up_next=descendants[-1,]))
             names(descendants) <- descendants[[1]]$top$taxon_name
             stack <- c(descendants , stack)
             
         } else {
+			# this is a tip, so set external and then work back down
+			external[current$node_id] <- TRUE
+			
             while(length(stack)){
                 up_next <- stack[[1]]$up_next
                 if(nrow(up_next)){
@@ -396,12 +380,25 @@ get_phylogeny <- function(record){
             }
         } 
     }
-
-    taxon_table <- as.data.frame(taxon_table, stringsAsFactors=FALSE)
-    class(taxon_table) <- c('safe_taxa', 'data.frame')
-
-    return(taxon_table)
-    
-    
+	
+	# Now need to renumber the nodes edge matrix: 1-N are the tips and (N+1):
+	n_tips <- sum(external)
+	n_internal <- sum(! external)
+	
+	# mapping to ape node numbers
+	node_mapping <- numeric(length(node_labels))
+	node_mapping[external] <- 1:n_tips
+	node_mapping[! external] <- (n_tips + 1):(n_tips + n_internal)	
+	ape_edge_matrix <- cbind(node_mapping[edge_matrix[,1]], node_mapping[edge_matrix[,2]])
+	
+	ret <- list(edge=ape_edge_matrix,
+				Nnode=n_internal, 
+				edge.length = rep(1, nrow(ape_edge_matrix)),
+				tip.label=node_labels[external],
+				node.label=node_labels[!external])
+	
+	class(ret) <- 'phylo'
+	
+    return(ret)
     
 }
