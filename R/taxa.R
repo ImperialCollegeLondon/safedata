@@ -201,8 +201,8 @@ add_taxa <- function (obj, taxon_field=NULL, taxon_table=NULL, prefix=NULL, whic
     #' @examples
     #'    safedir <- system.file('example_data_dir', package='safedata')
     #'    set_safe_dir(safedir, update=FALSE, validate=FALSE)
-    #'    ant_morph <- load_safe_data(1400562, 'MorphFunctTraits')
-    #'    ant_morph <- add_taxa(ant_morph)
+    #'    beetle_morph <- load_safe_data(1400562, 'MorphFunctTraits')
+    #'    beetle_morph <- add_taxa(beetle_morph)
     #' @export
     
     if(! inherits(obj, 'safedata')){
@@ -285,8 +285,8 @@ get_phylogeny <- function(record){
 	#' and \code{\link[ape]{collapse.singles}} can be used to detect and remove these if 
 	#' required.
     #' @examples
-	#'    ant_phylo <- get_phylogeny(1400562)
-    #'    plot(ant_phylo, show.node.label=TRUE, font=1, no.margin=TRUE)
+	#'    beetle_phylo <- get_phylogeny(1400562)
+    #'    plot(beetle_phylo, show.node.label=TRUE, font=1, no.margin=TRUE)
     #' @param record A single dataset record id
     #' @return An \code{\link[ape]{phylo}} object.
     #' @export

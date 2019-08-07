@@ -293,8 +293,8 @@ show_concepts <- function(obj){
     #'    show_record(recs[1,])
     #'    # Show worksheet metadata from a record or from a loaded worksheet
     #'    show_worksheet(1400562, 'EnvironVariables')
-    #'    ant_abund <- load_safe_data(1400562, 'Ant-Psel')
-    #'    show_worksheet(ant_abund, extended_fields=TRUE)
+    #'    beetle_abund <- load_safe_data(1400562, 'Ant-Psel')
+    #'    show_worksheet(beetle_abund, extended_fields=TRUE)
     #' @export
     
     if(inherits(obj, 'safedata')){
