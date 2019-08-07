@@ -32,7 +32,12 @@
 
 <meta property="og:title" content="Get a phylogeny for a dataset — get_phylogeny" />
 
-<meta property="og:description" content="This function has not yet been fully implemented." />
+<meta property="og:description" content="This function loads the taxa reported in a dataset (see get_taxa)
+and creates a phylogeny for those taxa, using the phylo class. 
+Equal branch lengths are used. This function differs from as.phylo.formula 
+in that it does not expect all taxonomic levels to be non NA: tips can
+be at different taxonomic depths. The object has internal node labels showing
+the taxonomic hierarchy of the phylogeny." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -86,7 +91,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/using_safe_data.html">Using the safe_data package</a>
+      <a href="../articles/overview.html">An overview of data at the SAFE Project</a>
+    </li>
+    <li>
+      <a href="../articles/using_safe_data.html">Using the `safedata` package</a>
     </li>
   </ul>
 </li>
@@ -113,7 +121,12 @@
 
     <div class="ref-description">
     
-    <p>This function has not yet been fully implemented.</p>
+    <p>This function loads the taxa reported in a dataset (see <code><a href='get_taxa.html'>get_taxa</a></code>)
+and creates a phylogeny for those taxa, using the <code><a href='https://www.rdocumentation.org/packages/ape/topics/read.tree'>phylo</a></code> class. 
+Equal branch lengths are used. This function differs from <code><a href='https://www.rdocumentation.org/packages/ape/topics/as.phylo.formula'>as.phylo.formula</a></code> 
+in that it does not expect all taxonomic levels to be non NA: tips can
+be at different taxonomic depths. The object has internal node labels showing
+the taxonomic hierarchy of the phylogeny.</p>
     
     </div>
 
@@ -134,13 +147,15 @@
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function laods the taxa reported in a dataset (see <code><a href='get_taxa.html'>get_taxa</a></code>)
-and creates a <code><a href='https://www.rdocumentation.org/packages/ape/topics/read.tree'>phylo</a></code> phylogeny for those taxa. Equal branch 
-lengths are used. This function differs from <code><a href='https://www.rdocumentation.org/packages/ape/topics/as.phylo.formula'>as.phylo.formula</a></code> 
-in that it does not expect all taxonomic levels to be non NA: tips can
-be at different taxonomic depths.</p>
+    <p>Note that the phylogeny will contain singleton nodes if an internal taxon has
+a single descendant: the <code>ape</code> functions <code><a href='https://www.rdocumentation.org/packages/ape/topics/collapse.singles'>has.singles</a></code>
+and <code><a href='https://www.rdocumentation.org/packages/ape/topics/collapse.singles'>collapse.singles</a></code> can be used to detect and remove these if 
+required.</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>   <span class='no'>beetle_phylo</span> <span class='kw'>&lt;-</span> <span class='fu'>get_phylogeny</span>(<span class='fl'>1400562</span>)
+   <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>beetle_phylo</span>, <span class='kw'>show.node.label</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>font</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>no.margin</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in xy.coords(x, y, xlabel, ylabel, log): 'x' is a list, but does not have components 'x' and 'y'</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -150,7 +165,9 @@ be at different taxonomic depths.</p>
       <li><a href="#value">Value</a></li>
 
       <li><a href="#details">Details</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

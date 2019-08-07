@@ -34,12 +34,12 @@
 
 <meta property="og:description" content="These functions provide access to the metadata associated with SAFE
 datasets. The functions provide three levels of information:
-  show_conceptsdisplays the record versions grouped under 
+     show_conceptsdisplays the record versions grouped under 
          dataset concepts,
-  show_recorddisplays summary information about a 
-        specific record, and
-  show_worksheetdisplays metadata about data worksheet
-        fields within a record.
+     show_recorddisplays summary information about a 
+           specific record, and
+     show_worksheetdisplays metadata about data worksheet
+           fields within a record.
 All three functions accept a first argument obj, which can be one 
 of three things:
 A character or numeric vector of SAFE dataset records or concepts, 
@@ -103,7 +103,10 @@ and which are unavailable due to embargo or retriction ('x')." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/using_safe_data.html">Using the safe_data package</a>
+      <a href="../articles/overview.html">An overview of data at the SAFE Project</a>
+    </li>
+    <li>
+      <a href="../articles/using_safe_data.html">Using the `safedata` package</a>
     </li>
   </ul>
 </li>
@@ -132,12 +135,12 @@ and which are unavailable due to embargo or retriction ('x')." />
     
     <p>These functions provide access to the metadata associated with SAFE
 datasets. The functions provide three levels of information:</p><dl class='dl-horizontal'>
-  <dt><code>show_concepts</code></dt><dd><p>displays the record versions grouped under 
+     <dt><code>show_concepts</code></dt><dd><p>displays the record versions grouped under 
          dataset concepts,</p></dd>
-  <dt><code>show_record</code></dt><dd><p>displays summary information about a 
-        specific record, and</p></dd>
-  <dt><code>show_worksheet</code></dt><dd><p>displays metadata about data worksheet
-        fields within a record.</p></dd>
+     <dt><code>show_record</code></dt><dd><p>displays summary information about a 
+           specific record, and</p></dd>
+     <dt><code>show_worksheet</code></dt><dd><p>displays metadata about data worksheet
+           fields within a record.</p></dd>
 </dl><p>All three functions accept a first argument <code>obj</code>, which can be one 
 of three things:</p><ol>
 <li><p>A character or numeric vector of SAFE dataset records or concepts, 
@@ -246,8 +249,8 @@ fields or a longer output including full metadata descriptors.</p></td>
 #&gt; 1 Site       Location   Site of measurements
 #&gt; 2 Temp       Numeric    Soil temperature    
 #&gt; 3 Moisture   Numeric    Soil moisture       
-#&gt; 4 Cover      Numeric    Canopy cover        </div><div class='input'>   <span class='no'>ant_abund</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='load_safe_data.html'>load_safe_data</a></span>(<span class='fl'>1400562</span>, <span class='st'>'Ant-Psel'</span>)
-   <span class='fu'>show_worksheet</span>(<span class='no'>ant_abund</span>, <span class='kw'>extended_fields</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; Record ID: 1400562
+#&gt; 4 Cover      Numeric    Canopy cover        </div><div class='input'>   <span class='no'>beetle_abund</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='load_safe_data.html'>load_safe_data</a></span>(<span class='fl'>1400562</span>, <span class='st'>'Ant-Psel'</span>)
+   <span class='fu'>show_worksheet</span>(<span class='no'>beetle_abund</span>, <span class='kw'>extended_fields</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; Record ID: 1400562
 #&gt; Worksheet name: Ant-Psel
 #&gt; Number of data rows: 20
 #&gt; Number of data fields: 3

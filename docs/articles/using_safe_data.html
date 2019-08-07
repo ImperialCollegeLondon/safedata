@@ -5,11 +5,11 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Using the safe_data package • safedata</title>
+<title>Using the <code>safedata</code> package • safedata</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Using the safe_data package">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Using the &lt;code&gt;safedata&lt;/code&gt; package">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -53,7 +53,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/using_safe_data.html">Using the safe_data package</a>
+      <a href="../articles/overview.html">An overview of data at the SAFE Project</a>
+    </li>
+    <li>
+      <a href="../articles/using_safe_data.html">Using the `safedata` package</a>
     </li>
   </ul>
 </li>
@@ -70,10 +73,10 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Using the safe_data package</h1>
+      <h1>Using the <code>safedata</code> package</h1>
                         <h4 class="author">Andy Aldersley and David Orme</h4>
             
-            <h4 class="date">2019-08-01</h4>
+            <h4 class="date">2019-08-07</h4>
       
       
       <div class="hidden name"><code>using_safe_data.Rmd</code></div>
@@ -82,108 +85,582 @@
 
     
     
-<div id="about-the-package" class="section level1">
+<p>The <code>safedata</code> package makes it easy to search for and use datasets collected at the SAFE Project. It provides an interface to download data files and packaged record metadata and then functions to load data worksheets and add taxonomic and spatial data where available.</p>
+<p>For further information on the publication and structure of data through the SAFE Project and within the <code>safedata</code> package, see the Overview vignette: <code><a href="../articles/overview.html">vignette("overview", package = "safedata")</a></code>.</p>
+<div id="installing-safedata" class="section level1">
 <h1 class="hasAnchor">
-<a href="#about-the-package" class="anchor"></a>About the package</h1>
-<p><code>safe_data</code> is an R package designed to access and interact with data from the Stability of Altered Forest Ecosystems (SAFE) Project. The SAFE Project is one of the largest ecological experiments in the world, investigating the effects of human activities on biodiversity and ecosystem function in the Malaysian rainforest. Further information can be found at our <a href="https://www.safeproject.net/">website</a>.</p>
-<p>Research conducted at the SAFE Project encompasses expertise from many disciplines and institutions, each running interlinked projects that help to develop our understanding of ecology within changing environments. Data from the many activities conducted through the SAFE Project are curated and made available at the <a href="https://zenodo.org/communities/safe/">SAFE Zenodo repository</a>, a cloud-storage platform. The <code>safe_data</code> package is intended to enable researchers to quickly and easily interface with these datasets. This document provides an introduction to the core functionalities of the package and describes the concepts supporting its development.</p>
-<div id="data-format" class="section level2">
+<a href="#installing-safedata" class="anchor"></a>Installing <code>safedata</code>
+</h1>
+<p>Currently, <code>safedata</code> can only be installed from GitHub:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"ImperialCollegeLondon/safedata"</span>)</a></code></pre></div>
+<p>In the future, it should be available from CRAN:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"safedata"</span>)</a></code></pre></div>
+<div id="package-dependencies" class="section level2">
 <h2 class="hasAnchor">
-<a href="#data-format" class="anchor"></a>Data format</h2>
-<p>All researchers working at the SAFE Project are asked to submit their project data to the <a href="https://zenodo.org/communities/safe/">SAFE Zenodo repository</a>. Submitted data must meet strict formatting requirements and pass a validation check before acceptance. Full details of this process can be found on the <a href="https://safe-dataset-checker.readthedocs.io/">SAFE Project data</a> webpages.</p>
-<p>In most cases, data are provided as tabular datasets stored in Excel spreadsheets (note that v0.1 of <code>safe_data</code> only provides support for .xlsx imports). Briefly, these datasets comprise the following worksheets:</p>
+<a href="#package-dependencies" class="anchor"></a>Package dependencies</h2>
+<p>The <code>safedata</code> package requires the following packages:</p>
 <ul>
 <li>
-<strong>Summary</strong>: simple metadata (authors, access rights) about the dataset</li>
+<code>readxl</code>, to read data directly from Excel datasets,</li>
 <li>
-<strong>Taxa</strong>: a description of the Taxa reported in the dataset</li>
+<code>jsonlite</code> and <code>curl</code>, to communicate with the SAFE API and to read downloaded JSON data,</li>
 <li>
-<strong>Locations</strong>: a description of all sampling locations in the dataset</li>
+<code>chron</code>, to represent time of day data, and</li>
 <li>
-<strong>Data worksheets</strong>: the actual data tables, described in the <strong>Summary</strong> sheet</li>
+<code>sf</code>, to handle spatial data about sampling locations.</li>
 </ul>
-<p>The <code>safe_data</code> package allows users to import and interrogate these datasets within the R environment.</p>
 </div>
-<div id="data-repository" class="section level2">
+</div>
+<div id="the-safe-data-directory" class="section level1">
+<h1 class="hasAnchor">
+<a href="#the-safe-data-directory" class="anchor"></a>The SAFE data directory</h1>
+<p>The <code>safedata</code> package makes use of a local directory to store downloaded data, index and metadata files (<code><a href="../articles/overview.html">vignette("overview", package = "safedata")</a></code> for details) . These files are needed for the <code>safedata</code> functions to work correctly, so the first step in using <code>safedata</code> is to set the location of the directory and the package will remind you to do this when it is loaded.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(safedata)</a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="co">## SAFE package reminder: Please set SAFE data directory using set_safe_dir()</span></a></code></pre></div>
+<div id="initialising-a-safe-data-directory" class="section level2">
 <h2 class="hasAnchor">
-<a href="#data-repository" class="anchor"></a>Data repository</h2>
-<p>The <a href="https://zenodo.org/communities/safe/">SAFE Zenodo repository</a> provides a searchable cloud-based data storage facility for research outputs from the SAFE Project. Zenodo uses a <a href="https://help.zenodo.org/">DOI versioning</a> system for file storage. When uploads are published on Zenodo for the first time, two DOIs are registered:</p>
+<a href="#initialising-a-safe-data-directory" class="anchor"></a>Initialising a SAFE data directory</h2>
+<p>If this is the first time you are loading <code>safedata</code> – or if you simply want to have two separate SAFE data directories – then you need to create a new, empty directory.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="../reference/set_safe_dir.html">set_safe_dir</a></span>(<span class="st">'my_safe_directory'</span>, <span class="dt">create=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb4-2" title="2"><span class="co">## Safe data directory created</span></a></code></pre></div>
+<p>This will create the directory and download the current index files. You cannot use an existing directory: the package wants to start with a fresh, empty directory. Note that the directory path is stored in <code><a href="https://www.rdocumentation.org/packages/base/topics/options">options()</a></code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">options</a></span>(<span class="st">'safedata.dir'</span>)</a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="co">## $safedata.dir</span></a>
+<a class="sourceLine" id="cb5-3" title="3"><span class="co">## [1] "my_safe_directory"</span></a></code></pre></div>
+</div>
+<div id="using-an-existing-safe-data-directory" class="section level2">
+<h2 class="hasAnchor">
+<a href="#using-an-existing-safe-data-directory" class="anchor"></a>Using an existing SAFE data directory</h2>
+<p>Once you have a SAFE data directory, the same function is used to tell the <code>safedata</code> package where to look for index and data files:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw"><a href="../reference/set_safe_dir.html">set_safe_dir</a></span>(<span class="st">'my_safe_directory'</span>)</a>
+<a class="sourceLine" id="cb6-2" title="2"><span class="co">## Checking for updates</span></a>
+<a class="sourceLine" id="cb6-3" title="3"><span class="co">##  - Index up to date</span></a>
+<a class="sourceLine" id="cb6-4" title="4"><span class="co">##  - Gazetteer up to date</span></a>
+<a class="sourceLine" id="cb6-5" title="5"><span class="co">##  - Location aliases up to date</span></a>
+<a class="sourceLine" id="cb6-6" title="6"><span class="co">## Validating directory</span></a></code></pre></div>
+<p>You will see that this function checks with the SAFE Project website for updates to the key index files. This can be turned off for offline use (<code><a href="../reference/set_safe_dir.html">set_safe_dir('~/my_safe_directory', update=FALSE)</a></code>). The function also validates local data files: it checks the MD5 hash of local data file copies against the MD5 of the published file. You <em>can</em> suppress validation (<code><a href="../reference/set_safe_dir.html">set_safe_dir('~/my_safe_directory', validate=FALSE)</a></code>), but this is not advised: altering the contents of a published data file undermines reproducible research.</p>
+</div>
+</div>
+<div id="exploring-record-metadata" class="section level1">
+<h1 class="hasAnchor">
+<a href="#exploring-record-metadata" class="anchor"></a>Exploring record metadata</h1>
+<p>You can browse published SAFE dataset at either our <a href="https://zenodo.org/communities/safe">SAFE Zenodo community</a> or on the <a href="https://www.safeproject.net/datasets/view_datasets">SAFE Project website</a>. Datasets are identified by their Zenodo record number, which is the number included in both the dataset DOI and Zenodo URL. All of the following point to the same dataset:</p>
 <ul>
-<li>a DOI representing the <em>specific version</em> of the record: the <strong>version ID</strong>
+<li><a href="https://doi.org/10.5281/zenodo.3247631">https://doi.org/10.5281/zenodo.3247631</a></li>
+<li><a href="https://doi.org/10.5281/zenodo.3247631">10.5281/zenodo.3247631</a></li>
+<li>
+<a href="https://zenodo.org/record/3247631">https://zenodo.org/record/3266821</a>)</li>
+</ul>
+<p>Note that all metadata is <em>available for all records</em>, regardless of whether they are open, embargoed or restricted. This includes field descriptions and taxon and location sampling so that users can assess whether a dataset is going to be useful even if it is not yet openly available.</p>
+<p>Once you have found datasets that you want to explore further, then you can use the <code><a href="../reference/validate_record_ids.html">validate_record_ids()</a></code> function. This function does the following:</p>
+<ol style="list-style-type: decimal">
+<li>checks that the record is valid,</li>
+<li>checks whether the record number is a <strong>record id</strong>, referring to a specific version of a dataset, or a <strong>concept id</strong>, which identifies all the versions of a dataset. In the example code below, two of the values are record ids, so the appropriate concept id is located and printed, and one is a concept id, so no specific version number is given.</li>
+<li>checks whether the data are currently available, and</li>
+<li>provides an interface to download and import the related data files.</li>
+</ol>
+<p>The output is an object of class <code>safe_record_set</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">recs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/validate_record_ids.html">validate_record_ids</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">'https://doi.org/10.5281/zenodo.3247631'</span>,</a>
+<a class="sourceLine" id="cb7-2" title="2">                              <span class="st">'10.5281/zenodo.3266827'</span>,</a>
+<a class="sourceLine" id="cb7-3" title="3">                              <span class="st">'https://zenodo.org/record/3266821'</span>))</a>
+<a class="sourceLine" id="cb7-4" title="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(recs)</a></code></pre></div>
+<pre><code>## Set includes 3 concept ids and 2 record ids: 
+##  - 1 open and most recent (*)
+##  - 0 open and outdated (o)
+##  - 1 under embargo or restricted (x)
+## 
+##   concept  record available
+## 1 3247630 3247631         x
+## 2 3266821 -------          
+## 3 3266826 3266827         *</code></pre>
+<p>This object is just a data frame containing validated record ids and access information and so you can use the normal data frame indices (e.g. <code>recs[1,]</code>) to select particular records.</p>
+<p>In addition, all of the main functions in <code>safedata</code> that expect to be passed a dataset id will run <code><a href="../reference/validate_record_ids.html">validate_record_ids()</a></code> on their inputs, so you can simply use those URLs directly with those functions without needing to specifically create a <code>safe_record_set</code> yourself.</p>
+<div id="displaying-dataset-metadata" class="section level2">
+<h2 class="hasAnchor">
+<a href="#displaying-dataset-metadata" class="anchor"></a>Displaying dataset metadata</h2>
+<p>Printing a <code>safe_record_set</code> object displays a deliberately compact summary of a set of record ids. There are three function that show the detailed metadata for records at three levels:</p>
+<ul>
+<li>the <strong>concept</strong> level: metadata about all the published versions of a particualar dataset,</li>
+<li>the <strong>record</strong> level: metadata about a specific version of a dataset, and</li>
+<li>the <strong>worksheet</strong> level: metadata about the fields available in a particular data worksheet.</li>
+</ul>
+<div id="show_concepts" class="section level3">
+<h3 class="hasAnchor">
+<a href="#show_concepts" class="anchor"></a><code><a href="../reference/show_concepts.html">show_concepts()</a></code>
+</h3>
+<p>The <code><a href="../reference/show_concepts.html">show_concepts()</a></code> function displays concept level metadata about a set of record ids. This includes the (most recent) dataset title and a short summary of the versions available under the dataset concept. Note that the output is not restricted just to the set of record ids given to the function: it shows metadata for all versions for each of the concept ids included.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw"><a href="../reference/show_concepts.html">show_concepts</a></span>(recs)</a></code></pre></div>
+<pre><code>## 
+## Concept ID: 3247630
+## Title: Functional traits of tree species in old-growth and selectively logged forest
+## Versions: 0 available, 1 embargoed or restricted
+## 
+##  record_id  published    embargo available
+##    3247631 2019-06-17 2020-12-31         x
+## 
+## -------------
+## 
+## Concept ID: 3266821
+## Title: Microclimate proxy measurements from a logging gradient in Malaysian Borneo (BALI project)
+## Versions: 1 available, 0 embargoed or restricted
+## 
+##  record_id  published embargo available
+##    3266822 2019-07-03      --         *
+## 
+## -------------
+## 
+## Concept ID: 3266826
+## Title: Quantifying the spatial heterogeneity of forest conversion costs and how it relates to biodiversity, conservation and land use history
+## Versions: 1 available, 0 embargoed or restricted
+## 
+##  record_id  published embargo available
+##    3266827 2019-07-03      --         *</code></pre>
+</div>
+<div id="show_record" class="section level3">
+<h3 class="hasAnchor">
+<a href="#show_record" class="anchor"></a><code><a href="../reference/show_concepts.html">show_record()</a></code>
+</h3>
+<p>This function shows metadata for a specific version of a dataset: if you give it a concept ID then it will display the available versions for that concept. Otherwise, the function prints out information about the dataset with that record id: it includes the dataset title, status and other dataset level metadata and then a summary of the data worksheets contained in the dataset.</p>
+<p>Note that - because a <code>safe_record_set</code> is just a data frame with some extra information attached - you can use the usual data frame indexing to select a row to pass to other functions. Running <code><a href="../reference/show_concepts.html">show_record()</a></code> also <em>requires an internet connection</em>: the package downloads a JSON file of the record metadata and stores it in the SAFE data directory.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw"><a href="../reference/show_concepts.html">show_record</a></span>(recs[<span class="dv">3</span>,])</a></code></pre></div>
+<pre><code>## Downloading 1 record metadata files</code></pre>
+<pre><code>## 
+## Record summary
+## Title: Quantifying the spatial heterogeneity of forest conversion costs and how it relates to biodiversity, conservation and land use history
+## Status: open
+## External files: SAFE_COUPE.zip
+## Locations: 187 locations reported
+## 
+## Data worksheets:
+## name ncol nrow description
+## Data   11  187 Dates of earliest and latest known salvage logging activity in logging coupes</code></pre>
+</div>
+<div id="show_worksheet" class="section level3">
+<h3 class="hasAnchor">
+<a href="#show_worksheet" class="anchor"></a><code><a href="../reference/show_concepts.html">show_worksheet()</a></code>
+</h3>
+<p>This function shows metadata for a named worksheet within a specific record. The default is to show a compact table of field names, field types and truncated descriptions:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="kw"><a href="../reference/show_concepts.html">show_worksheet</a></span>(recs[<span class="dv">3</span>,], <span class="st">'Data'</span>)</a></code></pre></div>
+<pre><code>## Record ID: 3266827
+## Worksheet name: Data
+## Number of data rows: 187
+## Number of data fields: 10
+## Description:
+## Dates of earliest and latest known salvage logging activity in logging coupes
+## 
+## Fields:
+##    field_name           field_type
+## 1  CoupeNumber          Location  
+## 2  StartDateTrack       Date      
+## 3  EndDateTrack         Date      
+## 4  StartDateLocation    Date      
+## 5  EndDateLocation      Date      
+## 6  StartDateMeasurement Date      
+## 7  EndDateMeasurement   Date      
+## 8  Contractor           ID        
+## 9  GlobalStart          Date      
+## 10 GlobalEnd            Date      
+##    description                                
+## 1  Coupe number                               
+## 2  Earliest date of logging activity record...
+## 3  Last date of logging activity recorded t...
+## 4  Earliest date of logging activity record...
+## 5  Last date of logging activity recorded t...
+## 6  Earliest date of logging activity record...
+## 7  Last date of logging activity recorded t...
+## 8  Name of the contractor responsible for t...
+## 9  Earliest date of any recorded salvage lo...
+## 10 Last date of any recorded salvage loggin...</code></pre>
+<p>There is also an extended display (<code>extended_fields=TRUE</code>) that will print out a list of all the available metadata for each field.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="kw"><a href="../reference/show_concepts.html">show_worksheet</a></span>(recs[<span class="dv">3</span>,], <span class="st">'Data'</span>, <span class="dt">extended_fields=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<pre><code>## Record ID: 3266827
+## Worksheet name: Data
+## Number of data rows: 187
+## Number of data fields: 10
+## Description:
+## Dates of earliest and latest known salvage logging activity in logging coupes
+## 
+## Fields:
+## CoupeNumber :
+##  - field_type: Location
+##  - description: Coupe number
+## StartDateTrack :
+##  - field_type: Date
+##  - description: Earliest date of logging activity recorded through GPS loggers on bulldozers
+##  - units: dd/mm/yyyy
+...</code></pre>
+</div>
+</div>
+</div>
+<div id="search-functions" class="section level1">
+<h1 class="hasAnchor">
+<a href="#search-functions" class="anchor"></a>Search functions</h1>
+<p>The <code>safedata</code> package also contains a set of search functions to explore datasets. These functions make use of a metadata index stored on the SAFE Project website and so need an internet connection to work. These search functions provide structured access to the same metadata shown in project description text but also provide extended taxonomic and spatial searches.</p>
+<p>The functions are:</p>
+<ul>
+<li>
+<code><a href="../reference/search_safe.html">search_text()</a></code>: free text search of dataset and worksheet titles and descriptions.</li>
+<li>
+<code><a href="../reference/search_safe.html">search_fields()</a></code>: searches worksheet field names and descriptions and field types.</li>
+<li>
+<code><a href="../reference/search_safe.html">search_authors()</a></code>: searches dataset authors</li>
+<li>
+<code><a href="../reference/search_safe.html">search_dates()</a></code>: searches for overlap with the start and end date of a dataset.</li>
+<li>
+<code><a href="../reference/search_safe.html">search_taxa()</a></code>: searches for datasets containing particular taxa.</li>
+<li>
+<code><a href="../reference/search_safe.html">search_spatial()</a></code>: searches for datasets sampling at or near a particular location.</li>
+</ul>
+<p>All of these functions return <code>safe_record_set</code> objects, which can be used in the metadata display functions shown above as well as for data downloading and use (see below).</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(soil_datasets &lt;-<span class="st"> </span><span class="kw"><a href="../reference/search_safe.html">search_text</a></span>(<span class="st">'soil'</span>))</a></code></pre></div>
+<pre><code>## Search returned 11 records</code></pre>
+<pre><code>## Set includes 8 concept ids and 11 record ids: 
+##  - 5 open and most recent (*)
+##  - 0 open and outdated (o)
+##  - 6 under embargo or restricted (x)
+## 
+##    concept  record available
+## 1  3247591 3247592         *
+## 2  3251886 3258079         x
+## 3  ------- 3251887         x
+## 4  3251899 3258117         x
+## 5  ------- 3251900         x
+## 6  3251901 3258082         x
+## 7  ------- 3251902         x
+## 8  3265745 3265746         *
+## 9  3266770 3266771         *
+## 10 3266821 3266822         *
+## 11 3354067 3354068         *</code></pre>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1"><span class="kw"><a href="../reference/show_concepts.html">show_concepts</a></span>(soil_datasets[<span class="dv">2</span>,])</a></code></pre></div>
+<pre><code>## 
+## Concept ID: 3251886
+## Title: Soil greenhouse gas fluxes along transects from oil palm to riparian forests in the SAFE landscape
+## Versions: 0 available, 2 embargoed or restricted
+## 
+##  record_id  published    embargo available
+##    3258079 2019-06-27 2020-06-30         x
+##    3251887 2019-06-21 2020-06-30         x</code></pre>
+<div id="taxon-search-details" class="section level2">
+<h2 class="hasAnchor">
+<a href="#taxon-search-details" class="anchor"></a>Taxon search details</h2>
+<p>Published datasets contain a taxonomic index of any organisms referred to within the data - see <a href="https://safe-dataset-checker.readthedocs.io/en/latest/data_format/taxa/">here</a> for details of the Taxa worksheet containing the index.</p>
+<p>The taxa in this index, along with all of the parent taxa in the taxonomic hierarchy leading up to that those taxa, are added to a taxonomic database on the SAFE Project website. The <code><a href="../reference/search_safe.html">search_taxa()</a></code> function searches that index to identify all the datasets that contain a particular taxon.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(ants &lt;-<span class="st"> </span><span class="kw"><a href="../reference/search_safe.html">search_taxa</a></span>(<span class="st">'Formicidae'</span>))</a>
+<a class="sourceLine" id="cb23-2" title="2"><span class="co">## Search returned 9 records</span></a>
+<a class="sourceLine" id="cb23-3" title="3"><span class="co">## Set includes 9 concept ids and 9 record ids: </span></a>
+<a class="sourceLine" id="cb23-4" title="4"><span class="co">##  - 8 open and most recent (*)</span></a>
+<a class="sourceLine" id="cb23-5" title="5"><span class="co">##  - 0 open and outdated (o)</span></a>
+<a class="sourceLine" id="cb23-6" title="6"><span class="co">##  - 1 under embargo or restricted (x)</span></a>
+<a class="sourceLine" id="cb23-7" title="7"><span class="co">## </span></a>
+<a class="sourceLine" id="cb23-8" title="8"><span class="co">##   concept  record available</span></a>
+<a class="sourceLine" id="cb23-9" title="9"><span class="co">## 1 1198301 1198302         *</span></a>
+<a class="sourceLine" id="cb23-10" title="10"><span class="co">## 2 1198471 1237732         *</span></a>
+<a class="sourceLine" id="cb23-11" title="11"><span class="co">## 3 1198838 1198839         *</span></a>
+<a class="sourceLine" id="cb23-12" title="12"><span class="co">## 4 1237729 1237730         *</span></a>
+<a class="sourceLine" id="cb23-13" title="13"><span class="co">## 5 1400561 1400562         *</span></a>
+<a class="sourceLine" id="cb23-14" title="14"><span class="co">## 6 1995247 1995439         *</span></a>
+<a class="sourceLine" id="cb23-15" title="15"><span class="co">## 7 3247484 3247485         x</span></a>
+<a class="sourceLine" id="cb23-16" title="16"><span class="co">## 8 3265745 3265746         *</span></a>
+<a class="sourceLine" id="cb23-17" title="17"><span class="co">## 9 3354067 3354068         *</span></a></code></pre></div>
+<p>The taxonomic index is built around the GBIF backbone taxonomic database and include the following core taxonomic levels: kingdom, phylum, class, order, family, genus, species and subspecies. It is also possible to search by <a href="https://www.gbif.org/species/4342">GBIF ID</a>.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1">ants &lt;-<span class="st"> </span><span class="kw"><a href="../reference/search_safe.html">search_taxa</a></span>(<span class="dt">gbif_id=</span><span class="dv">4342</span>)</a>
+<a class="sourceLine" id="cb24-2" title="2"><span class="co">## Search returned 9 records</span></a></code></pre></div>
+</div>
+<div id="spatial-search-details" class="section level2">
+<h2 class="hasAnchor">
+<a href="#spatial-search-details" class="anchor"></a>Spatial search details</h2>
+<p>Datasets also have to provide a full index of sampling locations used in the data. Sampling locations are either linked to existing sampling locations included in the <a href="https://www.safeproject.net/info/gazetteer">SAFE gazetteer</a> or users can identify new sampling locations and provide location data if possible.</p>
+<p>The <code><a href="../reference/search_safe.html">search_spatial()</a></code> function allows users to search for datasets by sampling locations. Accepted location names from the gazetteer can be used to search for datasets but users can also provide their own search geometries using the Well Known Text format. The search includes simple GIS capabilities to look for sampling within a given distance of the query location.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1"><span class="co"># Datasets that include sampling within experimental block A</span></a>
+<a class="sourceLine" id="cb25-2" title="2">within_a &lt;-<span class="st"> </span><span class="kw"><a href="../reference/search_safe.html">search_spatial</a></span>(<span class="dt">location=</span><span class="st">'BL_A'</span>)</a>
+<a class="sourceLine" id="cb25-3" title="3"><span class="co">## Search returned 26 records</span></a>
+<a class="sourceLine" id="cb25-4" title="4"><span class="co"># Datasets that sampled within 2 km of the Maliau Basin Field Study Centre</span></a>
+<a class="sourceLine" id="cb25-5" title="5">near_maliau &lt;-<span class="st"> </span><span class="kw"><a href="../reference/search_safe.html">search_spatial</a></span>(<span class="dt">wkt=</span><span class="st">'POINT(116.97394 4.73481)'</span>, <span class="dt">distance=</span><span class="dv">2000</span>)</a>
+<a class="sourceLine" id="cb25-6" title="6"><span class="co">## Search returned 47 records</span></a></code></pre></div>
+<p>Note that WKT coordinates should be supplied as WGS84 longitude and latitude - typically the output of GPS receivers - but the database uses the local UTM 50N projected coordinate system for all distance calculations and GIS operations.</p>
+</div>
+</div>
+<div id="downloading-data" class="section level1">
+<h1 class="hasAnchor">
+<a href="#downloading-data" class="anchor"></a>Downloading data</h1>
+<p>Once you have found records for which you want to explore the actual data, then you first need to download the data files for the dataset from Zenodo. This uses the <code><a href="../reference/download_safe_files.html">download_safe_files()</a></code> function and you can either give that a URL or number for a dataset or pass it an existing <code>safe_record_set</code>. The function will check which datasets are currently available and download them to the SAFE data directory. The default behaviour is to present a brief report on the number and size of available files to be downloaded before actually doing anything:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1"><span class="kw"><a href="../reference/download_safe_files.html">download_safe_files</a></span>(within_a)</a>
+<a class="sourceLine" id="cb26-2" title="2"><span class="co">## 26 files requested from 26 records</span></a>
+<a class="sourceLine" id="cb26-3" title="3"><span class="co">##  - 0 local (0 bytes)</span></a>
+<a class="sourceLine" id="cb26-4" title="4"><span class="co">##  - 4 embargoed or restricted (2.2 Mb)</span></a>
+<a class="sourceLine" id="cb26-5" title="5"><span class="co">##  - 22 to download (43.6 Mb) </span></a>
+<a class="sourceLine" id="cb26-6" title="6"><span class="co">## </span></a>
+<a class="sourceLine" id="cb26-7" title="7"><span class="co">## 1: Yes</span></a>
+<a class="sourceLine" id="cb26-8" title="8"><span class="co">## 2: No</span></a>
+<a class="sourceLine" id="cb26-9" title="9"><span class="co">## </span></a>
+<a class="sourceLine" id="cb26-10" title="10"><span class="co">## Selection:</span></a></code></pre></div>
+<p>By default, the <code><a href="../reference/download_safe_files.html">download_safe_files()</a></code> function downloads all of the files associated with the record. This will include <em>external</em> data files which may contain primary data that is not suited to the Excel format or additional information. Although many external files are likely to be readable in R, the<code>safedata</code> does not currently provide a mechanism to load them automatically. The function will also download the JSON metadata for the specified datasets.</p>
+<p>The function will warn you if the local copies of data files have been altered and the <code>refresh=TRUE</code> argument can be used to restore data files to the version of record. Note that this will <strong>delete local changes</strong>.</p>
+</div>
+<div id="loading-data" class="section level1">
+<h1 class="hasAnchor">
+<a href="#loading-data" class="anchor"></a>Loading data</h1>
+<p>The <code><a href="../reference/load_safe_data.html">load_safe_data()</a></code> function is used to load a named data worksheet from a dataset into a <code>safedata</code> object. This is just a data frame with some additional attribute data and it will in general behave just like any other data frame - the additional attributes are used for further data processing and adding brief metadata to the <code>str</code> and <code>print</code> methods.</p>
+<p>Some data formatting takes place based on <a href="https://safe-dataset-checker.readthedocs.io/en/latest/data_format/data/#field-types">field types</a>: categorical variables are converted to factors; dates and datetimes are converted to <code>POSIXct</code> and times are converted to <code>chron::time</code> objects.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1">beetle_abund &lt;-<span class="st"> </span><span class="kw"><a href="../reference/load_safe_data.html">load_safe_data</a></span>(<span class="dv">1400562</span>, <span class="st">'Ant-Psel'</span>)</a>
+<a class="sourceLine" id="cb27-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(beetle_abund)</a></code></pre></div>
+<pre><code>## SAFE dataset
+## Concept: 1400561; Record 1400562; Worksheet: Ant-Psel
+## 'data.frame':    20 obs. of  3 variables:
+##  $ Site                : chr  "SAFE_E" "SAFE_D" "SAFE_F" "SAFE_C" ...
+##  $ ant species richness: num  31 31 27 29 31 21 31 25 32 26 ...
+##  $ ant abundance       : num  561 713 392 481 1036 ...</code></pre>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(beetle_abund)</a></code></pre></div>
+<pre><code>## SAFE dataset:
+## Concept: 1400561; Record 1400562; Worksheet: Ant-Psel
+## First 10 rows:
+##        Site ant species richness ant abundance
+## 1    SAFE_E                   31           561
+## 2    SAFE_D                   31           713
+## 3    SAFE_F                   27           392
+## 4    SAFE_C                   29           481
+## 5    SAFE_B                   31          1036
+## 6    SAFE_A                   21           272
+## 7  Maliau_1                   31          1889
+## 8  Maliau_2                   25           409
+## 9  Maliau_3                   32           613
+## 10 Maliau_4                   26          1036</code></pre>
+<p>The display of <code>safedata</code> objects is kept deliberately simple to avoid cluttering the screen with metadata. You can always view additional metadata for a loaded worksheet by using the <code>show</code> functions directly on the loaded <code>safedata</code> object:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1"><span class="kw"><a href="../reference/show_concepts.html">show_concepts</a></span>(beetle_abund)</a></code></pre></div>
+<pre><code>## 
+## Concept ID: 1400561
+## Title: Myrmecophilous Pselaphine beetles in tropical forests
+## Versions: 1 available, 0 embargoed or restricted
+## 
+##  record_id  published embargo available
+##    1400562 2018-08-20      --         *</code></pre>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1"><span class="kw"><a href="../reference/show_concepts.html">show_record</a></span>(beetle_abund)</a></code></pre></div>
+<pre><code>## 
+## Record summary
+## Title: Myrmecophilous Pselaphine beetles in tropical forests
+## Status: open
+## Taxa: 67 taxa reported
+## Locations: 20 locations reported
+## 
+## Data worksheets:
+##             name ncol nrow description
+## EnvironVariables    5   20 Environmental variables
+##         Ant-Psel    4   20 Ant-Pselaphine data
+##   MorphAbundance   44   20 Morphospeices abundance
+## MorphFunctTraits   18   42 Morphospecies_Functional Traits</code></pre>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1"><span class="kw"><a href="../reference/show_concepts.html">show_worksheet</a></span>(beetle_abund)</a></code></pre></div>
+<pre><code>## Record ID: 1400562
+## Worksheet name: Ant-Psel
+## Number of data rows: 20
+## Number of data fields: 3
+## Description:
+## Ant-Pselaphine data
+## 
+## Fields:
+##   field_name           field_type description                    
+## 1 Site                 Location   Site where sample was collected
+## 2 ant species richness Numeric    Number of ant species in sample
+## 3 ant abundance        Abundance  Total number of ants in sample</code></pre>
+<div id="dataset-taxa" class="section level2">
+<h2 class="hasAnchor">
+<a href="#dataset-taxa" class="anchor"></a>Dataset taxa</h2>
+<p>There are three functions that can be used to work with the taxa in a dataset:</p>
+<ol style="list-style-type: decimal">
+<li>
+<p><code><a href="../reference/get_taxa.html">get_taxa()</a></code>: This function loads a dataframe containing all of the taxa used within a dataset, with fields including the core GBIF taxonomic levels, the taxonomic label used within the dataset and the taxonomic status of the each taxon. You can load a taxonomic dataframe from a <code>safe_record_set</code> row or using an existing loaded <code>safedata</code> object.</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1">beetle_taxa &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_taxa.html">get_taxa</a></span>(beetle_abund)</a>
+<a class="sourceLine" id="cb37-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(beetle_taxa)</a></code></pre></div>
+<pre><code>## Classes 'safe_taxa' and 'data.frame':    43 obs. of  11 variables:
+##  $ kingdom    : chr  "Animalia" "Animalia" "Animalia" "Animalia" ...
+##  $ phylum     : chr  "Arthropoda" "Arthropoda" "Arthropoda" "Arthropoda" ...
+##  $ class      : chr  "Insecta" "Insecta" "Insecta" "Insecta" ...
+##  $ order      : chr  "Coleoptera" "Coleoptera" "Coleoptera" "Coleoptera" ...
+##  $ family     : chr  "Pselaphidae" "Pselaphidae" "Staphylinidae" "Staphylinidae" ...
+##  $ genus      : chr  "Psel1" "Psel10" "Mnia" "Aphilia" ...
+##  $ species    : chr  NA NA "Psel11" "Psel12" ...
+##  $ subspecies : chr  NA NA NA NA ...
+##  $ taxon_name : chr  "Psel1" "Psel10" "Psel11" "Psel12" ...
+##  $ taxon_level: chr  "morphospecies" "morphospecies" "morphospecies" "morphospecies" ...
+##  $ gbif_status: chr  "user" "user" "user" "user" ...</code></pre>
 </li>
-<li>a DOI representing <em>all versions</em> of the record: the <strong>concept ID</strong>
+<li>
+<p><code><a href="../reference/add_taxa.html">add_taxa()</a></code>: This function adds taxonomic details to an already loaded data worksheet.</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" title="1">beetle_morph &lt;-<span class="st"> </span><span class="kw"><a href="../reference/load_safe_data.html">load_safe_data</a></span>(<span class="dv">1400562</span>, <span class="st">'MorphFunctTraits'</span>)</a>
+<a class="sourceLine" id="cb39-2" title="2">beetle_morph &lt;-<span class="st"> </span><span class="kw"><a href="../reference/add_taxa.html">add_taxa</a></span>(beetle_morph)</a>
+<a class="sourceLine" id="cb39-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(beetle_morph)</a></code></pre></div>
+<pre><code>## SAFE dataset
+## Concept: 1400561; Record 1400562; Worksheet: MorphFunctTraits
+## 'data.frame':    42 obs. of  28 variables:
+##  $ Morphospecies: chr  "Psel1" "Psel2" "Psel3" "Psel4" ...
+##  $ AL           : num  0.663 0.702 0.702 1.599 1.131 ...
+##  $ TAL          : num  0.117 0.039 0.39 0.234 0.234 0.273 0.078 0.351 0.117 0.156 ...
+##  $ TAW          : num  0.117 0.039 0.195 0.117 0.234 0.234 0.078 0.234 0.078 0.078 ...
+##  $ AN           : num  11 11 7 11 11 7 11 7 11 11 ...
+##  $ HCA          : Factor w/ 2 levels "absent","present": 2 2 2 2 1 1 2 1 2 2 ...
+##  $ HCP          : Factor w/ 2 levels "absent","present": 1 1 1 1 2 2 1 2 1 1 ...
+##  $ TA           : Factor w/ 2 levels "absent","present": 2 2 2 2 1 1 2 2 2 2 ...
+##  $ TP           : Factor w/ 2 levels "absent","present": 1 1 1 1 2 2 1 1 1 1 ...
+##  $ FP           : Factor w/ 2 levels "absent","present": 1 2 2 2 2 2 2 2 2 2 ...
+##  $ FA           : Factor w/ 2 levels "absent","present": 2 1 1 1 1 1 1 1 1 1 ...
+##  $ Bef2         : Factor w/ 2 levels "absent","present": 2 1 1 1 2 1 2 1 2 2 ...
+##  $ Bef3         : Factor w/ 2 levels "absent","present": 1 2 1 1 1 1 1 1 1 1 ...
+##  $ Bef1         : Factor w/ 2 levels "absent","present": 1 1 2 2 1 2 1 2 1 1 ...
+##  $ Bef0         : Factor w/ 2 levels "absent","present": 1 1 1 1 1 1 1 1 1 1 ...
+##  $ Bef4         : Factor w/ 2 levels "absent","present": 1 1 1 1 1 1 1 1 1 1 ...
+##  $ Myrmycophile : Factor w/ 4 levels "Facultative",..: NA 2 1 1 4 1 2 1 NA NA ...
+##  $ kingdom      : chr  "Animalia" "Animalia" "Animalia" "Animalia" ...
+##  $ phylum       : chr  "Arthropoda" "Arthropoda" "Arthropoda" "Arthropoda" ...
+##  $ class        : chr  "Insecta" "Insecta" "Insecta" "Insecta" ...
+##  $ order        : chr  "Coleoptera" "Coleoptera" "Coleoptera" "Coleoptera" ...
+##  $ family       : chr  "Pselaphidae" "Staphylinidae" "Staphylinidae" "Staphylinidae" ...
+##  $ genus        : chr  "Psel1" "Bibloporus" "Plagiophorus" "Harmophorus" ...
+##  $ species      : chr  NA "Psel2" "Psel3" "Psel4" ...
+##  $ subspecies   : chr  NA NA NA NA ...
+##  $ taxon_name   : chr  "Psel1" "Psel2" "Psel3" "Psel4" ...
+##  $ taxon_level  : chr  "morphospecies" "morphospecies" "morphospecies" "morphospecies" ...
+##  $ gbif_status  : chr  "user" "user" "user" "user" ...</code></pre>
 </li>
-</ul>
-<p>Subsequent versions of an upload are then logged under a new DOI.</p>
-<p>In practice, this means that multiple versions of a project’s data (or multiple datasets associated with a single research project) can be stored and referenced separately under a single identifier. The <strong>concept</strong> DOI allows users to cite the <em>entire</em> project, while the <strong>version</strong> DOI refers to a <em>particular</em> instance.</p>
-<p>Datasets published on Zenodo can have differing access rights:</p>
-<ul>
 <li>
-<strong>Open</strong>: the dataset is open for download</li>
+<p><code><a href="../reference/get_phylogeny.html">get_phylogeny()</a></code>: This function creates a phylogeny from the taxonomic data in a dataset, returning an object of class <code>phylo</code> (see package<code>ape</code>).</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ape)</a>
+<a class="sourceLine" id="cb41-2" title="2">beetle_phylo &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_phylogeny.html">get_phylogeny</a></span>(<span class="dv">1400562</span>)</a>
+<a class="sourceLine" id="cb41-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(beetle_phylo, <span class="dt">show.node.label=</span><span class="ot">TRUE</span>, <span class="dt">font=</span><span class="dv">1</span>, <span class="dt">no.margin=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<p><img src="using_safe_data_files/figure-html/unnamed-chunk-21-1.png" width="700"></p>
+</li>
+</ol>
+</div>
+<div id="dataset-locations" class="section level2">
+<h2 class="hasAnchor">
+<a href="#dataset-locations" class="anchor"></a>Dataset locations</h2>
+<p>Nearly all SAFE datasets will include observations at spatial locations, and these datasets must include a Locations worksheet used as an spatial index for research activities. There are three functions that can be used to work with locations in a dataset. All of these functions use the <code>sf</code> package to represent the GIS geometry of locations and which provides an extensive toolset for further spatial analysis.</p>
+<ol style="list-style-type: decimal">
 <li>
-<strong>Embargoed</strong>: the dataset is currently unavailable for download, but will be opened in the future</li>
+<p><code><a href="../reference/load_gazetteer.html">load_gazetteer()</a></code>: The gazetteer is one of the three key index files saved in the SAFE data directory and updated when <code><a href="../reference/set_safe_dir.html">set_safe_dir()</a></code> is run. It includes sampling locations drawn from across a wide range of projects running at SAFE and is intended to hold all locations that are likely to see repeated sampling. Locations included the gazetteer can be used directly as <strong>known locations</strong> in datasets, although data providers can also include <strong>new locations</strong>.</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" title="1">gazetteer &lt;-<span class="st"> </span><span class="kw"><a href="../reference/load_gazetteer.html">load_gazetteer</a></span>()</a>
+<a class="sourceLine" id="cb42-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(gazetteer)</a></code></pre></div>
+<pre><code>## Simple feature collection with 5061 features and 15 fields
+## geometry type:  GEOMETRY
+## dimension:      XY
+## bbox:           xmin: 116.9471 ymin: 4.41215 xmax: 117.9959 ymax: 4.961828
+## epsg (SRID):    4326
+## proj4string:    +proj=longlat +datum=WGS84 +no_defs
+## First 10 features:
+##      location                type plot_size display_order parent region
+## 1   SAFE_camp       SAFE basecamp      &lt;NA&gt;             3   &lt;NA&gt;   SAFE
+## 2  Flux_tower          Flux tower      &lt;NA&gt;             7   &lt;NA&gt;   SAFE
+## 3         A_1 SAFE Sampling point 25m x 25m             7   &lt;NA&gt;   SAFE
+## 4         A_2 SAFE Sampling point 25m x 25m             7   &lt;NA&gt;   SAFE
+## 5         A_3 SAFE Sampling point 25m x 25m             7   &lt;NA&gt;   SAFE
+## 6         A_4 SAFE Sampling point 25m x 25m             7   &lt;NA&gt;   SAFE
+## 7         A_5 SAFE Sampling point 25m x 25m             7   &lt;NA&gt;   SAFE
+## 8         A_6 SAFE Sampling point 25m x 25m             7   &lt;NA&gt;   SAFE
+## 9         A_7 SAFE Sampling point 25m x 25m             7   &lt;NA&gt;   SAFE
+## 10        A_8 SAFE Sampling point 25m x 25m             7   &lt;NA&gt;   SAFE
+##    fractal_order transect_order centroid_x centroid_y
+## 1             NA             NA   117.6009   4.723797
+## 2             NA             NA   117.6032   4.717283
+## 3              1              1   117.6515   4.708505
+## 4              1              1   117.6511   4.708578
+## 5              1              1   117.6514   4.708950
+## 6              1              2   117.6524   4.709513
+## 7              1              2   117.6520   4.709589
+## 8              1              2   117.6523   4.709968
+## 9              1              3   117.6538   4.711672
+## 10             1              3   117.6542   4.711600
+##                                   source bbox_xmin bbox_ymin bbox_xmax
+## 1                    Safe_camp_multi.shp  117.6001  4.723253  117.6016
+## 2                               GPS data  117.6032  4.717283  117.6032
+## 3  SAFE_core_sampling_stations_WGS84.shp  117.6515  4.708505  117.6515
+## 4  SAFE_core_sampling_stations_WGS84.shp  117.6511  4.708578  117.6511
+## 5  SAFE_core_sampling_stations_WGS84.shp  117.6514  4.708950  117.6514
+## 6  SAFE_core_sampling_stations_WGS84.shp  117.6524  4.709513  117.6524
+## 7  SAFE_core_sampling_stations_WGS84.shp  117.6520  4.709589  117.6520
+## 8  SAFE_core_sampling_stations_WGS84.shp  117.6523  4.709968  117.6523
+## 9  SAFE_core_sampling_stations_WGS84.shp  117.6538  4.711672  117.6538
+## 10 SAFE_core_sampling_stations_WGS84.shp  117.6542  4.711600  117.6542
+##    bbox_ymax                       geometry
+## 1   4.724475 MULTIPOLYGON (((117.6007 4....
+## 2   4.717283      POINT (117.6032 4.717283)
+## 3   4.708505      POINT (117.6515 4.708505)
+## 4   4.708578      POINT (117.6511 4.708578)
+## 5   4.708950       POINT (117.6514 4.70895)
+## 6   4.709513      POINT (117.6524 4.709513)
+## 7   4.709589       POINT (117.652 4.709589)
+## 8   4.709968      POINT (117.6523 4.709968)
+## 9   4.711672      POINT (117.6538 4.711672)
+## 10  4.711600        POINT (117.6542 4.7116)</code></pre>
+</li>
 <li>
-<strong>Closed</strong>: the dataset is no longer available</li>
-</ul>
-<p><code>safe_data</code> enables downloading of SAFE project datasets using either a specific version ID or concept ID (in which case the latest <strong>open</strong> version of the project records is returned). More detail on this can be found in the sections below.</p>
-</div>
-</div>
-<div id="get-safe_data" class="section level1">
-<h1 class="hasAnchor">
-<a href="#get-safe_data" class="anchor"></a>Get safe_data</h1>
-<p>The latest stable version of <code>safe_data</code> can be installed from CRAN</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"safe_data"</span>)</a></code></pre></div>
-<p>Alternatively, the current development version can be installed from GitHub</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"ImperialCollegeLondon/safe_data"</span>)</a></code></pre></div>
-</div>
-<div id="access-a-safe-project-dataset" class="section level1">
-<h1 class="hasAnchor">
-<a href="#access-a-safe-project-dataset" class="anchor"></a>Access a SAFE Project dataset</h1>
-<p>SAFE project datasets can be downloaded to a local directory.</p>
-<div id="the-safe-directory" class="section level2">
-<h2 class="hasAnchor">
-<a href="#the-safe-directory" class="anchor"></a>The SAFE directory</h2>
-<p>Information on how to set the <code>SAFE_data_dir</code> in R.</p>
-</div>
-<div id="local-directory-structure" class="section level2">
-<h2 class="hasAnchor">
-<a href="#local-directory-structure" class="anchor"></a>Local directory structure</h2>
-<p>SAFE Project datasets are stored locally within the <code>SAFE_data_dir</code>. Each SAFE Project has a master folder named according to the concept DOI. Separate versions of this project are then created as subfolders within the main project folder according to their version DOI. All datasets associated with this upload are then stored within the version subfolder.</p>
-<pre><code>index.rds
-concept_DOI/
-concept_DOI/versions.rds
-concept_DOI/record_DOI_1/file.xlsx
-concept_DOI/record_DOI_1/external_file1.xlsx
-concept_DOI/record_DOI_2/file.xlsx</code></pre>
-<p>The <code>index.rds</code> and <code>versions.rds</code> are local caches containing up-to-date offline records of files accessed and version statuses for all concept DOIs requested by the user. These files are described in more detail below.</p>
-</div>
-<div id="versioning" class="section level2">
-<h2 class="hasAnchor">
-<a href="#versioning" class="anchor"></a>Versioning</h2>
-<p>The <code>versions.rds</code> file is always</p>
-</div>
-</div>
-<div id="load-a-safe-project-dataset" class="section level1">
-<h1 class="hasAnchor">
-<a href="#load-a-safe-project-dataset" class="anchor"></a>Load a SAFE Project dataset</h1>
-<div id="importing-a-safe-data-object" class="section level2">
-<h2 class="hasAnchor">
-<a href="#importing-a-safe-data-object" class="anchor"></a>Importing a SAFE data object</h2>
-<p>Using <code>importSafe()</code></p>
-</div>
-<div id="the-safe-data-object-structure" class="section level2">
-<h2 class="hasAnchor">
-<a href="#the-safe-data-object-structure" class="anchor"></a>The SAFE data object structure</h2>
-<p>Description of different features within the object and how to access them (e.g. <code><a href="https://www.rdocumentation.org/packages/base/topics/print">print()</a></code>)</p>
-</div>
-<div id="building-taxonomic-heirarchies" class="section level2">
-<h2 class="hasAnchor">
-<a href="#building-taxonomic-heirarchies" class="anchor"></a>Building taxonomic heirarchies</h2>
-<p>Using <code>addTaxonHeirarchies()</code> to build a taxonomic tree</p>
-</div>
-<div id="visualising-locational-information" class="section level2">
-<h2 class="hasAnchor">
-<a href="#visualising-locational-information" class="anchor"></a>Visualising locational information</h2>
+<p><code><a href="../reference/get_locations.html">get_locations()</a></code>: This function returns an <code>sf</code> object containing the locations used within a dataset. For known locations, the GIS data for the location are taken directly from the gazetteer. If the locations are new sampling sites, then GIS data provided in the dataset is used. Note that it is possible for dataset providers to create a new locations without including GIS data - these will be represented using empty GIS geometries.</p>
+<p>By default, the returned <code>sf</code> object will only include the location name used in the dataset, the gazetteer name for known sampling sites and an indication of whether the location is new or known, but <code>gazetteer_info=TRUE</code> can be used to include the gazetteer attributes for known locations.</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(sf)</a></code></pre></div>
+<pre><code>## Linking to GEOS 3.6.1, GDAL 2.1.3, PROJ 4.9.3</code></pre>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" title="1">beetle_locs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_locations.html">get_locations</a></span>(<span class="dv">1400562</span>)</a>
+<a class="sourceLine" id="cb46-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(beetle_locs)</a></code></pre></div>
+<pre><code>## Simple feature collection with 20 features and 3 fields (with 20 geometries empty)
+## geometry type:  POINT
+## dimension:      XY
+## bbox:           xmin: 116.967 ymin: 4.69223 xmax: 117.7981 ymax: 4.97022
+## epsg (SRID):    4326
+## proj4string:    +proj=longlat +datum=WGS84 +no_defs
+## First 10 features:
+##          gazetteer_name new_location dataset_name                 geometry
+## Maliau_1             NA         TRUE     Maliau_1 POINT (116.9707 4.74462)
+## Maliau_2             NA         TRUE     Maliau_2 POINT (116.9748 4.74548)
+## Maliau_3             NA         TRUE     Maliau_3 POINT (116.9675 4.74757)
+## Maliau_4             NA         TRUE     Maliau_4 POINT (116.9714 4.74565)
+## Maliau_5             NA         TRUE     Maliau_5 POINT (116.9781 4.74501)
+## Maliau_6             NA         TRUE     Maliau_6 POINT (116.9669 4.75054)
+## Maliau_7             NA         TRUE     Maliau_7 POINT (116.9731 4.74864)
+## Maliau_8             NA         TRUE     Maliau_8 POINT (116.9701 4.74607)
+## Danum_1              NA         TRUE      Danum_1  POINT (117.796 4.96444)
+## Danum_2              NA         TRUE      Danum_2 POINT (117.7932 4.96486)</code></pre>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" title="1">fragments &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/subset">subset</a></span>(gazetteer, type<span class="op">==</span><span class="st">'SAFE forest fragment'</span>)</a>
+<a class="sourceLine" id="cb48-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/par">par</a></span>(<span class="dt">mar=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">1</span>,<span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb48-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/sf/topics/plot">plot</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/sf/topics/st_geometry">st_geometry</a></span>(fragments), <span class="dt">col=</span><span class="st">'khaki'</span>, <span class="dt">graticule=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb48-4" title="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/sf/topics/plot">plot</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/sf/topics/st_geometry">st_geometry</a></span>(beetle_locs), <span class="dt">add=</span><span class="ot">TRUE</span>, <span class="dt">col=</span><span class="st">'red'</span>, <span class="dt">pch=</span><span class="dv">4</span>)</a></code></pre></div>
+<p><img src="using_safe_data_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
+</li>
+<li>
+<p><code><a href="../reference/add_locations.html">add_locations()</a></code>: This functions adds location data to an already loaded worksheet. The result is a <code>safedata</code> object that is also an <code>sf</code> object.</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1">beetle_env &lt;-<span class="st"> </span><span class="kw"><a href="../reference/load_safe_data.html">load_safe_data</a></span>(<span class="dv">1400562</span>, <span class="st">'EnvironVariables'</span>)</a>
+<a class="sourceLine" id="cb49-2" title="2">beetle_env &lt;-<span class="st"> </span><span class="kw"><a href="../reference/add_locations.html">add_locations</a></span>(beetle_env)</a>
+<a class="sourceLine" id="cb49-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(beetle_env)</a></code></pre></div>
+<pre><code>## SAFE dataset:
+## Concept: 1400561; Record 1400562; Worksheet: EnvironVariables
+## Simple feature collection with 20 features and 7 fields
+## geometry type:  POINT
+## dimension:      XY
+## bbox:           xmin: 116.967 ymin: 4.69223 xmax: 117.7981 ymax: 4.97022
+## epsg (SRID):    4326
+## proj4string:    +proj=longlat +datum=WGS84 +no_defs
+## First 10 features:
+##              Site     Temp Moisture Cover gazetteer_name new_location
+## SAFE_E     SAFE_E 23.26667 40.73333    16             NA         TRUE
+## SAFE_D     SAFE_D 23.76667 36.24000    32             NA         TRUE
+## SAFE_F     SAFE_F 23.93333 26.71333    30             NA         TRUE
+## SAFE_C     SAFE_C 22.80000 35.90667    15             NA         TRUE
+## SAFE_B     SAFE_B 23.93333 20.96000    47             NA         TRUE
+## SAFE_A     SAFE_A 23.73333 20.43333    23             NA         TRUE
+## Maliau_1 Maliau_1 24.10000 18.08000   100             NA         TRUE
+## Maliau_2 Maliau_2 24.00000 27.59000   100             NA         TRUE
+## Maliau_3 Maliau_3 24.43333 14.46000   100             NA         TRUE
+## Maliau_4 Maliau_4 25.00000 15.68667   100             NA         TRUE
+##          dataset_name                 geometry
+## SAFE_E         SAFE_E POINT (117.5785 4.69223)
+## SAFE_D         SAFE_D POINT (117.5839 4.70618)
+## SAFE_F         SAFE_F POINT (117.5355 4.69872)
+## SAFE_C         SAFE_C POINT (117.6227 4.70994)
+## SAFE_B         SAFE_B POINT (117.6145 4.72757)
+## SAFE_A         SAFE_A  POINT (117.6472 4.7043)
+## Maliau_1     Maliau_1 POINT (116.9707 4.74462)
+## Maliau_2     Maliau_2 POINT (116.9748 4.74548)
+## Maliau_3     Maliau_3 POINT (116.9675 4.74757)
+## Maliau_4     Maliau_4 POINT (116.9714 4.74565)</code></pre>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/sf/topics/plot">plot</a></span>(beetle_env[<span class="st">'Cover'</span>], <span class="dt">key.pos=</span><span class="dv">4</span>, <span class="dt">breaks=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/seq">seq</a></span>(<span class="dv">0</span>,<span class="dv">100</span>, <span class="dt">by=</span><span class="dv">5</span>))</a></code></pre></div>
+<p><img src="using_safe_data_files/figure-html/unnamed-chunk-24-1.png" width="700"></p>
+</li>
+</ol>
 </div>
 </div>
   </div>
@@ -194,25 +671,32 @@ concept_DOI/record_DOI_2/file.xlsx</code></pre>
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li>
-<a href="#about-the-package">About the package</a><ul class="nav nav-pills nav-stacked">
-<li><a href="#data-format">Data format</a></li>
-      <li><a href="#data-repository">Data repository</a></li>
-      </ul>
-</li>
-      <li><a href="#get-safe_data">Get safe_data</a></li>
-      <li>
-<a href="#access-a-safe-project-dataset">Access a SAFE Project dataset</a><ul class="nav nav-pills nav-stacked">
-<li><a href="#the-safe-directory">The SAFE directory</a></li>
-      <li><a href="#local-directory-structure">Local directory structure</a></li>
-      <li><a href="#versioning">Versioning</a></li>
+<a href="#installing-safedata">Installing <code>safedata</code></a><ul class="nav nav-pills nav-stacked">
+<li><a href="#package-dependencies">Package dependencies</a></li>
       </ul>
 </li>
       <li>
-<a href="#load-a-safe-project-dataset">Load a SAFE Project dataset</a><ul class="nav nav-pills nav-stacked">
-<li><a href="#importing-a-safe-data-object">Importing a SAFE data object</a></li>
-      <li><a href="#the-safe-data-object-structure">The SAFE data object structure</a></li>
-      <li><a href="#building-taxonomic-heirarchies">Building taxonomic heirarchies</a></li>
-      <li><a href="#visualising-locational-information">Visualising locational information</a></li>
+<a href="#the-safe-data-directory">The SAFE data directory</a><ul class="nav nav-pills nav-stacked">
+<li><a href="#initialising-a-safe-data-directory">Initialising a SAFE data directory</a></li>
+      <li><a href="#using-an-existing-safe-data-directory">Using an existing SAFE data directory</a></li>
+      </ul>
+</li>
+      <li>
+<a href="#exploring-record-metadata">Exploring record metadata</a><ul class="nav nav-pills nav-stacked">
+<li><a href="#displaying-dataset-metadata">Displaying dataset metadata</a></li>
+      </ul>
+</li>
+      <li>
+<a href="#search-functions">Search functions</a><ul class="nav nav-pills nav-stacked">
+<li><a href="#taxon-search-details">Taxon search details</a></li>
+      <li><a href="#spatial-search-details">Spatial search details</a></li>
+      </ul>
+</li>
+      <li><a href="#downloading-data">Downloading data</a></li>
+      <li>
+<a href="#loading-data">Loading data</a><ul class="nav nav-pills nav-stacked">
+<li><a href="#dataset-taxa">Dataset taxa</a></li>
+      <li><a href="#dataset-locations">Dataset locations</a></li>
       </ul>
 </li>
       </ul>

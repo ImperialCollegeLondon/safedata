@@ -88,7 +88,10 @@ the function will also handle Zenodo URLs and DOIs." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/using_safe_data.html">Using the safe_data package</a>
+      <a href="../articles/overview.html">An overview of data at the SAFE Project</a>
+    </li>
+    <li>
+      <a href="../articles/using_safe_data.html">Using the `safedata` package</a>
     </li>
   </ul>
 </li>
@@ -170,7 +173,7 @@ check record ids and display summary information using the print method.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>   <span class='no'>safedir</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>'example_data_dir'</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>'safedata'</span>)
    <span class='fu'><a href='set_safe_dir.html'>set_safe_dir</a></span>(<span class='no'>safedir</span>, <span class='kw'>update</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>validate</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
-   <span class='fu'>validate_record_ids</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>3247631</span>, <span class='fl'>3266827</span>, <span class='fl'>3266821</span>, -<span class='fl'>1000</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Some record ids are not positive integers</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Some values are not known concept or record ids</span></div><div class='output co'>#&gt; Set includes 3 concept ids and 2 record ids: 
+   <span class='fu'>validate_record_ids</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>3247631</span>, <span class='fl'>3266827</span>, <span class='fl'>3266821</span>, -<span class='fl'>1000</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Invalid numeric record ids: -1000</span></div><div class='output co'>#&gt; Set includes 3 concept ids and 2 record ids: 
 #&gt;  - 1 open and most recent (*)
 #&gt;  - 0 open and outdated (o)
 #&gt;  - 1 under embargo or restricted (x)
@@ -178,22 +181,10 @@ check record ids and display summary information using the print method.</p>
 #&gt;   concept  record available
 #&gt; 1 3247630 3247631         x
 #&gt; 2 3266821 -------          
-#&gt; 3 3266826 3266827         *
-#&gt; 
-#&gt; Unmatched record ids: -1000 </div><div class='input'>   <span class='fu'>validate_record_ids</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'https://doi.org/10.5281/zenodo.3247631'</span>,
-                                            <span class='st'>'10.5281/zenodo.3266827'</span>,
-                                            <span class='st'>'https://zenodo.org/record/3266821'</span>,
-                                            <span class='st'>'not_this_one/3266821'</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Some record ids do not match known id formats</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Some values are not known concept or record ids</span></div><div class='output co'>#&gt; Set includes 3 concept ids and 2 record ids: 
-#&gt;  - 1 open and most recent (*)
-#&gt;  - 0 open and outdated (o)
-#&gt;  - 1 under embargo or restricted (x)
-#&gt; 
-#&gt;   concept  record available
-#&gt; 1 3247630 3247631         x
-#&gt; 2 3266821 -------          
-#&gt; 3 3266826 3266827         *
-#&gt; 
-#&gt; Unmatched record ids: not_this_one/3266821 </div></pre>
+#&gt; 3 3266826 3266827         *</div><div class='input'>   <span class='fu'>validate_record_ids</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'https://doi.org/10.5281/zenodo.3247631'</span>,
+                           <span class='st'>'10.5281/zenodo.3266827'</span>,
+                           <span class='st'>'https://zenodo.org/record/3266821'</span>,
+                           <span class='st'>'not_this_one/3266821'</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Invalid character record ids: not_this_one/3266821</span></div><div class='output co'>#&gt; <span class='error'>Error in regmatches(record_set, match): ‘x’ and ‘m’ must have the same length</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
