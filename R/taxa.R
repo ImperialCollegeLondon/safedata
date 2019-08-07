@@ -284,7 +284,9 @@ get_phylogeny <- function(record){
 	#' a single descendant: the \code{\link{ape}} functions \code{\link[ape]{has.singles}}
 	#' and \code{\link[ape]{collapse.singles}} can be used to detect and remove these if 
 	#' required.
-    #' 
+    #' @examples
+	#'    ant_phylo <- get_phylogeny(1400562)
+    #'    plot(ant_phylo, show.node.label=TRUE, font=1, no.margin=TRUE)
     #' @param record A single dataset record id
     #' @return An \code{\link[ape]{phylo}} object.
     #' @export
