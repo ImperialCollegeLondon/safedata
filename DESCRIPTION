@@ -22,7 +22,8 @@ Imports:
 	ape
 Suggests:
     knitr,
-    rmarkdown
+    rmarkdown,
+	ape
 URL: https://imperialcollegelondon.github.io/safe_data/index.html
 BugReports: https://github.com/ImperialCollegeLondon/safe_data/issues
 RoxygenNote: 6.1.1
