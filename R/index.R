@@ -363,7 +363,7 @@ load_gazetteer <- function(){
     #' 
     #' @return An \code{\link[sf]{sf}} object containing the SAFE gazetteer locations.
     #' @seealso \code{\link{load_location_aliases}}, \code{\link{load_index}}
-    #' @keywords internal
+    #' @export
 
     
     if(exists('gazetteer', safedata.env)){
