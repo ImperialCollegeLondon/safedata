@@ -5,7 +5,8 @@ Version: 0.2
 Date: 2019-07-30
 Authors@R: c(
     person('Andy', 'Aldersley', email='a.aldersley@imperial.ac.uk', role=c('aut')),
-    person('David', 'Orme', email='d.orme@imperial.ac.uk', role=c('aut','cre')))
+    person('David', 'Orme', email='d.orme@imperial.ac.uk', role=c('aut','cre'),
+	       comment=c(ORCID='0000-0002-7005-1394')))
 Description: The SAFE Project is a large scale ecological experiment
     in Malaysian Borneo that explores the impact of habitat fragmentation
     and conversion on ecosystem function and services. Data collected at

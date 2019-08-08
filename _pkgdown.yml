@@ -13,12 +13,6 @@ reference:
   desc: These functions provide an interface to the dataset metadata search API provided by the SAFE Project website
   contents:
   - search_safe
-- title: Data discovery
-  desc: >
-    SAFE datasets contain a considerable amount of metadata about at the dataset, data worksheet and field 
-    level. These functions display the metadata available at each of these levels.
-  contents:
-  - show_concepts
 - title: Metadata display
   desc: >
     SAFE datasets contain a considerable amount of metadata about at the dataset, data worksheet and field 
