@@ -120,104 +120,23 @@ contents of a published data file undermines reproducible research.
 safe_dir <- system.file('example_data_dir', package='safedata')
 set_safe_dir(safe_dir)
 ```
-# Exploring  record metadata
 
-You can browse published SAFE dataset at either our [SAFE Zenodo
-community](https://zenodo.org/communities/safe) or on the [SAFE Project
-website](https://www.safeproject.net/datasets/view_datasets). Datasets are identified by their
-Zenodo record number, which is the number included in both the dataset DOI and Zenodo URL. All of
-the following point to the same dataset:
+# Finding data
 
-* [https://doi.org/10.5281/zenodo.3247631](https://doi.org/10.5281/zenodo.3247631) 
-* [10.5281/zenodo.3247631](https://doi.org/10.5281/zenodo.3247631) 
-* [https://zenodo.org/record/3266821](https://zenodo.org/record/3247631))
+You can browse datasets published by the SAFE Project at either:
 
-Note that all metadata is *available for all records*, regardless of whether they are open,
-embargoed or restricted. This includes field descriptions and taxon and location sampling so that
-users can assess whether a dataset is going to be useful even if it is not yet openly available.
+* our [SAFE Zenodo community](https://zenodo.org/communities/safe) or
+* the  [SAFE Project website](https://www.safeproject.net/datasets/view_datasets). 
 
-Once you have found datasets that you want to explore further, then you can use the
-`validate_record_ids()` function. This function does the following:
+If you have done this, or have a dataset DOI from another source, then you can look up
+the dataset directly. 
 
-1. checks that the record is valid,
-2. checks whether the record number is a **record id**, referring to a specific version of a
-    dataset, or a **concept id**, which identifies all the versions of a dataset. In the example 
-    code below, two of the values are record ids, so the appropriate concept id is located and
-    printed, and one is a concept id, so no specific version number is given.
-3. checks whether the data are currently available, and
-4. provides an interface to download and  import the related data files. 
+However, if you want to search the dataset metadata or the taxa and locations covered by 
+datasets then there are a set of search functions built into the `safedata` package.
 
-The output is an object of class `safe_record_set`: 
+## Search functions
 
-```{r, echo=TRUE}
-recs <- validate_record_ids(c('https://doi.org/10.5281/zenodo.3247631',
-                              '10.5281/zenodo.3266827',
-                              'https://zenodo.org/record/3266821'))
-print(recs)
-```
-
-This object is just a data frame containing validated record ids and access information and so you
-can use the normal data frame indices (e.g. `recs[1,]`) to select particular records. 
-
-In addition, all of the main functions in `safedata` that expect to be passed a dataset id will run
-`validate_record_ids()` on their inputs, so you can simply use those URLs directly with those
-functions without needing to specifically create a `safe_record_set` yourself.
-
-## Displaying dataset metadata
-
-Printing a `safe_record_set` object displays a deliberately compact summary of a set of record
-ids. There are three function that show the detailed metadata for records at three levels: 
-
-* the **concept** level: metadata about all the published versions of a particualar dataset,
-* the **record** level: metadata about a specific version of a dataset, and
-* the **worksheet** level: metadata about the fields available in a particular data worksheet.
-
-### `show_concepts()`
-
-The `show_concepts()` function displays concept level metadata about a set of record ids. This
-includes the (most recent) dataset title and a short summary of the versions available under the 
-dataset concept. Note that the output is not restricted just to the set of record ids given to the function: 
-it shows metadata for all versions for each of the concept  ids included.
-
-```{r}
-show_concepts(recs)
-```
-
-### `show_record()`
-
-This function shows metadata for a specific version of a dataset: if you give it a concept ID then
-it will display the available versions for that concept. Otherwise, the function prints out information
-about the dataset with that record id: it includes the dataset title, status and other dataset level
-metadata and then a summary of the data worksheets contained in the dataset.
-
-Note that - because a `safe_record_set` is just a data frame with some extra information attached - 
-you can use the usual data frame indexing to select a row to pass to other functions. Running 
-`show_record()` also _requires an internet connection_: the package downloads a JSON file of
-the record metadata and stores it in the SAFE data directory.
-
-```{r}
-show_record(recs[3,])
-```
-
-### `show_worksheet()`
-
-This function  shows metadata for a named worksheet within a specific record. The default is to show
-a compact table of field names, field types and truncated descriptions: 
-
-```{r}
-show_worksheet(recs[3,], 'Data')
-```
-
-There is also an extended display (`extended_fields=TRUE`) that will print out a list of all the available
-metadata for each field.
-
-```{r, output.lines=15}
-show_worksheet(recs[3,], 'Data', extended_fields=TRUE)
-```
-
-# Search functions
-
-The `safedata` package also contains a set of search functions to explore datasets. These functions
+The `safedata` package  contains a set of search functions to explore datasets. These functions
 make use of a metadata index stored on the SAFE Project website and so need an internet connection
 to work. These search functions provide structured access to the same metadata shown in project
 description text but also provide extended taxonomic and spatial searches.
@@ -231,14 +150,16 @@ The functions are:
 * `search_taxa()`: searches for datasets containing particular taxa.
 * `search_spatial()`: searches for datasets sampling at or near a particular location.
 
-All of these functions return `safe_record_set` objects, which can be used in the metadata display functions shown above as well as for data downloading and use (see below).
+All of these functions return a `safe_record_set` objects, which is just a data frame 
+containing validated record ids and access information and so you can use the normal data
+ frame indices (e.g. `recs[1,]`) to select particular records. 
 
-```{r}
-print(soil_datasets <- search_text('soil'))
-show_concepts(soil_datasets[2,])
+```{r, echo=TRUE}
+soil_datasets <- search_text('soil')
+print(soil_datasets)
 ```
 
-## Taxon search details
+### Taxon search details
 
 Published datasets contain a taxonomic index of any organisms referred to within the data - see
 [here](https://safe-dataset-checker.readthedocs.io/en/latest/data_format/taxa/) for details of the
@@ -260,7 +181,7 @@ also possible to search by [GBIF ID](https://www.gbif.org/species/4342).
 ants <- search_taxa(gbif_id=4342)
 ```
 
-## Spatial search details
+### Spatial search details
 
 Datasets also have to provide a full index of sampling locations used in the data. Sampling
 locations are either linked to existing sampling locations included in the [SAFE
@@ -279,6 +200,98 @@ near_maliau <- search_spatial(wkt='POINT(116.97394 4.73481)', distance=2000)
 Note that WKT coordinates should be supplied as WGS84 longitude and latitude - typically the output
 of GPS receivers - but the database uses the local UTM 50N projected coordinate system for all
 distance calculations and GIS operations.
+
+## Look up a specific dataset
+
+Datasets are identified by their record number, which is the number included in both the 
+dataset DOI and  Zenodo URL. All of the following point to the same dataset:
+
+* [https://doi.org/10.5281/zenodo.3247631](https://doi.org/10.5281/zenodo.3247631) 
+* [10.5281/zenodo.3247631](https://doi.org/10.5281/zenodo.3247631) 
+* [https://zenodo.org/record/3266821](https://zenodo.org/record/3247631))
+
+Note that all metadata is *available for all records*, regardless of whether they are open,
+embargoed or restricted. This includes field descriptions and taxon and location sampling so that
+users can assess whether a dataset is going to be useful even if it is not yet openly available.
+
+Once you have the details of a dataset you are interestested in then you can validate 
+a dataset reference to access metadata and available data, using the 
+`validate_record_ids()` function. This function does the following:
+
+1. checks that the record is valid,
+2. checks whether the record number is a **record id**, referring to a specific version of a
+    dataset, or a **concept id**, which identifies all the versions of a dataset. In the example 
+    code below, two of the values are record ids, so the appropriate concept id is located and
+    printed, and one is a concept id, so no specific version number is given.
+3. checks whether the data are currently available, and
+4. provides an interface to download and  import the related data files. 
+
+Like the `search` functions, the output is `safe_record_set` object. Note that you can validate
+multiple references at once.
+
+```{r, echo=TRUE}
+recs <- validate_record_ids(c('https://doi.org/10.5281/zenodo.3247631',
+                              '10.5281/zenodo.3266827',
+                              'https://zenodo.org/record/3266821'))
+print(recs)
+```
+
+In addition, all of the main functions in `safedata` that expect to be passed a dataset id will run
+`validate_record_ids()` on their inputs, so you can simply use those URLs directly with those
+functions without needing to specifically create a `safe_record_set` yourself.
+
+# Displaying dataset metadata
+
+Printing a `safe_record_set` object displays a deliberately compact summary of a set of record
+ids. There are three function that show the detailed metadata for records at three levels: 
+
+* the **concept** level: metadata about all the published versions of a particualar dataset,
+* the **record** level: metadata about a specific version of a dataset, and
+* the **worksheet** level: metadata about the fields available in a particular data worksheet.
+
+## `show_concepts()`
+
+The `show_concepts()` function displays concept level metadata about a set of record ids. This
+includes the (most recent) dataset title and a short summary of the versions available under the 
+dataset concept. Note that the output is not restricted just to the set of record ids given to the function: 
+it shows metadata for all versions for each of the concept  ids included.
+
+```{r}
+show_concepts(recs)
+```
+
+## `show_record()`
+
+This function shows metadata for a specific version of a dataset: if you give it a concept ID then
+it will display the available versions for that concept. Otherwise, the function prints out information
+about the dataset with that record id: it includes the dataset title, status and other dataset level
+metadata and then a summary of the data worksheets contained in the dataset.
+
+Note that - because a `safe_record_set` is just a data frame with some extra information attached - 
+you can use the usual data frame indexing to select a row to pass to other functions. Running 
+`show_record()` also _requires an internet connection_: the package downloads a JSON file of
+the record metadata and stores it in the SAFE data directory.
+
+```{r}
+show_record(recs[3,])
+```
+
+## `show_worksheet()`
+
+This function  shows metadata for a named worksheet within a specific record. The default is to show
+a compact table of field names, field types and truncated descriptions: 
+
+```{r}
+show_worksheet(recs[3,], 'Data')
+```
+
+There is also an extended display (`extended_fields=TRUE`) that will print out a list of all the available
+metadata for each field.
+
+```{r, output.lines=15}
+show_worksheet(recs[3,], 'Data', extended_fields=TRUE)
+```
+
 
 # Downloading data
 
