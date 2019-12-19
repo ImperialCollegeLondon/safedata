@@ -9,9 +9,52 @@ addons:
       - libproj-dev
       - libgeos-dev
       - libgdal-dev
-# r_binary_packages:
-#     - readxl
-#     - jsonlite
-#     - chron
-#     - curl
-#     - sf
+
+r_binary_packages:
+- r-cran-remotes
+- r-cran-jsonlite
+- r-cran-chron
+- r-cran-curl
+- r-cran-Rcpp
+- r-cran-DBI
+- r-cran-magrittr
+- r-cran-evaluate
+- r-cran-highr
+- r-cran-yaml
+- r-cran-xfun
+- r-cran-base64enc
+- r-cran-mime
+- r-cran-rematch
+- r-cran-crayon
+- r-cran-fansi
+- r-cran-pkgconfig
+- r-cran-rlang
+- r-cran-assertthat
+- r-cran-glue
+- r-cran-utf8
+- r-cran-backports
+- r-cran-digest
+- r-cran-zeallot
+- r-cran-R6
+- r-cran-e1071
+- r-cran-stringi
+- r-cran-ape
+- r-cran-classInt
+- r-cran-units
+- r-cran-markdown
+- r-cran-stringr
+- r-cran-htmltools
+- r-cran-tinytex
+- r-cran-cli
+- r-cran-ellipsis
+- r-cran-prettyunits
+- r-cran-sf
+- r-cran-knitr
+- r-cran-vctrs
+- r-cran-rmarkdown
+- r-cran-pillar
+- r-cran-hms
+- r-cran-tibble
+- r-cran-progress
+- r-cran-cellranger
+- r-cran-readxl
