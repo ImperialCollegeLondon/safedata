@@ -6,3 +6,12 @@ addons:
   apt:
     packages:
       - libudunits2-dev
+      - libproj-dev
+      - libgeos-dev
+      - libgdal-dev
+# r_binary_packages:
+#     - readxl
+#     - jsonlite
+#     - chron
+#     - curl
+#     - sf
