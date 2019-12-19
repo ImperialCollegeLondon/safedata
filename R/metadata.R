@@ -77,6 +77,11 @@ validate_record_ids <- function(record_set){
                 mismatches <- record_set[! valid]
                 record_set <- record_set[valid]
                 warning(paste0('Invalid character record ids: ', paste0(mismatches, collapse=',')))
+                # Remove mismatches from the regexpr hits
+                attr_match <- attributes(match)
+                attr_match$match.length <- attr_match$match.length[valid]
+                match <- match[valid]
+                attributes(match) <- attr_match
             }
             
             # convert matching patterns to numeric
