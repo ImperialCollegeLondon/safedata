@@ -22,11 +22,11 @@ the taxonomic hierarchy of the phylogeny.
 }
 \details{
 Note that the phylogeny will contain singleton nodes if an internal taxon has
-a single descendant: the \code{\link{ape}} functions \code{\link[ape]{has.singles}}
+a single descendant: the \code{\link[ape]{ape}} functions \code{\link[ape]{has.singles}}
 and \code{\link[ape]{collapse.singles}} can be used to detect and remove these if 
 required.
 }
 \examples{
    beetle_phylo <- get_phylogeny(1400562)
-   plot(beetle_phylo, show.node.label=TRUE, font=1, no.margin=TRUE)
+   ape::plot.phylo(beetle_phylo, show.node.label=TRUE, font=1, no.margin=TRUE)
 }
