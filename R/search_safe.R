@@ -70,7 +70,8 @@
 #'    all versions of matching dataset concepts are returned.
 #' @return An object of class \code{\link{safe_record_set}} of datasets that match 
 #'    the query.
-#' @examples 
+#' @examples
+#'    \donttest{
 #'    search_dates('2014-06-12')
 #'    search_dates(as.POSIXct(c('2014-06-12', '2015-06-11')))
 #'    search_dates(c('2014-06-12', '2015-06-11'), match_type = 'contain')
@@ -88,6 +89,7 @@
 #'    search_spatial(wkt = 'Polygon((110 0, 110 10,120 10,120 0,110 0))')
 #'    search_spatial(location = 'A_1')
 #'    search_spatial(location = 'A_1', distance = 2500)
+#'    }
 #' @name search_safe
 NULL
 
