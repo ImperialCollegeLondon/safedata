@@ -302,10 +302,14 @@ download_safe_files <- function(record_ids, confirm=TRUE, xlsx_only=TRUE,
     unavail <- subset(targets, ! available)
     to_download <- subset(targets, (refresh | (! local_exists)) & available)
     
+    size_to_human <- function(size){
+    	return(format(structure(size, class="object_size"), units="auto"))
+    }
+    	
     msg <- sprintf(msg, nrow(targets), length(unique(targets$zenodo_record_id)),
-                   nrow(local), utils:::format.object_size(sum(local$filesize), "auto"),
-                   nrow(unavail), utils:::format.object_size(sum(unavail$filesize), "auto"),
-                   nrow(to_download), utils:::format.object_size(sum(to_download$filesize), "auto"))
+                   nrow(local), size_to_human(sum(local$filesize)),
+                   nrow(unavail), size_to_human(sum(unavail$filesize)),
+                   nrow(to_download), size_to_human(sum(to_download$filesize)))
     
     if(confirm){
         # Don't mute the message if the function is called to report this!
