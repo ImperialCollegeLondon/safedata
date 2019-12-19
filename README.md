@@ -18,3 +18,7 @@ In particular, the following links provide:
 * an vignette providing an [overview](https://imperialcollegelondon.github.io/safedata/articles/overview) of the SAFE project data, and
 * a short [user guide](https://imperialcollegelondon.github.io/safedata/articles/using_safe_data.html) for the package.
 
+
+<!-- badges: start -->
+[![Travis build status](https://travis-ci.org/ImperialCollegeLondon/safedata.svg?branch=master)](https://travis-ci.org/ImperialCollegeLondon/safedata)
+<!-- badges: end -->
