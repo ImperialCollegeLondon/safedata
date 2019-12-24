@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -76,7 +76,7 @@
       <h1>Using the <code>safedata</code> package</h1>
                         <h4 class="author">Andy Aldersley and David Orme</h4>
             
-            <h4 class="date">2019-10-08</h4>
+            <h4 class="date">2019-12-24</h4>
       
       
       <div class="hidden name"><code>using_safe_data.Rmd</code></div>
@@ -173,14 +173,11 @@
 <p>All of these functions return a <code>safe_record_set</code> objects, which is just a data frame containing validated record ids and access information and so you can use the normal data frame indices (e.g. <code>recs[1,]</code>) to select particular records.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">soil_datasets &lt;-<span class="st"> </span><span class="kw"><a href="../reference/search_safe.html">search_text</a></span>(<span class="st">'soil'</span>)</a></code></pre></div>
 <pre><code>## Search returned 12 records</code></pre>
-<pre><code>## Warning in validate_record_ids(content$entries$zenodo_record_id):
-## Unknown record ids in record_set:
-## FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE</code></pre>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(soil_datasets)</a></code></pre></div>
-<pre><code>## Set includes 8 concept ids and 11 record ids: 
-##  - 5 open and most recent (*)
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(soil_datasets)</a></code></pre></div>
+<pre><code>## Set includes 9 concept ids and 12 record ids: 
+##  - 4 open and most recent (*)
 ##  - 0 open and outdated (o)
-##  - 6 under embargo or restricted (x)
+##  - 8 under embargo or restricted (x)
 ## 
 ##    concept  record available
 ## 1  3247591 3247592         *
@@ -191,49 +188,53 @@
 ## 6  3251901 3258082         x
 ## 7  ------- 3251902         x
 ## 8  3265745 3265746         *
-## 9  3266770 3266771         *
+## 9  3266770 3266771         x
 ## 10 3266821 3266822         *
-## 11 3354067 3354068         *</code></pre>
+## 11 3354067 3354068         *
+## 12 3402745 3402746         x</code></pre>
 <div id="taxon-search-details" class="section level3">
 <h3 class="hasAnchor">
 <a href="#taxon-search-details" class="anchor"></a>Taxon search details</h3>
 <p>Published datasets contain a taxonomic index of any organisms referred to within the data - see <a href="https://safedata-validator.readthedocs.io/en/latest/data_format/taxa/">here</a> for details of the Taxa worksheet containing the index.</p>
 <p>The taxa in this index, along with all of the parent taxa in the taxonomic hierarchy leading up to that those taxa, are added to a taxonomic database on the SAFE Project website. The <code><a href="../reference/search_safe.html">search_taxa()</a></code> function searches that index to identify all the datasets that contain a particular taxon.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(ants &lt;-<span class="st"> </span><span class="kw"><a href="../reference/search_safe.html">search_taxa</a></span>(<span class="st">'Formicidae'</span>))</a>
-<a class="sourceLine" id="cb12-2" title="2"><span class="co">## Search returned 9 records</span></a>
-<a class="sourceLine" id="cb12-3" title="3"><span class="co">## Set includes 9 concept ids and 9 record ids: </span></a>
-<a class="sourceLine" id="cb12-4" title="4"><span class="co">##  - 8 open and most recent (*)</span></a>
-<a class="sourceLine" id="cb12-5" title="5"><span class="co">##  - 0 open and outdated (o)</span></a>
-<a class="sourceLine" id="cb12-6" title="6"><span class="co">##  - 1 under embargo or restricted (x)</span></a>
-<a class="sourceLine" id="cb12-7" title="7"><span class="co">## </span></a>
-<a class="sourceLine" id="cb12-8" title="8"><span class="co">##   concept  record available</span></a>
-<a class="sourceLine" id="cb12-9" title="9"><span class="co">## 1 1198301 1198302         *</span></a>
-<a class="sourceLine" id="cb12-10" title="10"><span class="co">## 2 1198471 1237732         *</span></a>
-<a class="sourceLine" id="cb12-11" title="11"><span class="co">## 3 1198838 1198839         *</span></a>
-<a class="sourceLine" id="cb12-12" title="12"><span class="co">## 4 1237729 1237730         *</span></a>
-<a class="sourceLine" id="cb12-13" title="13"><span class="co">## 5 1400561 1400562         *</span></a>
-<a class="sourceLine" id="cb12-14" title="14"><span class="co">## 6 1995247 1995439         *</span></a>
-<a class="sourceLine" id="cb12-15" title="15"><span class="co">## 7 3247484 3247485         x</span></a>
-<a class="sourceLine" id="cb12-16" title="16"><span class="co">## 8 3265745 3265746         *</span></a>
-<a class="sourceLine" id="cb12-17" title="17"><span class="co">## 9 3354067 3354068         *</span></a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(ants &lt;-<span class="st"> </span><span class="kw"><a href="../reference/search_safe.html">search_taxa</a></span>(<span class="st">'Formicidae'</span>))</a>
+<a class="sourceLine" id="cb11-2" title="2"><span class="co">## Search returned 9 records</span></a>
+<a class="sourceLine" id="cb11-3" title="3"><span class="co">## Set includes 9 concept ids and 9 record ids: </span></a>
+<a class="sourceLine" id="cb11-4" title="4"><span class="co">##  - 8 open and most recent (*)</span></a>
+<a class="sourceLine" id="cb11-5" title="5"><span class="co">##  - 0 open and outdated (o)</span></a>
+<a class="sourceLine" id="cb11-6" title="6"><span class="co">##  - 1 under embargo or restricted (x)</span></a>
+<a class="sourceLine" id="cb11-7" title="7"><span class="co">## </span></a>
+<a class="sourceLine" id="cb11-8" title="8"><span class="co">##   concept  record available</span></a>
+<a class="sourceLine" id="cb11-9" title="9"><span class="co">## 1 1198301 1198302         *</span></a>
+<a class="sourceLine" id="cb11-10" title="10"><span class="co">## 2 1198471 1237732         *</span></a>
+<a class="sourceLine" id="cb11-11" title="11"><span class="co">## 3 1198838 1198839         *</span></a>
+<a class="sourceLine" id="cb11-12" title="12"><span class="co">## 4 1237729 1237730         *</span></a>
+<a class="sourceLine" id="cb11-13" title="13"><span class="co">## 5 1400561 1400562         *</span></a>
+<a class="sourceLine" id="cb11-14" title="14"><span class="co">## 6 1995247 1995439         *</span></a>
+<a class="sourceLine" id="cb11-15" title="15"><span class="co">## 7 3247484 3247485         x</span></a>
+<a class="sourceLine" id="cb11-16" title="16"><span class="co">## 8 3265745 3265746         *</span></a>
+<a class="sourceLine" id="cb11-17" title="17"><span class="co">## 9 3354067 3354068         *</span></a></code></pre></div>
 <p>The taxonomic index is built around the GBIF backbone taxonomic database and include the following core taxonomic levels: kingdom, phylum, class, order, family, genus, species and subspecies. It is also possible to search by <a href="https://www.gbif.org/species/4342">GBIF ID</a>.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1">ants &lt;-<span class="st"> </span><span class="kw"><a href="../reference/search_safe.html">search_taxa</a></span>(<span class="dt">gbif_id=</span><span class="dv">4342</span>)</a>
-<a class="sourceLine" id="cb13-2" title="2"><span class="co">## Search returned 9 records</span></a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">ants &lt;-<span class="st"> </span><span class="kw"><a href="../reference/search_safe.html">search_taxa</a></span>(<span class="dt">gbif_id=</span><span class="dv">4342</span>)</a>
+<a class="sourceLine" id="cb12-2" title="2"><span class="co">## Search returned 9 records</span></a></code></pre></div>
 </div>
 <div id="spatial-search-details" class="section level3">
 <h3 class="hasAnchor">
 <a href="#spatial-search-details" class="anchor"></a>Spatial search details</h3>
 <p>Datasets also have to provide a full index of sampling locations used in the data. Sampling locations are either linked to existing sampling locations included in the <a href="https://www.safeproject.net/info/gazetteer">SAFE gazetteer</a> or users can identify new sampling locations and provide location data if possible.</p>
 <p>The <code><a href="../reference/search_safe.html">search_spatial()</a></code> function allows users to search for datasets by sampling locations. Accepted location names from the gazetteer can be used to search for datasets but users can also provide their own search geometries using the Well Known Text format. The search includes simple GIS capabilities to look for sampling within a given distance of the query location.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="co"># Datasets that include sampling within experimental block A</span></a>
-<a class="sourceLine" id="cb14-2" title="2">within_a &lt;-<span class="st"> </span><span class="kw"><a href="../reference/search_safe.html">search_spatial</a></span>(<span class="dt">location=</span><span class="st">'BL_A'</span>)</a>
-<a class="sourceLine" id="cb14-3" title="3"><span class="co">## Search returned 26 records</span></a>
-<a class="sourceLine" id="cb14-4" title="4"><span class="co"># Datasets that sampled within 2 km of the Maliau Basin Field Study Centre</span></a>
-<a class="sourceLine" id="cb14-5" title="5">near_maliau &lt;-<span class="st"> </span><span class="kw"><a href="../reference/search_safe.html">search_spatial</a></span>(<span class="dt">wkt=</span><span class="st">'POINT(116.97394 4.73481)'</span>, <span class="dt">distance=</span><span class="dv">2000</span>)</a>
-<a class="sourceLine" id="cb14-6" title="6"><span class="co">## Search returned 48 records</span></a>
-<a class="sourceLine" id="cb14-7" title="7"><span class="co">## Warning in validate_record_ids(content$entries$zenodo_record_id):</span></a>
-<a class="sourceLine" id="cb14-8" title="8"><span class="co">## Unknown record ids in record_set:</span></a>
-<a class="sourceLine" id="cb14-9" title="9"><span class="co">## FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE</span></a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="co"># Datasets that include sampling within experimental block A</span></a>
+<a class="sourceLine" id="cb13-2" title="2">within_a &lt;-<span class="st"> </span><span class="kw"><a href="../reference/search_safe.html">search_spatial</a></span>(<span class="dt">location=</span><span class="st">'BL_A'</span>)</a>
+<a class="sourceLine" id="cb13-3" title="3"><span class="co">## Search returned 28 records</span></a>
+<a class="sourceLine" id="cb13-4" title="4"><span class="co">## Warning in validate_record_ids(content$entries$zenodo_record_id):</span></a>
+<a class="sourceLine" id="cb13-5" title="5"><span class="co">## Unknown record ids in record_set:</span></a>
+<a class="sourceLine" id="cb13-6" title="6"><span class="co">## FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE</span></a>
+<a class="sourceLine" id="cb13-7" title="7"><span class="co"># Datasets that sampled within 2 km of the Maliau Basin Field Study Centre</span></a>
+<a class="sourceLine" id="cb13-8" title="8">near_maliau &lt;-<span class="st"> </span><span class="kw"><a href="../reference/search_safe.html">search_spatial</a></span>(<span class="dt">wkt=</span><span class="st">'POINT(116.97394 4.73481)'</span>, <span class="dt">distance=</span><span class="dv">2000</span>)</a>
+<a class="sourceLine" id="cb13-9" title="9"><span class="co">## Search returned 51 records</span></a>
+<a class="sourceLine" id="cb13-10" title="10"><span class="co">## Warning in validate_record_ids(content$entries$zenodo_record_id):</span></a>
+<a class="sourceLine" id="cb13-11" title="11"><span class="co">## Unknown record ids in record_set:</span></a>
+<a class="sourceLine" id="cb13-12" title="12"><span class="co">## FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE</span></a></code></pre></div>
 <p>Note that WKT coordinates should be supplied as WGS84 longitude and latitude - typically the output of GPS receivers - but the database uses the local UTM 50N projected coordinate system for all distance calculations and GIS operations.</p>
 </div>
 </div>
@@ -256,10 +257,10 @@
 <li>provides an interface to download and import the related data files.</li>
 </ol>
 <p>Like the <code>search</code> functions, the output is <code>safe_record_set</code> object. Note that you can validate multiple references at once.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1">recs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/validate_record_ids.html">validate_record_ids</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">'https://doi.org/10.5281/zenodo.3247631'</span>,</a>
-<a class="sourceLine" id="cb15-2" title="2">                              <span class="st">'10.5281/zenodo.3266827'</span>,</a>
-<a class="sourceLine" id="cb15-3" title="3">                              <span class="st">'https://zenodo.org/record/3266821'</span>))</a>
-<a class="sourceLine" id="cb15-4" title="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(recs)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">recs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/validate_record_ids.html">validate_record_ids</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">'https://doi.org/10.5281/zenodo.3247631'</span>,</a>
+<a class="sourceLine" id="cb14-2" title="2">                              <span class="st">'10.5281/zenodo.3266827'</span>,</a>
+<a class="sourceLine" id="cb14-3" title="3">                              <span class="st">'https://zenodo.org/record/3266821'</span>))</a>
+<a class="sourceLine" id="cb14-4" title="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(recs)</a></code></pre></div>
 <pre><code>## Set includes 3 concept ids and 2 record ids: 
 ##  - 1 open and most recent (*)
 ##  - 0 open and outdated (o)
@@ -286,7 +287,7 @@
 <a href="#show_concepts" class="anchor"></a><code><a href="../reference/show_concepts.html">show_concepts()</a></code>
 </h2>
 <p>The <code><a href="../reference/show_concepts.html">show_concepts()</a></code> function displays concept level metadata about a set of record ids. This includes the (most recent) dataset title and a short summary of the versions available under the dataset concept. Note that the output is not restricted just to the set of record ids given to the function: it shows metadata for all versions for each of the concept ids included.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1"><span class="kw"><a href="../reference/show_concepts.html">show_concepts</a></span>(recs)</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="kw"><a href="../reference/show_concepts.html">show_concepts</a></span>(recs)</a></code></pre></div>
 <pre><code>## 
 ## Concept ID: 3247630
 ## Title: Functional traits of tree species in old-growth and selectively logged forest
@@ -319,8 +320,7 @@
 </h2>
 <p>This function shows metadata for a specific version of a dataset: if you give it a concept ID then it will display the available versions for that concept. Otherwise, the function prints out information about the dataset with that record id: it includes the dataset title, status and other dataset level metadata and then a summary of the data worksheets contained in the dataset.</p>
 <p>Note that - because a <code>safe_record_set</code> is just a data frame with some extra information attached - you can use the usual data frame indexing to select a row to pass to other functions. Running <code><a href="../reference/show_concepts.html">show_record()</a></code> also <em>requires an internet connection</em>: the package downloads a JSON file of the record metadata and stores it in the SAFE data directory.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1"><span class="kw"><a href="../reference/show_concepts.html">show_record</a></span>(recs[<span class="dv">3</span>,])</a></code></pre></div>
-<pre><code>## Downloading 1 record metadata files</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1"><span class="kw"><a href="../reference/show_concepts.html">show_record</a></span>(recs[<span class="dv">3</span>,])</a></code></pre></div>
 <pre><code>## 
 ## Record summary
 ## Title: Quantifying the spatial heterogeneity of forest conversion costs and how it relates to biodiversity, conservation and land use history
@@ -337,7 +337,7 @@
 <a href="#show_worksheet" class="anchor"></a><code><a href="../reference/show_concepts.html">show_worksheet()</a></code>
 </h2>
 <p>This function shows metadata for a named worksheet within a specific record. The default is to show a compact table of field names, field types and truncated descriptions:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1"><span class="kw"><a href="../reference/show_concepts.html">show_worksheet</a></span>(recs[<span class="dv">3</span>,], <span class="st">'Data'</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1"><span class="kw"><a href="../reference/show_concepts.html">show_worksheet</a></span>(recs[<span class="dv">3</span>,], <span class="st">'Data'</span>)</a></code></pre></div>
 <pre><code>## Record ID: 3266827
 ## Worksheet name: Data
 ## Number of data rows: 187
@@ -369,7 +369,7 @@
 ## 9  Earliest date of any recorded salvage lo...
 ## 10 Last date of any recorded salvage loggin...</code></pre>
 <p>There is also an extended display (<code>extended_fields=TRUE</code>) that will print out a list of all the available metadata for each field.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1"><span class="kw"><a href="../reference/show_concepts.html">show_worksheet</a></span>(recs[<span class="dv">3</span>,], <span class="st">'Data'</span>, <span class="dt">extended_fields=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1"><span class="kw"><a href="../reference/show_concepts.html">show_worksheet</a></span>(recs[<span class="dv">3</span>,], <span class="st">'Data'</span>, <span class="dt">extended_fields=</span><span class="ot">TRUE</span>)</a></code></pre></div>
 <pre><code>## Record ID: 3266827
 ## Worksheet name: Data
 ## Number of data rows: 187
@@ -392,16 +392,16 @@
 <h1 class="hasAnchor">
 <a href="#downloading-data" class="anchor"></a>Downloading data</h1>
 <p>Once you have found records for which you want to explore the actual data, then you first need to download the data files for the dataset from Zenodo. This uses the <code><a href="../reference/download_safe_files.html">download_safe_files()</a></code> function and you can either give that a URL or number for a dataset or pass it an existing <code>safe_record_set</code>. The function will check which datasets are currently available and download them to the SAFE data directory. The default behaviour is to present a brief report on the number and size of available files to be downloaded before actually doing anything:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1"><span class="kw"><a href="../reference/download_safe_files.html">download_safe_files</a></span>(within_a)</a>
-<a class="sourceLine" id="cb26-2" title="2"><span class="co">## 26 files requested from 26 records</span></a>
-<a class="sourceLine" id="cb26-3" title="3"><span class="co">##  - 0 local (0 bytes)</span></a>
-<a class="sourceLine" id="cb26-4" title="4"><span class="co">##  - 4 embargoed or restricted (2.2 Mb)</span></a>
-<a class="sourceLine" id="cb26-5" title="5"><span class="co">##  - 22 to download (43.6 Mb) </span></a>
-<a class="sourceLine" id="cb26-6" title="6"><span class="co">## </span></a>
-<a class="sourceLine" id="cb26-7" title="7"><span class="co">## 1: Yes</span></a>
-<a class="sourceLine" id="cb26-8" title="8"><span class="co">## 2: No</span></a>
-<a class="sourceLine" id="cb26-9" title="9"><span class="co">## </span></a>
-<a class="sourceLine" id="cb26-10" title="10"><span class="co">## Selection:</span></a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1"><span class="kw"><a href="../reference/download_safe_files.html">download_safe_files</a></span>(within_a)</a>
+<a class="sourceLine" id="cb24-2" title="2"><span class="co">## 26 files requested from 26 records</span></a>
+<a class="sourceLine" id="cb24-3" title="3"><span class="co">##  - 0 local (0 bytes)</span></a>
+<a class="sourceLine" id="cb24-4" title="4"><span class="co">##  - 4 embargoed or restricted (2.2 Mb)</span></a>
+<a class="sourceLine" id="cb24-5" title="5"><span class="co">##  - 22 to download (43.6 Mb) </span></a>
+<a class="sourceLine" id="cb24-6" title="6"><span class="co">## </span></a>
+<a class="sourceLine" id="cb24-7" title="7"><span class="co">## 1: Yes</span></a>
+<a class="sourceLine" id="cb24-8" title="8"><span class="co">## 2: No</span></a>
+<a class="sourceLine" id="cb24-9" title="9"><span class="co">## </span></a>
+<a class="sourceLine" id="cb24-10" title="10"><span class="co">## Selection:</span></a></code></pre></div>
 <p>By default, the <code><a href="../reference/download_safe_files.html">download_safe_files()</a></code> function downloads all of the files associated with the record. This will include <em>external</em> data files which may contain primary data that is not suited to the Excel format or additional information. Although many external files are likely to be readable in R, the<code>safedata</code> does not currently provide a mechanism to load them automatically. The function will also download the JSON metadata for the specified datasets.</p>
 <p>The function will warn you if the local copies of data files have been altered and the <code>refresh=TRUE</code> argument can be used to restore data files to the version of record. Note that this will <strong>delete local changes</strong>.</p>
 </div>
@@ -410,15 +410,15 @@
 <a href="#loading-data" class="anchor"></a>Loading data</h1>
 <p>The <code><a href="../reference/load_safe_data.html">load_safe_data()</a></code> function is used to load a named data worksheet from a dataset into a <code>safedata</code> object. This is just a data frame with some additional attribute data and it will in general behave just like any other data frame - the additional attributes are used for further data processing and adding brief metadata to the <code>str</code> and <code>print</code> methods.</p>
 <p>Some data formatting takes place based on <a href="https://safedata-validator.readthedocs.io/en/latest/data_format/data/#field-types">field types</a>: categorical variables are converted to factors; dates and datetimes are converted to <code>POSIXct</code> and times are converted to <code>chron::time</code> objects.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1">beetle_abund &lt;-<span class="st"> </span><span class="kw"><a href="../reference/load_safe_data.html">load_safe_data</a></span>(<span class="dv">1400562</span>, <span class="st">'Ant-Psel'</span>)</a>
-<a class="sourceLine" id="cb27-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(beetle_abund)</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1">beetle_abund &lt;-<span class="st"> </span><span class="kw"><a href="../reference/load_safe_data.html">load_safe_data</a></span>(<span class="dv">1400562</span>, <span class="st">'Ant-Psel'</span>)</a>
+<a class="sourceLine" id="cb25-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(beetle_abund)</a></code></pre></div>
 <pre><code>## SAFE dataset
 ## Concept: 1400561; Record 1400562; Worksheet: Ant-Psel
 ## 'data.frame':    20 obs. of  3 variables:
 ##  $ Site                : chr  "SAFE_E" "SAFE_D" "SAFE_F" "SAFE_C" ...
 ##  $ ant species richness: num  31 31 27 29 31 21 31 25 32 26 ...
 ##  $ ant abundance       : num  561 713 392 481 1036 ...</code></pre>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(beetle_abund)</a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(beetle_abund)</a></code></pre></div>
 <pre><code>## SAFE dataset:
 ## Concept: 1400561; Record 1400562; Worksheet: Ant-Psel
 ## First 10 rows:
@@ -434,7 +434,7 @@
 ## 9  Maliau_3                   32           613
 ## 10 Maliau_4                   26          1036</code></pre>
 <p>The display of <code>safedata</code> objects is kept deliberately simple to avoid cluttering the screen with metadata. You can always view additional metadata for a loaded worksheet by using the <code>show</code> functions directly on the loaded <code>safedata</code> object:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1"><span class="kw"><a href="../reference/show_concepts.html">show_concepts</a></span>(beetle_abund)</a></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1"><span class="kw"><a href="../reference/show_concepts.html">show_concepts</a></span>(beetle_abund)</a></code></pre></div>
 <pre><code>## 
 ## Concept ID: 1400561
 ## Title: Myrmecophilous Pselaphine beetles in tropical forests
@@ -442,7 +442,7 @@
 ## 
 ##  record_id  published embargo available
 ##    1400562 2018-08-20      --         *</code></pre>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1"><span class="kw"><a href="../reference/show_concepts.html">show_record</a></span>(beetle_abund)</a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1"><span class="kw"><a href="../reference/show_concepts.html">show_record</a></span>(beetle_abund)</a></code></pre></div>
 <pre><code>## 
 ## Record summary
 ## Title: Myrmecophilous Pselaphine beetles in tropical forests
@@ -456,7 +456,7 @@
 ##         Ant-Psel    4   20 Ant-Pselaphine data
 ##   MorphAbundance   44   20 Morphospeices abundance
 ## MorphFunctTraits   18   42 Morphospecies_Functional Traits</code></pre>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1"><span class="kw"><a href="../reference/show_concepts.html">show_worksheet</a></span>(beetle_abund)</a></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1"><span class="kw"><a href="../reference/show_concepts.html">show_worksheet</a></span>(beetle_abund)</a></code></pre></div>
 <pre><code>## Record ID: 1400562
 ## Worksheet name: Ant-Psel
 ## Number of data rows: 20
@@ -476,8 +476,8 @@
 <ol style="list-style-type: decimal">
 <li>
 <p><code><a href="../reference/get_taxa.html">get_taxa()</a></code>: This function loads a dataframe containing all of the taxa used within a dataset, with fields including the core GBIF taxonomic levels, the taxonomic label used within the dataset and the taxonomic status of the each taxon. You can load a taxonomic dataframe from a <code>safe_record_set</code> row or using an existing loaded <code>safedata</code> object.</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1">beetle_taxa &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_taxa.html">get_taxa</a></span>(beetle_abund)</a>
-<a class="sourceLine" id="cb37-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(beetle_taxa)</a></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1">beetle_taxa &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_taxa.html">get_taxa</a></span>(beetle_abund)</a>
+<a class="sourceLine" id="cb35-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(beetle_taxa)</a></code></pre></div>
 <pre><code>## Classes 'safe_taxa' and 'data.frame':    43 obs. of  11 variables:
 ##  $ kingdom    : chr  "Animalia" "Animalia" "Animalia" "Animalia" ...
 ##  $ phylum     : chr  "Arthropoda" "Arthropoda" "Arthropoda" "Arthropoda" ...
@@ -493,9 +493,9 @@
 </li>
 <li>
 <p><code><a href="../reference/add_taxa.html">add_taxa()</a></code>: This function adds taxonomic details to an already loaded data worksheet.</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" title="1">beetle_morph &lt;-<span class="st"> </span><span class="kw"><a href="../reference/load_safe_data.html">load_safe_data</a></span>(<span class="dv">1400562</span>, <span class="st">'MorphFunctTraits'</span>)</a>
-<a class="sourceLine" id="cb39-2" title="2">beetle_morph &lt;-<span class="st"> </span><span class="kw"><a href="../reference/add_taxa.html">add_taxa</a></span>(beetle_morph)</a>
-<a class="sourceLine" id="cb39-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(beetle_morph)</a></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1">beetle_morph &lt;-<span class="st"> </span><span class="kw"><a href="../reference/load_safe_data.html">load_safe_data</a></span>(<span class="dv">1400562</span>, <span class="st">'MorphFunctTraits'</span>)</a>
+<a class="sourceLine" id="cb37-2" title="2">beetle_morph &lt;-<span class="st"> </span><span class="kw"><a href="../reference/add_taxa.html">add_taxa</a></span>(beetle_morph)</a>
+<a class="sourceLine" id="cb37-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(beetle_morph)</a></code></pre></div>
 <pre><code>## SAFE dataset
 ## Concept: 1400561; Record 1400562; Worksheet: MorphFunctTraits
 ## 'data.frame':    42 obs. of  28 variables:
@@ -530,9 +530,9 @@
 </li>
 <li>
 <p><code><a href="../reference/get_phylogeny.html">get_phylogeny()</a></code>: This function creates a phylogeny from the taxonomic data in a dataset, returning an object of class <code>phylo</code> (see package<code>ape</code>).</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ape)</a>
-<a class="sourceLine" id="cb41-2" title="2">beetle_phylo &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_phylogeny.html">get_phylogeny</a></span>(<span class="dv">1400562</span>)</a>
-<a class="sourceLine" id="cb41-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(beetle_phylo, <span class="dt">show.node.label=</span><span class="ot">TRUE</span>, <span class="dt">font=</span><span class="dv">1</span>, <span class="dt">no.margin=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ape)</a>
+<a class="sourceLine" id="cb39-2" title="2">beetle_phylo &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_phylogeny.html">get_phylogeny</a></span>(<span class="dv">1400562</span>)</a>
+<a class="sourceLine" id="cb39-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(beetle_phylo, <span class="dt">show.node.label=</span><span class="ot">TRUE</span>, <span class="dt">font=</span><span class="dv">1</span>, <span class="dt">no.margin=</span><span class="ot">TRUE</span>)</a></code></pre></div>
 <p><img src="using_safe_data_files/figure-html/unnamed-chunk-21-1.png" width="700"></p>
 </li>
 </ol>
@@ -544,8 +544,8 @@
 <ol style="list-style-type: decimal">
 <li>
 <p><code><a href="../reference/load_gazetteer.html">load_gazetteer()</a></code>: The gazetteer is one of the three key index files saved in the SAFE data directory and updated when <code><a href="../reference/set_safe_dir.html">set_safe_dir()</a></code> is run. It includes sampling locations drawn from across a wide range of projects running at SAFE and is intended to hold all locations that are likely to see repeated sampling. Locations included the gazetteer can be used directly as <strong>known locations</strong> in datasets, although data providers can also include <strong>new locations</strong>.</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" title="1">gazetteer &lt;-<span class="st"> </span><span class="kw"><a href="../reference/load_gazetteer.html">load_gazetteer</a></span>()</a>
-<a class="sourceLine" id="cb42-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(gazetteer)</a></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" title="1">gazetteer &lt;-<span class="st"> </span><span class="kw"><a href="../reference/load_gazetteer.html">load_gazetteer</a></span>()</a>
+<a class="sourceLine" id="cb40-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(gazetteer)</a></code></pre></div>
 <pre><code>## Simple feature collection with 5061 features and 15 fields
 ## geometry type:  GEOMETRY
 ## dimension:      XY
@@ -601,11 +601,11 @@
 <li>
 <p><code><a href="../reference/get_locations.html">get_locations()</a></code>: This function returns an <code>sf</code> object containing the locations used within a dataset. For known locations, the GIS data for the location are taken directly from the gazetteer. If the locations are new sampling sites, then GIS data provided in the dataset is used. Note that it is possible for dataset providers to create a new locations without including GIS data - these will be represented using empty GIS geometries.</p>
 <p>By default, the returned <code>sf</code> object will only include the location name used in the dataset, the gazetteer name for known sampling sites and an indication of whether the location is new or known, but <code>gazetteer_info=TRUE</code> can be used to include the gazetteer attributes for known locations.</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(sf)</a></code></pre></div>
-<pre><code>## Linking to GEOS 3.6.1, GDAL 2.1.3, PROJ 4.9.3</code></pre>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" title="1">beetle_locs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_locations.html">get_locations</a></span>(<span class="dv">1400562</span>)</a>
-<a class="sourceLine" id="cb46-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(beetle_locs)</a></code></pre></div>
-<pre><code>## Simple feature collection with 20 features and 3 fields (with 20 geometries empty)
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(sf)</a></code></pre></div>
+<pre><code>## Linking to GEOS 3.7.2, GDAL 2.4.2, PROJ 5.2.0</code></pre>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" title="1">beetle_locs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_locations.html">get_locations</a></span>(<span class="dv">1400562</span>)</a>
+<a class="sourceLine" id="cb44-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(beetle_locs)</a></code></pre></div>
+<pre><code>## Simple feature collection with 20 features and 3 fields
 ## geometry type:  POINT
 ## dimension:      XY
 ## bbox:           xmin: 116.967 ymin: 4.69223 xmax: 117.7981 ymax: 4.97022
@@ -623,17 +623,17 @@
 ## Maliau_8             NA         TRUE     Maliau_8 POINT (116.9701 4.74607)
 ## Danum_1              NA         TRUE      Danum_1  POINT (117.796 4.96444)
 ## Danum_2              NA         TRUE      Danum_2 POINT (117.7932 4.96486)</code></pre>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" title="1">fragments &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/subset">subset</a></span>(gazetteer, type<span class="op">==</span><span class="st">'SAFE forest fragment'</span>)</a>
-<a class="sourceLine" id="cb48-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/par">par</a></span>(<span class="dt">mar=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">1</span>,<span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb48-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/sf/topics/plot">plot</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/sf/topics/st_geometry">st_geometry</a></span>(fragments), <span class="dt">col=</span><span class="st">'khaki'</span>, <span class="dt">graticule=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb48-4" title="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/sf/topics/plot">plot</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/sf/topics/st_geometry">st_geometry</a></span>(beetle_locs), <span class="dt">add=</span><span class="ot">TRUE</span>, <span class="dt">col=</span><span class="st">'red'</span>, <span class="dt">pch=</span><span class="dv">4</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" title="1">fragments &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/subset">subset</a></span>(gazetteer, type<span class="op">==</span><span class="st">'SAFE forest fragment'</span>)</a>
+<a class="sourceLine" id="cb46-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/par">par</a></span>(<span class="dt">mar=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">1</span>,<span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb46-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/sf/topics/plot">plot</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/sf/topics/st_geometry">st_geometry</a></span>(fragments), <span class="dt">col=</span><span class="st">'khaki'</span>, <span class="dt">graticule=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb46-4" title="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/sf/topics/plot">plot</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/sf/topics/st_geometry">st_geometry</a></span>(beetle_locs), <span class="dt">add=</span><span class="ot">TRUE</span>, <span class="dt">col=</span><span class="st">'red'</span>, <span class="dt">pch=</span><span class="dv">4</span>)</a></code></pre></div>
 <p><img src="using_safe_data_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
 </li>
 <li>
 <p><code><a href="../reference/add_locations.html">add_locations()</a></code>: This functions adds location data to an already loaded worksheet. The result is a <code>safedata</code> object that is also an <code>sf</code> object.</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1">beetle_env &lt;-<span class="st"> </span><span class="kw"><a href="../reference/load_safe_data.html">load_safe_data</a></span>(<span class="dv">1400562</span>, <span class="st">'EnvironVariables'</span>)</a>
-<a class="sourceLine" id="cb49-2" title="2">beetle_env &lt;-<span class="st"> </span><span class="kw"><a href="../reference/add_locations.html">add_locations</a></span>(beetle_env)</a>
-<a class="sourceLine" id="cb49-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(beetle_env)</a></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1">beetle_env &lt;-<span class="st"> </span><span class="kw"><a href="../reference/load_safe_data.html">load_safe_data</a></span>(<span class="dv">1400562</span>, <span class="st">'EnvironVariables'</span>)</a>
+<a class="sourceLine" id="cb47-2" title="2">beetle_env &lt;-<span class="st"> </span><span class="kw"><a href="../reference/add_locations.html">add_locations</a></span>(beetle_env)</a>
+<a class="sourceLine" id="cb47-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(beetle_env)</a></code></pre></div>
 <pre><code>## SAFE dataset:
 ## Concept: 1400561; Record 1400562; Worksheet: EnvironVariables
 ## Simple feature collection with 20 features and 7 fields
@@ -665,7 +665,7 @@
 ## Maliau_2     Maliau_2 POINT (116.9748 4.74548)
 ## Maliau_3     Maliau_3 POINT (116.9675 4.74757)
 ## Maliau_4     Maliau_4 POINT (116.9714 4.74565)</code></pre>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/sf/topics/plot">plot</a></span>(beetle_env[<span class="st">'Cover'</span>], <span class="dt">key.pos=</span><span class="dv">4</span>, <span class="dt">breaks=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/seq">seq</a></span>(<span class="dv">0</span>,<span class="dv">100</span>, <span class="dt">by=</span><span class="dv">5</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/sf/topics/plot">plot</a></span>(beetle_env[<span class="st">'Cover'</span>], <span class="dt">key.pos=</span><span class="dv">4</span>, <span class="dt">breaks=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/seq">seq</a></span>(<span class="dv">0</span>,<span class="dv">100</span>, <span class="dt">by=</span><span class="dv">5</span>))</a></code></pre></div>
 <p><img src="using_safe_data_files/figure-html/unnamed-chunk-24-1.png" width="700"></p>
 </li>
 </ol>
