@@ -25,7 +25,7 @@ Suggests:
     rmarkdown,
     ape
 Encoding: UTF-8
-URL: https://imperialcollegelondon.github.io/safe_data/index.html
-BugReports: https://github.com/ImperialCollegeLondon/safe_data/issues
+URL: https://imperialcollegelondon.github.io/safedata/index.html
+BugReports: https://github.com/ImperialCollegeLondon/safedata/issues
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr
