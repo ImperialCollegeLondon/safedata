@@ -4,7 +4,7 @@ author: "Andy Aldersley and David Orme"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{An overview of the safe_data package}
+  %\VignetteIndexEntry{An overview of the safedata package}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
@@ -20,7 +20,7 @@ disciplines and institutions, each running interlinked projects that help to
 develop our understanding of ecology within changing environments. Data from 
 the many activities conducted through the SAFE Project are curated and published to 
 a community repository hosted at  [Zenodo](https://zenodo.org/communities/safe/).The
-`safe_data` package enables researchers to quickly and easily interface with 
+`safedata` package enables researchers to quickly and easily interface with 
 these datasets. 
 
 # The SAFE Project dataset workflow
@@ -46,14 +46,14 @@ worksheets:
 * **Locations**: a description of all sampling locations in the dataset
 * **Data worksheets**: the actual data tables, described in the **Summary** sheet
 
-The formatting details for each worksheet are described here: https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/
+The formatting details for each worksheet are described here: https://safedata-validator.readthedocs.io/en/latest/data_format/overview/
 
 Once a dataset has been formatted, researchers can submit the dataset to
 the SAFE Project website for validation and publication.
 
 ## Dataset validation
 
-Submitted datasets are validated using the Python program  (`safe_dataset_checker`)[https://github.com/ImperialCollegeLondon/safe_dataset_checker]. 
+Submitted datasets are validated using the Python program  (`safedata_validator`)[https://github.com/ImperialCollegeLondon/safedata_validator]. 
 This checks that the dataset format is correct and that all the required metadata is 
 provided and consistent. When a dataset fails validation, a report is returned to
 the submitter to help revise the dataset, otherwise validated datasets are published

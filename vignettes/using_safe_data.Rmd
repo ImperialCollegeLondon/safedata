@@ -162,7 +162,7 @@ print(soil_datasets)
 ### Taxon search details
 
 Published datasets contain a taxonomic index of any organisms referred to within the data - see
-[here](https://safe-dataset-checker.readthedocs.io/en/latest/data_format/taxa/) for details of the
+[here](https://safedata-validator.readthedocs.io/en/latest/data_format/taxa/) for details of the
 Taxa worksheet containing the index.
 
 The taxa in this index, along with all of the parent taxa in the taxonomic hierarchy leading up to
@@ -329,7 +329,7 @@ will **delete local changes**.
 
 The `load_safe_data()` function is used to load a named data worksheet from a dataset into a `safedata` object. This is just a data frame with some additional attribute data and it will in general behave just like any other data frame - the additional attributes are used for further data processing and adding brief metadata to the `str` and `print` methods.
 
-Some data formatting takes place based on [field types](https://safe-dataset-checker.readthedocs.io/en/latest/data_format/data/#field-types): categorical variables are converted to factors; dates and datetimes are converted to `POSIXct` and times are converted to `chron::time` objects. 
+Some data formatting takes place based on [field types](https://safedata-validator.readthedocs.io/en/latest/data_format/data/#field-types): categorical variables are converted to factors; dates and datetimes are converted to `POSIXct` and times are converted to `chron::time` objects. 
 
 ```{r}
 beetle_abund <- load_safe_data(1400562, 'Ant-Psel')
