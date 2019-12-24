@@ -38,7 +38,7 @@
 #' @section Links:
 #' \describe{
 #'    \item{SAFE API}{\url{https://www.safeproject.net/api}}
-#'    \item{Worksheet field types}{\url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/data/#field-types}}
+#'    \item{Worksheet field types}{\url{https://safedata-validator.readthedocs.io/en/latest/data_format/data/#field-types}}
 #'    \item{SAFE gazetteer}{See \code{\link{load_gazetteer}} and \url{https://www.safeproject.net/info/gazetteer}}
 #'    \item{WKT}{\url{https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry}}
 #' } 
