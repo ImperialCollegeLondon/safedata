@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -76,7 +76,7 @@
       <h1>An overview of data at the SAFE Project</h1>
                         <h4 class="author">Andy Aldersley and David Orme</h4>
             
-            <h4 class="date">2019-10-08</h4>
+            <h4 class="date">2019-12-24</h4>
       
       
       <div class="hidden name"><code>overview.Rmd</code></div>
@@ -86,7 +86,7 @@
     
     
 <p>The <code>safedata</code> R package is designed to discover and work with data from the Stability of Altered Forest Ecosystems (SAFE) Project. The <a href="https://www.safeproject.net/">SAFE Project</a> is one the largest ecological experiments in the world, investigating the effects of human activities on biodiversity and ecosystem function in the Malaysian rainforest.</p>
-<p>Research conducted at the SAFE Project encompasses expertise from many disciplines and institutions, each running interlinked projects that help to develop our understanding of ecology within changing environments. Data from the many activities conducted through the SAFE Project are curated and published to a community repository hosted at <a href="https://zenodo.org/communities/safe/">Zenodo</a>.The <code>safe_data</code> package enables researchers to quickly and easily interface with these datasets.</p>
+<p>Research conducted at the SAFE Project encompasses expertise from many disciplines and institutions, each running interlinked projects that help to develop our understanding of ecology within changing environments. Data from the many activities conducted through the SAFE Project are curated and published to a community repository hosted at <a href="https://zenodo.org/communities/safe/">Zenodo</a>.The <code>safedata</code> package enables researchers to quickly and easily interface with these datasets.</p>
 <div id="the-safe-project-dataset-workflow" class="section level1">
 <h1 class="hasAnchor">
 <a href="#the-safe-project-dataset-workflow" class="anchor"></a>The SAFE Project dataset workflow</h1>
@@ -111,13 +111,13 @@
 <li>
 <strong>Data worksheets</strong>: the actual data tables, described in the <strong>Summary</strong> sheet</li>
 </ul>
-<p>The formatting details for each worksheet are described here: <a href="https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/" class="uri">https://safe-dataset-checker.readthedocs.io/en/latest/data_format/overview/</a></p>
+<p>The formatting details for each worksheet are described here: <a href="https://safedata-validator.readthedocs.io/en/latest/data_format/overview/" class="uri">https://safedata-validator.readthedocs.io/en/latest/data_format/overview/</a></p>
 <p>Once a dataset has been formatted, researchers can submit the dataset to the SAFE Project website for validation and publication.</p>
 </div>
 <div id="dataset-validation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#dataset-validation" class="anchor"></a>Dataset validation</h2>
-<p>Submitted datasets are validated using the Python program (<code>safe_dataset_checker</code>)[<a href="https://github.com/ImperialCollegeLondon/safe_dataset_checker" class="uri">https://github.com/ImperialCollegeLondon/safe_dataset_checker</a>]. This checks that the dataset format is correct and that all the required metadata is provided and consistent. When a dataset fails validation, a report is returned to the submitter to help revise the dataset, otherwise validated datasets are published to Zenodo.</p>
+<p>Submitted datasets are validated using the Python program (<code>safedata_validator</code>)[<a href="https://github.com/ImperialCollegeLondon/safedata_validator" class="uri">https://github.com/ImperialCollegeLondon/safedata_validator</a>]. This checks that the dataset format is correct and that all the required metadata is provided and consistent. When a dataset fails validation, a report is returned to the submitter to help revise the dataset, otherwise validated datasets are published to Zenodo.</p>
 </div>
 <div id="data-publication" class="section level2">
 <h2 class="hasAnchor">

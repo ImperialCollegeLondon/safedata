@@ -41,7 +41,7 @@ loaded data worksheet (see \code{\link{add_taxa}}).
 
 For more details on the structure of the Taxa worksheet see:
 
-\url{https://safe-dataset-checker.readthedocs.io/en/latest/data_format/taxa/}
+\url{https://safedata-validator.readthedocs.io/en/latest/data_format/taxa/}
 }
 \examples{
    safedir <- system.file('example_data_dir', package='safedata')

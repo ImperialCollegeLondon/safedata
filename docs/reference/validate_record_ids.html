@@ -65,7 +65,7 @@ the function will also handle Zenodo URLs and DOIs." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -184,7 +184,15 @@ check record ids and display summary information using the print method.</p>
 #&gt; 3 3266826 3266827         *</div><div class='input'>   <span class='fu'>validate_record_ids</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'https://doi.org/10.5281/zenodo.3247631'</span>,
                            <span class='st'>'10.5281/zenodo.3266827'</span>,
                            <span class='st'>'https://zenodo.org/record/3266821'</span>,
-                           <span class='st'>'not_this_one/3266821'</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Invalid character record ids: not_this_one/3266821</span></div><div class='output co'>#&gt; <span class='error'>Error in regmatches(record_set, match): ‘x’ and ‘m’ must have the same length</span></div></pre>
+                           <span class='st'>'not_this_one/3266821'</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Invalid character record ids: not_this_one/3266821</span></div><div class='output co'>#&gt; Set includes 3 concept ids and 2 record ids: 
+#&gt;  - 1 open and most recent (*)
+#&gt;  - 0 open and outdated (o)
+#&gt;  - 1 under embargo or restricted (x)
+#&gt; 
+#&gt;   concept  record available
+#&gt; 1 3247630 3247631         x
+#&gt; 2 3266821 -------          
+#&gt; 3 3266826 3266827         *</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

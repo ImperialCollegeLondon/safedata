@@ -197,7 +197,7 @@
 <div id="taxon-search-details" class="section level3">
 <h3 class="hasAnchor">
 <a href="#taxon-search-details" class="anchor"></a>Taxon search details</h3>
-<p>Published datasets contain a taxonomic index of any organisms referred to within the data - see <a href="https://safe-dataset-checker.readthedocs.io/en/latest/data_format/taxa/">here</a> for details of the Taxa worksheet containing the index.</p>
+<p>Published datasets contain a taxonomic index of any organisms referred to within the data - see <a href="https://safedata-validator.readthedocs.io/en/latest/data_format/taxa/">here</a> for details of the Taxa worksheet containing the index.</p>
 <p>The taxa in this index, along with all of the parent taxa in the taxonomic hierarchy leading up to that those taxa, are added to a taxonomic database on the SAFE Project website. The <code><a href="../reference/search_safe.html">search_taxa()</a></code> function searches that index to identify all the datasets that contain a particular taxon.</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(ants &lt;-<span class="st"> </span><span class="kw"><a href="../reference/search_safe.html">search_taxa</a></span>(<span class="st">'Formicidae'</span>))</a>
 <a class="sourceLine" id="cb12-2" title="2"><span class="co">## Search returned 9 records</span></a>
@@ -409,7 +409,7 @@
 <h1 class="hasAnchor">
 <a href="#loading-data" class="anchor"></a>Loading data</h1>
 <p>The <code><a href="../reference/load_safe_data.html">load_safe_data()</a></code> function is used to load a named data worksheet from a dataset into a <code>safedata</code> object. This is just a data frame with some additional attribute data and it will in general behave just like any other data frame - the additional attributes are used for further data processing and adding brief metadata to the <code>str</code> and <code>print</code> methods.</p>
-<p>Some data formatting takes place based on <a href="https://safe-dataset-checker.readthedocs.io/en/latest/data_format/data/#field-types">field types</a>: categorical variables are converted to factors; dates and datetimes are converted to <code>POSIXct</code> and times are converted to <code>chron::time</code> objects.</p>
+<p>Some data formatting takes place based on <a href="https://safedata-validator.readthedocs.io/en/latest/data_format/data/#field-types">field types</a>: categorical variables are converted to factors; dates and datetimes are converted to <code>POSIXct</code> and times are converted to <code>chron::time</code> objects.</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1">beetle_abund &lt;-<span class="st"> </span><span class="kw"><a href="../reference/load_safe_data.html">load_safe_data</a></span>(<span class="dv">1400562</span>, <span class="st">'Ant-Psel'</span>)</a>
 <a class="sourceLine" id="cb27-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(beetle_abund)</a></code></pre></div>
 <pre><code>## SAFE dataset
