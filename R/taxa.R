@@ -55,7 +55,64 @@ get_taxa <- function(obj){
 
     # Get the record metadata containing the taxon index
     taxa <- load_record_metadata(record_set)$taxa
+	taxon_table <- taxon_index_to_taxon_table(taxa)
+	
+    return(taxon_table)
+}
 
+get_taxon_coverage <- function(){
+	
+    #' Retrieve the current taxon index 
+    #'
+    #' This function downloads the current taxon index across published  datasets
+	#' and returns a formatted taxon table showing the taxonomic hierarchy of each
+	#' taxon. It requires an internet connection.
+	#'
+	#' Note that the use of 'user' defined taxa can lead to some unusual entries. There
+	#' is nothing to stop a user defining 'Gallus gallus' as a 'user' taxon with Animalia
+	#' as a parent taxon. 
+	#'
+    #' @return A data frame containing higher taxon level information for each taxon
+	#'   in the database taxon index.
+    #' @seealso \code{\link{get_taxa}}
+    #' @examples
+	#'	   \dontrun{
+    #'     all_taxa <- get_taxon_coverage()
+	#'     }
+    #' @export
+	
+	url <- getOption('safedata.url')
+    api <- paste0(url, '/api/taxa')
+    taxa <- try(jsonlite::fromJSON(api), silent=TRUE)
+              
+    if(inherits(taxa, 'try-error')){
+        stop('Failed to download taxon index')
+    }
+	
+	# remove duplicate names
+	taxa$id <- NULL 
+	taxa$worksheet_name <- taxa$taxon_name
+	
+	taxa <- taxon_index_to_taxon_table(taxa)
+
+}
+
+
+taxon_index_to_taxon_table <- function(taxa){
+	
+    #' Add taxon hierarchy to taxon metadata
+    #'
+    #' Taxon data is stored as a set of taxa with taxon ids and parent taxon
+	#' ids. For any given dataset, the set should include all parent taxa required.
+	#' This internal function takes such list of taxon data and adds columns showing
+	#' the taxonomic hierarchy for each row. It is used by \code{\link{get_taxa}} and
+	#' \code{\link{get_taxon_coverage}}.
+	#'
+    #' @param taxa An existing object of class \code{safedata}
+    #' @return A data frame adding higher taxon level information for each taxon
+    #' @seealso \code{\link{get_taxa}}
+    #' @keywords internal
+	
     if(length(taxa) == 0){
         return(NULL)
     }
@@ -63,12 +120,13 @@ get_taxa <- function(obj){
     # create a taxon table to fill in
     worksheet_taxa <- unique(taxa$worksheet_name)
     worksheet_taxa <- worksheet_taxa[! is.na(worksheet_taxa)]
-    taxon_table <- matrix(NA, ncol=11, nrow=length(worksheet_taxa), 
+    taxon_table <- matrix(NA, ncol=13, nrow=length(worksheet_taxa), 
                           dimnames=list(
                               worksheet_taxa,
                               c("kingdom", "phylum", "class", "order", 
                                 "family", "genus", "species", "subspecies", 
-                                "taxon_name", "taxon_level", "gbif_status")))
+								"variety", "form",  "taxon_name", "taxon_level",
+								"gbif_status")))
         
     # Identify the root - this is the set of taxa that have NA as parent id, which
     # should all be kingdoms or incertae_sedis
@@ -130,7 +188,7 @@ get_taxa <- function(obj){
                 }
             }
             
-            hierarchy <- c(rev(names(stack)), rep(NA, 8 - length(stack)))
+            hierarchy <- c(rev(names(stack)), rep(NA, 10 - length(stack)))
             taxon_table[current_wn, ] <- c(hierarchy, txn, rnk, sts)
         }
         
@@ -164,9 +222,11 @@ get_taxa <- function(obj){
 
     taxon_table <- as.data.frame(taxon_table, stringsAsFactors=FALSE)
     class(taxon_table) <- c('safe_taxa', 'data.frame')
-
-    return(taxon_table)
+	
+	return(taxon_table)
+	
 }
+
 
 
 add_taxa <- function (obj, taxon_field=NULL, taxon_table=NULL, prefix=NULL, which=NULL) {
