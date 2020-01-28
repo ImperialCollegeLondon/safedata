@@ -10,21 +10,34 @@
 \alias{search_spatial}
 \title{SAFE dataset search functions.}
 \usage{
-search_dates(dates, match_type = "intersect", most_recent = FALSE,
-  ids = NULL)
+search_dates(dates, match_type = "intersect", most_recent = FALSE, ids = NULL)
 
-search_fields(field_text = NULL, field_type = NULL, ids = NULL,
-  most_recent = FALSE)
+search_fields(
+  field_text = NULL,
+  field_type = NULL,
+  ids = NULL,
+  most_recent = FALSE
+)
 
 search_authors(author, ids = NULL, most_recent = FALSE)
 
-search_taxa(taxon_name = NULL, taxon_rank = NULL, gbif_id = NULL,
-  ids = NULL, most_recent = FALSE)
+search_taxa(
+  taxon_name = NULL,
+  taxon_rank = NULL,
+  gbif_id = NULL,
+  ids = NULL,
+  most_recent = FALSE
+)
 
 search_text(text, ids = NULL, most_recent = FALSE)
 
-search_spatial(wkt = NULL, location = NULL, distance = NULL,
-  ids = NULL, most_recent = FALSE)
+search_spatial(
+  wkt = NULL,
+  location = NULL,
+  distance = NULL,
+  ids = NULL,
+  most_recent = FALSE
+)
 }
 \arguments{
 \item{dates}{A vector of length 1 or 2, containing either ISO format date 
@@ -108,8 +121,8 @@ is provided.
 
 \section{Spatial searches}{
 
-For spatial searches, users can select a location name from the SAFE gazetteer
-(see \url{https://www.safeproject.net/info/gazetteer} or \code{\link{load_gazetteer}})
+For spatial searches, users can select a location name from a SAFE data gazetteer
+(see e.g. \url{https://www.safeproject.net/info/gazetteer} or \code{\link{load_gazetteer}})
 or provide a WKT geometry. The sampling locations provided in each SAFE dataset
 are tested to see if they intersect the search geometry.
 
@@ -127,15 +140,15 @@ coordinate information.
 \section{Links}{
 
 \describe{
-   \item{SAFE API}{\url{https://www.safeproject.net/api}}
+   \item{SAFE data API}{e.g. \url{https://www.safeproject.net/api}}
    \item{Worksheet field types}{\url{https://safedata-validator.readthedocs.io/en/latest/data_format/data/#field-types}}
-   \item{SAFE gazetteer}{See \code{\link{load_gazetteer}} and \url{https://www.safeproject.net/info/gazetteer}}
+   \item{SAFE gazetteer}{See \code{\link{load_gazetteer}} and e.g. \url{https://www.safeproject.net/info/gazetteer}}
    \item{WKT}{\url{https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry}}
 }
 }
 
 \examples{
-   \donttest{
+   \dontrun{
    search_dates('2014-06-12')
    search_dates(as.POSIXct(c('2014-06-12', '2015-06-11')))
    search_dates(c('2014-06-12', '2015-06-11'), match_type = 'contain')

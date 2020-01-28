@@ -4,8 +4,12 @@
 \alias{add_locations}
 \title{Adds location data to a SAFE data worksheet.}
 \usage{
-add_locations(obj, location_field = NULL, location_table = NULL,
-  gazetteer_info = FALSE)
+add_locations(
+  obj,
+  location_field = NULL,
+  location_table = NULL,
+  gazetteer_info = FALSE
+)
 }
 \arguments{
 \item{obj}{An existing object of class \code{safedata}}

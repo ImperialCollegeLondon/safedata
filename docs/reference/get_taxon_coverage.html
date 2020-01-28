@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Downloads the current dataset index — download_index • safedata</title>
+<title>Retrieve the current taxon index — get_taxon_coverage • safedata</title>
 
 
 <!-- jquery -->
@@ -35,10 +35,10 @@
 
 
 
-<meta property="og:title" content="Downloads the current dataset index — download_index" />
-<meta property="og:description" content="This function downloads the dataset index from the SAFE data
-API (e.g. https://www.safeproject.net/api/index) and saves
-it in the root SAFE data directory" />
+<meta property="og:title" content="Retrieve the current taxon index — get_taxon_coverage" />
+<meta property="og:description" content="This function downloads the current taxon index across published  datasets
+and returns a formatted taxon table showing the taxonomic hierarchy of each
+taxon. It requires an internet connection." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -117,25 +117,45 @@ it in the root SAFE data directory" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Downloads the current dataset index</h1>
+    <h1>Retrieve the current taxon index</h1>
     
-    <div class="hidden name"><code>download_index.Rd</code></div>
+    <div class="hidden name"><code>get_taxon_coverage.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This function downloads the dataset index from the SAFE data
-API (e.g. <a href='https://www.safeproject.net/api/index'>https://www.safeproject.net/api/index</a>) and saves
-it in the root SAFE data directory</p>
+    <p>This function downloads the current taxon index across published  datasets
+and returns a formatted taxon table showing the taxonomic hierarchy of each
+taxon. It requires an internet connection.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>download_index</span>()</pre>
+    <pre class="usage"><span class='fu'>get_taxon_coverage</span>()</pre>
 
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+    <p>A data frame containing higher taxon level information for each taxon
+  in the database taxon index.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Note that the use of 'user' defined taxa can lead to some unusual entries. There
+is nothing to stop a user defining 'Gallus gallus' as a 'user' taxon with Animalia
+as a parent taxon.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='get_taxa.html'>get_taxa</a></code></p></div>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>   <span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <span class='no'>all_taxa</span> <span class='kw'>&lt;-</span> <span class='fu'>get_taxon_coverage</span>()
+    }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#value">Value</a></li>
+      <li><a href="#details">Details</a></li>
+      <li><a href="#see-also">See also</a></li>
+      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>

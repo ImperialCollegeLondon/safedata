@@ -34,7 +34,7 @@ SAFE data directory for reuse.
 }}
 
 \examples{
-   \donttest{
+   \dontrun{
    safedir <- system.file('example_data_dir', package='safedata')
    set_safe_dir(safedir, update=FALSE, validate=FALSE)
    rec <- validate_record_ids(1400562)

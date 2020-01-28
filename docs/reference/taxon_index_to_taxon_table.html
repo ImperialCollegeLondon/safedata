@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Downloads the current dataset index — download_index • safedata</title>
+<title>Add taxon hierarchy to taxon metadata — taxon_index_to_taxon_table • safedata</title>
 
 
 <!-- jquery -->
@@ -35,10 +35,12 @@
 
 
 
-<meta property="og:title" content="Downloads the current dataset index — download_index" />
-<meta property="og:description" content="This function downloads the dataset index from the SAFE data
-API (e.g. https://www.safeproject.net/api/index) and saves
-it in the root SAFE data directory" />
+<meta property="og:title" content="Add taxon hierarchy to taxon metadata — taxon_index_to_taxon_table" />
+<meta property="og:description" content="Taxon data is stored as a set of taxa with taxon ids and parent taxon
+ids. For any given dataset, the set should include all parent taxa required.
+This internal function takes such list of taxon data and adds columns showing
+the taxonomic hierarchy for each row. It is used by get_taxa and
+get_taxon_coverage." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -117,25 +119,44 @@ it in the root SAFE data directory" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Downloads the current dataset index</h1>
+    <h1>Add taxon hierarchy to taxon metadata</h1>
     
-    <div class="hidden name"><code>download_index.Rd</code></div>
+    <div class="hidden name"><code>taxon_index_to_taxon_table.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This function downloads the dataset index from the SAFE data
-API (e.g. <a href='https://www.safeproject.net/api/index'>https://www.safeproject.net/api/index</a>) and saves
-it in the root SAFE data directory</p>
+    <p>Taxon data is stored as a set of taxa with taxon ids and parent taxon
+ids. For any given dataset, the set should include all parent taxa required.
+This internal function takes such list of taxon data and adds columns showing
+the taxonomic hierarchy for each row. It is used by <code><a href='get_taxa.html'>get_taxa</a></code> and
+<code><a href='get_taxon_coverage.html'>get_taxon_coverage</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>download_index</span>()</pre>
+    <pre class="usage"><span class='fu'>taxon_index_to_taxon_table</span>(<span class='no'>taxa</span>)</pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>taxa</th>
+      <td><p>An existing object of class <code>safedata</code></p></td>
+    </tr>
+    </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A data frame adding higher taxon level information for each taxon</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='get_taxa.html'>get_taxa</a></code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
+      <li><a href="#see-also">See also</a></li>
     </ul>
 
   </div>

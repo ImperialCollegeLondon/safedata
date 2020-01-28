@@ -4,7 +4,13 @@
 \alias{set_safe_dir}
 \title{Set the local SAFE data directory}
 \usage{
-set_safe_dir(safedir, update = TRUE, create = FALSE, validate = TRUE)
+set_safe_dir(
+  safedir,
+  update = TRUE,
+  create = FALSE,
+  validate = TRUE,
+  url = "https://www.safeproject.net"
+)
 }
 \arguments{
 \item{safedir}{A path to the directory to set as the SAFE data 
@@ -16,6 +22,9 @@ directory (str).}
 path (logical)?}
 
 \item{validate}{Should the directory structure be validated (logical)?}
+
+\item{url}{A URL providing the SAFE Data API, defaulting to the SAFE 
+Project's own URL.}
 }
 \description{
 This function sets the local directory used to store SAFE dataset
@@ -23,7 +32,9 @@ files along with record and index metadata. The function can also
 initialise a new data directory, downloading the required index 
 files. By default, it will update indices if needed and will 
 validate the directory contents. Once set, the location of the 
-directory is stored in options('safedata.dir').
+directory is stored in options('safedata.dir'). The \code{url} 
+argument specifies a URL to a website that exposes the SAFE data 
+API.
 }
 \details{
 The safedata package uses a data directory to store local copies of 

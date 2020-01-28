@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>An overview of data at the SAFE Project • safedata</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="An overview of data at the SAFE Project">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
@@ -38,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -70,13 +71,14 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>An overview of data at the SAFE Project</h1>
                         <h4 class="author">Andy Aldersley and David Orme</h4>
             
-            <h4 class="date">2019-12-24</h4>
+            <h4 class="date">2020-01-24</h4>
       
       
       <div class="hidden name"><code>overview.Rmd</code></div>
@@ -85,7 +87,7 @@
 
     
     
-<p>The <code>safedata</code> R package is designed to discover and work with data from the Stability of Altered Forest Ecosystems (SAFE) Project. The <a href="https://www.safeproject.net/">SAFE Project</a> is one the largest ecological experiments in the world, investigating the effects of human activities on biodiversity and ecosystem function in the Malaysian rainforest.</p>
+<p>The <code>safedata</code> R package is designed to discover and work with data using the formatting and indexing API designed for the Stability of Altered Forest Ecosystems (SAFE) Project. The <a href="https://www.safeproject.net/">SAFE Project</a> is one the largest ecological experiments in the world, investigating the effects of human activities on biodiversity and ecosystem function in the Malaysian rainforest.</p>
 <p>Research conducted at the SAFE Project encompasses expertise from many disciplines and institutions, each running interlinked projects that help to develop our understanding of ecology within changing environments. Data from the many activities conducted through the SAFE Project are curated and published to a community repository hosted at <a href="https://zenodo.org/communities/safe/">Zenodo</a>.The <code>safedata</code> package enables researchers to quickly and easily interface with these datasets.</p>
 <div id="the-safe-project-dataset-workflow" class="section level1">
 <h1 class="hasAnchor">
@@ -173,17 +175,19 @@
 <h1 class="hasAnchor">
 <a href="#safe-data-directories" class="anchor"></a>SAFE data directories</h1>
 <p>The <code>safedata</code> package stores downloaded datasets, record metadata and key index files within a data directory, which is used as a local repository of the datasets used by an individual researcher. The structure of the directory is critical to the operation of the package and the datasets themselves are under version control: users <strong>must not change</strong> the structure or the file contents of this directory.</p>
-<p>The directory structure is as follows: three index files are stored in the root of the directory, which will also contain a folder named with the <strong>concept</strong> id number of each dataset that has been downloaded. These concept folders will then contain at least one subfolder giving named with the <strong>record</strong> number of a downloaded dataset. These subfolders will then contain the record files downloaded from Zenodo and a JSON format file containing the dataset metadata.</p>
+<p>The directory structure is as follows: three index files are stored in the root of the directory, which will also contain a folder named with the <strong>concept</strong> id number of each dataset that has been downloaded. These concept folders will then contain at least one subfolder giving named with the <strong>record</strong> number of a downloaded dataset. These subfolders will then contain the record files downloaded from Zenodo and a JSON format file containing the dataset metadata. The directory also contains a JSON format file that that records the base URL of the dataset index website.</p>
 <p>For example:</p>
 <pre><code>gazetteer.geojson
 index.json
 location_aliases.csv
+url.json
 1400561/1400562/1400562.json
 1400561/1400562/Psomas_Ant_Pselaphine_SAFE_dataset.xlsx</code></pre>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+
         <div id="tocnav">
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
@@ -204,17 +208,20 @@ location_aliases.csv
 </div>
 
 
+
       <footer><div class="copyright">
   <p>Developed by Andy Aldersley, David Orme.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>

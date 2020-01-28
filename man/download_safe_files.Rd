@@ -4,8 +4,14 @@
 \alias{download_safe_files}
 \title{Download SAFE dataset files}
 \usage{
-download_safe_files(record_ids, confirm = TRUE, xlsx_only = TRUE,
-  download_metadata = TRUE, refresh = FALSE, token = NULL)
+download_safe_files(
+  record_ids,
+  confirm = TRUE,
+  xlsx_only = TRUE,
+  download_metadata = TRUE,
+  refresh = FALSE,
+  token = NULL
+)
 }
 \arguments{
 \item{record_ids}{A vector of SAFE dataset record ids or a 
@@ -44,8 +50,10 @@ replace them with the versions of record from Zenodo.
 }
 
 \examples{
-   \donttest{
+   \dontrun{
+   safedir <- system.file('example_data_dir', package='safedata')
+   set_safe_dir(safedir, update=FALSE, validate=FALSE)
    recs <- validate_record_ids(c(3247631, 3266827, 3266821))
-   download_safe_files(recs)
+   download_safe_files(recs, confirm=FALSE)
    }
 }

@@ -9,11 +9,11 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
-The `safedata`  R package is designed to discover and work with data from the
-Stability of Altered Forest Ecosystems (SAFE) Project. The [SAFE Project](https://www.safeproject.net/)
- is one  the largest ecological experiments in the world, investigating the effects
-of human activities on biodiversity and ecosystem function in the Malaysian 
-rainforest.
+The `safedata` R package is designed to discover and work with data using the formatting and
+indexing API designed for the Stability of Altered Forest Ecosystems (SAFE) Project. The [SAFE
+Project](https://www.safeproject.net/) is one the largest ecological experiments in the world,
+investigating the effects of human activities on biodiversity and ecosystem function in the
+Malaysian rainforest.
 
 Research conducted at the SAFE Project encompasses expertise from many 
 disciplines and institutions, each running interlinked projects that help to 
@@ -110,8 +110,7 @@ structured queries to be performed on the following:
 * **`taxa`**: the taxa included  in a dataset, and
 * **`spatial`**: matching datasets by sampling location.
 
-In addition, the API provides a **`record`** endpoint that allows the full record metadata to be downloaded
-in JSON format.
+In addition, the API provides a **`record`** endpoint that allows the full record metadata to be downloaded in JSON format.
 
  
 # SAFE data directories
@@ -127,7 +126,7 @@ which will also contain a folder named with the **concept** id number of each da
 that has been downloaded. These concept folders will then contain at least one subfolder
 giving named with the **record** number of a downloaded dataset. These subfolders
 will then contain the record files downloaded from Zenodo and a JSON format file containing
-the dataset metadata.
+the dataset metadata. The directory also contains a JSON format file that that records the base URL of the dataset index website.
 
 For example:
 
@@ -135,6 +134,7 @@ For example:
 gazetteer.geojson
 index.json
 location_aliases.csv
+url.json
 1400561/1400562/1400562.json
 1400561/1400562/Psomas_Ant_Pselaphine_SAFE_dataset.xlsx
 ```

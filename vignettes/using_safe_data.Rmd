@@ -43,17 +43,18 @@ within the `safedata` package, see the Overview vignette: `vignette("overview", 
 
 # Installing `safedata`
 
-Currently, `safedata` can only be installed from GitHub:
+The `safedata` package is available from CRAN:
+
+```r
+install.packages("safedata")
+```
+
+The development version can also be installed from GitHub:
 
 ```r
 devtools::install_github("ImperialCollegeLondon/safedata")
 ```
 
-In the future, it should be available from CRAN:
-
-```r
-install.packages("safedata")
-```
 
 ## Package dependencies
 
@@ -371,6 +372,13 @@ There are three functions that can be used to work with the taxa in a dataset:
     beetle_phylo <- get_phylogeny(1400562)
     plot(beetle_phylo, show.node.label=TRUE, font=1, no.margin=TRUE)
     ```
+
+In addition, the `get_taxon_coverage` function can be used to get a taxon table of all taxa currently referenced in datasets.
+
+```{r}
+all_taxa <- get_taxon_coverage()
+str(all_taxa)
+```
 
 ## Dataset locations
 

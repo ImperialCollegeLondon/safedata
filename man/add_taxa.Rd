@@ -4,8 +4,13 @@
 \alias{add_taxa}
 \title{Add a taxonomic hierarchy to a SAFE data worksheet.}
 \usage{
-add_taxa(obj, taxon_field = NULL, taxon_table = NULL, prefix = NULL,
-  which = NULL)
+add_taxa(
+  obj,
+  taxon_field = NULL,
+  taxon_table = NULL,
+  prefix = NULL,
+  which = NULL
+)
 }
 \arguments{
 \item{obj}{An existing object of class \code{safedata}}
