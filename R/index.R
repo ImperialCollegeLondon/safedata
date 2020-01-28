@@ -10,7 +10,8 @@
 
 safedata.env <- new.env(parent = emptyenv())
 
-set_safe_dir <- function(safedir, update=TRUE, create=FALSE, validate=TRUE){
+set_safe_dir <- function(safedir, update=TRUE, create=FALSE, validate=TRUE,
+						 url='https://www.safeproject.net'){
     
     #' Set the local SAFE data directory
     #'
@@ -19,7 +20,9 @@ set_safe_dir <- function(safedir, update=TRUE, create=FALSE, validate=TRUE){
     #' initialise a new data directory, downloading the required index 
     #' files. By default, it will update indices if needed and will 
     #' validate the directory contents. Once set, the location of the 
-    #' directory is stored in options('safedata.dir').
+    #' directory is stored in options('safedata.dir'). The \code{url} 
+	#' argument specifies a URL to a website that exposes the SAFE data 
+	#' API. 
     #'
     #' The safedata package uses a data directory to store local copies of 
     #' dataset files along with index files. Files for a dataset record are
@@ -61,6 +64,8 @@ set_safe_dir <- function(safedir, update=TRUE, create=FALSE, validate=TRUE){
     #' @param create Should a new data directory be created at the provided
     #'    path (logical)?
     #' @param validate Should the directory structure be validated (logical)?
+    #' @param url A URL providing the SAFE Data API, defaulting to the SAFE 
+	#'    Project's own URL.
     #' @return NULL
     #' @examples
     #'    safedir <- system.file('example_data_dir', package='safedata')
@@ -73,7 +78,8 @@ set_safe_dir <- function(safedir, update=TRUE, create=FALSE, validate=TRUE){
     index_path <- file.path(safedir,'index.json')
     gazetteer_path <- file.path(safedir,'gazetteer.geojson')
     location_aliases_path <- file.path(safedir,'location_aliases.csv')
-    
+	url_path <-  file.path(safedir,'url.json')
+
     # Handle create first
     if(create) {
         
@@ -86,6 +92,10 @@ set_safe_dir <- function(safedir, update=TRUE, create=FALSE, validate=TRUE){
         dir.create(safedir)
         options(safedata.dir = safedir)
         
+		# Save the URL and set it
+		jsonlite::write_json(list(url=url), url_path)
+		options(safedata.url = url)
+		
         # download the index file, then cache it
         download_index()
         index <- load_index()
@@ -103,6 +113,10 @@ set_safe_dir <- function(safedir, update=TRUE, create=FALSE, validate=TRUE){
     if (! dir.exists(safedir)) {
         stop("Directory not found.")
     } 
+
+    if (! file.exists(url_path)) {
+        stop("API URL not found.")
+    }
     
     if (! file.exists(index_path)) {
         stop("Dataset index not found.")
@@ -116,9 +130,13 @@ set_safe_dir <- function(safedir, update=TRUE, create=FALSE, validate=TRUE){
         stop("Location aliases not found.")
     }
     
-    # Set the data directory and then load the index file. Only load the gazetteer
+    # Set the data directory and then load the index file and URL. Only load the gazetteer
     # and location aliases if the user starts using locations.
     options(safedata.dir = safedir)
+	
+	url <- jsonlite::read_json(url_path)$url
+	options(safedata.url = url)
+	
     index <- load_index()
     
     # Look for updates
@@ -126,9 +144,9 @@ set_safe_dir <- function(safedir, update=TRUE, create=FALSE, validate=TRUE){
         
         verbose_message('Checking for updates')
         
-        # Get the current index hashes from the SAFE Project API and 
+        # Get the current index hashes from the SAFE Data API and 
         # then check each of the three index files
-        index_hashes <- jsonlite::fromJSON('https://www.safeproject.net/api/index_hashes')
+        index_hashes <- jsonlite::fromJSON(paste0(url, '/api/index_hashes'))
 
         # Check the index
         if(tools::md5sum(index_path) != index_hashes$index){
@@ -166,7 +184,7 @@ set_safe_dir <- function(safedir, update=TRUE, create=FALSE, validate=TRUE){
         
         # Exclude the three index files and local metadata json files
         index_files <- c(basename(index_path), basename(gazetteer_path), 
-                         basename(location_aliases_path))
+                         basename(location_aliases_path), basename(url_path))
                          
         metadata_json <- local_files[grepl('[0-9]+/[0-9]+/[0-9]+.json$', local_files)]    
         local_files <- setdiff(local_files, c(index_files, metadata_json))
@@ -195,8 +213,8 @@ download_index <- function(){
     
     #' Downloads the current dataset index
     #' 
-    #' This function downloads the dataset index from the SAFE project
-    #' index API (\url{https://www.safeproject.net/api/index}) and saves
+    #' This function downloads the dataset index from the SAFE data
+    #' API (e.g. \url{https://www.safeproject.net/api/index}) and saves
     #' it in the root SAFE data directory
     #'
     #' @return NULL
@@ -204,7 +222,8 @@ download_index <- function(){
     
     safedir <- get_data_dir()
     path <- file.path(safedir,'index.json')
-    api <- 'https://www.safeproject.net/api/index'
+	url <- getOption('safedata.url')
+    api <- paste0(url, '/api/index')
     result <- try(curl::curl_download(api, path), silent=TRUE)
               
     if(inherits(result, 'try-error')){
@@ -220,8 +239,8 @@ download_gazetteer <- function(){
     
     #' Downloads the current SAFE gazetteer
     #' 
-    #' This function downloads the gazetteer from the SAFE project
-    #' gazetteer API (\url{https://www.safeproject.net/api/gazetteer})
+    #' This function downloads the gazetteer from the SAFE data
+    #' gazetteer API (e.g. \url{https://www.safeproject.net/api/gazetteer})
     #' and saves it in the root of the safe data directory.
     #'
     #' @return NULL
@@ -229,7 +248,8 @@ download_gazetteer <- function(){
     
     safedir <- get_data_dir()
     path <- file.path(safedir,'gazetteer.geojson')
-    api <- 'https://www.safeproject.net/api/gazetteer'
+	url <- getOption('safedata.url')
+    api <- paste0(url, '/api/gazetteer')
     result <- try(curl::curl_download(api, path), silent=TRUE)
               
     if(inherits(result, 'try-error')){
@@ -244,8 +264,8 @@ download_location_aliases <- function(){
     
     #' Downloads the current SAFE location aliases
     #' 
-    #' This function downloads the location aliases from the SAFE project
-    #' location aliases API (\url{https://www.safeproject.net/api/location_aliases})
+    #' This function downloads the location aliases from the SAFE data
+    #' location aliases API (e.g. \url{https://www.safeproject.net/api/location_aliases})
     #' and saves it in the root of the safe data directory.
     #'
     #' @return NULL
@@ -253,7 +273,8 @@ download_location_aliases <- function(){
     
     safedir <- get_data_dir()    
     path <- file.path(safedir,'location_aliases.csv')
-    api <- 'https://www.safeproject.net/api/location_aliases'
+	url <- getOption('safedata.url')
+    api <- paste0(url, '/api/location_aliases')
     result <- try(curl::curl_download(api, path), silent=TRUE)
               
     if(inherits(result, 'try-error')){
@@ -413,7 +434,7 @@ get_data_dir <- function(){
     #'
     #' @keywords internal
     
-    if(is.null(options('safedata.dir'))){
+    if(is.null(getOption('safedata.dir'))){
         stop('SAFE data directory not set.')
     }
     

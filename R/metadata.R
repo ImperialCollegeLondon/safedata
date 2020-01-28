@@ -185,7 +185,7 @@ fetch_record_metadata <- function(record_set){
     #'    \code{load_record_metadata} returns a list object containing record metadata
     #' @describeIn fetch_record_metadata Download and store JSON metadata for a record
     #' @examples
-    #'    \donttest{
+    #'    \dontrun{
     #'    safedir <- system.file('example_data_dir', package='safedata')
     #'    set_safe_dir(safedir, update=FALSE, validate=FALSE)
     #'    rec <- validate_record_ids(1400562)
@@ -222,8 +222,8 @@ fetch_record_metadata <- function(record_set){
             if(! dir.exists(dirname(to_get$local_path))){
                 dir.create(dirname(to_get$local_path), recursive=TRUE)
             }
-            
-            api <- sprintf('https://www.safeproject.net/api/record/%i', to_get$record)
+            url <- getOption('safedata.url')
+            api <- sprintf('%s/api/record/%i', url, to_get$record)
             curl::curl_download(api, to_get$local_path)
         }
     }

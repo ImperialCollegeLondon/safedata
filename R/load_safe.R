@@ -254,9 +254,11 @@ download_safe_files <- function(record_ids, confirm=TRUE, xlsx_only=TRUE,
     #' @param token An access token for restricted datasets. Not currently implemented.
     #' @return Invisibly, a vector of paths for successfully downloaded files.
     #' @examples
-    #'    \donttest{
+    #'    \dontrun{
+    #'    safedir <- system.file('example_data_dir', package='safedata')
+    #'    set_safe_dir(safedir, update=FALSE, validate=FALSE)
     #'    recs <- validate_record_ids(c(3247631, 3266827, 3266821))
-    #'    download_safe_files(recs)
+    #'    download_safe_files(recs, confirm=FALSE)
     #'    }
     #' @export
     

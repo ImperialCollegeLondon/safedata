@@ -20,8 +20,8 @@
 #' is provided.
 #' 
 #' @section Spatial searches:
-#' For spatial searches, users can select a location name from the SAFE gazetteer
-#' (see \url{https://www.safeproject.net/info/gazetteer} or \code{\link{load_gazetteer}})
+#' For spatial searches, users can select a location name from a SAFE data gazetteer
+#' (see e.g. \url{https://www.safeproject.net/info/gazetteer} or \code{\link{load_gazetteer}})
 #' or provide a WKT geometry. The sampling locations provided in each SAFE dataset
 #' are tested to see if they intersect the search geometry.
 #'
@@ -37,9 +37,9 @@
 #'
 #' @section Links:
 #' \describe{
-#'    \item{SAFE API}{\url{https://www.safeproject.net/api}}
+#'    \item{SAFE data API}{e.g. \url{https://www.safeproject.net/api}}
 #'    \item{Worksheet field types}{\url{https://safedata-validator.readthedocs.io/en/latest/data_format/data/#field-types}}
-#'    \item{SAFE gazetteer}{See \code{\link{load_gazetteer}} and \url{https://www.safeproject.net/info/gazetteer}}
+#'    \item{SAFE gazetteer}{See \code{\link{load_gazetteer}} and e.g. \url{https://www.safeproject.net/info/gazetteer}}
 #'    \item{WKT}{\url{https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry}}
 #' } 
 #'
@@ -71,7 +71,7 @@
 #' @return An object of class \code{\link{safe_record_set}} of datasets that match 
 #'    the query.
 #' @examples
-#'    \donttest{
+#'    \dontrun{
 #'    search_dates('2014-06-12')
 #'    search_dates(as.POSIXct(c('2014-06-12', '2015-06-11')))
 #'    search_dates(c('2014-06-12', '2015-06-11'), match_type = 'contain')
@@ -263,8 +263,8 @@ safe_api_search <- function (endpoint, params, ids = NULL, most_recent=FALSE) {
         params <- paste0(params, '&most_recent=')
     }
     
-    api <- 'https://www.safeproject.net/api/search'
-    url <- sprintf('%s/%s?%s', api, endpoint, params)
+	url <- getOption('safedata.url')
+    url <- sprintf('%s/%s/%s?%s', url, 'api/search', endpoint, params)
     url <- utils::URLencode(url)
     content <- jsonlite::fromJSON(url)
     
