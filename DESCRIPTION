@@ -1,18 +1,18 @@
 Package: safedata
 Type: Package
-Title: R Interface to Data from the SAFE Project 
+Title: Interface to Data from the SAFE Project 
 Version: 1.0.0
-Date: 2019-12-24
+Date: 2020-01-09
 Authors@R: c(
     person('Andy', 'Aldersley', email='a.aldersley@imperial.ac.uk', role=c('aut')),
     person('David', 'Orme', email='d.orme@imperial.ac.uk', role=c('aut','cre'),
 	       comment=c(ORCID='0000-0002-7005-1394')))
-Description: The SAFE Project is a large scale ecological experiment
-    in Malaysian Borneo that explores the impact of habitat fragmentation
-    and conversion on ecosystem function and services. Data collected at
-    the SAFE Project is made available under a common format through the
-    Zenodo data repository and this package makes it easy to discover and
-    load that data into R.
+Description: The SAFE Project (<https://www.safeproject.net/>) is a large 
+	scale ecological experiment in Malaysian Borneo that explores the impact 
+	of habitat fragmentation and conversion on ecosystem function and services. 
+	Data collected at the SAFE Project is made available under a common format 
+	through the Zenodo data repository and this package makes it easy to 
+	discover and load that data into R.
 License: GPL-3
 Imports: 
     readxl,
@@ -27,5 +27,5 @@ Suggests:
 Encoding: UTF-8
 URL: https://imperialcollegelondon.github.io/safedata/index.html
 BugReports: https://github.com/ImperialCollegeLondon/safedata/issues
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 VignetteBuilder: knitr
