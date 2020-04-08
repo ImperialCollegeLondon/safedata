@@ -24,13 +24,13 @@ validate_record_ids <- function(record_set){
     #' @param ... Further arguments to print methods, unused.
     #' @return An object of class \code{safe_record_set} (see Details)
     #' @examples
-    #'    safedir <- system.file('example_data_dir', package='safedata')
-    #'    set_safe_dir(safedir, update=FALSE, validate=FALSE)
+    #'    set_example_dir()
     #'    validate_record_ids(c(3247631, 3266827, 3266821, -1000))
     #'    validate_record_ids(c('https://doi.org/10.5281/zenodo.3247631', 
     #'                            '10.5281/zenodo.3266827', 
     #'                            'https://zenodo.org/record/3266821',
     #'                            'not_this_one/3266821'))
+    #'    unset_example_dir()
     #' @aliases safe_record_set
     #' @export
     
@@ -186,11 +186,11 @@ fetch_record_metadata <- function(record_set){
     #' @describeIn fetch_record_metadata Download and store JSON metadata for a record
     #' @examples
     #'    \dontrun{
-    #'    safedir <- system.file('example_data_dir', package='safedata')
-    #'    set_safe_dir(safedir, update=FALSE, validate=FALSE)
+    #'    set_example_dir()
     #'    rec <- validate_record_ids(1400562)
     #'    safedata:::fetch_record_metadata(rec)
     #'    metadata <- safedata:::load_record_metadata(rec)
+    #'    unset_example_dir()
     #'    }
     #' @keywords internal
     
@@ -291,8 +291,7 @@ show_concepts <- function(obj){
     #'    are not really intended for end user consumption.
     #' @describeIn show_concepts Show the records associated with a dataset concept.
     #' @examples
-    #'    safedir <- system.file('example_data_dir', package='safedata')
-    #'    set_safe_dir(safedir, update=FALSE, validate=FALSE)
+    #'    set_example_dir()
     #'    recs <- validate_record_ids(c(1400562, 3266827, 3266821))
     #'    show_concepts(recs)
     #'    show_record(recs[1,])
@@ -300,6 +299,7 @@ show_concepts <- function(obj){
     #'    show_worksheet(1400562, 'EnvironVariables')
     #'    beetle_abund <- load_safe_data(1400562, 'Ant-Psel')
     #'    show_worksheet(beetle_abund, extended_fields=TRUE)
+    #'    unset_example_dir()
     #' @export
     
     if(inherits(obj, 'safedata')){
