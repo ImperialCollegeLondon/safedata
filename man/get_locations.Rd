@@ -46,9 +46,9 @@ Not all SAFE project datasets contain locations. In this case
   \code{\link{get_locations}} will return NULL.
 }
 \examples{
-   safedir <- system.file('example_data_dir', package='safedata')
-   set_safe_dir(safedir, update=FALSE, validate=FALSE)
+   set_example_dir()
    locations <- get_locations(1400562)
+   unset_example_dir()
 }
 \seealso{
 \code{\link{add_locations}}, \code{\link{load_gazetteer}}, 

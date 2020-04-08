@@ -51,9 +51,9 @@ replace them with the versions of record from Zenodo.
 
 \examples{
    \dontrun{
-   safedir <- system.file('example_data_dir', package='safedata')
-   set_safe_dir(safedir, update=FALSE, validate=FALSE)
+   set_example_dir()
    recs <- validate_record_ids(c(3247631, 3266827, 3266821))
    download_safe_files(recs, confirm=FALSE)
+   unset_example_dir()
    }
 }

@@ -47,10 +47,10 @@ included in the output of \code{\link{get_taxa}}, but \code{which}
 allows a subset of field names to be used.
 }
 \examples{
-   safedir <- system.file('example_data_dir', package='safedata')
-   set_safe_dir(safedir, update=FALSE, validate=FALSE)
+   set_example_dir()
    beetle_morph <- load_safe_data(1400562, 'MorphFunctTraits')
    beetle_morph <- add_taxa(beetle_morph)
+   unset_example_dir()
 }
 \seealso{
 \code{\link{get_taxa}}

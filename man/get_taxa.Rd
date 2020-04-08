@@ -44,9 +44,9 @@ For more details on the structure of the Taxa worksheet see:
 \url{https://safedata-validator.readthedocs.io/en/latest/data_format/taxa/}
 }
 \examples{
-   safedir <- system.file('example_data_dir', package='safedata')
-   set_safe_dir(safedir, update=FALSE, validate=FALSE)
+   set_example_dir()
    taxa <- get_taxa(1400562)
+   unset_example_dir()
 }
 \seealso{
 \code{\link{add_taxa}}

@@ -53,10 +53,10 @@ files - data stored in external files is not yet handled.
 }}
 
 \examples{
-   safedir <- system.file('example_data_dir', package='safedata')
-   set_safe_dir(safedir, update=FALSE, validate=FALSE)
+   set_example_dir()
    beetle_abund <- load_safe_data(1400562, 'Ant-Psel')
    str(beetle_abund)
    # See also the show_worksheet function for further worksheet metadata
    show_worksheet(beetle_abund)
+   unset_example_dir()
 }
