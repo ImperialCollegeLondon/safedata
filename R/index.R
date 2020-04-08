@@ -434,11 +434,13 @@ get_data_dir <- function(){
     #'
     #' @keywords internal
     
-    if(is.null(getOption('safedata.dir'))){
+	ddir <- getOption('safedata.dir')
+	
+    if(is.null(ddir)){
         stop('SAFE data directory not set.')
     }
     
-    return(options('safedata.dir')$safedata.dir)
+    return(ddir)
 }
 
 
@@ -452,7 +454,56 @@ verbose_message <- function(str, ...){
     #'
     #' @keywords internal
     
-    if(options("safedata.verbose")[[1]]){
+    if(getOption("safedata.verbose")){
         message(str, ...)
     }
 }
+
+
+set_example_dir <- function(){
+	
+    #' Functions to use an example data directory for package examples
+    #'
+    #' The documentation of \code{safedata} includes code examples using a data 
+	#' directory. A zipped example directory is included in the package files
+	#' (data/safedata_example_dir.zip) but package code must not write within the 
+	#' package structure. These functions are used in code examples to unpack
+	#' this example directory into a temporary folder and set it for use in the 
+	#' example code. The function \code{unset_demo_dir()} is then used to restore
+	#' any existing data directory set by the user. The directory should only be 
+	#' created once per session. 
+	#'
+    #' @seealso \code{\link{set_data_dir}}
+    #' @export
+	
+	# record the user data directory if one has been set
+	udir <- try(safedata:::get_data_dir(), silent=TRUE)
+	
+	if(! inherits(udir, 'try-error')){
+		options(safedata.user.dir = udir)
+	}
+	
+	# Get the session tempdir and look for an existing extracted demo directory
+	tdir <- tempdir()
+	demo_dir <- file.path(tdir, 'safedata_example_dir')
+	
+	if(! dir.exists(demo_dir)){
+		example_zip <- system.file('data', 'safedata_example_dir.zip', package='safedata')
+		unzip(example_zip, exdir=tdir)
+	}
+	
+	set_safe_dir(demo_dir, update=FALSE, validate=FALSE)
+}
+
+unset_example_dir <- function(){
+	
+    #' @describeIn set_example_dir Restores a user data directory after running an code example.
+    #' @export
+	
+	# retrieve the user directory and if it isn't null restore it
+	udir <- getOption('safedata.user.dir')
+    if(! is.null(udir)){
+		set_safe_dir(udir, update=FALSE, validate=FALSE)
+	}
+}
+
