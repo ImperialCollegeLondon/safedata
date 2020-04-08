@@ -9,8 +9,9 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
-```{r, echo=FALSE}
+```{r knithook, echo=FALSE}
 library(knitr)
+# Knit hook to truncate output.
 hook_output <- knit_hooks$get("output")
 knit_hooks$set(output = function(x, options) {
 lines <- options$output.lines
@@ -45,13 +46,13 @@ within the `safedata` package, see the Overview vignette: `vignette("overview", 
 
 The `safedata` package is available from CRAN:
 
-```r
+```{r install_cran, eval=FALSE}
 install.packages("safedata")
 ```
 
 The development version can also be installed from GitHub:
 
-```r
+```{r install_git, eval=FALSE}
 devtools::install_github("ImperialCollegeLondon/safedata")
 ```
 
@@ -72,7 +73,7 @@ files (`vignette("overview", package = "safedata")` for details) . These files a
 `safedata` functions to work correctly, so the first step in using `safedata` is to set the
 location of the directory and the package will remind you to do this when it is loaded.
 
-```{r, collapse=TRUE}
+```{r load_lib, collapse=TRUE}
 library(safedata)
 ```
 
@@ -81,7 +82,7 @@ library(safedata)
 If this is the first time you are loading `safedata` -- or if you simply want to have two separate
 SAFE data directories -- then you need to create a new, empty directory.
 
-```{r, eval=FALSE}
+```{r create_new_dir, eval=FALSE}
 set_safe_dir('my_safe_directory', create=TRUE)
 ## Safe data directory created
 ```
@@ -90,9 +91,8 @@ This will create the directory and download the current index files. You cannot 
 directory: the package wants to start with a fresh, empty directory. Note that the directory path
 is stored in `options()`:
 
-```{r, eval=FALSE}
-options('safedata.dir')
-## $safedata.dir
+```{r show_safe_dir, eval=FALSE}
+getOption('safedata.dir')
 ## [1] "my_safe_directory"
 ```
 
@@ -101,7 +101,7 @@ options('safedata.dir')
 Once you have a SAFE data directory, the same function is used to tell the `safedata` package where
 to look for index and data files:
 
-```{r, eval=FALSE}
+```{r set_safe_dir, eval=FALSE}
 set_safe_dir('my_safe_directory')
 ## Checking for updates
 ##  - Index up to date
@@ -117,9 +117,8 @@ file copies against the MD5 of the published file. You _can_ suppress validation
 (`set_safe_dir('~/my_safe_directory', validate=FALSE)`), but this is not advised: altering the
 contents of a published data file undermines reproducible research.
 
-```{r, echo=FALSE, include=FALSE}
-safe_dir <- system.file('example_data_dir', package='safedata')
-set_safe_dir(safe_dir)
+```{r load_example_dir, echo=FALSE, include=FALSE}
+set_example_dir()
 ```
 
 # Finding data
@@ -155,7 +154,7 @@ All of these functions return a `safe_record_set` objects, which is just a data 
 containing validated record ids and access information and so you can use the normal data
  frame indices (e.g. `recs[1,]`) to select particular records. 
 
-```{r, echo=TRUE}
+```{r search_text, echo=TRUE}
 soil_datasets <- search_text('soil')
 print(soil_datasets)
 ```
@@ -170,7 +169,7 @@ The taxa in this index, along with all of the parent taxa in the taxonomic hiera
 that those taxa, are added to a taxonomic database on the SAFE Project website. The `search_taxa()`
 function searches that index to identify all the datasets that contain a particular taxon.
 
-```{r, collapse=TRUE}
+```{r search_taxa, collapse=TRUE}
 print(ants <- search_taxa('Formicidae'))
 ```
 
@@ -178,7 +177,7 @@ The taxonomic index is built around the GBIF backbone taxonomic database and inc
 core taxonomic levels: kingdom, phylum, class, order, family, genus, species and subspecies. It is
 also possible to search by [GBIF ID](https://www.gbif.org/species/4342).
 
-```{r, collapse=TRUE}
+```{r search_taxa_id, collapse=TRUE}
 ants <- search_taxa(gbif_id=4342)
 ```
 
@@ -191,7 +190,7 @@ and provide location data if possible.
 
 The `search_spatial()` function allows users to search for datasets by sampling locations. Accepted location names from the gazetteer can be used to search for datasets but users can also provide their own search geometries using the Well Known Text format. The search includes simple GIS capabilities to look for sampling within a  given distance of the query location.
 
-```{r, collapse=TRUE}
+```{r search_spatial, collapse=TRUE}
 # Datasets that include sampling within experimental block A
 within_a <- search_spatial(location='BL_A')
 # Datasets that sampled within 2 km of the Maliau Basin Field Study Centre
@@ -230,7 +229,7 @@ a dataset reference to access metadata and available data, using the
 Like the `search` functions, the output is `safe_record_set` object. Note that you can validate
 multiple references at once.
 
-```{r, echo=TRUE}
+```{r validate_recs, echo=TRUE}
 recs <- validate_record_ids(c('https://doi.org/10.5281/zenodo.3247631',
                               '10.5281/zenodo.3266827',
                               'https://zenodo.org/record/3266821'))
@@ -257,7 +256,7 @@ includes the (most recent) dataset title and a short summary of the versions ava
 dataset concept. Note that the output is not restricted just to the set of record ids given to the function: 
 it shows metadata for all versions for each of the concept  ids included.
 
-```{r}
+```{r show_concepts}
 show_concepts(recs)
 ```
 
@@ -273,7 +272,7 @@ you can use the usual data frame indexing to select a row to pass to other funct
 `show_record()` also _requires an internet connection_: the package downloads a JSON file of
 the record metadata and stores it in the SAFE data directory.
 
-```{r}
+```{r show_record}
 show_record(recs[3,])
 ```
 
@@ -282,14 +281,14 @@ show_record(recs[3,])
 This function  shows metadata for a named worksheet within a specific record. The default is to show
 a compact table of field names, field types and truncated descriptions: 
 
-```{r}
+```{r show_worksheet}
 show_worksheet(recs[3,], 'Data')
 ```
 
 There is also an extended display (`extended_fields=TRUE`) that will print out a list of all the available
 metadata for each field.
 
-```{r, output.lines=15}
+```{r show_worksheet_long, output.lines=15}
 show_worksheet(recs[3,], 'Data', extended_fields=TRUE)
 ```
 
@@ -303,7 +302,7 @@ and you can either give that a URL or number for a dataset or pass it an existin
 to the SAFE data directory. The default behaviour is to present a brief report on the number and
 size of available files to be downloaded before actually doing anything:
 
-```{r, eval=FALSE}
+```{r download_safe, eval=FALSE}
 download_safe_files(within_a)
 ## 26 files requested from 26 records
 ##  - 0 local (0 bytes)
@@ -332,7 +331,7 @@ The `load_safe_data()` function is used to load a named data worksheet from a da
 
 Some data formatting takes place based on [field types](https://safedata-validator.readthedocs.io/en/latest/data_format/data/#field-types): categorical variables are converted to factors; dates and datetimes are converted to `POSIXct` and times are converted to `chron::time` objects. 
 
-```{r}
+```{r load_safe_data}
 beetle_abund <- load_safe_data(1400562, 'Ant-Psel')
 str(beetle_abund)
 print(beetle_abund)
@@ -340,7 +339,7 @@ print(beetle_abund)
 
 The display of `safedata` objects is kept deliberately simple to avoid cluttering the screen with metadata. You can always view additional metadata for a loaded worksheet by using the `show` functions directly on the loaded `safedata` object:
 
-```{r}
+```{r explore_loaded}
 show_concepts(beetle_abund)
 show_record(beetle_abund)
 show_worksheet(beetle_abund)
@@ -352,14 +351,14 @@ There are three functions that can be used to work with the taxa in a dataset:
 
 1. `get_taxa()`:  This function loads a dataframe containing all of the taxa used within a dataset, with fields including the core GBIF taxonomic levels, the taxonomic label used within the dataset and the taxonomic status of the each taxon. You can load a taxonomic dataframe from a `safe_record_set` row or using an existing loaded `safedata` object.
 
-    ```{r}
+    ```{r get_taxa}
     beetle_taxa <- get_taxa(beetle_abund)
     str(beetle_taxa)
     ```
 
 2. `add_taxa()`: This function adds taxonomic details to an already loaded data worksheet. 
 
-    ```{r}
+    ```{r add_taxa}
     beetle_morph <- load_safe_data(1400562, 'MorphFunctTraits')
     beetle_morph <- add_taxa(beetle_morph)
     str(beetle_morph)
@@ -367,7 +366,7 @@ There are three functions that can be used to work with the taxa in a dataset:
     
 3. `get_phylogeny()`:  This function creates a phylogeny from the taxonomic data in a dataset, returning an object of class `phylo` (see package`ape`).
 
-    ```{r}
+    ```{r get_phylo}
     library(ape)
     beetle_phylo <- get_phylogeny(1400562)
     plot(beetle_phylo, show.node.label=TRUE, font=1, no.margin=TRUE)
@@ -375,7 +374,8 @@ There are three functions that can be used to work with the taxa in a dataset:
 
 In addition, the `get_taxon_coverage` function can be used to get a taxon table of all taxa currently referenced in datasets.
 
-```{r}
+```{r get_taxon_coverage, eval=FALSE}
+# TODO FIX THIS
 all_taxa <- get_taxon_coverage()
 str(all_taxa)
 ```
@@ -387,7 +387,7 @@ Nearly all SAFE datasets will include observations at spatial locations, and the
 
 1. `load_gazetteer()`: The gazetteer is one of the three key index files saved in the SAFE data directory and updated when `set_safe_dir()` is run. It includes sampling locations drawn from across a wide range of projects running at SAFE and is intended to hold all locations that are likely to see repeated sampling. Locations included the gazetteer can be used directly as **known locations** in datasets, although data providers can also include **new locations**.
 
-    ```{r}
+    ```{r load_gazetteer}
     gazetteer <- load_gazetteer()
     print(gazetteer)
     ```
@@ -396,7 +396,7 @@ Nearly all SAFE datasets will include observations at spatial locations, and the
 
     By default, the returned `sf` object will only include the location name used in the dataset, the gazetteer name for known sampling sites and an indication of whether the location is new or known, but `gazetteer_info=TRUE` can be used to include the gazetteer attributes for known locations.
 
-    ```{r}
+    ```{r get_locations}
     library(sf)
     beetle_locs <- get_locations(1400562)
     print(beetle_locs)
@@ -408,7 +408,7 @@ Nearly all SAFE datasets will include observations at spatial locations, and the
 	
 3. `add_locations()`: This functions adds location data to an already loaded worksheet. The result is a `safedata` object that is also an `sf` object.
 
-    ```{r}
+    ```{r add_locations}
     beetle_env <- load_safe_data(1400562, 'EnvironVariables')
     beetle_env <- add_locations(beetle_env)
     print(beetle_env)
