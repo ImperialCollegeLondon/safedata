@@ -89,8 +89,8 @@ get_taxon_coverage <- function(){
         stop('Failed to download taxon index')
     }
 	
-	# remove duplicate names
-	taxa$id <- NULL 
+	# This API does not bring in worksheet names (they will clash across datasets)
+	# so replace them with the canonical taxon name
 	taxa$worksheet_name <- taxa$taxon_name
 	
 	taxa <- taxon_index_to_taxon_table(taxa)

@@ -117,8 +117,12 @@ file copies against the MD5 of the published file. You _can_ suppress validation
 (`set_safe_dir('~/my_safe_directory', validate=FALSE)`), but this is not advised: altering the
 contents of a published data file undermines reproducible research.
 
-```{r load_example_dir, echo=FALSE, include=FALSE}
-set_example_dir()
+The rest of this vignette uses an example SAFE data directory that is included within the package.
+This is set up for use using the following command but note that this is a temporary data folder and
+is only used for demonstration purposes.
+
+```{r load_example_dir}
+set_example_safe_dir()
 ```
 
 # Finding data
@@ -374,8 +378,7 @@ There are three functions that can be used to work with the taxa in a dataset:
 
 In addition, the `get_taxon_coverage` function can be used to get a taxon table of all taxa currently referenced in datasets.
 
-```{r get_taxon_coverage, eval=FALSE}
-# TODO FIX THIS
+```{r get_taxon_coverage}
 all_taxa <- get_taxon_coverage()
 str(all_taxa)
 ```
