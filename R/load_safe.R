@@ -75,12 +75,12 @@ load_safe_data <- function(record_id, worksheet){
     #' @return A data frame with the additional \code{safedata} class and
     #'    additional attribute data containing metadata for the data.
     #' @examples
-    #'    set_example_dir()
+    #'    set_example_safe_dir()
     #'    beetle_abund <- load_safe_data(1400562, 'Ant-Psel')
     #'    str(beetle_abund)
     #'    # See also the show_worksheet function for further worksheet metadata
     #'    show_worksheet(beetle_abund)
-	#'    unset_example_dir()
+	#'    unset_example_safe_dir()
     #' @export
     
     # TODO - provide a path argument and then mechanisms to support a standalone file download?
@@ -255,10 +255,10 @@ download_safe_files <- function(record_ids, confirm=TRUE, xlsx_only=TRUE,
     #' @return Invisibly, a vector of paths for successfully downloaded files.
     #' @examples
     #'    \dontrun{
-    #'    set_example_dir()
+    #'    set_example_safe_dir()
     #'    recs <- validate_record_ids(c(3247631, 3266827, 3266821))
     #'    download_safe_files(recs, confirm=FALSE)
-    #'    unset_example_dir()
+    #'    unset_example_safe_dir()
     #'    }
     #' @export
     

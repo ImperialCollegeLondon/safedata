@@ -457,24 +457,24 @@ verbose_message <- function(str, ...){
 }
 
 
-set_example_dir <- function(){
+set_example_safe_dir <- function(){
 	
     #' Functions to use an example data directory for package examples
     #'
     #' The documentation of \code{safedata} includes code examples using a data 
 	#' directory. A zipped example directory is included in the package files
 	#' (data/safedata_example_dir.zip) but package code must not write within the 
-	#' package structure. These functions are used in code examples to unpack
-	#' this example directory into a temporary folder and set it for use in the 
-	#' example code. The function \code{unset_demo_dir()} is then used to restore
-	#' any existing data directory set by the user. The directory should only be 
-	#' created once per session. 
+	#' package structure. The \code{set_example_safe_dir} function is used in code examples 
+	#' to unpack this example directory into a temporary folder and set it for use in 
+	#' the example code. The function \code{unset_demo_dir()} is then used to restore 
+	#' any existing data directory set by the user. The example directory should only 
+	#' be created once per session. 
 	#'
-    #' @seealso \code{\link{set_data_dir}}
+    #' @seealso \code{\link{set_safe_dir}}
     #' @export
 	
 	# record the user data directory if one has been set
-	udir <- try(safedata:::get_data_dir(), silent=TRUE)
+	udir <- try(get_data_dir(), silent=TRUE)
 	
 	if(! inherits(udir, 'try-error')){
 		options(safedata.user.dir = udir)
@@ -486,15 +486,15 @@ set_example_dir <- function(){
 	
 	if(! dir.exists(demo_dir)){
 		example_zip <- system.file('data', 'safedata_example_dir.zip', package='safedata')
-		unzip(example_zip, exdir=tdir)
+		utils::unzip(example_zip, exdir=tdir)
 	}
 	
 	set_safe_dir(demo_dir, update=FALSE, validate=FALSE)
 }
 
-unset_example_dir <- function(){
+unset_example_safe_dir <- function(){
 	
-    #' @describeIn set_example_dir Restores a user data directory after running an code example.
+    #' @describeIn set_example_safe_dir Restores a user data directory after running an code example.
     #' @export
 	
 	# retrieve the user directory and if it isn't null restore it

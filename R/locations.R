@@ -34,9 +34,9 @@ get_locations <- function(obj, gazetteer_info=FALSE){
     #' @seealso \code{\link{add_locations}}, \code{\link{load_gazetteer}}, 
     #'    \code{\link{load_location_aliases}}
     #' @examples
-    #'    set_example_dir()
+    #'    set_example_safe_dir()
     #'    locations <- get_locations(1400562)
-    #'    unset_example_dir()
+    #'    unset_example_safe_dir()
     #' @export
     
     if(inherits(obj, 'safedata')){

@@ -36,9 +36,9 @@ get_taxa <- function(obj){
     #' @return A taxonomy table of classes 'safe_taxa' and 'data.frame'.
     #' @seealso \code{\link{add_taxa}}
     #' @examples
-    #'    set_example_dir()
+    #'    set_example_safe_dir()
     #'    taxa <- get_taxa(1400562)
-    #'    unset_example_dir()
+    #'    unset_example_safe_dir()
     #' @export
     
     if(inherits(obj, 'safedata')){
@@ -259,10 +259,10 @@ add_taxa <- function (obj, taxon_field=NULL, taxon_table=NULL, prefix=NULL, whic
     #' @return A modified \code{safedata} object with added taxonomic columns.
     #' @seealso \code{\link{get_taxa}}
     #' @examples
-    #'    set_example_dir()
+    #'    set_example_safe_dir()
     #'    beetle_morph <- load_safe_data(1400562, 'MorphFunctTraits')
     #'    beetle_morph <- add_taxa(beetle_morph)
-    #'    unset_example_dir()
+    #'    unset_example_safe_dir()
     #' @export
     
     if(! inherits(obj, 'safedata')){
