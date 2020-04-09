@@ -76,7 +76,7 @@ get_taxon_coverage <- function(){
 	#'   in the database taxon index.
     #' @seealso \code{\link{get_taxa}}
     #' @examples
-	#'	   \dontrun{
+	#'	   \donttest{
     #'     all_taxa <- get_taxon_coverage()
 	#'     }
     #' @export

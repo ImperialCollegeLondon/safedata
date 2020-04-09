@@ -185,7 +185,7 @@ fetch_record_metadata <- function(record_set){
     #'    \code{load_record_metadata} returns a list object containing record metadata
     #' @describeIn fetch_record_metadata Download and store JSON metadata for a record
     #' @examples
-    #'    \dontrun{
+    #'    \donttest{
     #'    set_example_safe_dir()
     #'    rec <- validate_record_ids(1400562)
     #'    safedata:::fetch_record_metadata(rec)
