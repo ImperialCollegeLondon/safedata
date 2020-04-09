@@ -485,7 +485,8 @@ set_example_safe_dir <- function(){
 	demo_dir <- file.path(tdir, 'safedata_example_dir')
 	
 	if(! dir.exists(demo_dir)){
-		example_zip <- system.file('data', 'safedata_example_dir.zip', package='safedata')
+		example_zip <- system.file('safedata_example_dir', 'safedata_example_dir.zip', 
+								   package='safedata')
 		utils::unzip(example_zip, exdir=tdir)
 	}
 	
