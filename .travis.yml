@@ -13,6 +13,10 @@ addons:
       - libgeos-dev
       - libgdal-dev
 
+r_packages:
+- Rcpp
+- units
+
 r_binary_packages:
 - ape
 - assertthat
@@ -44,7 +48,6 @@ r_binary_packages:
 - prettyunits
 - progress
 - R6
-- Rcpp
 - readxl
 - rematch
 - remotes
@@ -55,7 +58,6 @@ r_binary_packages:
 - stringr
 - tibble
 - tinytex
-- units
 - utf8
 - vctrs
 - xfun
