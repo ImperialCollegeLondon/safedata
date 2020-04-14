@@ -45,11 +45,11 @@ check record ids and display summary information using the print method.
 }}
 
 \examples{
-   set_example_dir()
+   set_example_safe_dir()
    validate_record_ids(c(3247631, 3266827, 3266821, -1000))
    validate_record_ids(c('https://doi.org/10.5281/zenodo.3247631', 
                            '10.5281/zenodo.3266827', 
                            'https://zenodo.org/record/3266821',
                            'not_this_one/3266821'))
-   unset_example_dir()
+   unset_example_safe_dir()
 }

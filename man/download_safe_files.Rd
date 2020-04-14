@@ -50,10 +50,10 @@ replace them with the versions of record from Zenodo.
 }
 
 \examples{
-   \dontrun{
-   set_example_dir()
+   \donttest{
+   set_example_safe_dir()
    recs <- validate_record_ids(c(3247631, 3266827, 3266821))
    download_safe_files(recs, confirm=FALSE)
-   unset_example_dir()
+   unset_example_safe_dir()
    }
 }

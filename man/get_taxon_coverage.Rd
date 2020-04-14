@@ -21,7 +21,7 @@ is nothing to stop a user defining 'Gallus gallus' as a 'user' taxon with Animal
 as a parent taxon.
 }
 \examples{
-   \dontrun{
+   \donttest{
     all_taxa <- get_taxon_coverage()
     }
 }

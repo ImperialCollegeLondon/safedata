@@ -148,7 +148,7 @@ coordinate information.
 }
 
 \examples{
-   \dontrun{
+   \donttest{
    search_dates('2014-06-12')
    search_dates(as.POSIXct(c('2014-06-12', '2015-06-11')))
    search_dates(c('2014-06-12', '2015-06-11'), match_type = 'contain')

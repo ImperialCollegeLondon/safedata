@@ -11,7 +11,7 @@
 ### devel
 
 * using log directory 'd:/RCompile/CRANguest/R-devel/safedata.Rcheck'
-* using R Under development (unstable) (2020-01-03 r77630)
+* using R Under development (unstable) (2020-01-27 r77730)
 * using platform: x86_64-w64-mingw32 (64-bit)
 
 ## Ubuntu (Travis/Xenial)
@@ -25,7 +25,7 @@
 ### devel
 
 * using log directory ‘/home/travis/build/ImperialCollegeLondon/safedata/safedata.Rcheck’
-* using R Under development (unstable) (2020-01-07 r77633)
+* using R Under development (unstable) (2020-01-28 r77734)
 * using platform: x86_64-pc-linux-gnu (64-bit)
 
 
@@ -38,7 +38,7 @@
 
 # R CMD CHECK results
 
-There were no ERRORs or WARNINGS, `win-builder` returns 1 NOTE in both release and devel:
+There were no ERRORs or WARNINGS and 1 NOTE in both release and devel using --as-cran.
 
     * checking CRAN incoming feasibility ... NOTE
     Maintainer: 'David Orme <d.orme@imperial.ac.uk>'
@@ -49,4 +49,5 @@ There were no ERRORs or WARNINGS, `win-builder` returns 1 NOTE in both release a
       Zenodo (14:5)
 
 Zenodo is spelled correctly.
+
 

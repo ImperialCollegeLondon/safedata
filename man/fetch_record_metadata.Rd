@@ -34,12 +34,12 @@ SAFE data directory for reuse.
 }}
 
 \examples{
-   \dontrun{
-   set_example_dir()
+   \donttest{
+   set_example_safe_dir()
    rec <- validate_record_ids(1400562)
    safedata:::fetch_record_metadata(rec)
    metadata <- safedata:::load_record_metadata(rec)
-   unset_example_dir()
+   unset_example_safe_dir()
    }
 }
 \keyword{internal}
