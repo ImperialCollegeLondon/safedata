@@ -181,8 +181,7 @@ add_locations <- function (obj, location_field=NULL, location_table=NULL, gazett
     
     # Get the location fields and check it
     obj_attr <- attr(obj, 'metadata')
-    fields <- obj_attr$fields[[1]]
-    location_fields <- with(fields, field_name[field_type == "Location"])
+    location_fields <- with(obj_attr$fields, field_name[field_type == "location"])
     
     if(length(location_fields) == 0){
         stop('Data frame does not contain location fields')

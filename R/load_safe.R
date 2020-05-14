@@ -125,12 +125,14 @@ load_safe_data <- function(record_id, worksheet){
         stop('Data worksheet name not one of: ', paste(metadata$dataworksheets$name, collapse=', '))
     }
 
-    # If successful get the worksheet metadata and load the data
-    dwksh <- metadata$dataworksheets[metadata$dataworksheets$name == worksheet, ]
+    # If successful get the worksheet metadata
+    dwksh <- metadata$dataworksheets[[metadata$dataworksheets$name == worksheet]]
+    dwksh$safe_record_set <- record_set
+
     data <- load_safe_worksheet(record_set, worksheet, skip=dwksh$field_name_row - 1, n_max = dwksh$n_data_row)
     
     # Now do field type conversions
-    fields <- dwksh$fields[[1]]
+    fields <- dwksh$fields
     
     if(! all.equal(fields$field_name, names(data))){
         stop('Mismatch between data field names and local metadata')
@@ -180,8 +182,6 @@ load_safe_data <- function(record_id, worksheet){
     # attributes and displaying that information at top is aesthetically nicer.
     
     class(data) <- c('safedata', 'data.frame')
-    dwksh <- as.list(dwksh)
-    dwksh$safe_record_set <- record_set
     attr(data, 'metadata') <- dwksh
     return(data)
 }

@@ -271,7 +271,7 @@ add_taxa <- function (obj, taxon_field=NULL, taxon_table=NULL, prefix=NULL, whic
     
     # Get the taxon field and check it
     obj_attr <- attr(obj, 'metadata')
-    taxa_fields <- obj_attr$taxa_fields[[1]]
+    taxa_fields <- obj_attr$taxa_fields
     
     if(length(taxa_fields) == 0){
         stop('Data frame does not contain taxon fields')

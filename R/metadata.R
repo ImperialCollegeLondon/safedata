@@ -249,8 +249,33 @@ load_record_metadata <- function(record_set){
     
     # load it and return it
     safedir <- get_data_dir()
-    metadata_file <- with(record_set, file.path(safedir, concept, record, sprintf('%i.json', record)))
-    return(jsonlite::fromJSON(metadata_file))
+    metadata_file <- with(record_set, 
+                          file.path(safedir, concept, record, sprintf('%i.json', record)))
+    metadata <- jsonlite::fromJSON(metadata_file)
+    
+    # metadata$dataworksheets has an odd structure - it is loaded from JSON
+    # as a data frame with a row per worksheet but some of the entries are
+    # _lists_, which makes for ugly syntax. 
+    # The code  here converts it all into a list of lists
+    
+    dwkshts <- vector(nrow(metadata$dataworksheets), mode='list')
+    for(idx in seq_along(dwkshts)){
+        # extract the row from the data frame, convert to a list
+        # and then move the nested components up.
+        dwksh <- as.list(metadata$dataworksheets[idx, ])
+        dwksh$taxa_fields <- dwksh$taxa_fields[[1]]
+        dwksh$descriptors <- dwksh$descriptors[[1]]
+        dwksh$fields <- dwksh$fields[[1]]
+        # The field_types in safedata_validator do not have consistent
+        # casing - older versions were picky and so some datasets have
+        # Caps and some don't. This could concievably get tidied up but
+        # fix here: 
+        dwksh$fields$field_type <- tolower(dwksh$fields$field_type)
+        dwkshts[[idx]] <- dwksh
+    }
+    metadata$dataworksheets <- dwkshts
+    
+    return(metadata)
 }
 
 
