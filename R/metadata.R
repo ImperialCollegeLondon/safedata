@@ -238,8 +238,8 @@ load_record_metadata <- function(record_set){
     #' @keywords internal
 
     if((! inherits(record_set, 'safe_record_set')) || 
-       (nrow(record_set) == 1) || 
-       (! any(is.na(record_set)))
+       (! nrow(record_set) == 1) || 
+       (any(is.na(record_set)))
       ){
         stop('Expects a single row safe_record_set object with complete concept and record id.')
     }
