@@ -80,7 +80,7 @@ load_safe_data <- function(record_id, worksheet){
     #'    str(beetle_abund)
     #'    # See also the show_worksheet function for further worksheet metadata
     #'    show_worksheet(beetle_abund)
-	#'    unset_example_safe_dir()
+    #'    unset_example_safe_dir()
     #' @export
     
     # TODO - provide a path argument and then mechanisms to support a standalone file download?
@@ -121,15 +121,17 @@ load_safe_data <- function(record_id, worksheet){
     
     # Now get the metadata and find the target worksheet
     metadata <- load_record_metadata(record_set)
-    if(! worksheet %in% metadata$dataworksheets$name){
-        stop('Data worksheet name not one of: ', paste(metadata$dataworksheets$name, collapse=', '))
+    ws_names <- sapply(metadata$dataworksheet, '[[', 'name')
+    if(! worksheet %in% ws_names){
+        stop('Data worksheet name not one of: ', paste(ws_names, collapse=', '))
     }
 
     # If successful get the worksheet metadata
-    dwksh <- metadata$dataworksheets[[metadata$dataworksheets$name == worksheet]]
+    dwksh <- metadata$dataworksheets[[which(ws_names == worksheet)]]
     dwksh$safe_record_set <- record_set
 
-    data <- load_safe_worksheet(record_set, worksheet, skip=dwksh$field_name_row - 1, n_max = dwksh$n_data_row)
+    data <- load_safe_worksheet(record_set, worksheet, skip=dwksh$field_name_row - 1, 
+                                n_max = dwksh$n_data_row)
     
     # Now do field type conversions
     fields <- dwksh$fields
@@ -305,9 +307,9 @@ download_safe_files <- function(record_ids, confirm=TRUE, xlsx_only=TRUE,
     to_download <- subset(targets, (refresh | (! local_exists)) & available)
     
     size_to_human <- function(size){
-    	return(format(structure(size, class="object_size"), units="auto"))
+        return(format(structure(size, class="object_size"), units="auto"))
     }
-    	
+        
     msg <- sprintf(msg, nrow(targets), length(unique(targets$zenodo_record_id)),
                    nrow(local), size_to_human(sum(local$filesize)),
                    nrow(unavail), size_to_human(sum(unavail$filesize)),
