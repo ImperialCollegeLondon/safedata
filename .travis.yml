@@ -4,7 +4,7 @@ language: R
 r:
   - release
   - devel
-cache: packages
+#cache: packages
 addons:
   apt:
     packages:
@@ -16,6 +16,7 @@ addons:
 r_packages:
 - Rcpp
 - units
+- devtools
 
 r_binary_packages:
 - ape
