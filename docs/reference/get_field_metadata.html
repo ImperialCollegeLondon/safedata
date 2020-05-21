@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Loads data from a SAFE dataset. — load_safe_data • safedata</title>
+<title>Extract the field metadata for a safedata object. — get_field_metadata • safedata</title>
 
 
 <!-- jquery -->
@@ -35,13 +35,13 @@
 
 
 
-<meta property="og:title" content="Loads data from a SAFE dataset. — load_safe_data" />
-<meta property="og:description" content="This function returns a data frame containing the data from a data 
-worksheet in a SAFE dataset. Note that SAFE dataset .xlsx files include
-the other (non-data) worksheets Summary, Taxa, Locations that contain 
-metadata: see  get_taxa, get_locations, 
-add_taxa and add_locations for accessing 
-and using this metadata." />
+<meta property="og:title" content="Extract the field metadata for a safedata object. — get_field_metadata" />
+<meta property="og:description" content="This function returns a data frame containing the field metadata from 
+a safedata object. This is a dataframe with field descriptors as columns
+and a row for each field in the safedata object. The function will add
+blank metadata rows for fields that have been added to the dataset and
+will subset metadata to ensure that the rows of the metadata align with 
+the columns of the safedata object." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -120,105 +120,57 @@ and using this metadata." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Loads data from a SAFE dataset.</h1>
+    <h1>Extract the field metadata for a safedata object.</h1>
     
-    <div class="hidden name"><code>load_safe_data.Rd</code></div>
+    <div class="hidden name"><code>get_field_metadata.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This function returns a data frame containing the data from a data 
-worksheet in a SAFE dataset. Note that SAFE dataset .xlsx files include
-the other (non-data) worksheets Summary, Taxa, Locations that contain 
-metadata: see  <code><a href='get_taxa.html'>get_taxa</a></code>, <code><a href='get_locations.html'>get_locations</a></code>, 
-<code><a href='add_taxa.html'>add_taxa</a></code> and <code><a href='add_locations.html'>add_locations</a></code> for accessing 
-and using this metadata.</p>
+    <p>This function returns a data frame containing the field metadata from 
+a safedata object. This is a dataframe with field descriptors as columns
+and a row for each field in the safedata object. The function will add
+blank metadata rows for fields that have been added to the dataset and
+will subset metadata to ensure that the rows of the metadata align with 
+the columns of the safedata object.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>load_safe_data</span>(<span class='no'>record_id</span>, <span class='no'>worksheet</span>)
-
-<span class='co'># S3 method for safedata</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>object</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for safedata</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>x</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>get_field_metadata</span>(<span class='no'>obj</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>record_id</th>
-      <td><p>A SAFE dataset record id</p></td>
-    </tr>
-    <tr>
-      <th>worksheet</th>
-      <td><p>The name of the worksheet to load</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Further arguments to <code>str</code> and <code>print</code> methods.</p></td>
-    </tr>
-    <tr>
-      <th>x, object</th>
-      <td><p>A <code>safedata</code> object.</p></td>
-    </tr>
-    <tr>
-      <th>n</th>
-      <td><p>The number of rows to show in the <code>print</code> method.</p></td>
+      <th>obj</th>
+      <td><p>A safedata object</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>A data frame with the additional <code>safedata</code> class and
-   additional attribute data containing metadata for the data.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The data worksheet summary metadata is saved in the <code>metadata</code> 
-attribute. However, the <code>print</code> and <code>summary</code> methods suppress
-printing of this attribute to avoid excessive output to the console
-during normal use of the data frame. An extended description of a worksheet
-can be displayed using <code><a href='show_concepts.html'>show_worksheet</a></code> and the
-<code><a href='get_field_metadata.html'>get_field_metadata</a></code> returns the field level metadata. The full
-metadata can, of course, be accessed using <code><a href='https://rdrr.io/r/base/attr.html'>attr(obj, 'metadata')</a></code>.</p>
-<p>Currently, this function only loads data from SAFE formatted <code>.xlsx</code>
-files - data stored in external files is not yet handled.</p>
-    <h2 class="hasAnchor" id="methods-by-generic-"><a class="anchor" href="#methods-by-generic-"></a>Methods (by generic)</h2>
-
-    
-<ul>
-<li><p><code>str</code>: Display structure of a safedata data frame</p></li>
-<li><p><code>print</code>: Print safedata data frame</p></li>
-</ul>
+    <p>Note that this function currently relies on matching field names, so 
+changing the column names of safedata will break it.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>   <span class='fu'><a href='set_example_safe_dir.html'>set_example_safe_dir</a></span>()
-   <span class='no'>beetle_abund</span> <span class='kw'>&lt;-</span> <span class='fu'>load_safe_data</span>(<span class='fl'>1400562</span>, <span class='st'>'Ant-Psel'</span>)
-   <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>beetle_abund</span>)</div><div class='output co'>#&gt; SAFE dataset
-#&gt; Concept: 1400561; Record 1400562; Worksheet: Ant-Psel
-#&gt; 'data.frame':	20 obs. of  3 variables:
-#&gt;  $ Site                : chr  "SAFE_E" "SAFE_D" "SAFE_F" "SAFE_C" ...
-#&gt;  $ ant species richness: num  31 31 27 29 31 21 31 25 32 26 ...
-#&gt;  $ ant abundance       : num  561 713 392 481 1036 ...</div><div class='input'>   <span class='co'># See also the show_worksheet function for further worksheet metadata</span>
-   <span class='fu'><a href='show_concepts.html'>show_worksheet</a></span>(<span class='no'>beetle_abund</span>)</div><div class='output co'>#&gt; Record ID: 1400562
-#&gt; Worksheet name: Ant-Psel
-#&gt; Number of data rows: 20
-#&gt; Number of data fields: 3
-#&gt; Description:
-#&gt; Ant-Pselaphine data
-#&gt; 
-#&gt; Fields:
-#&gt;   field_name           field_type description                    
-#&gt; 1 Site                 location   Site where sample was collected
-#&gt; 2 ant species richness numeric    Number of ant species in sample
-#&gt; 3 ant abundance        abundance  Total number of ants in sample </div><div class='input'>   <span class='fu'><a href='set_example_safe_dir.html'>unset_example_safe_dir</a></span>()</div></pre>
+   <span class='no'>beetle_abund</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='load_safe_data.html'>load_safe_data</a></span>(<span class='fl'>1400562</span>, <span class='st'>'Ant-Psel'</span>)
+   <span class='fu'>get_field_metadata</span>(<span class='no'>beetle_abund</span>)</div><div class='output co'>#&gt;   field_type interaction_name                     description interaction_field
+#&gt; 1   location               Na Site where sample was collected                NA
+#&gt; 2    numeric             &lt;NA&gt; Number of ant species in sample                NA
+#&gt; 3  abundance             &lt;NA&gt;  Total number of ants in sample                NA
+#&gt;   col_idx taxon_name levels taxon_field units           field_name      method
+#&gt; 1       1       &lt;NA&gt;     NA          NA  &lt;NA&gt;                 Site        &lt;NA&gt;
+#&gt; 2       2       &lt;NA&gt;     NA          NA     # ant species richness Winkler bag
+#&gt; 3       3       Ants     NA          NA     #        ant abundance Winkler bag
+#&gt;       range
+#&gt; 1      NULL
+#&gt; 2    21, 34
+#&gt; 3 272, 1889</div><div class='input'>   <span class='fu'><a href='set_example_safe_dir.html'>unset_example_safe_dir</a></span>()</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
       <li><a href="#details">Details</a></li>
-      <li><a href="#methods-by-generic-">Methods (by generic)</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
 

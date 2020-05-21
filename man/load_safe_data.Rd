@@ -36,11 +36,13 @@ metadata: see  \code{\link{get_taxa}}, \code{\link{get_locations}},
 and using this metadata.
 }
 \details{
-In particular, the large amount of data worksheet summary metadata is
-not attached as attributes to the data frame returned by this function.
-This is largely to avoid excessive output to the console during normal use 
-of the data frame: an extended description of a worksheet can be displayed
-using \code{\link{show_worksheet}}.
+The data worksheet summary metadata is saved in the \code{metadata} 
+attribute. However, the \code{print} and \code{summary} methods suppress
+printing of this attribute to avoid excessive output to the console
+during normal use of the data frame. An extended description of a worksheet
+can be displayed using \code{\link{show_worksheet}} and the
+\code{\link{get_field_metadata}} returns the field level metadata. The full
+metadata can, of course, be accessed using \code{attr(obj, 'metadata')}.
 
 Currently, this function only loads data from SAFE formatted \code{.xlsx}
 files - data stored in external files is not yet handled.
