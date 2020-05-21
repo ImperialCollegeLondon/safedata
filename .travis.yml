@@ -1,7 +1,7 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
 language: R
-dist: bionic
+dist: xenial
 r:
   - release
   - devel
@@ -18,9 +18,7 @@ r_packages:
 - Rcpp
 - units
 - devtools
-
-r_binary_packages:
-- ape
+- ape # from here down used to use r_binary_packages:
 - assertthat
 - backports
 - base64enc
