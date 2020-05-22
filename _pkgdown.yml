@@ -32,8 +32,6 @@ reference:
   - add_taxa
   - get_locations
   - add_locations
-  - get_field_metadata
-  - get_field_taxa
 - title: Internal functions
   desc: The following internal functions are not included in the package namespace but are documented here briefly.
   contents:
@@ -51,5 +49,5 @@ reference:
   - safe_api_search
   - validate_query_param
   - taxon_index_to_taxon_table
-  - parse_factor_metadata
+
 
