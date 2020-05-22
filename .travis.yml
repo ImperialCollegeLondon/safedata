@@ -2,10 +2,17 @@
 
 language: R
 dist: xenial
-r:
-  - release
-  - devel
-#cache: packages
+cache: packages
+
+matrix:
+  include:
+  - r: release
+    os: linux
+  - r: devel
+    os: linux
+  - r: release
+    os: osx
+
 addons:
   apt:
     packages:
@@ -18,7 +25,7 @@ r_packages:
 - Rcpp
 - units
 - devtools
-- ape # from here down used to use r_binary_packages:
+- ape # from here down used to use r_binary_packages but the PPA that supplied those is temporarily down
 - assertthat
 - backports
 - base64enc
