@@ -237,9 +237,9 @@ load_record_metadata <- function(record_set){
     #' @describeIn fetch_record_metadata Load JSON metadata for a record
     #' @keywords internal
 
-    if((! inherits(record_set, 'safe_record_set')) || 
-       (! nrow(record_set) == 1) || 
-       (any(is.na(record_set)))
+    if((! inherits(record_set, 'safe_record_set')) && 
+       (nrow(record_set) == 1) && 
+       (! any(is.na(record_set)))
       ){
         stop('Expects a single row safe_record_set object with complete concept and record id.')
     }
@@ -249,33 +249,8 @@ load_record_metadata <- function(record_set){
     
     # load it and return it
     safedir <- get_data_dir()
-    metadata_file <- with(record_set, 
-                          file.path(safedir, concept, record, sprintf('%i.json', record)))
-    metadata <- jsonlite::fromJSON(metadata_file)
-    
-    # metadata$dataworksheets has an odd structure - it is loaded from JSON
-    # as a data frame with a row per worksheet but some of the entries are
-    # _lists_, which makes for ugly syntax. 
-    # The code  here converts it all into a list of lists
-    
-    dwkshts <- vector(nrow(metadata$dataworksheets), mode='list')
-    for(idx in seq_along(dwkshts)){
-        # extract the row from the data frame, convert to a list
-        # and then move the nested components up.
-        dwksh <- as.list(metadata$dataworksheets[idx, ])
-        dwksh$taxa_fields <- dwksh$taxa_fields[[1]]
-        dwksh$descriptors <- dwksh$descriptors[[1]]
-        dwksh$fields <- dwksh$fields[[1]]
-        # The field_types in safedata_validator do not have consistent
-        # casing - older versions were picky and so some datasets have
-        # Caps and some don't. This could concievably get tidied up but
-        # fix here: 
-        dwksh$fields$field_type <- tolower(dwksh$fields$field_type)
-        dwkshts[[idx]] <- dwksh
-    }
-    metadata$dataworksheets <- dwkshts
-    
-    return(metadata)
+    metadata_file <- with(record_set, file.path(safedir, concept, record, sprintf('%i.json', record)))
+    return(jsonlite::fromJSON(metadata_file))
 }
 
 
@@ -401,9 +376,9 @@ show_record <- function(obj){
     if(is.na(record_set$record)){
         warning('Concept ID provided: showing available versions')
         show_concepts(record_set)
-        return(invisible())
+        return(invisible())        
     }
-    
+            
     # Get the record metadata and a single row for the record
     metadata <- load_record_metadata(record_set)
     
@@ -441,23 +416,18 @@ show_record <- function(obj){
         cat(sprintf('Locations: %i locations reported\n', nrow(locs)))
     }
     
-    # Data worksheets - extract components from lists
+    # Data worksheets
     dwksh <- metadata$dataworksheets
-    dwname <- sapply(dwksh, '[[', 'name')
-    dwmaxcol <- sapply(dwksh, '[[', 'max_col')
-    dwnrw <- sapply(dwksh, '[[', 'n_data_row')
-    dwdesc <- sapply(dwksh, '[[', 'description')
-
-    nm_nch <- max(nchar(dwname))
-    cl_nch <- max(ceiling(log10(dwmaxcol)), 4)
-    rw_nch <- max(ceiling(log10(dwnrw)), 4)
+    nm_nch <- max(nchar(dwksh$name))
+    cl_nch <- max(ceiling(log10(dwksh$max_col)), 4)
+    rw_nch <- max(ceiling(log10(dwksh$n_data_row)), 4)
 
     cat('\nData worksheets:\n')
     cat(sprintf('%*s %*s %*s %s', nm_nch, 'name', cl_nch, 'ncol', 
                 rw_nch, 'nrow', 'description'), sep='\n')
     
-    cat(sprintf('%*s %*i %*i %s', nm_nch, dwname, cl_nch, dwmaxcol, 
-                rw_nch, dwnrw, dwdesc), sep='\n')
+    cat(with(dwksh, sprintf('%*s %*i %*i %s', nm_nch, name, cl_nch, max_col, 
+                            rw_nch, n_data_row, description)), sep='\n')
     cat('\n')
     return(invisible(metadata))
 }
@@ -494,14 +464,13 @@ show_worksheet <- function(obj, worksheet=NULL, extended_fields=FALSE){
         
     # Find the worksheet
     dwksh <- metadata$dataworksheets
-	ws_names <- sapply(dwksh, '[[', 'name')
-    idx <- which(ws_names == worksheet)
+    idx <- which(dwksh$name == worksheet)
     if(! length(idx)){
         stop('Data worksheet not found. Worksheets available are: ', 
-             paste(ws_names, collapse=','))
+             paste(dwksh$name, collapse=','))
     }
     
-    dwksh <- dwksh[[idx]]
+    dwksh <- dwksh[idx,]
     
     # Print out a summary
     cat(sprintf('Record ID: %i\n', metadata$zenodo_record_id))
@@ -521,7 +490,7 @@ show_worksheet <- function(obj, worksheet=NULL, extended_fields=FALSE){
     }
 
     cat('\nFields:\n')
-    fields <- dwksh$fields
+    fields <- dwksh['fields'][[1]][[1]]
 
     if(extended_fields){
         # print a long list of fields and non NA descriptor metadata

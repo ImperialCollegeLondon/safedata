@@ -58,13 +58,11 @@ load_safe_data <- function(record_id, worksheet){
     #' \code{\link{add_taxa}} and \code{\link{add_locations}} for accessing 
     #' and using this metadata.
     #' 
-    #' The data worksheet summary metadata is saved in the \code{metadata} 
-    #' attribute. However, the \code{print} and \code{summary} methods suppress
-    #' printing of this attribute to avoid excessive output to the console
-    #' during normal use of the data frame. An extended description of a worksheet
-    #' can be displayed using \code{\link{show_worksheet}} and the
-    #' \code{\link{get_field_metadata}} returns the field level metadata. The full
-    #' metadata can, of course, be accessed using \code{attr(obj, 'metadata')}.
+    #' In particular, the large amount of data worksheet summary metadata is
+    #' not attached as attributes to the data frame returned by this function.
+    #' This is largely to avoid excessive output to the console during normal use 
+    #' of the data frame: an extended description of a worksheet can be displayed
+    #' using \code{\link{show_worksheet}}.
     #'
     #' Currently, this function only loads data from SAFE formatted \code{.xlsx}
     #' files - data stored in external files is not yet handled.
@@ -82,7 +80,7 @@ load_safe_data <- function(record_id, worksheet){
     #'    str(beetle_abund)
     #'    # See also the show_worksheet function for further worksheet metadata
     #'    show_worksheet(beetle_abund)
-    #'    unset_example_safe_dir()
+	#'    unset_example_safe_dir()
     #' @export
     
     # TODO - provide a path argument and then mechanisms to support a standalone file download?
@@ -123,20 +121,16 @@ load_safe_data <- function(record_id, worksheet){
     
     # Now get the metadata and find the target worksheet
     metadata <- load_record_metadata(record_set)
-    ws_names <- sapply(metadata$dataworksheet, '[[', 'name')
-    if(! worksheet %in% ws_names){
-        stop('Data worksheet name not one of: ', paste(ws_names, collapse=', '))
+    if(! worksheet %in% metadata$dataworksheets$name){
+        stop('Data worksheet name not one of: ', paste(metadata$dataworksheets$name, collapse=', '))
     }
 
-    # If successful get the worksheet metadata
-    dwksh <- metadata$dataworksheets[[which(ws_names == worksheet)]]
-    dwksh$safe_record_set <- record_set
-
-    data <- load_safe_worksheet(record_set, worksheet, skip=dwksh$field_name_row - 1, 
-                                n_max = dwksh$n_data_row)
+    # If successful get the worksheet metadata and load the data
+    dwksh <- metadata$dataworksheets[metadata$dataworksheets$name == worksheet, ]
+    data <- load_safe_worksheet(record_set, worksheet, skip=dwksh$field_name_row - 1, n_max = dwksh$n_data_row)
     
     # Now do field type conversions
-    fields <- dwksh$fields
+    fields <- dwksh$fields[[1]]
     
     if(! all.equal(fields$field_name, names(data))){
         stop('Mismatch between data field names and local metadata')
@@ -186,6 +180,8 @@ load_safe_data <- function(record_id, worksheet){
     # attributes and displaying that information at top is aesthetically nicer.
     
     class(data) <- c('safedata', 'data.frame')
+    dwksh <- as.list(dwksh)
+    dwksh$safe_record_set <- record_set
     attr(data, 'metadata') <- dwksh
     return(data)
 }
@@ -309,9 +305,9 @@ download_safe_files <- function(record_ids, confirm=TRUE, xlsx_only=TRUE,
     to_download <- subset(targets, (refresh | (! local_exists)) & available)
     
     size_to_human <- function(size){
-        return(format(structure(size, class="object_size"), units="auto"))
+    	return(format(structure(size, class="object_size"), units="auto"))
     }
-        
+    	
     msg <- sprintf(msg, nrow(targets), length(unique(targets$zenodo_record_id)),
                    nrow(local), size_to_human(sum(local$filesize)),
                    nrow(unavail), size_to_human(sum(unavail$filesize)),
@@ -418,97 +414,3 @@ download_safe_files <- function(record_ids, confirm=TRUE, xlsx_only=TRUE,
     return(invisible(downloaded))
 }
 
-get_field_metadata <- function(obj){
-    
-    
-    #' Extract the field metadata for a safedata object.
-    #'
-    #' This function returns a data frame containing the field metadata from 
-    #' a safedata object. This is a dataframe with field descriptors as columns
-    #' and a row for each field in the safedata object. The function will add
-    #' blank metadata rows for fields that have been added to the dataset and
-    #' will subset metadata to ensure that the rows of the metadata align with 
-    #' the columns of the safedata object.
-    #' 
-    #' Note that this function currently relies on matching field names, so 
-    #' changing the column names of safedata will break it.
-    #'
-    #' @param obj A safedata object
-    #' @examples
-    #'    set_example_safe_dir()
-    #'    beetle_abund <- load_safe_data(1400562, 'Ant-Psel')
-    #'    get_field_metadata(beetle_abund)
-    #'    unset_example_safe_dir()
-    #' @export
-    
-    if(! inherits(obj, 'safedata')){
-        stop("add_taxa requires an object of class 'safedata'")
-    }
-        
-    metadata_fields <- attr(obj, 'metadata')$fields
-    metadata_field_names <- metadata_fields$field_name
-    obj_field_names <- names(obj)
-    
-    missing_fields <- setdiff(obj_field_names, metadata_field_names)
-    
-    if(length(missing_fields) > 0){
-        missing_rows <- fields[0,]
-        missing_rows[seq_along(missing_fields),] <- NA
-        missing_rows$field_name <- missing_fields
-        metadata_fields <- rbind(metadata_fields, missing_rows)
-    }
-    
-    return(metadata_fields[match(obj_field_names, metadata_fields$field_name),])
-}
-
-parse_factor_metadata <- function(x){
-    
-    #' Parses the factor metadata format into a dataframe
-    #'
-    #' @param x A string containing factor information in the metadata format.
-    #' @return A data frame of factor levels and description (if any)
-    #' @keywords internal
-    
-    x <- strsplit(x, ';')[[1]]
-    x <- strsplit(x, ':')
-    level <- sapply(x, '[', 1)
-    desc <- sapply(x, '[', 2)
-    
-    return(data.frame(level=level, desc=desc))
-}
-
-
-# "[.safedata" <- function(x, i, j, ...){
-#
-#   # An extraction method for the safedata class. The main function of this
-#   # is to drop the fields metadata when fields are dropped to keep fields
-#   # metadata and fields aligned.
-#
-# This code is currently parked - the approach at the moment is to keep all
-# of the field metadata within the object and then use field names to restrict
-# which ones are displayed. This is vulnerable to names being changed, so a 
-# separate temporary hash could be used to match field ID to field metadata 
-# (kinda like a secret name) but that seems over the top.
-#
-#   # TODO - handle drop
-#
-#   # Let the methods dispatch for the other classes handle error
-#   # trapping in the arguments rather than reimplement it here.
-#   names_x <- names(x)
-#   metadata <- attr(x, 'metadata')
-#   x <- NextMethod(x)
-#
-#   # Now reduce the fields metadata to remove rows of metadata$fields
-#   # corresponding to dropped columns, if any.
-#   has.j <- ! missing(j)
-#   if(has.j){
-#       if(is.character(j)){
-#           j <- match(j, names_x)
-#       }
-#       metadata$fields <- metadata$fields[j, ]
-#   }
-#   attr(x, 'metadata') <- metadata
-#
-#   return(x)
-# }
-#
