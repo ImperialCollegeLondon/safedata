@@ -5,13 +5,13 @@
 ### release
 
 * using log directory 'd:/RCompile/CRANguest/R-release/safedata.Rcheck'
-* using R version 3.6.2 (2019-12-12)
+* using R version 3.6.3 (2020-02-29)
 * using platform: x86_64-w64-mingw32 (64-bit)
 
 ### devel
 
 * using log directory 'd:/RCompile/CRANguest/R-devel/safedata.Rcheck'
-* using R Under development (unstable) (2020-01-27 r77730)
+* using R version 4.0.0 alpha (2020-03-26 r78078)
 * using platform: x86_64-w64-mingw32 (64-bit)
 
 ## Ubuntu (Travis/Xenial)
@@ -24,10 +24,7 @@
 
 ### devel
 
-* using log directory ‘/home/travis/build/ImperialCollegeLondon/safedata/safedata.Rcheck’
-* using R Under development (unstable) (2020-01-28 r77734)
-* using platform: x86_64-pc-linux-gnu (64-bit)
-
+* installation problems with R in devel: knitr and units
 
 ## Mac OS 
 
