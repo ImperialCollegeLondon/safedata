@@ -55,64 +55,64 @@ get_taxa <- function(obj){
 
     # Get the record metadata containing the taxon index
     taxa <- load_record_metadata(record_set)$taxa
-	taxon_table <- taxon_index_to_taxon_table(taxa)
-	
+    taxon_table <- taxon_index_to_taxon_table(taxa)
+    
     return(taxon_table)
 }
 
 get_taxon_coverage <- function(){
-	
+    
     #' Retrieve the current taxon index 
     #'
     #' This function downloads the current taxon index across published  datasets
-	#' and returns a formatted taxon table showing the taxonomic hierarchy of each
-	#' taxon. It requires an internet connection.
-	#'
-	#' Note that the use of 'user' defined taxa can lead to some unusual entries. There
-	#' is nothing to stop a user defining 'Gallus gallus' as a 'user' taxon with Animalia
-	#' as a parent taxon. 
-	#'
+    #' and returns a formatted taxon table showing the taxonomic hierarchy of each
+    #' taxon. It requires an internet connection.
+    #'
+    #' Note that the use of 'user' defined taxa can lead to some unusual entries. There
+    #' is nothing to stop a user defining 'Gallus gallus' as a 'user' taxon with Animalia
+    #' as a parent taxon. 
+    #'
     #' @return A data frame containing higher taxon level information for each taxon
-	#'   in the database taxon index.
+    #'   in the database taxon index.
     #' @seealso \code{\link{get_taxa}}
     #' @examples
-	#'	   \donttest{
+    #'     \donttest{
     #'     all_taxa <- get_taxon_coverage()
-	#'     }
+    #'     }
     #' @export
-	
-	url <- getOption('safedata.url')
+    
+    url <- getOption('safedata.url')
     api <- paste0(url, '/api/taxa')
     taxa <- try(jsonlite::fromJSON(api), silent=TRUE)
               
     if(inherits(taxa, 'try-error')){
         stop('Failed to download taxon index')
     }
-	
-	# This API does not bring in worksheet names (they will clash across datasets)
-	# so replace them with the canonical taxon name
-	taxa$worksheet_name <- taxa$taxon_name
-	
-	taxa <- taxon_index_to_taxon_table(taxa)
+    
+    # This API does not bring in worksheet names (they will clash across datasets)
+    # so replace them with the canonical taxon name
+    taxa$worksheet_name <- taxa$taxon_name
+    
+    taxa <- taxon_index_to_taxon_table(taxa)
 
 }
 
 
 taxon_index_to_taxon_table <- function(taxa){
-	
+    
     #' Add taxon hierarchy to taxon metadata
     #'
     #' Taxon data is stored as a set of taxa with taxon ids and parent taxon
-	#' ids. For any given dataset, the set should include all parent taxa required.
-	#' This internal function takes such list of taxon data and adds columns showing
-	#' the taxonomic hierarchy for each row. It is used by \code{\link{get_taxa}} and
-	#' \code{\link{get_taxon_coverage}}.
-	#'
+    #' ids. For any given dataset, the set should include all parent taxa required.
+    #' This internal function takes such list of taxon data and adds columns showing
+    #' the taxonomic hierarchy for each row. It is used by \code{\link{get_taxa}} and
+    #' \code{\link{get_taxon_coverage}}.
+    #'
     #' @param taxa An existing object of class \code{safedata}
     #' @return A data frame adding higher taxon level information for each taxon
     #' @seealso \code{\link{get_taxa}}
     #' @keywords internal
-	
+    
     if(length(taxa) == 0){
         return(NULL)
     }
@@ -125,8 +125,8 @@ taxon_index_to_taxon_table <- function(taxa){
                               worksheet_taxa,
                               c("kingdom", "phylum", "class", "order", 
                                 "family", "genus", "species", "subspecies", 
-								"variety", "form",  "taxon_name", "taxon_level",
-								"gbif_status")))
+                                "variety", "form",  "taxon_name", "taxon_level",
+                                "gbif_status")))
         
     # Identify the root - this is the set of taxa that have NA as parent id, which
     # should all be kingdoms or incertae_sedis
@@ -188,7 +188,9 @@ taxon_index_to_taxon_table <- function(taxa){
                 }
             }
             
+            # insert the names but drop user names for intermediate taxonomic ranks
             hierarchy <- c(rev(names(stack)), rep(NA, 10 - length(stack)))
+            if(sts == 'user') hierarchy[length(stack)] <- NA
             taxon_table[current_wn, ] <- c(hierarchy, txn, rnk, sts)
         }
         
@@ -222,9 +224,9 @@ taxon_index_to_taxon_table <- function(taxa){
 
     taxon_table <- as.data.frame(taxon_table, stringsAsFactors=FALSE)
     class(taxon_table) <- c('safe_taxa', 'data.frame')
-	
-	return(taxon_table)
-	
+    
+    return(taxon_table)
+    
 }
 
 
@@ -367,66 +369,66 @@ get_phylogeny <- function(record){
         return(NULL)
     }
 
-	# Need to generate an edge matrix and node labels. The phlyo node numbering
-	# uses 1-N for the tips and (N+1):(N+n_internal) for the internal nodes, with
-	# the numbering of internal nodes showing a nested structure (so N + 1 is the 
-	# root). The number of tips is not known a priori (a taxon with a worksheet 
-	# name is not necessarily a tip), so assign a correctly nested node numbering
-	# and then renumber afterwards
-	
-	external <- logical(nrow(taxa))
-	edge_matrix <- matrix(0, ncol=2, nrow=nrow(taxa) - 1)
-	node_labels <- character(nrow(taxa))
+    # Need to generate an edge matrix and node labels. The phlyo node numbering
+    # uses 1-N for the tips and (N+1):(N+n_internal) for the internal nodes, with
+    # the numbering of internal nodes showing a nested structure (so N + 1 is the 
+    # root). The number of tips is not known a priori (a taxon with a worksheet 
+    # name is not necessarily a tip), so assign a correctly nested node numbering
+    # and then renumber afterwards
+    
+    external <- logical(nrow(taxa))
+    edge_matrix <- matrix(0, ncol=2, nrow=nrow(taxa) - 1)
+    node_labels <- character(nrow(taxa))
 
-	# This function autoincrements the index, guaranteeing that edges will
-	# always have a smaller number in the parent node and hence providing an
-	# ordering that can be used for renumbering to the ape structue:
-	# 	1-N are the tips and (N+1):(N+n_internal) are the nodes
-	node_index <- 0
-	node_id <- function() {node_index <<- node_index + 1; return(node_index)}
-	edge_index <- 0
-	edge_id <- function() {edge_index <<- edge_index + 1; return(edge_index)}
+    # This function autoincrements the index, guaranteeing that edges will
+    # always have a smaller number in the parent node and hence providing an
+    # ordering that can be used for renumbering to the ape structue:
+    #   1-N are the tips and (N+1):(N+n_internal) are the nodes
+    node_index <- 0
+    node_id <- function() {node_index <<- node_index + 1; return(node_index)}
+    edge_index <- 0
+    edge_id <- function() {edge_index <<- edge_index + 1; return(edge_index)}
 
-	# make a slot to store node id in the taxon table, so it can be updated
-	# within the stack
-	taxa$node_id <- 0
-	
+    # make a slot to store node id in the taxon table, so it can be updated
+    # within the stack
+    taxa$node_id <- 0
+    
     # See get_taxa for notes on stack code   
     is_root <- is.na(taxa$gbif_parent_id)
     root <- taxa[is_root,]
     taxa <- taxa[! is_root,]
     taxa <- split(as.data.frame(taxa), f=taxa$gbif_parent_id)
     stack <- list(list(top=root[1,], up_next=root[-1,]))
-	
-	# Allocate the first node id and node_label
-	root_node_id <- node_id()
-	stack[[1]]$top$node_id <- root_node_id
+    
+    # Allocate the first node id and node_label
+    root_node_id <- node_id()
+    stack[[1]]$top$node_id <- root_node_id
     node_labels[root_node_id] <- stack[[1]]$top$taxon_name
 
     while(length(stack)){
         
         current <- stack[[1]]$top
         descendants <- taxa[[as.character(current$gbif_id)]]
-		        
+                
         if(! is.null(descendants)){
-			
-			# fill in the edge matrix, allocating node_ids and setting taxon labels			
-			for(idx in seq(nrow(descendants))){
-				this_node <- node_id()
-				node_labels[this_node] <- descendants[idx,]$taxon_name
-				descendants[idx,]$node_id <- this_node
-				edge_matrix[edge_id(), ] <- c(current$node_id, this_node)
-			}
-			
-			# and then move descendants on to stack
+            
+            # fill in the edge matrix, allocating node_ids and setting taxon labels         
+            for(idx in seq(nrow(descendants))){
+                this_node <- node_id()
+                node_labels[this_node] <- descendants[idx,]$taxon_name
+                descendants[idx,]$node_id <- this_node
+                edge_matrix[edge_id(), ] <- c(current$node_id, this_node)
+            }
+            
+            # and then move descendants on to stack
             descendants <- list(list(top=descendants[1,], up_next=descendants[-1,]))
             names(descendants) <- descendants[[1]]$top$taxon_name
             stack <- c(descendants , stack)
             
         } else {
-			# this is a tip, so set external and then work back down
-			external[current$node_id] <- TRUE
-			
+            # this is a tip, so set external and then work back down
+            external[current$node_id] <- TRUE
+            
             while(length(stack)){
                 up_next <- stack[[1]]$up_next
                 if(nrow(up_next)){
@@ -442,25 +444,25 @@ get_phylogeny <- function(record){
             }
         } 
     }
-	
-	# Now need to renumber the nodes edge matrix: 1-N are the tips and (N+1):
-	n_tips <- sum(external)
-	n_internal <- sum(! external)
-	
-	# mapping to ape node numbers
-	node_mapping <- numeric(length(node_labels))
-	node_mapping[external] <- 1:n_tips
-	node_mapping[! external] <- (n_tips + 1):(n_tips + n_internal)	
-	ape_edge_matrix <- cbind(node_mapping[edge_matrix[,1]], node_mapping[edge_matrix[,2]])
-	
-	ret <- list(edge=ape_edge_matrix,
-				Nnode=n_internal, 
-				edge.length = rep(1, nrow(ape_edge_matrix)),
-				tip.label=node_labels[external],
-				node.label=node_labels[!external])
-	
-	class(ret) <- 'phylo'
-	
+    
+    # Now need to renumber the nodes edge matrix: 1-N are the tips and (N+1):
+    n_tips <- sum(external)
+    n_internal <- sum(! external)
+    
+    # mapping to ape node numbers
+    node_mapping <- numeric(length(node_labels))
+    node_mapping[external] <- 1:n_tips
+    node_mapping[! external] <- (n_tips + 1):(n_tips + n_internal)  
+    ape_edge_matrix <- cbind(node_mapping[edge_matrix[,1]], node_mapping[edge_matrix[,2]])
+    
+    ret <- list(edge=ape_edge_matrix,
+                Nnode=n_internal, 
+                edge.length = rep(1, nrow(ape_edge_matrix)),
+                tip.label=node_labels[external],
+                node.label=node_labels[!external])
+    
+    class(ret) <- 'phylo'
+    
     return(ret)
     
 }
