@@ -5,36 +5,39 @@
 ### release
 
 * using log directory 'd:/RCompile/CRANguest/R-release/safedata.Rcheck'
-* using R version 3.6.2 (2019-12-12)
+* using R version 4.0.0 (2020-04-24)
 * using platform: x86_64-w64-mingw32 (64-bit)
 
 ### devel
 
 * using log directory 'd:/RCompile/CRANguest/R-devel/safedata.Rcheck'
-* using R Under development (unstable) (2020-01-27 r77730)
+* using R Under development (unstable) (2020-05-22 r78545)
 * using platform: x86_64-w64-mingw32 (64-bit)
 
 ## Ubuntu (Travis/Xenial)
 
 ### release
 
-* using log directory ‘/home/travis/build/ImperialCollegeLondon/safedata/safedata.Rcheck’
-* using R version 3.6.2 (2017-01-27)
-* using platform: x86_64-pc-linux-gnu (64-bit)
+$ Rscript -e 'sessionInfo()'
+R version 4.0.0 (2020-04-24)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Ubuntu 16.04.6 LTS
 
 ### devel
 
-* using log directory ‘/home/travis/build/ImperialCollegeLondon/safedata/safedata.Rcheck’
-* using R Under development (unstable) (2020-01-28 r77734)
-* using platform: x86_64-pc-linux-gnu (64-bit)
+$ Rscript -e 'sessionInfo()'
+R Under development (unstable) (2020-05-26 r78575)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Ubuntu 16.04.6 LTS
 
-
-## Mac OS 
+## Mac OS (Travis)
 
 ### release
 
-* using R version 3.6.2 (2019-12-12)
-* using platform: x86_64-apple-darwin15.6.0 (64-bit)
+$ Rscript -e 'sessionInfo()'
+R version 4.0.0 (2020-04-24)
+Platform: x86_64-apple-darwin17.0 (64-bit)
+Running under: macOS High Sierra 10.13.6
 
 # R CMD CHECK results
 

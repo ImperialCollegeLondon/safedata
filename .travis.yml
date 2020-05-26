@@ -1,10 +1,18 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
 language: R
-r:
-  - release
-  - devel
+dist: xenial
 cache: packages
+
+matrix:
+  include:
+  - r: release
+    os: linux
+  - r: devel
+    os: linux
+  - r: release
+    os: osx
+
 addons:
   apt:
     packages:
@@ -16,9 +24,8 @@ addons:
 r_packages:
 - Rcpp
 - units
-
-r_binary_packages:
-- ape
+- devtools
+- ape # from here down used to use r_binary_packages but the PPA that supplied those is temporarily down
 - assertthat
 - backports
 - base64enc
@@ -63,3 +70,4 @@ r_binary_packages:
 - xfun
 - yaml
 - zeallot
+
