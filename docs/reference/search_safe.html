@@ -291,7 +291,7 @@ coordinate information.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>   <span class='co'># \donttest{</span>
-   <span class='fu'>search_dates</span>(<span class='st'>'2014-06-12'</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 52 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE</span></div><div class='output co'>#&gt; Set includes 22 concept ids and 30 record ids: 
+   <span class='fu'>search_dates</span>(<span class='st'>'2014-06-12'</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 52 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: 3492126,3490564,3698297,3697796,3490675,3402746,3485121,3476358,3402748,3490687,3833856,3402752,3492153,3476390,3492148,3490613,3490488,3492064,3366104,3697804,3492009,3491956</span></div><div class='output co'>#&gt; Set includes 22 concept ids and 30 record ids: 
 #&gt;  - 19 open and most recent (*)
 #&gt;  - 8 open and outdated (o)
 #&gt;  - 3 under embargo or restricted (x)
@@ -326,7 +326,7 @@ coordinate information.</p>
 #&gt; 27 3266770 3266771         *
 #&gt; 28 3266826 3266827         *
 #&gt; 29 3342494 3342495         *
-#&gt; 30 3354067 3354068         *</div><div class='input'>   <span class='fu'>search_dates</span>(<span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'2014-06-12'</span>, <span class='st'>'2015-06-11'</span>)))</div><div class='output co'>#&gt; <span class='message'>Search returned 69 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE</span></div><div class='output co'>#&gt; Set includes 34 concept ids and 45 record ids: 
+#&gt; 30 3354067 3354068         *</div><div class='input'>   <span class='fu'>search_dates</span>(<span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'2014-06-12'</span>, <span class='st'>'2015-06-11'</span>)))</div><div class='output co'>#&gt; <span class='message'>Search returned 69 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: 3492126,3490564,3698297,3490675,3402748,3402752,3476390,3492148,3698115,3490613,3490488,3492064,3492009,3491956,3476542,3697796,3402746,3485121,3476358,3490687,3833856,3492153,3366104,3697804</span></div><div class='output co'>#&gt; Set includes 34 concept ids and 45 record ids: 
 #&gt;  - 28 open and most recent (*)
 #&gt;  - 10 open and outdated (o)
 #&gt;  - 7 under embargo or restricted (x)
@@ -386,7 +386,7 @@ coordinate information.</p>
 #&gt; 2 3081058 3247699         *
 #&gt; 3 ------- 3081059         o
 #&gt; 4 3247493 3247494         x
-#&gt; 5 3265703 3265704         *</div><div class='input'>   <span class='fu'>search_fields</span>(<span class='kw'>field_text</span> <span class='kw'>=</span> <span class='st'>'temperature'</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 10 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE</span></div><div class='output co'>#&gt; Set includes 6 concept ids and 7 record ids: 
+#&gt; 5 3265703 3265704         *</div><div class='input'>   <span class='fu'>search_fields</span>(<span class='kw'>field_text</span> <span class='kw'>=</span> <span class='st'>'temperature'</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 10 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: 3475408,3479171,3698115</span></div><div class='output co'>#&gt; Set includes 6 concept ids and 7 record ids: 
 #&gt;  - 4 open and most recent (*)
 #&gt;  - 0 open and outdated (o)
 #&gt;  - 3 under embargo or restricted (x)
@@ -398,7 +398,7 @@ coordinate information.</p>
 #&gt; 4 3251899 3258117         x
 #&gt; 5 ------- 3251900         x
 #&gt; 6 3266770 3266771         *
-#&gt; 7 3266821 3266822         *</div><div class='input'>   <span class='fu'>search_fields</span>(<span class='kw'>field_type</span> <span class='kw'>=</span> <span class='st'>'numeric'</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 46 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE</span></div><div class='output co'>#&gt; Set includes 22 concept ids and 25 record ids: 
+#&gt; 7 3266821 3266822         *</div><div class='input'>   <span class='fu'>search_fields</span>(<span class='kw'>field_type</span> <span class='kw'>=</span> <span class='st'>'numeric'</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 47 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: 3742834,3492126,3490675,3476390,3492148,3698115,3490613,3492064,3492009,3476542,3614876,3485086,3402746,3485121,3476358,3833856,3492153,3857210,3475406,3366104,3479171,3475408</span></div><div class='output co'>#&gt; Set includes 22 concept ids and 25 record ids: 
 #&gt;  - 13 open and most recent (*)
 #&gt;  - 0 open and outdated (o)
 #&gt;  - 12 under embargo or restricted (x)
@@ -428,7 +428,7 @@ coordinate information.</p>
 #&gt; 22 3266770 3266771         *
 #&gt; 23 3266821 3266822         *
 #&gt; 24 3342494 3342495         *
-#&gt; 25 3354067 3354068         *</div><div class='input'>   <span class='fu'>search_fields</span>(<span class='kw'>field_text</span> <span class='kw'>=</span> <span class='st'>'temperature'</span>, <span class='kw'>field_type</span> <span class='kw'>=</span> <span class='st'>'numeric'</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 10 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE</span></div><div class='output co'>#&gt; Set includes 6 concept ids and 7 record ids: 
+#&gt; 25 3354067 3354068         *</div><div class='input'>   <span class='fu'>search_fields</span>(<span class='kw'>field_text</span> <span class='kw'>=</span> <span class='st'>'temperature'</span>, <span class='kw'>field_type</span> <span class='kw'>=</span> <span class='st'>'numeric'</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 10 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: 3475408,3479171,3698115</span></div><div class='output co'>#&gt; Set includes 6 concept ids and 7 record ids: 
 #&gt;  - 4 open and most recent (*)
 #&gt;  - 0 open and outdated (o)
 #&gt;  - 3 under embargo or restricted (x)
@@ -440,7 +440,7 @@ coordinate information.</p>
 #&gt; 4 3251899 3258117         x
 #&gt; 5 ------- 3251900         x
 #&gt; 6 3266770 3266771         *
-#&gt; 7 3266821 3266822         *</div><div class='input'>   <span class='fu'>search_authors</span>(<span class='st'>'Ewers'</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 63 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE</span></div><div class='output co'>#&gt; Set includes 46 concept ids and 56 record ids: 
+#&gt; 7 3266821 3266822         *</div><div class='input'>   <span class='fu'>search_authors</span>(<span class='st'>'Ewers'</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 63 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: 3742834,3698297,3490675,3476390,3476358,3492153,3479171</span></div><div class='output co'>#&gt; Set includes 46 concept ids and 56 record ids: 
 #&gt;  - 43 open and most recent (*)
 #&gt;  - 10 open and outdated (o)
 #&gt;  - 3 under embargo or restricted (x)
@@ -529,7 +529,7 @@ coordinate information.</p>
 #&gt; 6 1995247 1995439         *
 #&gt; 7 3247484 3247485         *
 #&gt; 8 3265745 3265746         *
-#&gt; 9 3354067 3354068         *</div><div class='input'>   <span class='fu'>search_taxa</span>(<span class='kw'>taxon_rank</span> <span class='kw'>=</span> <span class='st'>'family'</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 55 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE</span></div><div class='output co'>#&gt; Set includes 46 concept ids and 46 record ids: 
+#&gt; 9 3354067 3354068         *</div><div class='input'>   <span class='fu'>search_taxa</span>(<span class='kw'>taxon_rank</span> <span class='kw'>=</span> <span class='st'>'family'</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 55 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: 3742834,3402748,3402752,3832076,3476542,3485086,3475406,3366104,3475408</span></div><div class='output co'>#&gt; Set includes 46 concept ids and 46 record ids: 
 #&gt;  - 40 open and most recent (*)
 #&gt;  - 0 open and outdated (o)
 #&gt;  - 6 under embargo or restricted (x)
@@ -580,7 +580,7 @@ coordinate information.</p>
 #&gt; 43 3265711 3265712         x
 #&gt; 44 3265745 3265746         *
 #&gt; 45 3342494 3342495         *
-#&gt; 46 3354067 3354068         *</div><div class='input'>   <span class='fu'>search_text</span>(<span class='st'>'forest'</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 35 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE</span></div><div class='output co'>#&gt; Set includes 17 concept ids and 19 record ids: 
+#&gt; 46 3354067 3354068         *</div><div class='input'>   <span class='fu'>search_text</span>(<span class='st'>'forest'</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 35 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: 3742834,3402748,3402752,3476390,3698115,3490613,3492064,3476542,3485086,3485121,3476358,3833856,3492153,3475406,3366104,3475408</span></div><div class='output co'>#&gt; Set includes 17 concept ids and 19 record ids: 
 #&gt;  - 10 open and most recent (*)
 #&gt;  - 0 open and outdated (o)
 #&gt;  - 9 under embargo or restricted (x)
@@ -604,7 +604,7 @@ coordinate information.</p>
 #&gt; 16 3265747 3265748         *
 #&gt; 17 3266770 3266771         *
 #&gt; 18 3266821 3266822         *
-#&gt; 19 3266826 3266827         *</div><div class='input'>   <span class='fu'>search_text</span>(<span class='st'>'ant'</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 26 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE</span></div><div class='output co'>#&gt; Set includes 16 concept ids and 16 record ids: 
+#&gt; 19 3266826 3266827         *</div><div class='input'>   <span class='fu'>search_text</span>(<span class='st'>'ant'</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 26 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: 3742834,3402752,3832076,3492148,3492064,3476542,3485086,3402746,3475406,3475408</span></div><div class='output co'>#&gt; Set includes 16 concept ids and 16 record ids: 
 #&gt;  - 11 open and most recent (*)
 #&gt;  - 0 open and outdated (o)
 #&gt;  - 5 under embargo or restricted (x)
@@ -631,7 +631,7 @@ coordinate information.</p>
 #&gt;  - 0 under embargo or restricted (x)
 #&gt; 
 #&gt; [1] concept   record    available
-#&gt; &lt;0 rows&gt; (or 0-length row.names)</div><div class='input'>   <span class='fu'>search_spatial</span>(<span class='kw'>wkt</span> <span class='kw'>=</span> <span class='st'>'Point(116.5 4.75)'</span>, <span class='kw'>distance</span> <span class='kw'>=</span> <span class='fl'>100000</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 51 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE</span></div><div class='output co'>#&gt; Set includes 39 concept ids and 46 record ids: 
+#&gt; &lt;0 rows&gt; (or 0-length row.names)</div><div class='input'>   <span class='fu'>search_spatial</span>(<span class='kw'>wkt</span> <span class='kw'>=</span> <span class='st'>'Point(116.5 4.75)'</span>, <span class='kw'>distance</span> <span class='kw'>=</span> <span class='fl'>100000</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 52 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: 3490564,3402748,3402752,3490613,3492009,3857210</span></div><div class='output co'>#&gt; Set includes 39 concept ids and 46 record ids: 
 #&gt;  - 34 open and most recent (*)
 #&gt;  - 7 open and outdated (o)
 #&gt;  - 5 under embargo or restricted (x)
@@ -682,7 +682,7 @@ coordinate information.</p>
 #&gt; 43 3265747 3265748         *
 #&gt; 44 3266770 3266771         *
 #&gt; 45 3342494 3342495         *
-#&gt; 46 3354067 3354068         *</div><div class='input'>   <span class='fu'>search_spatial</span>(<span class='kw'>wkt</span> <span class='kw'>=</span> <span class='st'>'Polygon((110 0, 110 10,120 10,120 0,110 0))'</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 85 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE</span></div><div class='output co'>#&gt; Set includes 56 concept ids and 72 record ids: 
+#&gt; 46 3354067 3354068         *</div><div class='input'>   <span class='fu'>search_spatial</span>(<span class='kw'>wkt</span> <span class='kw'>=</span> <span class='st'>'Polygon((110 0, 110 10,120 10,120 0,110 0))'</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 86 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: 3490564,3490675,3402748,3402752,3832076,3476390,3490613,3492009,3476542,3485086,3476358,3857210,3479171,3475408</span></div><div class='output co'>#&gt; Set includes 56 concept ids and 72 record ids: 
 #&gt;  - 50 open and most recent (*)
 #&gt;  - 16 open and outdated (o)
 #&gt;  - 6 under embargo or restricted (x)
@@ -771,7 +771,7 @@ coordinate information.</p>
 #&gt; 4 1228187 1228188         *
 #&gt; 5 1323503 1323504         *
 #&gt; 6 1344568 1344569         *
-#&gt; 7 3354067 3354068         *</div><div class='input'>   <span class='fu'>search_spatial</span>(<span class='kw'>location</span> <span class='kw'>=</span> <span class='st'>'A_1'</span>, <span class='kw'>distance</span> <span class='kw'>=</span> <span class='fl'>2500</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 37 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE</span></div><div class='output co'>#&gt; Set includes 25 concept ids and 31 record ids: 
+#&gt; 7 3354067 3354068         *</div><div class='input'>   <span class='fu'>search_spatial</span>(<span class='kw'>location</span> <span class='kw'>=</span> <span class='st'>'A_1'</span>, <span class='kw'>distance</span> <span class='kw'>=</span> <span class='fl'>2500</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 37 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: 3490675,3832076,3476390,3476542,3485086,3476358</span></div><div class='output co'>#&gt; Set includes 25 concept ids and 31 record ids: 
 #&gt;  - 24 open and most recent (*)
 #&gt;  - 6 open and outdated (o)
 #&gt;  - 1 under embargo or restricted (x)
