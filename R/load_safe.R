@@ -14,11 +14,11 @@ load_safe_worksheet <- function(record_set,  worksheet, skip, n_max){
     #' @keywords internal
     
     # Look for a local copy of the file. If it doesn't exist, download it if possible
-    
     index <- load_index()
-    index_row <- subset(index, zenodo_record_id == record_set$record)
-    
-    local_path <- file.path(get_data_dir(), record_set$concept, record_set$record, index_row$filename)
+    index_row <- subset(index, zenodo_record_id == record_set$record &
+                               grepl('.xlsx$', filename))
+    local_path <- file.path(get_data_dir(), record_set$concept, 
+                            record_set$record, index_row$filename)
     local_copy <- file.exists(local_path)
     
     if(! local_copy){
@@ -294,7 +294,7 @@ download_safe_files <- function(record_ids, confirm=TRUE, xlsx_only=TRUE,
         targets$refresh <- FALSE
     }
     
-    # Slightly naughtily using an unexported function call from utils
+    # Create the confirmation message
     msg <- paste0('%i files requested from %i records\n',
                   ' - %i local (%s)\n',
                   ' - %i embargoed or restricted (%s)\n',
