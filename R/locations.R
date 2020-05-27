@@ -59,9 +59,13 @@ get_locations <- function(obj, gazetteer_info=FALSE){
         return(NULL)
     }
     
-    # Load the gazeteer and location aliases
+    # Load the gazeteer
     gazetteer <- load_gazetteer()
+    
+    # Load location aliases and reduce to global aliases and aliases specific to this record 
     location_aliases <- load_location_aliases()
+    location_aliases <- subset(location_aliases, is.na(zenodo_record_id) | 
+                                                 zenodo_record_id == record_set$record)
     
     # # Convert locations into an sf object, with an initially empty set of geometries
     # locations$geometry <- sf::st_sfc(NULL)
@@ -167,9 +171,9 @@ add_locations <- function (obj, location_field=NULL, location_table=NULL, gazett
     #'    \code{\link{load_location_aliases}}
     #' @examples
     #'    # safedir <- system.file('data', 'example_data_dir.zip', package='safedata')
-	#'    # tdir <- tempdir()
-	#'    # unzip(safedir, exdir=tdir)
-	#'    # tdir <- file.path(tdir, 'example_data_dir')
+    #'    # tdir <- tempdir()
+    #'    # unzip(safedir, exdir=tdir)
+    #'    # tdir <- file.path(tdir, 'example_data_dir')
     #'    # set_safe_dir(tdir, update=FALSE, validate=FALSE)
     #'    # beetle_abund <- load_safe_data(1400562, 'Ant-Psel')
     #'    # beetle_abund <- add_locations(beetle_abund)
@@ -194,7 +198,7 @@ add_locations <- function (obj, location_field=NULL, location_table=NULL, gazett
         stop(sprintf('%s is not a location field in the data frame', location_field))
     }
     
-    # Load the taxonomy
+    # Load the locations table
     if(is.null(location_table)){
         location_table <- get_locations(obj_attr$safe_record_set)
     } else if(! inherits(location_table, 'safe_locations')){
