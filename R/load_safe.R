@@ -1,52 +1,3 @@
-load_safe_worksheet <- function(record_set,  worksheet, skip, n_max){
-    
-    #' Internal data loading function
-    #'
-    #' This is an internal function shared between load_safe_data (data worksheets)
-    #' get_taxa (Taxa sheets) and get_locations (Locations sheets). 
-    #'
-    #' @param index_row A row selected from the index data frame, identifying the
-    #'    workbook path.
-    #' @param worksheet The name of the worksheet to load (str).
-    #' @param skip The number of initial rows to skip (integer)
-    #' @param n_max The number of rows to load (integer)
-    #' @return A data frame of the worksheet, 
-    #' @keywords internal
-    
-    # Look for a local copy of the file. If it doesn't exist, download it if possible
-    index <- load_index()
-    index_row <- subset(index, zenodo_record_id == record_set$record &
-                               grepl('.xlsx$', filename))
-    local_path <- file.path(get_data_dir(), record_set$concept, 
-                            record_set$record, index_row$filename)
-    local_copy <- file.exists(local_path)
-    
-    if(! local_copy){
-        verbose_message('Downloading datafile: ', index_row$filename)
-        downloaded <- download_safe_files(index_row$zenodo_record_id)
-        if(! length(downloaded)){
-            stop('Data file unavailable')
-        }
-    }
-    
-    # Validate the local copy
-    local_md5 <- tools::md5sum(local_path)
-    if(local_md5 != index_row$checksum){
-        stop('Local file has been modified - do not edit files within the SAFE data directory')
-    }
-
-    # Now load the data - using readxl, openxlsx is also possible but seems
-    # to be orphaned and has some date time handling issues
-    data <- readxl::read_xlsx(local_path, worksheet, skip = skip, n_max = n_max, na='NA')
-                          
-    # Discard the tibble class and first column of row numbers
-    class(data) <- 'data.frame'
-    data <- data[,-1]
-
-    return(data)
-}
-
-
 load_safe_data <- function(record_id, worksheet){
     
     #' Loads data from a SAFE dataset.
@@ -80,7 +31,7 @@ load_safe_data <- function(record_id, worksheet){
     #'    str(beetle_abund)
     #'    # See also the show_worksheet function for further worksheet metadata
     #'    show_worksheet(beetle_abund)
-	#'    unset_example_safe_dir()
+    #'    unset_example_safe_dir()
     #' @export
     
     # TODO - provide a path argument and then mechanisms to support a standalone file download?
@@ -92,7 +43,6 @@ load_safe_data <- function(record_id, worksheet){
     # a) If a record is provided, return that unless it is unavailable, in 
     #    which case suggest an alternative.
     # b) If a concept is provided, load MRA if there is one.
-    
     
     if(nrow(record_set) != 1){
         stop("Requires a single valid record or concept id")
@@ -108,30 +58,80 @@ load_safe_data <- function(record_id, worksheet){
         # record provided
         if(! record_set$available){
             if(is.na(record_set$mra)){
-                stop("Record ID provided: this and all other versions of this dataset concept are under embargo or restricted")
+                stop("Record ID provided: this and all other versions of this dataset concept ", 
+                     "are under embargo or restricted")
             } else {
-                stop("Record ID provided: version is under embargo or restricted. Most recent available is ", record_set$mra)
+                stop("Record ID provided: version is under embargo or restricted. ", 
+                     "Most recent available is ", record_set$mra)
             }
         } else {
             if(! (record_set$record ==  record_set$mra)){
-                verbose_message("Outdated record: the most recent available version is ", record_set$mra)
+                verbose_message("Outdated record: the most recent available ",
+                                "version is ", record_set$mra)
             }
         }
     }
     
-    # Now get the metadata and find the target worksheet
+    # Now get the metadata and check the target worksheet exists
     metadata <- load_record_metadata(record_set)
     if(! worksheet %in% metadata$dataworksheets$name){
         stop('Data worksheet name not one of: ', paste(metadata$dataworksheets$name, collapse=', '))
     }
 
-    # If successful get the worksheet metadata and load the data
+    # Look for a local copy of the file. If it doesn't exist, download it if possible
+    index <- load_index()
+    index_row <- subset(index, zenodo_record_id == record_set$record &
+                               grepl('.xlsx$', filename))
+    local_path <- file.path(get_data_dir(), record_set$concept, 
+                            record_set$record, index_row$filename)
+    local_copy <- file.exists(local_path)
+
+    if(! local_copy){
+        verbose_message('Downloading datafile: ', index_row$filename)
+        downloaded <- download_safe_files(index_row$zenodo_record_id)
+        if(! length(downloaded)){
+            stop('Data file unavailable')
+        }
+    }
+
+    # Validate the local copy
+    local_md5 <- tools::md5sum(local_path)
+    if(local_md5 != index_row$checksum){
+        stop('Local file has been modified - do not edit files within the SAFE data directory')
+    }
+
+    # Now load the data - using readxl, openxlsx is also possible but seems
+    # to be orphaned and has some date time handling issues. One issue with 
+    # readxl is it has field type guessing based on the Excel cell types of
+    # the first N rows. Usually this is fine but can be tripped up (e.g. one
+    # alphanumeric in a list of IDs or a sparsely populated field). So, we use
+    # the field types to set column classes using a conversion map from safedata
+    # types to readxl col_types: "skip", "guess", "logical", "numeric", "date", 
+    # "text" or "list". Datetime fields are left to the guessing mechanism because
+    # they can be Excel dates or POSIX strings.
     dwksh <- metadata$dataworksheets[metadata$dataworksheets$name == worksheet, ]
-    data <- load_safe_worksheet(record_set, worksheet, skip=dwksh$field_name_row - 1, n_max = dwksh$n_data_row)
-    
-    # Now do field type conversions
     fields <- dwksh$fields[[1]]
+    field_types <- tolower(fields$field_type)
+    readxl_map <- c('date'='guess', 'datetime'='guess', 'time'='guess', 'location'='text',
+                    'latitude'='numeric', 'longitude'='numeric', 'replicate'='text', 'id'='text', 
+                    'categorical'='text', 'ordered categorical'='text', 'numeric'='numeric', 
+                    'taxa'='text', 'abundance'='numeric', 'categorical trait'='text', 
+                    'numeric trait'='numeric', 'categorical interaction'='text', 
+                    'numeric interaction'='numeric', 'file'='text', 'comments'='text')
     
+    # map the column types, including the first column of record numbers
+    col_types <- c('numeric', readxl_map[match(field_types, names(readxl_map))])
+    if(any(is.na(col_types))){
+        stop('Problem with column type specification. Contact developers')
+    }
+    
+    # Read the data and then reduce to a data frame (not tibble) with no row numbers
+    data <- readxl::read_xlsx(local_path, worksheet, skip = dwksh$field_name_row - 1, 
+                              n_max=dwksh$n_data_row, na='NA', col_types=col_types)
+    class(data) <- 'data.frame'
+    data <- data[,-1]
+
+    # Now do field type conversions
     if(! all.equal(fields$field_name, names(data))){
         stop('Mismatch between data field names and local metadata')
     }
@@ -305,9 +305,9 @@ download_safe_files <- function(record_ids, confirm=TRUE, xlsx_only=TRUE,
     to_download <- subset(targets, (refresh | (! local_exists)) & available)
     
     size_to_human <- function(size){
-    	return(format(structure(size, class="object_size"), units="auto"))
+        return(format(structure(size, class="object_size"), units="auto"))
     }
-    	
+        
     msg <- sprintf(msg, nrow(targets), length(unique(targets$zenodo_record_id)),
                    nrow(local), size_to_human(sum(local$filesize)),
                    nrow(unavail), size_to_human(sum(unavail$filesize)),

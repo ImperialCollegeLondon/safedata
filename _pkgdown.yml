@@ -45,7 +45,6 @@ reference:
   - load_gazetteer
   - load_location_aliases
   - fetch_record_metadata
-  - load_safe_worksheet
   - safe_api_search
   - validate_query_param
   - taxon_index_to_taxon_table
