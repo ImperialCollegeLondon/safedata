@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1.9000</span>
       </span>
     </div>
 
@@ -695,6 +695,33 @@
 </ol>
 </div>
 </div>
+<div id="inserting-datasets" class="section level1">
+<h1 class="hasAnchor">
+<a href="#inserting-datasets" class="anchor"></a>Inserting datasets</h1>
+<p>If you want access to a dataset that is currently embargoed or restricted, then you can approach the authors listed on the Zenodo record to ask for permission to use the data. If you are then provided with the files for the dataset, then they need to be inserted into your local SAFE data directory so that they can be accessed by the <code>safedata</code> functions.</p>
+<p>The <code>insert_dataset</code> function does this: it will check to see if a set of files are part of specified Zenodo record and then copy them into the correct places in the current SAFE data directory.</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1"></a>files &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">'safedata_example_dir'</span>, <span class="st">'template_ClareWfunctiondata.xlsx'</span>, </span>
+<span id="cb55-2"><a href="#cb55-2"></a>                     <span class="dt">package=</span><span class="st">'safedata'</span>)</span>
+<span id="cb55-3"><a href="#cb55-3"></a><span class="kw"><a href="../reference/insert_dataset.html">insert_dataset</a></span>(<span class="dv">1237719</span>, files)</span></code></pre></div>
+<pre><code>## Inserting files: template_ClareWfunctiondata.xlsx</code></pre>
+<pre><code>## NULL</code></pre>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1"></a>dat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/load_safe_data.html">load_safe_data</a></span>(<span class="dv">1237719</span>, <span class="st">'Data'</span>)</span></code></pre></div>
+<pre><code>## Downloading 1 record metadata files</code></pre>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1"></a><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(dat)</span></code></pre></div>
+<pre><code>## SAFE dataset
+## Concept: 1198840; Record 1237719; Worksheet: Data
+## 'data.frame':    34 obs. of  10 variables:
+##  $ taxon_name              : chr  "Anguilla.borneensis" "Anguilla.marmorata" "Barbodes.sealei" "Barbonymus.balleroides" ...
+##  $ Body_size               : num  24.14 30.56 8.51 11.36 7.59 ...
+##  $ body_shape              : Factor w/ 3 levels "Compressed","Cylindrical",..: 2 2 1 1 1 2 1 2 1 2 ...
+##  $ trophic_position        : Factor w/ 4 levels "Herbivore","Higher carnivore",..: 2 2 4 3 3 2 2 1 3 1 ...
+##  $ mouth_position          : Factor w/ 3 levels "Inferior","Superior",..: 3 3 3 3 3 3 3 1 3 1 ...
+##  $ presence_teeth          : Factor w/ 2 levels "no","yes": 2 2 1 1 2 2 1 1 1 1 ...
+##  $ gregariousness          : Factor w/ 2 levels "no","yes": 1 1 2 2 1 1 1 2 2 2 ...
+##  $ presence_barbels        : Factor w/ 2 levels "no","yes": 2 2 2 2 1 2 2 2 1 2 ...
+##  $ vertical_position_water : Factor w/ 4 levels "Benthic","Benthopelagic",..: 2 2 3 3 2 2 2 2 3 1 ...
+##  $ air-breathing_capability: Factor w/ 2 levels "no","yes": 2 2 1 1 2 2 1 1 1 1 ...</code></pre>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -739,6 +766,7 @@
       <li><a href="#dataset-locations">Dataset locations</a></li>
       </ul>
 </li>
+      <li><a href="#inserting-datasets">Inserting datasets</a></li>
       </ul>
 </div>
       </div>
