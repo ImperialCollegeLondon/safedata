@@ -414,3 +414,90 @@ download_safe_files <- function(record_ids, confirm=TRUE, xlsx_only=TRUE,
     return(invisible(downloaded))
 }
 
+
+insert_dataset <- function(record_id, files){
+    
+    #' Inserts local copies of files from a dataset into a SAFE data directory
+    #'
+    #' If files are embargoed or restricted, then users may request the
+    #' datafiles from the authors. This function allows provided files
+    #' to be incorporated into a SAFE data directory, so that they will
+    #' then work seamlessly alongside openly available data.
+    #'
+    #' @param record_id A SAFE dataset record id 
+    #' @param files A vector of files to insert into the data directory
+    #' @return NULL
+    #' @examples
+    #'    set_example_safe_dir()
+    #'    files <- system.file('safedata_example_dir', 'template_ClareWfunctiondata.xlsx', 
+    #'                         package='safedata')
+    #'    insert_dataset(1237719, files)
+	#'    dat <- load_safe_data(1237719, 'Data')
+	#'    str(dat)
+    #'    unset_example_safe_dir()
+    #' @export
+    
+    record_set <- validate_record_ids(record_id)
+    if(nrow(record_set) != 1){
+        stop("record_id must identify a single record")
+    } else if(is.na(record_set$record)){
+        stop("record_id cannot be a concept record id")
+    }
+    
+    # Get the list of possible files for this record
+    index <- load_index()
+    record_files <- subset(index, zenodo_record_id == record_set$record)
+    
+    # Validate incoming files
+    local_md5 <- tools::md5sum(files)
+    
+    # Do the provided files actually exist
+    missing_files <- is.na(local_md5)
+    if(any(missing_files)){
+        stop('Files not found: ', paste0(files[missing_files], collapse=','))
+    }
+    
+    # Add index data on to the local files
+    local_files <- data.frame(local_path=files, filename=basename(files), 
+                              local_md5=local_md5, stringsAsFactors=FALSE)
+    local_files  <- merge(local_files, record_files, by='filename', all.x=TRUE)
+    
+    # Are the provided filenames part of the record
+    unknown_files <- is.na(local_files$checksum)
+    if(any(unknown_files)){
+        stop('Local files not found in record metadata: ', 
+             paste0(local_files$filename[unknown_files], collapse=','))
+    }
+    
+    # Are they the same files - compare checksums
+    non_matching_checksums <- local_files$local_md5 != local_files$checksum
+    if(any(non_matching_checksums)){
+        stop('Local file checksums do not match record metadata: ', 
+             paste0(local_files$filename[non_matching_checksums], collapse=','))
+    }
+    
+    # Now we can insert them - skipping files already present
+    local_files$current_safe_dir_path <- file.path(getOption('safedata.dir'), local_files$path)
+    local_files$local_copy <- file.exists(local_files$current_safe_dir_path)
+    
+    if(any(local_files$local_copy)){
+        verbose_message('Skipping files already present: ', 
+                        paste0(local_files$filename[local_files$local_copy], collapse=','))
+        local_files <- subset(local_files, ! local_copy)
+    }
+    
+    if(nrow(local_files)){
+        verbose_message('Inserting files: ', 
+                        paste0(local_files$filename, collapse=','))
+        copy_success <- try({
+	        dir.create(dirname(local_files$current_safe_dir_path[1]), recursive=TRUE)
+			with(local_files, file.copy(local_path, current_safe_dir_path))
+			})
+        if(inherits(copy_success, 'try-error')){
+            stop('Failed to insert files:', 
+                 paste0(local_files$filename[! copy_success], collapse=','))
+        }
+    }
+    
+    return(NULL)
+}
