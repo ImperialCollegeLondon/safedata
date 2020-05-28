@@ -103,7 +103,7 @@ validate_record_ids <- function(record_set){
         if(! all(known)){
             unknown <- record_set[! known]
             record_set <- record_set[known]
-            warning(paste0('Unknown record ids in record_set: ', paste0(dupes, collapse=',')))
+            warning(paste0('Unknown record ids in record_set: ', paste0(unknown, collapse=',')))
         }
             
         record_set <- data.frame(concept = ifelse(record_set %in% index$zenodo_concept_id, record_set, NA),

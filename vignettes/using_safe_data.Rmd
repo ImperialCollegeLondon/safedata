@@ -418,3 +418,21 @@ Nearly all SAFE datasets will include observations at spatial locations, and the
     plot(beetle_env['Cover'], key.pos=4, breaks=seq(0,100, by=5))
     ```
 
+# Inserting datasets
+
+If you want access to a dataset that is currently embargoed or restricted, then you can approach the authors listed on the Zenodo record to ask for permission to use the data. If you are then provided with the files for the dataset, then they need to be inserted into your local SAFE data directory so that they can be accessed by the `safedata` functions. 
+
+The `insert_dataset` function does this: it will check to see if a set of files are part of specified Zenodo record and then copy them into the correct places in the current SAFE data directory.
+
+
+```{r insert_dataset}
+files <- system.file('safedata_example_dir', 'template_ClareWfunctiondata.xlsx', 
+                     package='safedata')
+insert_dataset(1237719, files)
+dat <- load_safe_data(1237719, 'Data')
+str(dat)
+```
+
+```{r unset, echo=FALSE}
+unset_example_safe_dir()
+```

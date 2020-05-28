@@ -150,7 +150,7 @@ set_safe_dir <- function(safedir, update=TRUE, create=FALSE, validate=TRUE,
             verbose_message(' - Updating index')
             # reload the index into the cache and get it
             download_index()
-            index <- load_index()
+            index <- load_index(reload=TRUE)
         } else {
             verbose_message(' - Index up to date')
         }
@@ -282,7 +282,7 @@ download_location_aliases <- function(){
 }
 
 
-load_index <- function(){
+load_index <- function(reload=FALSE){
     
     #' Load and cache the dataset index
     #' 
@@ -295,6 +295,7 @@ load_index <- function(){
     #' memory to reduce load times. The cache is within an environment that is not
     #' exported in the package namespace and is not intended to be user accessible.
     #'
+    #' @param reload Force a refresh of the cached index from the file.
     #' @return A data frame containing the dataset index details.
     #' @seealso \code{\link{load_location_aliases}}, \code{\link{load_gazetteer}}
     #' @keywords internal

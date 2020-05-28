@@ -4,7 +4,10 @@
 \alias{load_index}
 \title{Load and cache the dataset index}
 \usage{
-load_index()
+load_index(reload = FALSE)
+}
+\arguments{
+\item{reload}{Force a refresh of the cached index from the file.}
 }
 \value{
 A data frame containing the dataset index details.
