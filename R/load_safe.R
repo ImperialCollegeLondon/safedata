@@ -131,11 +131,13 @@ load_safe_data <- function(record_id, worksheet){
     class(data) <- 'data.frame'
     data <- data[,-1]
 
-    # Now do field type conversions
-    if(! all.equal(fields$field_name, names(data))){
+    # Check field name matching, safeguarding against whitespace. Although this shouldn't
+    # make it through safedata_validator, some early datasets may have crept through
+    if(! identical(trimws(fields$field_name), trimws(names(data)))){
         stop('Mismatch between data field names and local metadata')
     }
     
+    # Now do field type conversions
     for(idx in seq_along(names(data))){
         
         fld <- fields[idx, ]
@@ -432,8 +434,8 @@ insert_dataset <- function(record_id, files){
     #'    files <- system.file('safedata_example_dir', 'template_ClareWfunctiondata.xlsx', 
     #'                         package='safedata')
     #'    insert_dataset(1237719, files)
-	#'    dat <- load_safe_data(1237719, 'Data')
-	#'    str(dat)
+    #'    dat <- load_safe_data(1237719, 'Data')
+    #'    str(dat)
     #'    unset_example_safe_dir()
     #' @export
     
@@ -490,9 +492,9 @@ insert_dataset <- function(record_id, files){
         verbose_message('Inserting files: ', 
                         paste0(local_files$filename, collapse=','))
         copy_success <- try({
-	        dir.create(dirname(local_files$current_safe_dir_path[1]), recursive=TRUE)
-			with(local_files, file.copy(local_path, current_safe_dir_path))
-			})
+            dir.create(dirname(local_files$current_safe_dir_path[1]), recursive=TRUE)
+            with(local_files, file.copy(local_path, current_safe_dir_path))
+            })
         if(inherits(copy_success, 'try-error')){
             stop('Failed to insert files:', 
                  paste0(local_files$filename[! copy_success], collapse=','))
