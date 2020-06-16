@@ -133,7 +133,7 @@ validate_record_ids <- function(record_set){
                                     decreasing=c(FALSE, TRUE), method='radix', na.last=FALSE), ]
     
     rownames(record_set) <- seq_along(record_set$record)
-    return(record_set)    
+    return(record_set)
 }
 
 
@@ -279,7 +279,9 @@ show_concepts <- function(obj){
     #' If \code{show_concepts} is passed a record id, then the function looks up the
     #' relevant concept. The version table indicates which versions are available ('*' 
     #' for the most recent available version and 'o' for older available versions),
-    #' and which are unavailable due to embargo or retriction ('x').
+    #' and which are unavailable due to embargo or retriction ('x'). A '!' is used 
+    #' to show that a private local copy of an embargoed or restricted dataset has 
+    #' been inserted using \code{\link(insert_dataset)}.
     #'
     #' @param obj A reference to SAFE records or a loaded worksheet (see above)
     #' @param worksheet The name of a worksheet to show. Obviously, if \code{obj} 
@@ -308,15 +310,17 @@ show_concepts <- function(obj){
         record_set <- validate_record_ids(obj)
     }
         
-    # get the rows to report, sort by publication date and cut into record chunks
+    # get the rows for the XLSX file to report, sort by publication date
+    # and cut into record chunks
     index <- load_index()
     
-    rows <- subset(index, zenodo_concept_id %in% record_set$concept,
+    rows <- subset(index, zenodo_concept_id %in% record_set$concept &
+                          grepl('.xlsx$', filename),
                    select=c(zenodo_concept_id, zenodo_record_id, dataset_title,
-                               publication_date, available, most_recent_available, 
-                            dataset_embargo))
+                            publication_date, available, most_recent_available, 
+                            dataset_embargo, local_copy))
     
-    rows <- unique(rows)    
+    rows <- unique(rows)
     
     concepts <- split(rows, f=rows$zenodo_concept_id)
     
@@ -335,7 +339,7 @@ show_concepts <- function(obj){
         text <- c(text, sprintf('Versions: %i available, %i embargoed or restricted\n', n_avail, n_unavail))
     
         # Version summary
-        version_available <- ifelse(concept$available, 'o', 'x')
+        version_available <- ifelse(concept$available, 'o', ifelse(concept$local_copy, '!', 'x'))
         version_available[which(concept$most_recent_available)[1]] <- '*'
         
         version_table <- data.frame(record_id = concept$zenodo_record_id,
@@ -368,7 +372,7 @@ show_record <- function(obj){
     } else {
         record_set <- validate_record_ids(obj)
     }
-        
+    
     if(nrow(record_set) != 1){
         stop('show_record requires a single record id')
     }
@@ -376,9 +380,9 @@ show_record <- function(obj){
     if(is.na(record_set$record)){
         warning('Concept ID provided: showing available versions')
         show_concepts(record_set)
-        return(invisible())        
+        return(invisible())
     }
-            
+    
     # Get the record metadata and a single row for the record
     metadata <- load_record_metadata(record_set)
     
@@ -392,11 +396,8 @@ show_record <- function(obj){
                 format(as.POSIXct(metadata$publication_date), '%Y-%m-%d'),
                 record_set$zenodo_record_id,
                 record_set$zenodo_concept_id))
-
-    status <- metadata$access
-    if(status == 'embargo' && metadata$embargo_date < Sys.time()){
-        status <- 'open'
-    }
+    
+    status <- file_status(metadata)
     cat(sprintf('Status: %s\n', status))
     
     ext_files <- metadata$external_files
@@ -479,16 +480,9 @@ show_worksheet <- function(obj, worksheet=NULL, extended_fields=FALSE){
     cat(sprintf('Number of data fields: %s\n', dwksh$max_col - 1))
     cat(sprintf('Description:\n%s\n', dwksh$description))
 
-    if(metadata$access == 'embargo'){
-        embargo_date <- as.POSIXct(metadata$embargo_date)
-        if(embargo_date >= Sys.time()){
-            cat(sprintf('Data embargoed until %s, only metadata available\n', 
-                        format(embargo_date, '%Y-%m-%d')))
-        }
-    } else if(metadata$access == 'restricted') {
-        cat('Dataset restricted , only metadata available\n') 
-    }
-
+    status <- file_status(metadata)
+    cat(sprintf('Status: %s\n', status))
+    
     cat('\nFields:\n')
     fields <- dwksh['fields'][[1]][[1]]
 
@@ -516,4 +510,41 @@ show_worksheet <- function(obj, worksheet=NULL, extended_fields=FALSE){
         print(descriptors, right=FALSE)
     }
     return(invisible(metadata))
+}
+
+file_status <- function(metadata){
+    
+    #' Get file status for a dataset
+    #' 
+    #' This returns a formatted status string for \code{\link{show_record}} and 
+    #' \code{\link{show_worksheet}} showing if a dataset is available globally
+    #' or locally as a private copy.
+    #' @param A loaded metadata dictionary for a record
+    #' @keywords internal
+    
+    # Data access status - check for local private copy
+    index <- load_index()
+    file_row <- subset(index, grepl('.xlsx$', filename) & 
+                              zenodo_record_id == metadata$zenodo_record_id)
+
+    status <- 'open'
+    if(metadata$access == 'embargo'){
+        embargo_date <- as.POSIXct(metadata$embargo_date)
+        if(embargo_date >= Sys.time()){
+            status <- sprintf('embargoed until %s', format(embargo_date, '%Y-%m-%d'))
+        }
+    } else if(metadata$access == 'restricted') {
+        status <- ('restricted') 
+    } 
+
+    if( status != 'open'){
+        if(file_row$local_copy){
+            status <- paste0('Local private copy available\n',
+                             '        ** Dataset ', status, ' ** ')
+        } else {
+            status <- paste0('Dataset ', status, ', only metadata available')
+        }
+    }
+
+    return(status)
 }
