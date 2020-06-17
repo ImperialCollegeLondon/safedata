@@ -336,21 +336,21 @@ get_phylogeny <- function(record){
     #' Get a phylogeny for a dataset
     #'
     #' This function loads the taxa reported in a dataset (see \code{\link{get_taxa}})
-    #' and creates a phylogeny for those taxa, using the \code{\link[ape]{phylo}} class. 
+    #' and creates a phylogeny for those taxa, using the \code{\link[ape:read.tree]{phylo}} class. 
     #' Equal branch lengths are used. This function differs from \code{\link[ape]{as.phylo.formula}} 
     #' in that it does not expect all taxonomic levels to be non NA: tips can
     #' be at different taxonomic depths. The object has internal node labels showing
     #' the taxonomic hierarchy of the phylogeny.
     #'
     #' Note that the phylogeny will contain singleton nodes if an internal taxon has
-    #' a single descendant: the \code{\link[ape]{ape}} functions \code{\link[ape]{has.singles}}
+    #' a single descendant: the \code{\link[ape:ape-package]{ape}} functions \code{\link[ape:collapse.singles]{has.singles}}
     #' and \code{\link[ape]{collapse.singles}} can be used to detect and remove these if 
     #' required.
     #' @examples
     #'    beetle_phylo <- get_phylogeny(1400562)
     #'    ape::plot.phylo(beetle_phylo, show.node.label=TRUE, font=1, no.margin=TRUE)
     #' @param record A single dataset record id
-    #' @return An \code{\link[ape]{phylo}} object.
+    #' @return An \code{\link[ape:read.tree]{phylo}} object.
     #' @export
         
     record_set <- validate_record_ids(record)

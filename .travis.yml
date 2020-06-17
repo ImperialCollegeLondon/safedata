@@ -21,6 +21,9 @@ addons:
       - libgeos-dev
       - libgdal-dev
 
+brew_packages:
+  - udunits
+
 r_packages:
 - Rcpp
 - units
