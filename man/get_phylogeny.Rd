@@ -10,7 +10,7 @@ get_phylogeny(record)
 \item{record}{A single dataset record id}
 }
 \value{
-An \code{\link[ape]{phylo}} object.
+An \code{\link[ape:read.tree]{phylo}} object.
 }
 \description{
 This function loads the taxa reported in a dataset (see \code{\link{get_taxa}})
