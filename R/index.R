@@ -304,7 +304,7 @@ load_index <- function(reload=FALSE){
     #' @seealso \code{\link{load_location_aliases}}, \code{\link{load_gazetteer}}
     #' @keywords internal
     
-    if(exists('index', safedata.env)){
+    if(exists('index', safedata.env) & ! reload){
         index <- get('index', safedata.env)
     } else {
         safedir <- get_data_dir()
@@ -348,7 +348,8 @@ load_index <- function(reload=FALSE){
         # save the index into the cache
         assign('index', index, safedata.env)
     }
-    return(index)
+	
+    invisible(index)
 }
 
 
@@ -509,5 +510,6 @@ unset_example_safe_dir <- function(){
     if(! is.null(udir)){
 		set_safe_dir(udir, update=FALSE)
 	}
+	load_index(reload=TRUE)
 }
 
