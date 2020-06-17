@@ -23,9 +23,6 @@ addons:
 
 brew_packages:
   - udunits
-  - proj
-  - geos
-  - gdal
 
 r_packages:
 - Rcpp
