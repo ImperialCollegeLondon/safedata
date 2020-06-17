@@ -71,7 +71,7 @@ the function will also handle Zenodo URLs and DOIs." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2.9000</span>
       </span>
     </div>
 
@@ -173,8 +173,7 @@ check record ids and display summary information using the print method.</p>
 </ul>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>   <span class='fu'><a href='set_example_safe_dir.html'>set_example_safe_dir</a></span>()
-   <span class='fu'>validate_record_ids</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3247631</span>, <span class='fl'>3266827</span>, <span class='fl'>3266821</span>, -<span class='fl'>1000</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Invalid numeric record ids: -1000</span></div><div class='output co'>#&gt; Set includes 3 concept ids and 2 record ids: 
+    <pre class="examples"><div class='input'>   <span class='fu'><a href='set_example_safe_dir.html'>set_example_safe_dir</a></span>()</div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div><div class='input'>   <span class='fu'>validate_record_ids</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3247631</span>, <span class='fl'>3266827</span>, <span class='fl'>3266821</span>, -<span class='fl'>1000</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Invalid numeric record ids: -1000</span></div><div class='output co'>#&gt; Set includes 3 concept ids and 2 record ids: 
 #&gt;  - 1 open and most recent (*)
 #&gt;  - 0 open and outdated (o)
 #&gt;  - 1 under embargo or restricted (x)
@@ -193,7 +192,7 @@ check record ids and display summary information using the print method.</p>
 #&gt;   concept  record available
 #&gt; 1 3247630 3247631         x
 #&gt; 2 3266821 -------          
-#&gt; 3 3266826 3266827         *</div><div class='input'>   <span class='fu'><a href='set_example_safe_dir.html'>unset_example_safe_dir</a></span>()</div></pre>
+#&gt; 3 3266826 3266827         *</div><div class='input'>   <span class='fu'><a href='set_example_safe_dir.html'>unset_example_safe_dir</a></span>()</div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

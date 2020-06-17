@@ -10,7 +10,7 @@
 
 safedata.env <- new.env(parent = emptyenv())
 
-set_safe_dir <- function(safedir, update=TRUE, create=FALSE, validate=TRUE,
+set_safe_dir <- function(safedir, update=TRUE, create=FALSE, 
 						 url='https://www.safeproject.net'){
     
     #' Set the local SAFE data directory
@@ -63,7 +63,6 @@ set_safe_dir <- function(safedir, update=TRUE, create=FALSE, validate=TRUE,
     #' @param update Should the local dataset index be updated (logical)?
     #' @param create Should a new data directory be created at the provided
     #'    path (logical)?
-    #' @param validate Should the directory structure be validated (logical)?
     #' @param url A URL providing the SAFE Data API, defaulting to the SAFE 
 	#'    Project's own URL.
     #' @return NULL
@@ -172,36 +171,41 @@ set_safe_dir <- function(safedir, update=TRUE, create=FALSE, validate=TRUE,
         }
     }
     
-    if(validate){
-        
-        verbose_message('Validating directory')
-        
-        # Run a check on directory structure
-        local_files <- dir(safedir, recursive=TRUE)
-        
-        # Exclude the three index files and local metadata json files
-        index_files <- c(basename(index_path), basename(gazetteer_path), 
-                         basename(location_aliases_path), basename(url_path))
-                         
-        metadata_json <- local_files[grepl('[0-9]+/[0-9]+/[0-9]+.json$', local_files)]    
-        local_files <- setdiff(local_files, c(index_files, metadata_json))
+    # Validate the directory contents
+    verbose_message('Validating directory')
     
-        local_unexpected <- setdiff(local_files, index$path)
-        if(length(local_unexpected)){
-            warning('SAFE data directory contains unexpected files: ', paste(local_unexpected, collapse=', '))
-        }
+    # Run a check on directory structure
+    local_files <- dir(safedir, recursive=TRUE)
     
-        # Run a check on file modification
-        local_expected <- subset(index, file.exists(file.path(safedir, index$path)))
-        local_expected$local_md5 <- tools::md5sum(file.path(safedir, local_expected$path))
-        
-        local_altered <- with(local_expected, filename[local_md5 != checksum])
-        
-        if(length(local_altered)){
-            warning('Local copies of dataset files have been modified', paste(local_unexpected, collapse=', '))
-        }
+    # Exclude the three index files and local metadata json files
+    index_files <- c(basename(index_path), basename(gazetteer_path), 
+                     basename(location_aliases_path), basename(url_path))
+                     
+    metadata_json <- local_files[grepl('[0-9]+/[0-9]+/[0-9]+.json$', local_files)]
+    local_files <- setdiff(local_files, c(index_files, metadata_json))
+
+    local_unexpected <- setdiff(local_files, index$path)
+    if(length(local_unexpected)){
+        warning('SAFE data directory contains unexpected files: ', paste(local_unexpected, collapse=', '))
     }
-        
+
+    # Run a check on file modification
+    local_expected <- subset(index, file.exists(file.path(safedir, index$path)))
+    local_expected$local_md5 <- tools::md5sum(file.path(safedir, local_expected$path))
+    
+    local_expected$altered <- with(local_expected, local_md5 != checksum)
+    
+    if(sum(local_expected$altered)){
+        warning('Local copies of dataset files have been modified', 
+		        paste(local_expected$filename[local_expected$altered], collapse=', '))
+    }
+	
+	# Update index to note which files have unaltered local copies (this could include 
+	# embargoed and restricted datasets, so this is used as a flag to note which can be 
+	# loaded from private local copies).
+	index$local_copy <- index$checksum %in% local_expected$checksum[! local_expected$altered]
+	assign('index', index, safedata.env)
+	
     return(invisible())
 }
 
@@ -300,7 +304,7 @@ load_index <- function(reload=FALSE){
     #' @seealso \code{\link{load_location_aliases}}, \code{\link{load_gazetteer}}
     #' @keywords internal
     
-    if(exists('index', safedata.env)){
+    if(exists('index', safedata.env) & ! reload){
         index <- get('index', safedata.env)
     } else {
         safedir <- get_data_dir()
@@ -342,10 +346,12 @@ load_index <- function(reload=FALSE){
         index$most_recent_available <- with(index, ifelse(zenodo_record_id %in% unlist(mr_avail), TRUE, FALSE))
     
         # save the index into the cache
-        assign('index', index, safedata.env)    
+        assign('index', index, safedata.env)
     }
-    return(index)
+	
+    invisible(index)
 }
+
 
 load_gazetteer <- function(){
     
@@ -491,7 +497,7 @@ set_example_safe_dir <- function(){
 		utils::unzip(example_zip, exdir=tdir)
 	}
 	
-	set_safe_dir(demo_dir, update=FALSE, validate=FALSE)
+	set_safe_dir(demo_dir, update=FALSE)
 }
 
 unset_example_safe_dir <- function(){
@@ -502,7 +508,8 @@ unset_example_safe_dir <- function(){
 	# retrieve the user directory and if it isn't null restore it
 	udir <- getOption('safedata.user.dir')
     if(! is.null(udir)){
-		set_safe_dir(udir, update=FALSE, validate=FALSE)
+		set_safe_dir(udir, update=FALSE)
 	}
+	load_index(reload=TRUE)
 }
 

@@ -34,8 +34,6 @@ load_safe_data <- function(record_id, worksheet){
     #'    unset_example_safe_dir()
     #' @export
     
-    # TODO - provide a path argument and then mechanisms to support a standalone file download?
-    
     # validate the record id
     record_set <- validate_record_ids(record_id)
     
@@ -44,10 +42,15 @@ load_safe_data <- function(record_id, worksheet){
     #    which case suggest an alternative.
     # b) If a concept is provided, load MRA if there is one.
     
+    # Look for a local copy of the file. If it doesn't exist, download it if possible
+    index <- load_index()
+    index_row <- subset(index, zenodo_record_id == record_set$record &
+                               grepl('.xlsx$', filename))
+
     if(nrow(record_set) != 1){
         stop("Requires a single valid record or concept id")
     } else if(is.na(record_set$record)){
-        # concept provided
+        # concept provided - we don't attempt to load local private copies here
         if(is.na(record_set$mra)){
             stop("Concept ID provided: all records under embargo or restricted")
         } else {
@@ -57,7 +60,9 @@ load_safe_data <- function(record_id, worksheet){
     } else {
         # record provided
         if(! record_set$available){
-            if(is.na(record_set$mra)){
+            if(index_row$local_copy){
+                verbose_message("Loading data from private copy of embargoed or restricted data")
+            } else if(is.na(record_set$mra)){
                 stop("Record ID provided: this and all other versions of this dataset concept ", 
                      "are under embargo or restricted")
             } else {
@@ -78,15 +83,8 @@ load_safe_data <- function(record_id, worksheet){
         stop('Data worksheet name not one of: ', paste(metadata$dataworksheets$name, collapse=', '))
     }
 
-    # Look for a local copy of the file. If it doesn't exist, download it if possible
-    index <- load_index()
-    index_row <- subset(index, zenodo_record_id == record_set$record &
-                               grepl('.xlsx$', filename))
-    local_path <- file.path(get_data_dir(), record_set$concept, 
-                            record_set$record, index_row$filename)
-    local_copy <- file.exists(local_path)
-
-    if(! local_copy){
+    # Download the data if needed
+    if(! index_row$local_copy){
         verbose_message('Downloading datafile: ', index_row$filename)
         downloaded <- download_safe_files(index_row$zenodo_record_id)
         if(! length(downloaded)){
@@ -95,6 +93,7 @@ load_safe_data <- function(record_id, worksheet){
     }
 
     # Validate the local copy
+	local_path <- file.path(getOption('safedata.dir'), index_row$path)
     local_md5 <- tools::md5sum(local_path)
     if(local_md5 != index_row$checksum){
         stop('Local file has been modified - do not edit files within the SAFE data directory')
@@ -131,11 +130,13 @@ load_safe_data <- function(record_id, worksheet){
     class(data) <- 'data.frame'
     data <- data[,-1]
 
-    # Now do field type conversions
-    if(! all.equal(fields$field_name, names(data))){
+    # Check field name matching, safeguarding against whitespace. Although this shouldn't
+    # make it through safedata_validator, some early datasets may have crept through
+    if(! identical(trimws(fields$field_name), trimws(names(data)))){
         stop('Mismatch between data field names and local metadata')
     }
     
+    # Now do field type conversions
     for(idx in seq_along(names(data))){
         
         fld <- fields[idx, ]
@@ -432,8 +433,8 @@ insert_dataset <- function(record_id, files){
     #'    files <- system.file('safedata_example_dir', 'template_ClareWfunctiondata.xlsx', 
     #'                         package='safedata')
     #'    insert_dataset(1237719, files)
-	#'    dat <- load_safe_data(1237719, 'Data')
-	#'    str(dat)
+    #'    dat <- load_safe_data(1237719, 'Data')
+    #'    str(dat)
     #'    unset_example_safe_dir()
     #' @export
     
@@ -490,14 +491,18 @@ insert_dataset <- function(record_id, files){
         verbose_message('Inserting files: ', 
                         paste0(local_files$filename, collapse=','))
         copy_success <- try({
-	        dir.create(dirname(local_files$current_safe_dir_path[1]), recursive=TRUE)
-			with(local_files, file.copy(local_path, current_safe_dir_path))
-			})
+            dir.create(dirname(local_files$current_safe_dir_path[1]), recursive=TRUE)
+            with(local_files, file.copy(local_path, current_safe_dir_path))
+            })
         if(inherits(copy_success, 'try-error')){
             stop('Failed to insert files:', 
                  paste0(local_files$filename[! copy_success], collapse=','))
+        } else {
+            # update the index
+            index$local_copy[index$checksum %in% local_files$checksum] <- TRUE
+            assign('index', index, safedata.env)
         }
     }
     
-    return(NULL)
+    return()
 }

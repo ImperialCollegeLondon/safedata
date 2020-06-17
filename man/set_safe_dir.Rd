@@ -8,7 +8,6 @@ set_safe_dir(
   safedir,
   update = TRUE,
   create = FALSE,
-  validate = TRUE,
   url = "https://www.safeproject.net"
 )
 }
@@ -20,8 +19,6 @@ directory (str).}
 
 \item{create}{Should a new data directory be created at the provided
 path (logical)?}
-
-\item{validate}{Should the directory structure be validated (logical)?}
 
 \item{url}{A URL providing the SAFE Data API, defaulting to the SAFE 
 Project's own URL.}

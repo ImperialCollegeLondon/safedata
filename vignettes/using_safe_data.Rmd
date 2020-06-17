@@ -113,9 +113,7 @@ set_safe_dir('my_safe_directory')
 You will see that this function checks with the SAFE Project website for updates to the key index
 files. This can be turned off for offline use (`set_safe_dir('~/my_safe_directory',
 update=FALSE)`). The function also validates local data files: it checks the MD5 hash of local data
-file copies against the MD5 of the published file. You _can_ suppress validation
-(`set_safe_dir('~/my_safe_directory', validate=FALSE)`), but this is not advised: altering the
-contents of a published data file undermines reproducible research.
+file copies against the MD5 of the published file.
 
 The rest of this vignette uses an example SAFE data directory that is included within the package.
 This is set up for use using the following command but note that this is a temporary data folder and

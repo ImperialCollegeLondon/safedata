@@ -72,7 +72,7 @@ then work seamlessly alongside openly available data." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2.9000</span>
       </span>
     </div>
 
@@ -147,8 +147,7 @@ then work seamlessly alongside openly available data.</p>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>   <span class='fu'><a href='set_example_safe_dir.html'>set_example_safe_dir</a></span>()
-   <span class='no'>files</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>'safedata_example_dir'</span>, <span class='st'>'template_ClareWfunctiondata.xlsx'</span>,
+    <pre class="examples"><div class='input'>   <span class='fu'><a href='set_example_safe_dir.html'>set_example_safe_dir</a></span>()</div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div><div class='input'>   <span class='no'>files</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>'safedata_example_dir'</span>, <span class='st'>'template_ClareWfunctiondata.xlsx'</span>,
                         <span class='kw'>package</span><span class='kw'>=</span><span class='st'>'safedata'</span>)
    <span class='fu'>insert_dataset</span>(<span class='fl'>1237719</span>, <span class='no'>files</span>)</div><div class='output co'>#&gt; <span class='message'>Inserting files: template_ClareWfunctiondata.xlsx</span></div><div class='output co'>#&gt; NULL</div><div class='input'>   <span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='load_safe_data.html'>load_safe_data</a></span>(<span class='fl'>1237719</span>, <span class='st'>'Data'</span>)</div><div class='output co'>#&gt; <span class='message'>Downloading 1 record metadata files</span></div><div class='input'>   <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>dat</span>)</div><div class='output co'>#&gt; SAFE dataset
 #&gt; Concept: 1198840; Record 1237719; Worksheet: Data
@@ -162,7 +161,7 @@ then work seamlessly alongside openly available data.</p>
 #&gt;  $ gregariousness          : Factor w/ 2 levels "no","yes": 1 1 2 2 1 1 1 2 2 2 ...
 #&gt;  $ presence_barbels        : Factor w/ 2 levels "no","yes": 2 2 2 2 1 2 2 2 1 2 ...
 #&gt;  $ vertical_position_water : Factor w/ 4 levels "Benthic","Benthopelagic",..: 2 2 3 3 2 2 2 2 3 1 ...
-#&gt;  $ air-breathing_capability: Factor w/ 2 levels "no","yes": 2 2 1 1 2 2 1 1 1 1 ...</div><div class='input'>   <span class='fu'><a href='set_example_safe_dir.html'>unset_example_safe_dir</a></span>()</div></pre>
+#&gt;  $ air-breathing_capability: Factor w/ 2 levels "no","yes": 2 2 1 1 2 2 1 1 1 1 ...</div><div class='input'>   <span class='fu'><a href='set_example_safe_dir.html'>unset_example_safe_dir</a></span>()</div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

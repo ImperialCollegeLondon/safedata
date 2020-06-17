@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Download SAFE dataset files — download_safe_files • safedata</title>
+<title>Get file status for a dataset — file_status • safedata</title>
 
 
 <!-- jquery -->
@@ -35,11 +35,10 @@
 
 
 
-<meta property="og:title" content="Download SAFE dataset files — download_safe_files" />
-<meta property="og:description" content="This downloads files associated with SAFE datasets, either all of the files 
-included in a set of records (xlsx_only=FALSE) or just the core .xlsx
-files (xlsx_only=FALSE), and stores them in the SAFE data directory.
-Currently, there is no mechanism for importing restricted datasets." />
+<meta property="og:title" content="Get file status for a dataset — file_status" />
+<meta property="og:description" content="This returns a formatted status string for show_record and 
+show_worksheet showing if a dataset is available globally
+or locally as a private copy." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -118,91 +117,34 @@ Currently, there is no mechanism for importing restricted datasets." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Download SAFE dataset files</h1>
+    <h1>Get file status for a dataset</h1>
     
-    <div class="hidden name"><code>download_safe_files.Rd</code></div>
+    <div class="hidden name"><code>file_status.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This downloads files associated with SAFE datasets, either all of the files 
-included in a set of records (<code>xlsx_only=FALSE</code>) or just the core .xlsx
-files (<code>xlsx_only=FALSE</code>), and stores them in the SAFE data directory.
-Currently, there is no mechanism for importing restricted datasets.</p>
+    <p>This returns a formatted status string for <code><a href='show_concepts.html'>show_record</a></code> and 
+<code><a href='show_concepts.html'>show_worksheet</a></code> showing if a dataset is available globally
+or locally as a private copy.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>download_safe_files</span>(
-  <span class='no'>record_ids</span>,
-  <span class='kw'>confirm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>xlsx_only</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>download_metadata</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>refresh</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>token</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)</pre>
+    <pre class="usage"><span class='fu'>file_status</span>(<span class='no'>metadata</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>record_ids</th>
-      <td><p>A vector of SAFE dataset record ids or a 
-<code><a href='validate_record_ids.html'>safe_record_set</a></code> object.</p></td>
-    </tr>
-    <tr>
-      <th>confirm</th>
-      <td><p>Requires the user to confirm before download (logical)</p></td>
-    </tr>
-    <tr>
-      <th>xlsx_only</th>
-      <td><p>Should all files be downloaded or just the core .xslx file (logical)</p></td>
-    </tr>
-    <tr>
-      <th>download_metadata</th>
-      <td><p>Should the metadata record for the file be downloaded (logical)</p></td>
-    </tr>
-    <tr>
-      <th>refresh</th>
-      <td><p>Should the function check if local copies have been modified and 
-download fresh copies. This is useful if the local copies have unintentionally 
-been modified but note the warning above.</p></td>
-    </tr>
-    <tr>
-      <th>token</th>
-      <td><p>An access token for restricted datasets. Not currently implemented.</p></td>
+      <th>A</th>
+      <td><p>loaded metadata dictionary for a record</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Invisibly, a vector of paths for successfully downloaded files.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>By default, the function will also download the dataset metadata. This 
-information is required by many of the functions in the package but users
-can turn off automatic metadata download.</p>
-    <h2 class="hasAnchor" id="warning"><a class="anchor" href="#warning"></a>Warning</h2>
-
-    
-
-<p>Using <code>refresh=TRUE</code> will <strong>overwrite locally modified files</strong> and 
-replace them with the versions of record from Zenodo.</p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>   <span class='co'># \donttest{</span>
-   <span class='fu'><a href='set_example_safe_dir.html'>set_example_safe_dir</a></span>()</div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div><div class='input'>   <span class='no'>recs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='validate_record_ids.html'>validate_record_ids</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3247631</span>, <span class='fl'>3266827</span>, <span class='fl'>3266821</span>))
-   <span class='fu'>download_safe_files</span>(<span class='no'>recs</span>, <span class='kw'>confirm</span><span class='kw'>=</span><span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>2 files requested from 2 records</span>
-#&gt; <span class='message'> - 0 local (0 bytes)</span>
-#&gt; <span class='message'> - 1 embargoed or restricted (647.1 Kb)</span>
-#&gt; <span class='message'> - 1 to download (27.9 Kb)</span></div><div class='output co'>#&gt; <span class='message'>Downloading 2 record metadata files</span></div><div class='output co'>#&gt; <span class='message'>1 files for record 3247631: under embargo or restricted</span></div><div class='output co'>#&gt; <span class='message'>1 files for record 3266827: 1 to download</span></div><div class='output co'>#&gt; <span class='message'> - Downloaded: template_Symes.xlsx</span></div><div class='input'>   <span class='fu'><a href='set_example_safe_dir.html'>unset_example_safe_dir</a></span>()</div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div><div class='input'>   # }
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#warning">Warning</a></li>
-      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>
