@@ -350,7 +350,7 @@ get_phylogeny <- function(record){
     #'    beetle_phylo <- get_phylogeny(1400562)
     #'    ape::plot.phylo(beetle_phylo, show.node.label=TRUE, font=1, no.margin=TRUE)
     #' @param record A single dataset record id
-    #' @return An \code{\link[ape]{phylo}} object.
+    #' @return An \code{\link[ape:read.tree]{phylo}} object.
     #' @export
         
     record_set <- validate_record_ids(record)
