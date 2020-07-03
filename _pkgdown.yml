@@ -33,6 +33,11 @@ reference:
   - add_taxa
   - get_locations
   - add_locations
+- title: Accessing files
+  desc: >
+    These functions help users get access to the files stored in a safedata directory.
+  contents:
+  - get_file_details
 - title: Internal functions
   desc: The following internal functions are not included in the package namespace but are documented here briefly.
   contents:
