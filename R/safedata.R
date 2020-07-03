@@ -22,13 +22,14 @@
 #' @name safedata
 
 
-
 # All of the variables below appear in non standard evaluation formats (e.g. subset etc.) 
 # and so get NOTEd by R CMD CHECK. This suppresses the NOTEs, but I won't pretend I'm happy
 # about the solution.
 
-if(getRversion() >= "2.15.1")  utils::globalVariables(c("available", "col_idx", "concept", 
-    "dataset_embargo", "dataset_title", "description", "field_name", "field_type", "filename",
-    "geometry", "head", "local_exists", "location", "most_recent_available", "publication_date", 
-    "record", "str", "to_download", "zenodo_concept_id", "zenodo_record_id", "local_copy",
-    "dataset_access", "path"))
+if(getRversion() >= "2.15.1")  utils::globalVariables(c("available", "col_idx",
+    "concept", "dataset_embargo", "dataset_title", "description", "field_name",
+    "field_type", "filename", "geometry", "head", "local_exists", "location",
+    "most_recent_available", "publication_date", "record", "str", "to_download",
+    "zenodo_concept_id", "zenodo_record_id", "local_copy", "dataset_access",
+    "path", "gbif_id", "gbif_status", "taxon_name", "taxon_rank", 
+    "worksheet_name"))

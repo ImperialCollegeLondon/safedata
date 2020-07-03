@@ -561,13 +561,19 @@ get_taxon_graph <- function(record){
     vertices <- rbind(vertices, list('root','root', 'root', NA, 'accepted'))
 
     g <- igraph::graph_from_data_frame(edges, vertices=vertices)
-    g <- igraph::set_vertex_attr(g, 'leaf', value=degree(g, mode='out') == 0)
+    g <- igraph::set_vertex_attr(g, 'leaf', 
+                                 value=igraph::degree(g, mode='out') == 0)
 
-    if(! is_simple(g)){
-        warning('Taxon graph is not simple')
+    if(! igraph::is_dag(g)){
+        warning('Taxon graph is not a directed acyclic graph')
     }
-    if(! is_connected(g)){
+
+    if(! igraph::is_connected(g)){
         warning('Taxon graph is not connected')
+    }
+
+    if(! igraph::is_simple(g)){
+        warning('Taxon graph is not simple')
     }
 
     return(g)
@@ -601,13 +607,12 @@ igraph_to_phylo <- function(g){
     #' @return An \code{\link[igraph:make_graph]{graph}} object.
     #' @export
 
-    if(! is_simple(g)){
-        stop('Taxon graph is not simple')
+    if(! igraph::is_simple(g) |
+       ! igraph::is_connected(g) |
+       ! igraph::is_dag(g)){
+        stop('Taxon graph is not a simple, connected, directed acylic graph')
     }
-    if(! is_connected(g)){
-        stop('Taxon graph is not connected')
-    }
-    
+
     # Use a depth first search of the tree to get an ordering 
     # from the root to the tips
     traverse <- igraph::dfs(g, 'root')
