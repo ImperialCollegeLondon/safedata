@@ -466,3 +466,188 @@ get_phylogeny <- function(record){
     return(ret)
     
 }
+
+
+get_taxon_graph <- function(record){
+
+    #' Get a graph of the taxa in a dataset
+    #'
+    #' This function loads the taxa reported in a dataset (see 
+    #' \code{\link{get_taxa}}) and creates a taxonomic graph for the dataset.
+    #' The graph vertex attributes contain further details of each taxon, 
+    #' including GBIF id and taxonomic status.
+    #'
+    #' @examples
+    #'    set_example_safe_dir()
+    #'    beetle_graph <- get_taxon_graph(1400562)
+    #'    igraph::plot(beetle_graph, vertex.label.cex=0.6, vertex.size=15, 
+    #'                 vertex.size2=3, vertex.shape='rectangle', 
+    #'                 vertex.color=vertex_attr(g, 'leaf'))
+    #'    unset_example_safe_dir()
+    #' @param record A single dataset record id
+    #' @return An \code{\link[igraph:make_graph]{graph}} object.
+    #' @export
+
+    record_set <- validate_record_ids(record)
+
+    if(nrow(record_set) != 1){
+        stop("Requires a single valid record or concept id")
+    } else if(is.na(record_set$record)){
+        stop("Concept ID provided, please indicate a specific version")
+    } 
+
+    # Get the record metadata containing the taxon index and if possible the taxon worksheet,
+    # which provides the matching of taxon names to datasets
+    taxa <- load_record_metadata(record_set)$taxa
+
+    if(length(taxa) == 0){
+        return(NULL)
+    }
+
+    # drop the id field 
+    taxa <- taxa[, -match('id', names(taxa))]
+
+    # Some datasets point more than one different "worksheet name" to the same
+    # taxon. This is not ideal but was not expressly an error in early versions
+    # of safedata_validator. Each duplicated row is a (hopefully) different
+    # child of the shared taxon, so promoting the taxon to a parent retains
+    # the expected tips.
+    is_tip <- ! is.na(taxa$worksheet_name)
+    dupe_tn <- duplicated(taxa$taxon_name[is_tip])
+
+    if(any(dupe_tn)){
+        
+        # split the tree into tips (taxa used in the dataset and which have
+        # worksheet names) and the rest of the tree that connects those tips
+        tips <- taxa[is_tip , ]
+        tree <- taxa[! is_tip, ]
+        
+        # remove duplications from the tips data frame
+        dupes <- tips$taxon_name[which(dupe_tn)]
+        dupes <- tips$taxon_name %in% dupes
+        dupe_rows <- tips[dupes, ]
+        tips <- tips[! dupes, ]
+        
+        # split the duplicates up into sets by the duplicated name and
+        # then repackage the row into new tips and new tree rows
+        dupe_rows <- split(dupe_rows, dupe_rows$taxon_name)
+
+        for(this_dupe in dupe_rows){
+            new_tips <- data.frame(worksheet_name = this_dupe$worksheet_name,
+                                   gbif_id = -1,
+                                   taxon_rank = 'user',
+                                   taxon_name = this_dupe$worksheet_name,
+                                   gbif_status = 'user',
+                                   dataset_id = this_dupe$dataset_id,
+                                   gbif_parent_id = this_dupe$gbif_id)
+            tips <- rbind(tips, new_tips)
+
+            new_parent <- this_dupe[1,]
+            new_parent$worksheet_name <- NA
+            tree <- rbind(tree, new_parent)
+        }
+
+        taxa <- rbind(tips, tree);
+    }
+
+    # Add the parent name to the taxa to make edges
+    taxa$parent_name <- taxa$taxon_name[match(taxa$gbif_parent_id, taxa$gbif_id)]
+    taxa$parent_name[is.na(taxa$parent_name) & 
+                     taxa$taxon_rank == 'kingdom'] <- 'root'
+
+    edges <- taxa[, c('parent_name','taxon_name')]
+    vertices <- subset(taxa, select=c(taxon_name, taxon_rank, worksheet_name,
+                                   gbif_id, gbif_status))
+    vertices <- rbind(vertices, list('root','root', 'root', NA, 'accepted'))
+
+    g <- igraph::graph_from_data_frame(edges, vertices=vertices)
+    g <- igraph::set_vertex_attr(g, 'leaf', value=degree(g, mode='out') == 0)
+
+    if(! is_simple(g)){
+        warning('Taxon graph is not simple')
+    }
+    if(! is_connected(g)){
+        warning('Taxon graph is not connected')
+    }
+
+    return(g)
+}
+
+
+igraph_to_phylo <- function(g){
+
+    #' Convert a taxon graph to a phylogeny
+    #'
+    #' This function takes a taxon graph (see \code{\link{get_taxon_graph}})
+    #' and converts it into an \code{\link[ape:read.tree]{phylo}} object.
+    #' This will fail if the graph is not simple (no loops or multiple edges)
+    #' or is not connected (has isolated taxa). Neither of these conditions
+    #' should happen in datasets but they do.
+    #' 
+    #' The phylogeny is assigned with equal branch lengths and so displays
+    #' showing the taxonomic hierarchy of taxa. Note that the phylogeny will
+    #' contain singleton nodes if an internal taxon has a single descendant -
+    #' see the example below showing internal node labels. The 
+    #' \code{\link[ape:ape-package]{ape}} functions 
+    #' \code{\link[ape:collapse.singles]{has.singles}} and
+    #' \code{\link[ape]{collapse.singles}} can be used to detect and remove
+    #' these if required.
+    #' @examples
+    #'    set_example_safe_dir()
+    #'    beetle_graph <- get_taxon_graph(1400562)
+    #'    beetle_phylo <- igraph_to_phylo(beetle_graph)
+    #'    ape::plot(beetle_phylo, show.node.labels=TRUE)
+    #' @param record A single dataset record id
+    #' @return An \code{\link[igraph:make_graph]{graph}} object.
+    #' @export
+
+    if(! is_simple(g)){
+        stop('Taxon graph is not simple')
+    }
+    if(! is_connected(g)){
+        stop('Taxon graph is not connected')
+    }
+    
+    # Use a depth first search of the tree to get an ordering 
+    # from the root to the tips
+    traverse <- igraph::dfs(g, 'root')
+    
+    # Use the leaf attribute to find which vertices in the sequence
+    # are tips and then use this to create increasing numberings for the
+    # tips and nodes. The sequences can then be merged to get a correct
+    # phylo node numbering.
+    is_leaf <- igraph::vertex_attr(g, 'leaf', traverse$order)
+    n_leaf <- sum(is_leaf)
+    n_node <- sum(! is_leaf)
+    node_id <- ifelse(is_leaf, cumsum(is_leaf), cumsum(!is_leaf) + n_leaf)
+
+    # Store the node ids on the graph
+    g <- igraph::set_vertex_attr(g, 'node_id', index=traverse$order,
+                                 value=node_id)
+    
+    # Extract the edge and vertex data
+    vertex_data <-  igraph::as_data_frame(g, 'vertices')
+    edge_data <- igraph::as_data_frame(g, 'edges')
+
+    # Substitute the node id numbers into the edge list
+    edge_data <- unlist(edge_data)
+    edge_data <- vertex_data$node_id[match(edge_data, vertex_data$name)]
+    edge_data <- matrix(edge_data, ncol=2)
+    
+    # lookup the tip and node labels
+    tip_labels <- 1:n_leaf
+    tip_labels <- vertex_data$name[match(tip_labels, vertex_data$node_id, tip_labels)]
+    node_labels <- (n_leaf + 1):(n_node + n_leaf)
+    node_labels <- vertex_data$name[match(node_labels, vertex_data$node_id)]
+    
+    # Build the phylogeny
+    phy <- structure(list(edge=edge_data, 
+                          edge.length=rep(1, nrow(edge_data)),
+                          tip.labels=tip_labels, 
+                          node.labels=node_labels,
+                          Nnode=n_node), 
+                     class='phylo')
+    return(phy)
+}
+
+

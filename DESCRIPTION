@@ -19,7 +19,8 @@ Imports:
     jsonlite,
     chron,
     curl,
-    sf
+    sf,
+    igraph
 Suggests:
     knitr,
     rmarkdown,
