@@ -30,4 +30,5 @@
 if(getRversion() >= "2.15.1")  utils::globalVariables(c("available", "col_idx", "concept", 
     "dataset_embargo", "dataset_title", "description", "field_name", "field_type", "filename",
     "geometry", "head", "local_exists", "location", "most_recent_available", "publication_date", 
-    "record", "str", "to_download", "zenodo_concept_id", "zenodo_record_id", "local_copy"))
+    "record", "str", "to_download", "zenodo_concept_id", "zenodo_record_id", "local_copy",
+    "dataset_access", "path"))
