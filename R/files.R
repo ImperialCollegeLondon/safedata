@@ -18,7 +18,8 @@ get_file_details <- function(record_id){
     #'    files <- get_file_details(1400562)
     #'    unset_example_safe_dir()
     #'    }
-
+    #' @export
+    
     # validate the record id
     record_set <- validate_record_ids(record_id)
     index <- load_index()
