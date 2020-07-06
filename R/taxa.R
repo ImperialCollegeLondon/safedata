@@ -331,17 +331,6 @@ add_taxa <- function (obj, taxon_field=NULL, taxon_table=NULL, prefix=NULL, whic
     return(ret)
 }
 
-get_phylogeny <- function(record){
-
-    #' describeIn igraph_to_phylo.
-    #' @export
-
-    graph <- get_taxon_graph(record)
-    phylo <- igraph_to_phylo(graph)
-
-    return(phylo)
-}
-
 
 get_taxon_graph <- function(record){
 
@@ -373,14 +362,14 @@ get_taxon_graph <- function(record){
     #' @examples
     #'    set_example_safe_dir()
     #'    beetle_graph <- get_taxon_graph(1400562)
-    #'    igraph::plot(beetle_graph, vertex.label.cex=0.6, vertex.size=15, 
-    #'                 vertex.size2=3, vertex.shape='rectangle', 
-    #'                 vertex.color=vertex_attr(g, 'leaf'))
+    #'    plot(beetle_graph, vertex.label.cex=0.6, vertex.size=15, 
+    #'         vertex.size2=3, vertex.shape='rectangle')
     #'    # show worksheet names for tips
-    #'    wsn <- get.vertex.attribute(g, 'worksheet_name')
-    #'    txn <- get.vertex.attribute(g, 'name')
+    #'    wsn <- igraph::vertex_attr(beetle_graph, 'worksheet_name')
+    #'    txn <- igraph::vertex_attr(beetle_graph, 'name')
     #'    labels <- ifelse(is.na(wsn), txn, wsn)
-    #'    vert_col <- ifelse(vertex_attr(g, 'leaf'), 'cornflowerblue','grey')
+    #'    is_leaf <- igraph::vertex_attr(beetle_graph, 'leaf')
+    #'    vert_col <- ifelse(is_leaf, 'cornflowerblue','grey')
     #'    plot(beetle_graph, vertex.label.cex=0.6, vertex.size=15, 
     #'         vertex.size2=3, vertex.shape='rectangle', 
     #'         vertex.label=labels, vertex.color= vert_col)
@@ -540,12 +529,12 @@ igraph_to_phylo <- function(g){
     #'    set_example_safe_dir()
     #'    beetle_graph <- get_taxon_graph(1400562)
     #'    beetle_phylo <- igraph_to_phylo(beetle_graph)
-    #'    ape::plot(beetle_phylo, show.node.labels=TRUE)
-	#'    # Or wrapped into a single function
-	#'    beetle_phylo <- get_phylogeny(1400562)
-	#'    ape::plot(beetle_phylo, show.node.labels=TRUE)
+    #'    ape::plot.phylo(beetle_phylo, show.node.label=TRUE)
+    #'    # Or wrapped into a single function
+    #'    beetle_phylo <- get_phylogeny(1400562)
+    #'    ape::plot.phylo(beetle_phylo, show.node.label=TRUE)
     #'    unset_example_safe_dir()
-	#' @param g A taxon graph returned by \code{\link{get_taxon_graph}}
+    #' @param g A taxon graph returned by \code{\link{get_taxon_graph}}
     #' @param record A single dataset record id
     #' @return An \code{\link[ape:read.tree]{phylo}} object.
     #' @export
@@ -599,3 +588,13 @@ igraph_to_phylo <- function(g){
 }
 
 
+get_phylogeny <- function(record){
+
+    #' @describeIn igraph_to_phylo Get a phylogeny for a dataset
+    #' @export
+
+    graph <- get_taxon_graph(record)
+    phylo <- igraph_to_phylo(graph)
+
+    return(phylo)
+}

@@ -30,6 +30,8 @@ reference:
   - get_taxa
   - get_taxon_coverage
   - get_phylogeny
+  - get_taxon_graph
+  - igraph_to_phylo
   - add_taxa
   - get_locations
   - add_locations
