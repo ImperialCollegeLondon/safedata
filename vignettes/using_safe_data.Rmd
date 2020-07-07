@@ -349,7 +349,7 @@ show_worksheet(beetle_abund)
 
 ## Dataset taxa
 
-There are three functions that can be used to work with the taxa in a dataset:
+There are a number of functions that can be used to work with the taxa in a dataset. Some generate simple tables of taxa:
 
 1. `get_taxa()`:  This function loads a dataframe containing all of the taxa used within a dataset, with fields including the core GBIF taxonomic levels, the taxonomic label used within the dataset and the taxonomic status of the each taxon. You can load a taxonomic dataframe from a `safe_record_set` row or using an existing loaded `safedata` object.
 
@@ -365,21 +365,27 @@ There are three functions that can be used to work with the taxa in a dataset:
     beetle_morph <- add_taxa(beetle_morph)
     str(beetle_morph)
     ```
-    
-3. `get_phylogeny()`:  This function creates a phylogeny from the taxonomic data in a dataset, returning an object of class `phylo` (see package`ape`).
+
+3. The `get_taxon_coverage` function can be used to get a taxon table of all taxa currently referenced in _all_ datasets.
+
+     ```{r get_taxon_coverage}
+     all_taxa <- get_taxon_coverage()
+     str(all_taxa)
+     ```
+ 
+ The other functions convert taxon tables into graphs (vertices and edges) and phylogenetic trees using the GBIF taxonomic backbone to represent phylogeny. The data validation should ensure that the taxa in a dataset can be connected as a phylogenetic tree, but this isn't always the case. For this reason, these functions use a more general graph conversion and then checks whether the result can be converted to a phlyogenetic tree. Technically, that is checking that the graph is a connected, simple, directed acyclic graph.
+ 
+1. The `get_taxon_graph` function converts a taxon table to a graph. The function also does some extra validation, and will give warnings when the taxon table has to be adjusted to represent the taxonomic hierarchy and worksheet taxa properly. The result is an object of class `igraph` and the vertices have attributes containing the original table data.
+
+2. The `igraph_to_phylo` function tests whether a taxon graph can be converted to a phylogeny and returns a `phylo` object (package `ape`). The tips and internal nodes are labelled with taxon names but the `phylo` structure does not store other node information.
+
+3. `get_phylogeny()`:  This is simply a wrapper that runs both functions above in turn to go straight to a phylogeny.
 
     ```{r get_phylo}
     library(ape)
     beetle_phylo <- get_phylogeny(1400562)
     plot(beetle_phylo, show.node.label=TRUE, font=1, no.margin=TRUE)
     ```
-
-In addition, the `get_taxon_coverage` function can be used to get a taxon table of all taxa currently referenced in datasets.
-
-```{r get_taxon_coverage}
-all_taxa <- get_taxon_coverage()
-str(all_taxa)
-```
 
 ## Dataset locations
 
@@ -434,3 +440,7 @@ str(dat)
 ```{r unset, echo=FALSE}
 unset_example_safe_dir()
 ```
+
+# File details and accessing files
+
+At the moment, the `safedata` package only handles loading data from the core Excel files. We do intend to add functions and recipes to access other files stored within a dataset in the future. At the moment, if you have downloaded all the files associated with a dataset then the `get_file_details` function allows you to quickly see a list of the files in a datset, whether you have downloaded a local copy and the absolute file path of those files.
