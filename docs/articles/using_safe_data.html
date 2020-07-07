@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.3.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4.9000</span>
       </span>
     </div>
 
@@ -78,7 +78,7 @@
       <h1>Using the <code>safedata</code> package</h1>
                         <h4 class="author">Andy Aldersley and David Orme</h4>
             
-            <h4 class="date">2020-06-17</h4>
+            <h4 class="date">2020-07-07</h4>
       
       
       <div class="hidden name"><code>using_safe_data.Rmd</code></div>
@@ -176,23 +176,24 @@
 </ul>
 <p>All of these functions return a <code>safe_record_set</code> objects, which is just a data frame containing validated record ids and access information and so you can use the normal data frame indices (e.g. <code>recs[1,]</code>) to select particular records.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>soil_datasets &lt;-<span class="st"> </span><span class="kw"><a href="../reference/search_safe.html">search_text</a></span>(<span class="st">'soil'</span>)</span></code></pre></div>
-<pre><code>## Search returned 18 records</code></pre>
-<pre><code>## Warning in validate_record_ids(content$entries$zenodo_record_id): Unknown record
-## ids in record_set: 3897377,3888375,3698115,3897394,3614876,3402746,3857210</code></pre>
+<pre><code>## Search returned 19 records</code></pre>
+<pre><code>## Warning in validate_record_ids(content$entries$zenodo_record_id):
+## Unknown record ids in record_set:
+## 3897377,3888375,3698115,3897394,3614876,3402746,3929632,3857210</code></pre>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(soil_datasets)</span></code></pre></div>
 <pre><code>## Set includes 8 concept ids and 11 record ids: 
-##  - 5 open and most recent (*)
-##  - 0 open and outdated (o)
-##  - 6 under embargo or restricted (x)
+##  - 8 open and most recent (*)
+##  - 3 open and outdated (o)
+##  - 0 under embargo or restricted (x)
 ## 
 ##    concept  record available
 ## 1  3247591 3247592         *
-## 2  3251886 3258079         x
-## 3  ------- 3251887         x
-## 4  3251899 3258117         x
-## 5  ------- 3251900         x
-## 6  3251901 3258082         x
-## 7  ------- 3251902         x
+## 2  3251886 3258079         *
+## 3  ------- 3251887         o
+## 4  3251899 3258117         *
+## 5  ------- 3251900         o
+## 6  3251901 3258082         *
+## 7  ------- 3251902         o
 ## 8  3265745 3265746         *
 ## 9  3266770 3266771         *
 ## 10 3266821 3266822         *
@@ -203,9 +204,9 @@
 <p>Published datasets contain a taxonomic index of any organisms referred to within the data - see <a href="https://safedata-validator.readthedocs.io/en/latest/data_format/taxa/">here</a> for details of the Taxa worksheet containing the index.</p>
 <p>The taxa in this index, along with all of the parent taxa in the taxonomic hierarchy leading up to that those taxa, are added to a taxonomic database on the SAFE Project website. The <code><a href="../reference/search_safe.html">search_taxa()</a></code> function searches that index to identify all the datasets that contain a particular taxon.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(ants &lt;-<span class="st"> </span><span class="kw"><a href="../reference/search_safe.html">search_taxa</a></span>(<span class="st">'Formicidae'</span>))</span>
-<span id="cb14-2"><a href="#cb14-2"></a><span class="co">## Search returned 10 records</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="co">## Search returned 11 records</span></span>
 <span id="cb14-3"><a href="#cb14-3"></a><span class="co">## Warning in validate_record_ids(content$entries$zenodo_record_id): Unknown record</span></span>
-<span id="cb14-4"><a href="#cb14-4"></a><span class="co">## ids in record_set: 3876227</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="co">## ids in record_set: 3876227,3901735</span></span>
 <span id="cb14-5"><a href="#cb14-5"></a><span class="co">## Set includes 9 concept ids and 9 record ids: </span></span>
 <span id="cb14-6"><a href="#cb14-6"></a><span class="co">##  - 9 open and most recent (*)</span></span>
 <span id="cb14-7"><a href="#cb14-7"></a><span class="co">##  - 0 open and outdated (o)</span></span>
@@ -223,9 +224,9 @@
 <span id="cb14-19"><a href="#cb14-19"></a><span class="co">## 9 3354067 3354068         *</span></span></code></pre></div>
 <p>The taxonomic index is built around the GBIF backbone taxonomic database and include the following core taxonomic levels: kingdom, phylum, class, order, family, genus, species and subspecies. It is also possible to search by <a href="https://www.gbif.org/species/4342">GBIF ID</a>.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>ants &lt;-<span class="st"> </span><span class="kw"><a href="../reference/search_safe.html">search_taxa</a></span>(<span class="dt">gbif_id=</span><span class="dv">4342</span>)</span>
-<span id="cb15-2"><a href="#cb15-2"></a><span class="co">## Search returned 10 records</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a><span class="co">## Search returned 11 records</span></span>
 <span id="cb15-3"><a href="#cb15-3"></a><span class="co">## Warning in validate_record_ids(content$entries$zenodo_record_id): Unknown record</span></span>
-<span id="cb15-4"><a href="#cb15-4"></a><span class="co">## ids in record_set: 3876227</span></span></code></pre></div>
+<span id="cb15-4"><a href="#cb15-4"></a><span class="co">## ids in record_set: 3876227,3901735</span></span></code></pre></div>
 </div>
 <div id="spatial-search-details" class="section level3">
 <h3 class="hasAnchor">
@@ -239,9 +240,10 @@
 <span id="cb16-5"><a href="#cb16-5"></a><span class="co">## ids in record_set: 3876227,3490675,3832076,3476542</span></span>
 <span id="cb16-6"><a href="#cb16-6"></a><span class="co"># Datasets that sampled within 2 km of the Maliau Basin Field Study Centre</span></span>
 <span id="cb16-7"><a href="#cb16-7"></a>near_maliau &lt;-<span class="st"> </span><span class="kw"><a href="../reference/search_safe.html">search_spatial</a></span>(<span class="dt">wkt=</span><span class="st">'POINT(116.97394 4.73481)'</span>, <span class="dt">distance=</span><span class="dv">2000</span>)</span>
-<span id="cb16-8"><a href="#cb16-8"></a><span class="co">## Search returned 52 records</span></span>
-<span id="cb16-9"><a href="#cb16-9"></a><span class="co">## Warning in validate_record_ids(content$entries$zenodo_record_id): Unknown record</span></span>
-<span id="cb16-10"><a href="#cb16-10"></a><span class="co">## ids in record_set: 3876227,3490564,3402748,3490613,3492009,3857210</span></span></code></pre></div>
+<span id="cb16-8"><a href="#cb16-8"></a><span class="co">## Search returned 56 records</span></span>
+<span id="cb16-9"><a href="#cb16-9"></a><span class="co">## Warning in validate_record_ids(content$entries$zenodo_record_id):</span></span>
+<span id="cb16-10"><a href="#cb16-10"></a><span class="co">## Unknown record ids in record_set:</span></span>
+<span id="cb16-11"><a href="#cb16-11"></a><span class="co">## 3876227,3490564,3402748,3490613,3492009,3901735,3908118,3780391,3857210,3908128</span></span></code></pre></div>
 <p>Note that WKT coordinates should be supplied as WGS84 longitude and latitude - typically the output of GPS receivers - but the database uses the local UTM 50N projected coordinate system for all distance calculations and GIS operations.</p>
 </div>
 </div>
@@ -482,7 +484,7 @@
 <div id="dataset-taxa" class="section level2">
 <h2 class="hasAnchor">
 <a href="#dataset-taxa" class="anchor"></a>Dataset taxa</h2>
-<p>There are three functions that can be used to work with the taxa in a dataset:</p>
+<p>There are a number of functions that can be used to work with the taxa in a dataset. Some generate simple tables of taxa:</p>
 <ol style="list-style-type: decimal">
 <li>
 <p><code><a href="../reference/get_taxa.html">get_taxa()</a></code>: This function loads a dataframe containing all of the taxa used within a dataset, with fields including the core GBIF taxonomic levels, the taxonomic label used within the dataset and the taxonomic status of the each taxon. You can load a taxonomic dataframe from a <code>safe_record_set</code> row or using an existing loaded <code>safedata</code> object.</p>
@@ -543,30 +545,37 @@
 ##  $ gbif_status  : chr  "user" "user" "user" "user" ...</code></pre>
 </li>
 <li>
-<p><code><a href="../reference/get_phylogeny.html">get_phylogeny()</a></code>: This function creates a phylogeny from the taxonomic data in a dataset, returning an object of class <code>phylo</code> (see package<code>ape</code>).</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ape)</span>
-<span id="cb43-2"><a href="#cb43-2"></a>beetle_phylo &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_phylogeny.html">get_phylogeny</a></span>(<span class="dv">1400562</span>)</span>
-<span id="cb43-3"><a href="#cb43-3"></a><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(beetle_phylo, <span class="dt">show.node.label=</span><span class="ot">TRUE</span>, <span class="dt">font=</span><span class="dv">1</span>, <span class="dt">no.margin=</span><span class="ot">TRUE</span>)</span></code></pre></div>
-<p><img src="using_safe_data_files/figure-html/get_phylo-1.png" width="700"></p>
-</li>
-</ol>
-<p>In addition, the <code>get_taxon_coverage</code> function can be used to get a taxon table of all taxa currently referenced in datasets.</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a>all_taxa &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_taxon_coverage.html">get_taxon_coverage</a></span>()</span>
-<span id="cb44-2"><a href="#cb44-2"></a><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(all_taxa)</span></code></pre></div>
-<pre><code>## Classes 'safe_taxa' and 'data.frame':    5741 obs. of  13 variables:
-##  $ kingdom    : chr  "Plantae" "Plantae" "Plantae" "Animalia" ...
-##  $ phylum     : chr  "Tracheophyta" "Tracheophyta" "Tracheophyta" "Chordata" ...
-##  $ class      : chr  "Magnoliopsida" "Magnoliopsida" "Magnoliopsida" "Aves" ...
-##  $ order      : chr  "Malpighiales" "Ericales" "Lamiales" "Columbiformes" ...
-##  $ family     : chr  "Salicaceae" "Pentaphylacaceae" "Lamiaceae" "Columbidae" ...
-##  $ genus      : chr  NA NA "Congea" "Chalcophaps" ...
-##  $ species    : chr  NA NA NA NA ...
+<p>The <code>get_taxon_coverage</code> function can be used to get a taxon table of all taxa currently referenced in <em>all</em> datasets.</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a>all_taxa &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_taxon_coverage.html">get_taxon_coverage</a></span>()</span>
+<span id="cb43-2"><a href="#cb43-2"></a><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(all_taxa)</span></code></pre></div>
+<pre><code>## Classes 'safe_taxa' and 'data.frame':   5811 obs. of  13 variables:
+##  $ kingdom    : chr  "Plantae" "Plantae" "Animalia" "Plantae" ...
+##  $ phylum     : chr  "Tracheophyta" "Tracheophyta" "Chordata" "Tracheophyta" ...
+##  $ class      : chr  "Magnoliopsida" "Magnoliopsida" "Aves" "Magnoliopsida" ...
+##  $ order      : chr  "Ericales" "Lamiales" "Columbiformes" "Ericales" ...
+##  $ family     : chr  "Pentaphylacaceae" "Lamiaceae" "Columbidae" "Ebenaceae" ...
+##  $ genus      : chr  NA "Congea" "Chalcophaps" "Diospyros" ...
+##  $ species    : chr  NA NA NA "Diospyros frutescens" ...
 ##  $ subspecies : chr  NA NA NA NA ...
 ##  $ variety    : chr  NA NA NA NA ...
 ##  $ form       : chr  NA NA NA NA ...
-##  $ taxon_name : chr  "Salicaceae" "Pentaphylacaceae" "Congea" "Chalcophaps" ...
-##  $ taxon_level: chr  "family" "family" "genus" "genus" ...
+##  $ taxon_name : chr  "Pentaphylacaceae" "Congea" "Chalcophaps" "Diospyros frutescens" ...
+##  $ taxon_level: chr  "family" "genus" "genus" "species" ...
 ##  $ gbif_status: chr  "accepted" "accepted" "accepted" "accepted" ...</code></pre>
+</li>
+</ol>
+<p>The other functions convert taxon tables into graphs (vertices and edges) and phylogenetic trees using the GBIF taxonomic backbone to represent phylogeny. The data validation should ensure that the taxa in a dataset can be connected as a phylogenetic tree, but this isn’t always the case. For this reason, these functions use a more general graph conversion and then checks whether the result can be converted to a phlyogenetic tree. Technically, that is checking that the graph is a connected, simple, directed acyclic graph.</p>
+<ol style="list-style-type: decimal">
+<li><p>The <code>get_taxon_graph</code> function converts a taxon table to a graph. The function also does some extra validation, and will give warnings when the taxon table has to be adjusted to represent the taxonomic hierarchy and worksheet taxa properly. The result is an object of class <code>igraph</code> and the vertices have attributes containing the original table data.</p></li>
+<li><p>The <code>igraph_to_phylo</code> function tests whether a taxon graph can be converted to a phylogeny and returns a <code>phylo</code> object (package <code>ape</code>). The tips and internal nodes are labelled with taxon names but the <code>phylo</code> structure does not store other node information.</p></li>
+<li>
+<p><code><a href="../reference/igraph_to_phylo.html">get_phylogeny()</a></code>: This is simply a wrapper that runs both functions above in turn to go straight to a phylogeny.</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ape)</span>
+<span id="cb45-2"><a href="#cb45-2"></a>beetle_phylo &lt;-<span class="st"> </span><span class="kw"><a href="../reference/igraph_to_phylo.html">get_phylogeny</a></span>(<span class="dv">1400562</span>)</span>
+<span id="cb45-3"><a href="#cb45-3"></a><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(beetle_phylo, <span class="dt">show.node.label=</span><span class="ot">TRUE</span>, <span class="dt">font=</span><span class="dv">1</span>, <span class="dt">no.margin=</span><span class="ot">TRUE</span>)</span></code></pre></div>
+<p><img src="using_safe_data_files/figure-html/get_phylo-1.png" width="700"></p>
+</li>
+</ol>
 </div>
 <div id="dataset-locations" class="section level2">
 <h2 class="hasAnchor">
@@ -726,6 +735,11 @@
 ##  $ vertical_position_water : Factor w/ 4 levels "Benthic","Benthopelagic",..: 2 2 3 3 2 2 2 2 3 1 ...
 ##  $ air-breathing_capability: Factor w/ 2 levels "no","yes": 2 2 1 1 2 2 1 1 1 1 ...</code></pre>
 </div>
+<div id="file-details-and-accessing-files" class="section level1">
+<h1 class="hasAnchor">
+<a href="#file-details-and-accessing-files" class="anchor"></a>File details and accessing files</h1>
+<p>At the moment, the <code>safedata</code> package only handles loading data from the core Excel files. We do intend to add functions and recipes to access other files stored within a dataset in the future. At the moment, if you have downloaded all the files associated with a dataset then the <code>get_file_details</code> function allows you to quickly see a list of the files in a datset, whether you have downloaded a local copy and the absolute file path of those files.</p>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -771,6 +785,7 @@
       </ul>
 </li>
       <li><a href="#inserting-datasets">Inserting datasets</a></li>
+      <li><a href="#file-details-and-accessing-files">File details and accessing files</a></li>
       </ul>
 </div>
       </div>

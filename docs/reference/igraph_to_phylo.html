@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get a phylogeny for a dataset — get_phylogeny • safedata</title>
+<title>Getting a phylogeny for a dataset — igraph_to_phylo • safedata</title>
 
 
 <!-- jquery -->
@@ -35,13 +35,13 @@
 
 
 
-<meta property="og:title" content="Get a phylogeny for a dataset — get_phylogeny" />
-<meta property="og:description" content="This function loads the taxa reported in a dataset (see get_taxa)
-and creates a phylogeny for those taxa, using the phylo class. 
-Equal branch lengths are used. This function differs from as.phylo.formula 
-in that it does not expect all taxonomic levels to be non NA: tips can
-be at different taxonomic depths. The object has internal node labels showing
-the taxonomic hierarchy of the phylogeny." />
+<meta property="og:title" content="Getting a phylogeny for a dataset — igraph_to_phylo" />
+<meta property="og:description" content="The function igraph_to_phylo takes a taxon graph (see 
+get_taxon_graph) and attempts to convert that to a
+a phylo object from ape.
+This will fail if the graph is not simple (no loops or multiple edges)
+or is not connected (has isolated taxa). Neither of these conditions
+should happen in datasets but they do." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -74,7 +74,7 @@ the taxonomic hierarchy of the phylogeny." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.3.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4.9000</span>
       </span>
     </div>
 
@@ -120,25 +120,31 @@ the taxonomic hierarchy of the phylogeny." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get a phylogeny for a dataset</h1>
+    <h1>Getting a phylogeny for a dataset</h1>
     
-    <div class="hidden name"><code>get_phylogeny.Rd</code></div>
+    <div class="hidden name"><code>igraph_to_phylo.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This function loads the taxa reported in a dataset (see <code><a href='get_taxa.html'>get_taxa</a></code>)
-and creates a phylogeny for those taxa, using the <code><a href='https://rdrr.io/pkg/ape/man/read.tree.html'>phylo</a></code> class. 
-Equal branch lengths are used. This function differs from <code><a href='https://rdrr.io/pkg/ape/man/as.phylo.formula.html'>as.phylo.formula</a></code> 
-in that it does not expect all taxonomic levels to be non NA: tips can
-be at different taxonomic depths. The object has internal node labels showing
-the taxonomic hierarchy of the phylogeny.</p>
+    <p>The function <code>igraph_to_phylo</code> takes a taxon graph (see 
+<code><a href='get_taxon_graph.html'>get_taxon_graph</a></code>) and attempts to convert that to a
+a <code><a href='https://rdrr.io/pkg/ape/man/read.tree.html'>phylo</a></code> object from <span class="pkg">ape</span>.
+This will fail if the graph is not simple (no loops or multiple edges)
+or is not connected (has isolated taxa). Neither of these conditions
+should happen in datasets but they do.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_phylogeny</span>(<span class='no'>record</span>)</pre>
+    <pre class="usage"><span class='fu'>igraph_to_phylo</span>(<span class='no'>g</span>)
+
+<span class='fu'>get_phylogeny</span>(<span class='no'>record</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>g</th>
+      <td><p>A taxon graph returned by <code><a href='get_taxon_graph.html'>get_taxon_graph</a></code></p></td>
+    </tr>
     <tr>
       <th>record</th>
       <td><p>A single dataset record id</p></td>
@@ -150,14 +156,32 @@ the taxonomic hierarchy of the phylogeny.</p>
     <p>An <code><a href='https://rdrr.io/pkg/ape/man/read.tree.html'>phylo</a></code> object.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Note that the phylogeny will contain singleton nodes if an internal taxon has
-a single descendant: the <code><a href='https://rdrr.io/pkg/ape/man/ape-package.html'>ape</a></code> functions <code><a href='https://rdrr.io/pkg/ape/man/collapse.singles.html'>has.singles</a></code>
-and <code><a href='https://rdrr.io/pkg/ape/man/collapse.singles.html'>collapse.singles</a></code> can be used to detect and remove these if 
-required.</p>
+    <p>The phylogeny is assigned with equal branch lengths and so displays
+showing the taxonomic hierarchy of taxa. Note that the phylogeny will
+contain singleton nodes if an internal taxon has a single descendant -
+see the example below showing internal node labels. The 
+<code><a href='https://rdrr.io/pkg/ape/man/ape-package.html'>ape</a></code> functions 
+<code><a href='https://rdrr.io/pkg/ape/man/collapse.singles.html'>has.singles</a></code> and
+<code><a href='https://rdrr.io/pkg/ape/man/collapse.singles.html'>collapse.singles</a></code> can be used to detect and remove
+these if required.</p>
+<p>The function <code>get_phylogeny</code> is simply a wrapper that calls
+<code><a href='get_taxon_graph.html'>get_taxon_graph</a></code> and then <code>igraph_to_phylo</code>.</p>
+    <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
+
+    
+<ul>
+<li><p><code>get_phylogeny</code>: Get a phylogeny for a dataset</p></li>
+</ul>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='get_taxon_graph.html'>get_taxon_graph</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>   <span class='no'>beetle_phylo</span> <span class='kw'>&lt;-</span> <span class='fu'>get_phylogeny</span>(<span class='fl'>1400562</span>)
-   <span class='kw pkg'>ape</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/ape/man/plot.phylo.html'>plot.phylo</a></span>(<span class='no'>beetle_phylo</span>, <span class='kw'>show.node.label</span><span class='kw'>=</span><span class='fl'>TRUE</span>, <span class='kw'>font</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>no.margin</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='img'><img src='get_phylogeny-1.png' alt='' width='700' height='433' /></div></pre>
+    <pre class="examples"><div class='input'>   <span class='fu'><a href='set_example_safe_dir.html'>set_example_safe_dir</a></span>()</div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div><div class='input'>   <span class='no'>beetle_graph</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_taxon_graph.html'>get_taxon_graph</a></span>(<span class='fl'>1400562</span>)
+   <span class='no'>beetle_phylo</span> <span class='kw'>&lt;-</span> <span class='fu'>igraph_to_phylo</span>(<span class='no'>beetle_graph</span>)
+   <span class='kw pkg'>ape</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/ape/man/plot.phylo.html'>plot.phylo</a></span>(<span class='no'>beetle_phylo</span>, <span class='kw'>show.node.label</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='input'>   <span class='co'># Or wrapped into a single function</span>
+   <span class='no'>beetle_phylo</span> <span class='kw'>&lt;-</span> <span class='fu'>get_phylogeny</span>(<span class='fl'>1400562</span>)
+   <span class='kw pkg'>ape</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/ape/man/plot.phylo.html'>plot.phylo</a></span>(<span class='no'>beetle_phylo</span>, <span class='kw'>show.node.label</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='img'><img src='igraph_to_phylo-1.png' alt='' width='700' height='433' /></div><div class='input'>   <span class='fu'><a href='set_example_safe_dir.html'>unset_example_safe_dir</a></span>()</div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -165,6 +189,8 @@ required.</p>
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
       <li><a href="#details">Details</a></li>
+      <li><a href="#functions">Functions</a></li>
+      <li><a href="#see-also">See also</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
 
