@@ -18,7 +18,7 @@ get_phylogeny(record)
 An \code{\link[ape:read.tree]{phylo}} object.
 }
 \description{
-The function \code{igraph_to_phylo} takes a taxon graph (see 
+The function \code{igraph_to_phylo} takes a taxon graph (see
 \code{\link{get_taxon_graph}}) and attempts to convert that to a
 a \code{\link[ape:read.tree]{phylo}} object from \pkg{ape}.
 This will fail if the graph is not simple (no loops or multiple edges)
@@ -29,8 +29,8 @@ should happen in datasets but they do.
 The phylogeny is assigned with equal branch lengths and so displays
 showing the taxonomic hierarchy of taxa. Note that the phylogeny will
 contain singleton nodes if an internal taxon has a single descendant -
-see the example below showing internal node labels. The 
-\code{\link[ape:ape-package]{ape}} functions 
+see the example below showing internal node labels. The
+\code{\link[ape:ape-package]{ape}} functions
 \code{\link[ape:collapse.singles]{has.singles}} and
 \code{\link[ape]{collapse.singles}} can be used to detect and remove
 these if required.
@@ -47,10 +47,10 @@ The function \code{get_phylogeny} is simply a wrapper that calls
    set_example_safe_dir()
    beetle_graph <- get_taxon_graph(1400562)
    beetle_phylo <- igraph_to_phylo(beetle_graph)
-   ape::plot.phylo(beetle_phylo, show.node.label=TRUE)
+   ape::plot.phylo(beetle_phylo, show.node.label = TRUE)
    # Or wrapped into a single function
    beetle_phylo <- get_phylogeny(1400562)
-   ape::plot.phylo(beetle_phylo, show.node.label=TRUE)
+   ape::plot.phylo(beetle_phylo, show.node.label = TRUE)
    unset_example_safe_dir()
 }
 \seealso{

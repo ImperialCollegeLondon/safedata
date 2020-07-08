@@ -6,10 +6,10 @@
 \title{Finding and using data from the SAFE Project.}
 \description{
 The SAFE Project is one of the largest ecological experiments in the world.
-We are studying how biodiversity and ecosystem function change as forests are 
+We are studying how biodiversity and ecosystem function change as forests are
 modified by human activities. As well as studying the change, we also
 explore whether preserving sections of forest within modified landscapes
-and around waterways can protect biodiversity and ecosystem function, 
+and around waterways can protect biodiversity and ecosystem function,
 and how much protection is needed to be effective.
 
 The project is a multinational collaboration that has generated a wide range

@@ -12,7 +12,7 @@ set_safe_dir(
 )
 }
 \arguments{
-\item{safedir}{A path to the directory to set as the SAFE data 
+\item{safedir}{A path to the directory to set as the SAFE data
 directory (str).}
 
 \item{update}{Should the local dataset index be updated (logical)?}
@@ -20,51 +20,51 @@ directory (str).}
 \item{create}{Should a new data directory be created at the provided
 path (logical)?}
 
-\item{url}{A URL providing the SAFE Data API, defaulting to the SAFE 
+\item{url}{A URL providing the SAFE Data API, defaulting to the SAFE
 Project's own URL.}
 }
 \description{
 This function sets the local directory used to store SAFE dataset
 files along with record and index metadata. The function can also
-initialise a new data directory, downloading the required index 
-files. By default, it will update indices if needed and will 
-validate the directory contents. Once set, the location of the 
-directory is stored in options('safedata.dir'). The \code{url} 
-argument specifies a URL to a website that exposes the SAFE data 
+initialise a new data directory, downloading the required index
+files. By default, it will update indices if needed and will
+validate the directory contents. Once set, the location of the
+directory is stored in options("safedata.dir"). The \code{url}
+argument specifies a URL to a website that exposes the SAFE data
 API.
 }
 \details{
-The safedata package uses a data directory to store local copies of 
+The safedata package uses a data directory to store local copies of
 dataset files along with index files. Files for a dataset record are
-stored in subdirectories using the zenodo concept id for the record 
-and then record id: \code{3342494/3342495}, for example. In addition 
+stored in subdirectories using the zenodo concept id for the record
+and then record id: \code{3342494/3342495}, for example. In addition
 to data files from these records, these folders can also contain a
 JSON file containing record metadata (e.g. \code{3342495.json}): this
-is a structured version of the summary information shown on the 
+is a structured version of the summary information shown on the
 Zenodo page.
 
 The root of the data directory also holds three index files:
 \describe{
   \item{\code{index.json}}{, containing a full list of the
-        files and dataset records available in the SAFE data 
+        files and dataset records available in the SAFE data
         repository;}
-  \item{\code{gazetteer.geojson}}{, containing the official list of 
+  \item{\code{gazetteer.geojson}}{, containing the official list of
         known sampling locations and GIS data; and}
-  \item{\code{location_aliases.csv}}{, a list of alternative names 
+  \item{\code{location_aliases.csv}}{, a list of alternative names
         permitted for some locations.}
 }
 
-If \code{create=TRUE}, the function will try to create the named
+If \code{create = TRUE}, the function will try to create the named
 directory and populate it with the three index files. This requires
 an internet connection.
 
 By default, the function also needs an internet connection to check
-for updates to the three index files. Updating can be turned off for 
+for updates to the three index files. Updating can be turned off for
 offline use.
 
 The default behaviour is also to validate the directory structure. The
-function will warn when files other than those found in datasets are 
+function will warn when files other than those found in datasets are
 present within the data structure and when any dataset files that are
-present have been modified. Although this can be turned off, it is 
+present have been modified. Although this can be turned off, it is
 not recommended to modify or add files within a SAFE data directory.
 }

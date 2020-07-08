@@ -37,7 +37,7 @@
 
 <meta property="og:title" content="Get and load SAFE dataset metadata — fetch_record_metadata" />
 <meta property="og:description" content="Internal handlers to i) ensure there are local copies of record metadata,
-fetching it from the SAFE project website if needed and ii) load that 
+fetching it from the SAFE project website if needed and ii) load that
 data from file." />
 <meta name="twitter:card" content="summary" />
 
@@ -71,7 +71,7 @@ data from file." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.5.9000</span>
       </span>
     </div>
 
@@ -124,7 +124,7 @@ data from file." />
 
     <div class="ref-description">
     <p>Internal handlers to i) ensure there are local copies of record metadata,
-fetching it from the SAFE project website if needed and ii) load that 
+fetching it from the SAFE project website if needed and ii) load that
 data from file.</p>
     </div>
 
@@ -143,18 +143,20 @@ data from file.</p>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The <code>fetch_record_metadata</code> function returns NULL and 
-   <code>load_record_metadata</code> returns a list object containing record metadata</p>
+    <p>The <code>fetch_record_metadata</code> function returns NULL and
+   <code>load_record_metadata</code> returns a list object containing record
+   metadata</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This is the same metadata used to populate the Zenodo description but is 
+    <p>This is the same metadata used to populate the Zenodo description but is
 downloaded as JSON format and stored within the record directory in the
 SAFE data directory for reuse.</p>
     <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
 
     
 <ul>
-<li><p><code>fetch_record_metadata</code>: Download and store JSON metadata for a record</p></li>
+<li><p><code>fetch_record_metadata</code>: Download and store JSON metadata for
+a record</p></li>
 <li><p><code>load_record_metadata</code>: Load JSON metadata for a record</p></li>
 </ul>
 

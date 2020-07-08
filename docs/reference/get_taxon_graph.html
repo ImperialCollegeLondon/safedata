@@ -36,9 +36,9 @@
 
 
 <meta property="og:title" content="Get a graph of the taxa in a dataset — get_taxon_graph" />
-<meta property="og:description" content="This function loads the taxon index for a dataset (see 
+<meta property="og:description" content="This function loads the taxon index for a dataset (see
 get_taxa) and creates a taxonomic graph for the dataset.
-The graph vertex attributes contain further details of each taxon, 
+The graph vertex attributes contain further details of each taxon,
 including GBIF id and taxonomic status." />
 <meta name="twitter:card" content="summary" />
 
@@ -72,7 +72,7 @@ including GBIF id and taxonomic status." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.5.9000</span>
       </span>
     </div>
 
@@ -124,9 +124,9 @@ including GBIF id and taxonomic status." />
     </div>
 
     <div class="ref-description">
-    <p>This function loads the taxon index for a dataset (see 
+    <p>This function loads the taxon index for a dataset (see
 <code><a href='get_taxa.html'>get_taxa</a></code>) and creates a taxonomic graph for the dataset.
-The graph vertex attributes contain further details of each taxon, 
+The graph vertex attributes contain further details of each taxon,
 including GBIF id and taxonomic status.</p>
     </div>
 
@@ -149,33 +149,33 @@ including GBIF id and taxonomic status.</p>
     <p>This function may modify the taxon index data to represent it as a
 graph, primarily to avoid duplicating taxon names, which are used as
 the primary vertex id. Possible issues are:</p><ol>
-<li><p>A user maps two worksheet names onto the _same_ taxon name: for 
-    example, 'moth' and 'butterfly' both using Lepidoptera as a taxon name.
-    This is resolved by recreating the two worksheet names as children of 
-    the shared taxon name.</p></li>
-<li><p>The taxon index may contain two GBIF taxonomic concepts with the 
-    same name (e.g. an accepted and doubtful usage). In this case, the 
+<li><p>A user maps two worksheet names onto the _same_ taxon name: for
+    example, "moth" and "butterfly" both using Lepidoptera as a taxon
+    name. This is resolved by recreating the two worksheet names as
+    children ofthe shared taxon name.</p></li>
+<li><p>The taxon index may contain two GBIF taxonomic concepts with the
+    same name (e.g. an accepted and doubtful usage). In this case, the
     function appends the GBIF ID to make taxon names unique.</p></li>
-<li><p>Simple duplication of identical taxa - this should not happen 
+<li><p>Simple duplication of identical taxa - this should not happen
     but has been observed and the function removes all but one entry.</p></li>
-<li><p>Missing parent taxa - again this should not happen but sometimes 
-    the GBIF backbone chain stops above the Kingdom level. The function 
+<li><p>Missing parent taxa - again this should not happen but sometimes
+    the GBIF backbone chain stops above the Kingdom level. The function
     adds a unique name for unknown parents.</p></li>
 </ol>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>   <span class='fu'><a href='set_example_safe_dir.html'>set_example_safe_dir</a></span>()</div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div><div class='input'>   <span class='no'>beetle_graph</span> <span class='kw'>&lt;-</span> <span class='fu'>get_taxon_graph</span>(<span class='fl'>1400562</span>)
-   <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>beetle_graph</span>, <span class='kw'>vertex.label.cex</span><span class='kw'>=</span><span class='fl'>0.6</span>, <span class='kw'>vertex.size</span><span class='kw'>=</span><span class='fl'>15</span>,
-        <span class='kw'>vertex.size2</span><span class='kw'>=</span><span class='fl'>3</span>, <span class='kw'>vertex.shape</span><span class='kw'>=</span><span class='st'>'rectangle'</span>)</div><div class='img'><img src='get_taxon_graph-1.png' alt='' width='700' height='433' /></div><div class='input'>   <span class='co'># show worksheet names for tips</span>
-   <span class='no'>wsn</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>igraph</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/igraph/man/vertex_attr.html'>vertex_attr</a></span>(<span class='no'>beetle_graph</span>, <span class='st'>'worksheet_name'</span>)
-   <span class='no'>txn</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>igraph</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/igraph/man/vertex_attr.html'>vertex_attr</a></span>(<span class='no'>beetle_graph</span>, <span class='st'>'name'</span>)
+   <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>beetle_graph</span>, <span class='kw'>vertex.label.cex</span> <span class='kw'>=</span> <span class='fl'>0.6</span>, <span class='kw'>vertex.size</span> <span class='kw'>=</span> <span class='fl'>15</span>,
+        <span class='kw'>vertex.size2</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>vertex.shape</span> <span class='kw'>=</span> <span class='st'>"rectangle"</span>)</div><div class='img'><img src='get_taxon_graph-1.png' alt='' width='700' height='433' /></div><div class='input'>   <span class='co'># show worksheet names for tips</span>
+   <span class='no'>wsn</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>igraph</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/igraph/man/vertex_attr.html'>vertex_attr</a></span>(<span class='no'>beetle_graph</span>, <span class='st'>"worksheet_name"</span>)
+   <span class='no'>txn</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>igraph</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/igraph/man/vertex_attr.html'>vertex_attr</a></span>(<span class='no'>beetle_graph</span>, <span class='st'>"name"</span>)
    <span class='no'>labels</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='no'>wsn</span>), <span class='no'>txn</span>, <span class='no'>wsn</span>)
-   <span class='no'>is_leaf</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>igraph</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/igraph/man/vertex_attr.html'>vertex_attr</a></span>(<span class='no'>beetle_graph</span>, <span class='st'>'leaf'</span>)
-   <span class='no'>vert_col</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span>(<span class='no'>is_leaf</span>, <span class='st'>'cornflowerblue'</span>,<span class='st'>'grey'</span>)
-   <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>beetle_graph</span>, <span class='kw'>vertex.label.cex</span><span class='kw'>=</span><span class='fl'>0.6</span>, <span class='kw'>vertex.size</span><span class='kw'>=</span><span class='fl'>15</span>,
-        <span class='kw'>vertex.size2</span><span class='kw'>=</span><span class='fl'>3</span>, <span class='kw'>vertex.shape</span><span class='kw'>=</span><span class='st'>'rectangle'</span>,
-        <span class='kw'>vertex.label</span><span class='kw'>=</span><span class='no'>labels</span>, <span class='kw'>vertex.color</span><span class='kw'>=</span> <span class='no'>vert_col</span>)</div><div class='img'><img src='get_taxon_graph-2.png' alt='' width='700' height='433' /></div><div class='input'>   <span class='fu'><a href='set_example_safe_dir.html'>unset_example_safe_dir</a></span>()</div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div></pre>
+   <span class='no'>is_leaf</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>igraph</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/igraph/man/vertex_attr.html'>vertex_attr</a></span>(<span class='no'>beetle_graph</span>, <span class='st'>"leaf"</span>)
+   <span class='no'>vert_col</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span>(<span class='no'>is_leaf</span>, <span class='st'>"cornflowerblue"</span>, <span class='st'>"grey"</span>)
+   <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>beetle_graph</span>, <span class='kw'>vertex.label.cex</span> <span class='kw'>=</span> <span class='fl'>0.6</span>, <span class='kw'>vertex.size</span> <span class='kw'>=</span> <span class='fl'>15</span>,
+        <span class='kw'>vertex.size2</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>vertex.shape</span> <span class='kw'>=</span> <span class='st'>"rectangle"</span>,
+        <span class='kw'>vertex.label</span> <span class='kw'>=</span> <span class='no'>labels</span>, <span class='kw'>vertex.color</span><span class='kw'>=</span> <span class='no'>vert_col</span>)</div><div class='img'><img src='get_taxon_graph-2.png' alt='' width='700' height='433' /></div><div class='input'>   <span class='fu'><a href='set_example_safe_dir.html'>unset_example_safe_dir</a></span>()</div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

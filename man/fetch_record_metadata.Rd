@@ -13,22 +13,24 @@ load_record_metadata(record_set)
 \item{record_set}{An object of class \code{\link{safe_record_set}}.}
 }
 \value{
-The \code{fetch_record_metadata} function returns NULL and 
-   \code{load_record_metadata} returns a list object containing record metadata
+The \code{fetch_record_metadata} function returns NULL and
+   \code{load_record_metadata} returns a list object containing record
+   metadata
 }
 \description{
 Internal handlers to i) ensure there are local copies of record metadata,
-fetching it from the SAFE project website if needed and ii) load that 
+fetching it from the SAFE project website if needed and ii) load that
 data from file.
 }
 \details{
-This is the same metadata used to populate the Zenodo description but is 
+This is the same metadata used to populate the Zenodo description but is
 downloaded as JSON format and stored within the record directory in the
 SAFE data directory for reuse.
 }
 \section{Functions}{
 \itemize{
-\item \code{fetch_record_metadata}: Download and store JSON metadata for a record
+\item \code{fetch_record_metadata}: Download and store JSON metadata for
+a record
 
 \item \code{load_record_metadata}: Load JSON metadata for a record
 }}

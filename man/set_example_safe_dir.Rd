@@ -10,18 +10,20 @@ set_example_safe_dir()
 unset_example_safe_dir()
 }
 \description{
-The documentation of \code{safedata} includes code examples using a data 
+The documentation of \code{safedata} includes code examples using a data
 directory. A zipped example directory is included in the package files
-(data/safedata_example_dir.zip) but package code must not write within the 
-package structure. The \code{set_example_safe_dir} function is used in code examples 
-to unpack this example directory into a temporary folder and set it for use in 
-the example code. The function \code{unset_demo_dir()} is then used to restore 
-any existing data directory set by the user. The example directory should only 
-be created once per session.
+(data/safedata_example_dir.zip) but package code must not write within
+the package structure. The \code{set_example_safe_dir} function is used
+in code examples to unpack this example directory into a temporary
+folder and set it for use in  the example code. The function
+\code{unset_demo_dir()} is then used to restore any existing data
+directory set by the user. The example directory should only be created
+once per session.
 }
 \section{Functions}{
 \itemize{
-\item \code{unset_example_safe_dir}: Restores a user data directory after running an code example.
+\item \code{unset_example_safe_dir}: Restores a user data directory after
+running an code example.
 }}
 
 \seealso{

@@ -71,7 +71,7 @@ The GIS data uses the WGS84 (EPSG:4326) geographic coordinate system." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.5.9000</span>
       </span>
     </div>
 
@@ -133,33 +133,38 @@ The GIS data uses the WGS84 (EPSG:4326) geographic coordinate system.</p>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An <code><a href='https://rdrr.io/pkg/sf/man/sf.html'>sf</a></code> object containing the SAFE gazetteer locations.</p>
+    <p>An <code><a href='https://rdrr.io/pkg/sf/man/sf.html'>sf</a></code> object containing the SAFE gazetteer
+   locations.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The gazetteer contains the following fields:</p><dl class='dl-horizontal'>
 <dt>location</dt><dd><p>The official gazetteer name for a sampling site.</p></dd>
-<dt>type</dt><dd><p>A short description of location type - typically the project 
+<dt>type</dt><dd><p>A short description of location type - typically the project
       that created the location</p></dd>
-<dt>plot_size</dt><dd><p>Where applicable, the size of the plot at a location. 
-      Note that point locations may define a sampling area with a plot 
+<dt>plot_size</dt><dd><p>Where applicable, the size of the plot at a location.
+      Note that point locations may define a sampling area with a plot
       size.</p></dd>
 <dt>display_order</dt><dd><p>DELETE</p></dd>
 <dt>parent</dt><dd><p>DELETE</p></dd>
-<dt>region</dt><dd><p>One of the four major large scale sampling areas: SAFE, Maliau, 
-      Danum and VJR</p></dd>
-<dt>fractal_order</dt><dd><p>Only defined for the SAFE core sampling points, which 
-      follow a fractal layout.</p></dd>
-<dt>transect_order</dt><dd><p>Again, for SAFE core sampling points, the location of 
-      a point along the sampling design transect.</p></dd>
+<dt>region</dt><dd><p>One of the four major large scale sampling areas: SAFE,
+      Maliau, Danum and VJR</p></dd>
+<dt>fractal_order</dt><dd><p>Only defined for the SAFE core sampling points,
+      which follow a fractal layout.</p></dd>
+<dt>transect_order</dt><dd><p>Again, for SAFE core sampling points, the
+      location of a point along the sampling design transect.</p></dd>
 <dt>centroid_x, centroid_y</dt><dd><p>The centroid of the feature</p></dd>
-<dt>source</dt><dd><p>The original source GIS file that the feature was described in.</p></dd>
-<dt>bbox_xmin, bbox_ymin, bbox_xmax, bbox_ymax</dt><dd><p>The bounding box of the feature.</p></dd>
-<dt>geometry</dt><dd><p>The GIS geometry for the data - a column of class <code><a href='https://rdrr.io/pkg/sf/man/sfc.html'>sfc</a></code>.</p></dd>
+<dt>source</dt><dd><p>The original source GIS file that the feature was
+      described in.</p></dd>
+<dt>bbox_xmin, bbox_ymin, bbox_xmax, bbox_ymax</dt><dd><p>The bounding box of
+      the feature.</p></dd>
+<dt>geometry</dt><dd><p>The GIS geometry for the data - a column of class
+      <code><a href='https://rdrr.io/pkg/sf/man/sfc.html'>sfc</a></code>.</p></dd>
 
 </dl>
 
-<p>When this function is first called in a session, the loaded <code><a href='https://rdrr.io/pkg/sf/man/sf.html'>sf</a></code>
-object is cached for re-use (see <code><a href='load_index.html'>load_index</a></code>).</p>
+<p>When this function is first called in a session, the loaded
+<code><a href='https://rdrr.io/pkg/sf/man/sf.html'>sf</a></code> object is cached for re-use (see
+<code><a href='load_index.html'>load_index</a></code>).</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='load_location_aliases.html'>load_location_aliases</a></code>, <code><a href='load_index.html'>load_index</a></code></p></div>

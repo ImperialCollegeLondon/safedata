@@ -7,18 +7,18 @@
 get_taxon_coverage()
 }
 \value{
-A data frame containing higher taxon level information for each taxon
-  in the database taxon index.
+A data frame containing higher taxon level information for
+  each taxon in the database taxon index.
 }
 \description{
-This function downloads the current taxon index across published  datasets
-and returns a formatted taxon table showing the taxonomic hierarchy of each
-taxon. It requires an internet connection.
+This function downloads the current taxon index across published
+datasets and returns a formatted taxon table showing the taxonomic
+hierarchy of each taxon. It requires an internet connection.
 }
 \details{
-Note that the use of 'user' defined taxa can lead to some unusual entries. There
-is nothing to stop a user defining 'Gallus gallus' as a 'user' taxon with Animalia
-as a parent taxon.
+Note that the use of "user" defined taxa can lead to some unusual
+entries. There is nothing to stop a user defining "Gallus gallus" as a
+"user" taxon with Animalia as a parent taxon.
 }
 \examples{
     \donttest{

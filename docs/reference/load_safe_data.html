@@ -36,11 +36,11 @@
 
 
 <meta property="og:title" content="Loads data from a SAFE dataset. — load_safe_data" />
-<meta property="og:description" content="This function returns a data frame containing the data from a data 
+<meta property="og:description" content="This function returns a data frame containing the data from a data
 worksheet in a SAFE dataset. Note that SAFE dataset .xlsx files include
-the other (non-data) worksheets Summary, Taxa, Locations that contain 
-metadata: see  get_taxa, get_locations, 
-add_taxa and add_locations for accessing 
+the other (non-data) worksheets Summary, Taxa, Locations that contain
+metadata: see  get_taxa, get_locations,
+add_taxa and add_locations for accessing
 and using this metadata." />
 <meta name="twitter:card" content="summary" />
 
@@ -74,7 +74,7 @@ and using this metadata." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.5.9000</span>
       </span>
     </div>
 
@@ -126,11 +126,11 @@ and using this metadata." />
     </div>
 
     <div class="ref-description">
-    <p>This function returns a data frame containing the data from a data 
+    <p>This function returns a data frame containing the data from a data
 worksheet in a SAFE dataset. Note that SAFE dataset .xlsx files include
-the other (non-data) worksheets Summary, Taxa, Locations that contain 
-metadata: see  <code><a href='get_taxa.html'>get_taxa</a></code>, <code><a href='get_locations.html'>get_locations</a></code>, 
-<code><a href='add_taxa.html'>add_taxa</a></code> and <code><a href='add_locations.html'>add_locations</a></code> for accessing 
+the other (non-data) worksheets Summary, Taxa, Locations that contain
+metadata: see  <code><a href='get_taxa.html'>get_taxa</a></code>, <code><a href='get_locations.html'>get_locations</a></code>,
+<code><a href='add_taxa.html'>add_taxa</a></code> and <code><a href='add_locations.html'>add_locations</a></code> for accessing
 and using this metadata.</p>
     </div>
 
@@ -175,11 +175,12 @@ and using this metadata.</p>
 
     <p>In particular, the large amount of data worksheet summary metadata is
 not attached as attributes to the data frame returned by this function.
-This is largely to avoid excessive output to the console during normal use 
-of the data frame: an extended description of a worksheet can be displayed
-using <code><a href='show_concepts.html'>show_worksheet</a></code>.</p>
-<p>Currently, this function only loads data from SAFE formatted <code>.xlsx</code>
-files - data stored in external files is not yet handled.</p>
+This is largely to avoid excessive output to the console during normal
+use of the data frame: an extended description of a worksheet can be
+displayed using <code><a href='show_concepts.html'>show_worksheet</a></code>.</p>
+<p>Currently, this function only loads data from SAFE formatted
+<code>.xlsx</code> files - data stored in external files is not yet
+handled.</p>
     <h2 class="hasAnchor" id="methods-by-generic-"><a class="anchor" href="#methods-by-generic-"></a>Methods (by generic)</h2>
 
     
@@ -189,7 +190,7 @@ files - data stored in external files is not yet handled.</p>
 </ul>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>   <span class='fu'><a href='set_example_safe_dir.html'>set_example_safe_dir</a></span>()</div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div><div class='input'>   <span class='no'>beetle_abund</span> <span class='kw'>&lt;-</span> <span class='fu'>load_safe_data</span>(<span class='fl'>1400562</span>, <span class='st'>'Ant-Psel'</span>)
+    <pre class="examples"><div class='input'>   <span class='fu'><a href='set_example_safe_dir.html'>set_example_safe_dir</a></span>()</div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div><div class='input'>   <span class='no'>beetle_abund</span> <span class='kw'>&lt;-</span> <span class='fu'>load_safe_data</span>(<span class='fl'>1400562</span>, <span class='st'>"Ant-Psel"</span>)
    <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>beetle_abund</span>)</div><div class='output co'>#&gt; SAFE dataset
 #&gt; Concept: 1400561; Record 1400562; Worksheet: Ant-Psel
 #&gt; 'data.frame':	20 obs. of  3 variables:

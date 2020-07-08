@@ -36,9 +36,10 @@
 
 
 <meta property="og:title" content="Internal SAFE dataset API search functions — safe_api_search" />
-<meta property="og:description" content="The two internal functions described here handle validating the parameters
-passed to the exported search functions and then constructing API calls from
-the parameters and the common ids and most_recent arguments." />
+<meta property="og:description" content="The two internal functions described here handle validating the
+parameters passed to the exported search functions and then constructing
+API calls from the parameters and the common ids and
+most_recent arguments." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -71,7 +72,7 @@ the parameters and the common ids and most_recent arguments." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.5.9000</span>
       </span>
     </div>
 
@@ -123,9 +124,10 @@ the parameters and the common ids and most_recent arguments." />
     </div>
 
     <div class="ref-description">
-    <p>The two internal functions described here handle validating the parameters
-passed to the exported search functions and then constructing API calls from
-the parameters and the common <code>ids</code> and <code>most_recent</code> arguments.</p>
+    <p>The two internal functions described here handle validating the
+parameters passed to the exported search functions and then constructing
+API calls from the parameters and the common <code>ids</code> and
+<code>most_recent</code> arguments.</p>
     </div>
 
     <pre class="usage"><span class='fu'>safe_api_search</span>(<span class='no'>endpoint</span>, <span class='no'>params</span>, <span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>most_recent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
@@ -147,9 +149,9 @@ the API endpoint.</p></td>
     <tr>
       <th>ids</th>
       <td><p>A set of SAFE dataset record IDs to restrict a search. This will
-typically be a <code><a href='validate_record_ids.html'>safe_record_set</a></code> object returned by another search 
-but can also be a vector of record ids in any of the formats accepted by 
-<code><a href='validate_record_ids.html'>validate_record_ids</a></code>.</p></td>
+typically be a <code><a href='validate_record_ids.html'>safe_record_set</a></code> object returned by another
+search but can also be a vector of record ids in any of the formats
+accepted by <code><a href='validate_record_ids.html'>validate_record_ids</a></code>.</p></td>
     </tr>
     <tr>
       <th>most_recent</th>
@@ -177,15 +179,16 @@ all versions of matching dataset concepts are returned.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The <code>safe_api_search</code> function returns an object of class 
-   <code><a href='validate_record_ids.html'>safe_record_set</a></code> of datasets that match the submitted query. The
-   <code>validate_query_param</code> function either returns NULL on success or
-   raises an error.</p>
+    <p>The <code>safe_api_search</code> function returns an object of class
+   <code><a href='validate_record_ids.html'>safe_record_set</a></code> of datasets that match the submitted
+   query. The <code>validate_query_param</code> function either returns NULL
+   on success or raises an error.</p>
     <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
 
     
 <ul>
-<li><p><code>safe_api_search</code>: Constructs, submits and formats calls to the SAFE API.</p></li>
+<li><p><code>safe_api_search</code>: Constructs, submits and formats calls to
+the SAFE API.</p></li>
 <li><p><code>validate_query_param</code>: A basic query parameter validation handler</p></li>
 </ul>
 

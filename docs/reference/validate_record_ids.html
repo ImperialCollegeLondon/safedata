@@ -36,9 +36,9 @@
 
 
 <meta property="og:title" content="Validates dataset record ids from user input — validate_record_ids" />
-<meta property="og:description" content="This takes a vector of user supplied record identifiers and validates them 
-against the index. Typically the identifiers are provided as integers, but
-the function will also handle Zenodo URLs and DOIs." />
+<meta property="og:description" content="This takes a vector of user supplied record identifiers and validates
+them against the index. Typically the identifiers are provided as
+integers, but the function will also handle Zenodo URLs and DOIs." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -71,7 +71,7 @@ the function will also handle Zenodo URLs and DOIs." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.5.9000</span>
       </span>
     </div>
 
@@ -123,9 +123,9 @@ the function will also handle Zenodo URLs and DOIs." />
     </div>
 
     <div class="ref-description">
-    <p>This takes a vector of user supplied record identifiers and validates them 
-against the index. Typically the identifiers are provided as integers, but
-the function will also handle Zenodo URLs and DOIs.</p>
+    <p>This takes a vector of user supplied record identifiers and validates
+them against the index. Typically the identifiers are provided as
+integers, but the function will also handle Zenodo URLs and DOIs.</p>
     </div>
 
     <pre class="usage"><span class='fu'>validate_record_ids</span>(<span class='no'>record_set</span>)
@@ -138,7 +138,8 @@ the function will also handle Zenodo URLs and DOIs.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>record_set</th>
-      <td><p>A vector of values containing Zenodo concept or record ids.</p></td>
+      <td><p>A vector of values containing Zenodo concept or
+record ids.</p></td>
     </tr>
     <tr>
       <th>x</th>
@@ -155,21 +156,24 @@ the function will also handle Zenodo URLs and DOIs.</p>
     <p>An object of class <code>safe_record_set</code> (see Details)</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The function returns a data frame with class <code>safe_record_set</code>, containing
-the columns <code>concept</code>, <code>record</code>, <code>available</code> and, finally,
-<code>mra</code> containing the most recent available record (if any). The function can
-be run on an existing <code>safe_record_set</code> to update this information.</p>
-<p>Note that <code>record</code> will be NA when a value represents a concept id. Inputs
-that do not match a record or concept ids are returned in the attribute 
-<code>mismatches</code> of the record set.</p>
-<p>This function is largely used internally to validate user inputs and to provide
-a common output for the search functions but is exported to allow users to 
-check record ids and display summary information using the print method.</p>
+    <p>The function returns a data frame with class <code>safe_record_set</code>,
+containing the columns <code>concept</code>, <code>record</code>, <code>available</code>
+and, finally, <code>mra</code> containing the most recent available record
+(if any). The function can be run on an existing <code>safe_record_set</code>
+to update this information.</p>
+<p>Note that <code>record</code> will be NA when a value represents a concept id.
+Inputs that do not match a record or concept ids are returned in the
+attribute <code>mismatches</code> of the record set.</p>
+<p>This function is largely used internally to validate user inputs and
+to provide a common output for the search functions but is exported
+to allow users to check record ids and display summary information
+using the print method.</p>
     <h2 class="hasAnchor" id="methods-by-generic-"><a class="anchor" href="#methods-by-generic-"></a>Methods (by generic)</h2>
 
     
 <ul>
-<li><p><code>print</code>: Print a brief summary of 'safe_record_set' objects.</p></li>
+<li><p><code>print</code>: Print a brief summary of
+"safe_record_set" objects.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -181,10 +185,10 @@ check record ids and display summary information using the print method.</p>
 #&gt;   concept  record available
 #&gt; 1 3247630 3247631         x
 #&gt; 2 3266821 -------          
-#&gt; 3 3266826 3266827         *</div><div class='input'>   <span class='fu'>validate_record_ids</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'https://doi.org/10.5281/zenodo.3247631'</span>,
-                           <span class='st'>'10.5281/zenodo.3266827'</span>,
-                           <span class='st'>'https://zenodo.org/record/3266821'</span>,
-                           <span class='st'>'not_this_one/3266821'</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Invalid character record ids: not_this_one/3266821</span></div><div class='output co'>#&gt; Set includes 3 concept ids and 2 record ids: 
+#&gt; 3 3266826 3266827         *</div><div class='input'>   <span class='fu'>validate_record_ids</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"https://doi.org/10.5281/zenodo.3247631"</span>,
+                         <span class='st'>"10.5281/zenodo.3266827"</span>,
+                         <span class='st'>"https://zenodo.org/record/3266821"</span>,
+                         <span class='st'>"not_this_one/3266821"</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Invalid character record ids: not_this_one/3266821</span></div><div class='output co'>#&gt; Set includes 3 concept ids and 2 record ids: 
 #&gt;  - 1 open and most recent (*)
 #&gt;  - 0 open and outdated (o)
 #&gt;  - 1 under embargo or restricted (x)

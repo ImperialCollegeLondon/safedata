@@ -10,10 +10,10 @@ get_taxa(obj)
 \item{obj}{A single record id, or an existing safedata dataframe.}
 }
 \value{
-A taxonomy table of classes 'safe_taxa' and 'data.frame'.
+A taxonomy table of classes "safe_taxa" and "data.frame".
 }
 \description{
-This function generates a taxonomy table for a specified SAFE dataset 
+This function generates a taxonomy table for a specified SAFE dataset
 record. Each row represent a taxon used in the data worksheets in the
 dataset and the table fields show the taxonomic hierarchy, taken from
 GBIF, for those taxa.
@@ -21,26 +21,25 @@ GBIF, for those taxa.
 \details{
 All SAFE datasets containing taxa must include a Taxa worksheet, which
 must contain all of the taxa referred to in taxon fields in data
-worksheets. All entries in this worksheet are  validated against the  
+worksheets. All entries in this worksheet are  validated against the
 GBIF database before publication and are used to populate the taxonomic
 index for the SAFE datasets. The validated taxonomic hierarchy for the
 data is also available in the metadata for a record and this function
-converts the metadata into a taxonomy table. If the Taxa worksheet for 
-a SAFE project dataset is empty, because the data does not contain 
+converts the metadata into a taxonomy table. If the Taxa worksheet for
+a SAFE project dataset is empty, because the data does not contain
 observations on taxa, \code{get_taxa} will return NULL.
 
-The taxonomy table includes the eight 'backbone' taxonomic ranks used
-in the GBIF database: Kingdom, Phylum, Class, Order, Family, Genus, 
+The taxonomy table includes the eight "backbone" taxonomic ranks used
+in the GBIF database: Kingdom, Phylum, Class, Order, Family, Genus,
 Species and Subspecies. It also includes three further fields:
-\code{taxon_name}, \code{taxon_rank} and \code{gbif_status}. These 
+\code{taxon_name}, \code{taxon_rank} and \code{gbif_status}. These
 record the original taxa provided in the Taxa worksheet and show
 where the taxonomic name used in a dataset differs from the canonical
 name used in GBIF. The row names of the taxon table are the labels
-used in data worksheets and are used to match a taxonomy table to a 
+used in data worksheets and are used to match a taxonomy table to a
 loaded data worksheet (see \code{\link{add_taxa}}).
 
 For more details on the structure of the Taxa worksheet see:
-
 \url{https://safedata-validator.readthedocs.io/en/latest/data_format/taxa/}
 }
 \examples{

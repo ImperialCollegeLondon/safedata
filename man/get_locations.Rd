@@ -9,11 +9,11 @@ get_locations(obj, gazetteer_info = FALSE)
 \arguments{
 \item{obj}{A single record id, or an existing safedata dataframe.}
 
-\item{gazetteer_info}{Should all the gazetteer fields be included in the 
+\item{gazetteer_info}{Should all the gazetteer fields be included in the
 returned \code{\link[sf]{sf}} object.}
 }
 \value{
-An object of classes 'safe_locations', 'sf' and 'data.frame'.
+An object of classes "safe_locations", "sf" and "data.frame".
 }
 \description{
 This function returns a spatial 'simple features' (\code{\link[sf]{sf}})
@@ -23,21 +23,22 @@ for the SAFE gazetteer if requested.
 \details{
 All SAFE datasets recording observations from the field must include a
 Locations worksheet, which must contain all of the location names used
-in Locations type fields in data worksheets. These entries are matched against
-existing location names in the SAFE gazetteer. Users can also include 
-'new' location names in their dataset, which do not necessarily have
- coordinates. Processing locations works as follows:
+in Locations type fields in data worksheets. These entries are matched
+against existing location names in the SAFE gazetteer. Users can
+also include "new" location names in their dataset, which do not
+necessarily have coordinates. Processing locations works as
+follows:
 \enumerate{
-    \item Known locations (\code{new_location=FALSE}) are matched against
-          both the official location names in the gazetteer and the 
-          accepted aliases.
+    \item Known locations (\code{new_location = FALSE}) are matched
+          against both the official location names in the gazetteer
+          and the accepted aliases.
     \item New locations are first checked against the location aliases
-          list to see if any new locations in this dataset have been 
+          list to see if any new locations in this dataset have been
           matched to a gazetteer location. The gazetteer location is
           then used in preference to any new location data within the
           dataset.
-    \item Finally, remaining new locations are assigned any feature 
-             geometry within the dataset. New locations do not necessarily
+    \item Finally, remaining new locations are assigned any feature
+          geometry within the dataset. New locations do not necessarily
           have geometry data, so may have null or empty geometries.
 }
 }
@@ -51,6 +52,6 @@ Not all SAFE project datasets contain locations. In this case
    unset_example_safe_dir()
 }
 \seealso{
-\code{\link{add_locations}}, \code{\link{load_gazetteer}}, 
+\code{\link{add_locations}}, \code{\link{load_gazetteer}},
    \code{\link{load_location_aliases}}
 }

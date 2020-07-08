@@ -38,25 +38,28 @@
 <meta property="og:title" content="Show SAFE dataset metadata — show_concepts" />
 <meta property="og:description" content="These functions provide access to the metadata associated with SAFE
 datasets. The functions provide three levels of information:
-     show_conceptsdisplays the record versions grouped under 
-         dataset concepts,
-     show_recorddisplays summary information about a 
+     show_conceptsdisplays the record versions grouped
+           under dataset concepts,
+     show_recorddisplays summary information about a
            specific record, and
      show_worksheetdisplays metadata about data worksheet
            fields within a record.
 
-All three functions accept a first argument obj, which can be one 
+All three functions accept a first argument obj, which can be one
 of three things:
-A character or numeric vector of SAFE dataset records or concepts, 
-         which will be validated using validate_record_ids, or
+A character or numeric vector of SAFE dataset records or
+         concepts, which will be validated using
+         validate_record_ids, or
 An already validated safe_record_set object, or
-A safedata data frame loaded using load_safe_data.
-If show_concepts is passed a record id, then the function looks up the
-relevant concept. The version table indicates which versions are available ('*' 
-for the most recent available version and 'o' for older available versions),
-and which are unavailable due to embargo or retriction ('x'). A '!' is used 
-to show that a private local copy of an embargoed or restricted dataset has 
-been inserted using insert_dataset." />
+A safedata data frame loaded using
+         load_safe_data.
+If show_concepts is passed a record id, then the function looks
+up the relevant concept. The version table indicates which versions
+are available (&quot;*&quot; for the most recent available version and &quot;o&quot;
+for older available versions), and which are unavailable due to
+embargo or retriction (&quot;x&quot;). A &quot;!&quot; is used to show that a private
+local copy of an embargoed or restricted dataset has been inserted
+using insert_dataset." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -89,7 +92,7 @@ been inserted using insert_dataset." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.5.9000</span>
       </span>
     </div>
 
@@ -143,25 +146,28 @@ been inserted using insert_dataset." />
     <div class="ref-description">
     <p>These functions provide access to the metadata associated with SAFE
 datasets. The functions provide three levels of information:</p><dl class='dl-horizontal'>
-     <dt><code>show_concepts</code></dt><dd><p>displays the record versions grouped under 
-         dataset concepts,</p></dd>
-     <dt><code>show_record</code></dt><dd><p>displays summary information about a 
+     <dt><code>show_concepts</code></dt><dd><p>displays the record versions grouped
+           under dataset concepts,</p></dd>
+     <dt><code>show_record</code></dt><dd><p>displays summary information about a
            specific record, and</p></dd>
      <dt><code>show_worksheet</code></dt><dd><p>displays metadata about data worksheet
            fields within a record.</p></dd>
 
-</dl><p>All three functions accept a first argument <code>obj</code>, which can be one 
+</dl><p>All three functions accept a first argument <code>obj</code>, which can be one
 of three things:</p><ol>
-<li><p>A character or numeric vector of SAFE dataset records or concepts, 
-         which will be validated using <code><a href='validate_record_ids.html'>validate_record_ids</a></code>, or</p></li>
+<li><p>A character or numeric vector of SAFE dataset records or
+         concepts, which will be validated using
+         <code><a href='validate_record_ids.html'>validate_record_ids</a></code>, or</p></li>
 <li><p>An already validated <code><a href='validate_record_ids.html'>safe_record_set</a></code> object, or</p></li>
-<li><p>A <code>safedata</code> data frame loaded using <code><a href='load_safe_data.html'>load_safe_data</a></code>.</p></li>
-</ol><p>If <code>show_concepts</code> is passed a record id, then the function looks up the
-relevant concept. The version table indicates which versions are available ('*' 
-for the most recent available version and 'o' for older available versions),
-and which are unavailable due to embargo or retriction ('x'). A '!' is used 
-to show that a private local copy of an embargoed or restricted dataset has 
-been inserted using <code><a href='insert_dataset.html'>insert_dataset</a></code>.</p>
+<li><p>A <code>safedata</code> data frame loaded using
+         <code><a href='load_safe_data.html'>load_safe_data</a></code>.</p></li>
+</ol><p>If <code>show_concepts</code> is passed a record id, then the function looks
+up the relevant concept. The version table indicates which versions
+are available ("*" for the most recent available version and "o"
+for older available versions), and which are unavailable due to
+embargo or retriction ("x"). A "!" is used to show that a private
+local copy of an embargoed or restricted dataset has been inserted
+using <code><a href='insert_dataset.html'>insert_dataset</a></code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>show_concepts</span>(<span class='no'>obj</span>)
@@ -179,9 +185,9 @@ been inserted using <code><a href='insert_dataset.html'>insert_dataset</a></code
     </tr>
     <tr>
       <th>worksheet</th>
-      <td><p>The name of a worksheet to show. Obviously, if <code>obj</code> 
-is a loaded worksheet, that will be the worksheet described and this can
-be left as NULL.</p></td>
+      <td><p>The name of a worksheet to show. Obviously, if
+<code>obj</code> is a loaded worksheet, that will be the worksheet
+described and this can be left as NULL.</p></td>
     </tr>
     <tr>
       <th>extended_fields</th>
@@ -192,13 +198,14 @@ fields or a longer output including full metadata descriptors.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Invisibly, a SAFE metadata object or a list of such objects. These
-   are not really intended for end user consumption.</p>
+    <p>Invisibly, a SAFE metadata object or a list of such objects.
+    These are not really intended for end user consumption.</p>
     <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
 
     
 <ul>
-<li><p><code>show_concepts</code>: Show the records associated with a dataset concept.</p></li>
+<li><p><code>show_concepts</code>: Show the records associated with a
+dataset concept.</p></li>
 <li><p><code>show_record</code>: Show details of a specific dataset</p></li>
 <li><p><code>show_worksheet</code>: Show details of a data worksheet</p></li>
 </ul>
@@ -244,7 +251,7 @@ fields or a longer output including full metadata descriptors.</p></td>
 #&gt;   MorphAbundance   44   20 Morphospeices abundance
 #&gt; MorphFunctTraits   18   42 Morphospecies_Functional Traits
 #&gt; </div><div class='input'>   <span class='co'># Show worksheet metadata from a record or from a loaded worksheet</span>
-   <span class='fu'>show_worksheet</span>(<span class='fl'>1400562</span>, <span class='st'>'EnvironVariables'</span>)</div><div class='output co'>#&gt; Record ID: 1400562
+   <span class='fu'>show_worksheet</span>(<span class='fl'>1400562</span>, <span class='st'>"EnvironVariables"</span>)</div><div class='output co'>#&gt; Record ID: 1400562
 #&gt; Worksheet name: EnvironVariables
 #&gt; Number of data rows: 20
 #&gt; Number of data fields: 4
@@ -257,8 +264,8 @@ fields or a longer output including full metadata descriptors.</p></td>
 #&gt; 1 Site       Location   Site of measurements
 #&gt; 2 Temp       Numeric    Soil temperature    
 #&gt; 3 Moisture   Numeric    Soil moisture       
-#&gt; 4 Cover      Numeric    Canopy cover        </div><div class='input'>   <span class='no'>beetle_abund</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='load_safe_data.html'>load_safe_data</a></span>(<span class='fl'>1400562</span>, <span class='st'>'Ant-Psel'</span>)
-   <span class='fu'>show_worksheet</span>(<span class='no'>beetle_abund</span>, <span class='kw'>extended_fields</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; Record ID: 1400562
+#&gt; 4 Cover      Numeric    Canopy cover        </div><div class='input'>   <span class='no'>beetle_abund</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='load_safe_data.html'>load_safe_data</a></span>(<span class='fl'>1400562</span>, <span class='st'>"Ant-Psel"</span>)
+   <span class='fu'>show_worksheet</span>(<span class='no'>beetle_abund</span>, <span class='kw'>extended_fields</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; Record ID: 1400562
 #&gt; Worksheet name: Ant-Psel
 #&gt; Number of data rows: 20
 #&gt; Number of data fields: 3

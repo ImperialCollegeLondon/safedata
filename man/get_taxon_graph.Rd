@@ -13,9 +13,9 @@ get_taxon_graph(record)
 An \code{\link[igraph:make_graph]{graph}} object.
 }
 \description{
-This function loads the taxon index for a dataset (see 
+This function loads the taxon index for a dataset (see
 \code{\link{get_taxa}}) and creates a taxonomic graph for the dataset.
-The graph vertex attributes contain further details of each taxon, 
+The graph vertex attributes contain further details of each taxon,
 including GBIF id and taxonomic status.
 }
 \details{
@@ -23,33 +23,33 @@ This function may modify the taxon index data to represent it as a
 graph, primarily to avoid duplicating taxon names, which are used as
 the primary vertex id. Possible issues are:
 \enumerate{
-  \item A user maps two worksheet names onto the _same_ taxon name: for 
-    example, 'moth' and 'butterfly' both using Lepidoptera as a taxon name.
-    This is resolved by recreating the two worksheet names as children of 
-    the shared taxon name.
-  \item The taxon index may contain two GBIF taxonomic concepts with the 
-    same name (e.g. an accepted and doubtful usage). In this case, the 
+  \item A user maps two worksheet names onto the _same_ taxon name: for
+    example, "moth" and "butterfly" both using Lepidoptera as a taxon
+    name. This is resolved by recreating the two worksheet names as
+    children ofthe shared taxon name.
+  \item The taxon index may contain two GBIF taxonomic concepts with the
+    same name (e.g. an accepted and doubtful usage). In this case, the
     function appends the GBIF ID to make taxon names unique.
-  \item Simple duplication of identical taxa - this should not happen 
+  \item Simple duplication of identical taxa - this should not happen
     but has been observed and the function removes all but one entry.
-  \item Missing parent taxa - again this should not happen but sometimes 
-    the GBIF backbone chain stops above the Kingdom level. The function 
+  \item Missing parent taxa - again this should not happen but sometimes
+    the GBIF backbone chain stops above the Kingdom level. The function
     adds a unique name for unknown parents.
 }
 }
 \examples{
    set_example_safe_dir()
    beetle_graph <- get_taxon_graph(1400562)
-   plot(beetle_graph, vertex.label.cex=0.6, vertex.size=15, 
-        vertex.size2=3, vertex.shape='rectangle')
+   plot(beetle_graph, vertex.label.cex = 0.6, vertex.size = 15,
+        vertex.size2 = 3, vertex.shape = "rectangle")
    # show worksheet names for tips
-   wsn <- igraph::vertex_attr(beetle_graph, 'worksheet_name')
-   txn <- igraph::vertex_attr(beetle_graph, 'name')
+   wsn <- igraph::vertex_attr(beetle_graph, "worksheet_name")
+   txn <- igraph::vertex_attr(beetle_graph, "name")
    labels <- ifelse(is.na(wsn), txn, wsn)
-   is_leaf <- igraph::vertex_attr(beetle_graph, 'leaf')
-   vert_col <- ifelse(is_leaf, 'cornflowerblue','grey')
-   plot(beetle_graph, vertex.label.cex=0.6, vertex.size=15, 
-        vertex.size2=3, vertex.shape='rectangle', 
-        vertex.label=labels, vertex.color= vert_col)
+   is_leaf <- igraph::vertex_attr(beetle_graph, "leaf")
+   vert_col <- ifelse(is_leaf, "cornflowerblue", "grey")
+   plot(beetle_graph, vertex.label.cex = 0.6, vertex.size = 15,
+        vertex.size2 = 3, vertex.shape = "rectangle",
+        vertex.label = labels, vertex.color= vert_col)
    unset_example_safe_dir()
 }
