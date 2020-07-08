@@ -170,7 +170,7 @@ You should now _immediately_ get off the `master` branch, before you accidentall
 ```sh
 git checkout develop
 # Edit DESCRIPTION to e.g. version 1.0.6-9000
-git commit -am "Bump develop version [ci skip]"
+git commit -m "Bump develop version [ci skip]" DESCRIPTION
 git push
 ```
 
