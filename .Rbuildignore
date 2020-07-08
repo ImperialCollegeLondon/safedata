@@ -4,3 +4,5 @@
 ^docs$
 ^_pkgdown\.yml$
 cran-comments.md
+build_notes.md
+^build_scripts$
