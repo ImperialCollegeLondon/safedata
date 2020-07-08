@@ -419,17 +419,20 @@ show_record <- function(obj){
     
     # Data worksheets
     dwksh <- metadata$dataworksheets
-    nm_nch <- max(nchar(dwksh$name))
-    cl_nch <- max(ceiling(log10(dwksh$max_col)), 4)
-    rw_nch <- max(ceiling(log10(dwksh$n_data_row)), 4)
+    if (length(dwksh) == 0) {
+        cat('\nData in external files only\n')
+    } else {
+        nm_nch <- max(nchar(dwksh$name))
+        cl_nch <- max(ceiling(log10(dwksh$max_col)), 4)
+        rw_nch <- max(ceiling(log10(dwksh$n_data_row)), 4)
+        cat('\nData worksheets:\n')
+        cat(sprintf('%*s %*s %*s %s', nm_nch, 'name', cl_nch, 'ncol',
+                    rw_nch, 'nrow', 'description'), sep='\n')
+        cat(with(dwksh, sprintf('%*s %*i %*i %s', nm_nch, name, cl_nch, max_col,
+                                rw_nch, n_data_row, description)), sep='\n')
+        cat('\n')
+    }
 
-    cat('\nData worksheets:\n')
-    cat(sprintf('%*s %*s %*s %s', nm_nch, 'name', cl_nch, 'ncol', 
-                rw_nch, 'nrow', 'description'), sep='\n')
-    
-    cat(with(dwksh, sprintf('%*s %*i %*i %s', nm_nch, name, cl_nch, max_col, 
-                            rw_nch, n_data_row, description)), sep='\n')
-    cat('\n')
     return(invisible(metadata))
 }
 
