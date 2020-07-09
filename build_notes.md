@@ -40,7 +40,9 @@ This removes old files and recreates the website in the `docs` directory. This d
 
 https://imperialcollegelondon.github.io/safedata/
 
-These two steps are bundled together in `build_scripts/build_docs.sh`
+These two steps are bundled together in `build_scripts/build_docs.sh`. 
+
+Note that within the normal day-to-day use of the `develop` branch,  you probably **do not have to commit every change** to the `man` and `docs` directories. These files are generated automatically, so working with the R and vignette files and only committing documentation changes when you have got a to a stable point is fine.
 
 ### Linting
 
