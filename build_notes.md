@@ -13,21 +13,24 @@ These notes provide a brief walk through for these systems and some package spec
 
 The `build_scripts` folder in the repository contains scripts containing the code blocks used in some of the steps described below. All are set up to be run from directly inside the `build_scripts` directory. Scripts are described in context below
 
-### Documentation
+### Package documentation
 
 With the `roxygen` package , all of the package documentation is located in one of three places:
 
 1. Markup inside the `R` source files - there are blocks of comments starting with `#'` that contain all of the documentation that goes into the normal R documentaion (`.Rd`) files. 
 2. Vignettes, formatted as `Rmarkdown` files in the `vignettes` directory.
-3. The `README.md` document.
 
-When the documentation has been changed then the `.Rd` files in `man` and any vignettes can be built automatically. The key command is:
+When the documentation has been changed then the `.Rd` files in `man` and any vignettes in `doc` can be built automatically. The key command is:
 
 ```sh
 Rscript -e "devtools::document()"
 ```
 
-In addition to using `roxygen` to maintain the in-package documentation, `safedata` also uses `pkgdown` to create a documentation website. This needs one additional file  - `_pkgdown.yml` - that is used to structure the website. This file typically only needs updating when new functions are added, as they need to be added into the reference structure.
+These documentation pages are a key part of the package and so whenever the code changes, the documentation should be rebuilt  before commits are made: this ensures that the full package is submitted to Travis CI.
+
+### Website
+
+In addition to using `roxygen` to maintain the in-package documentation, `safedata` also uses `pkgdown` to create a documentation website. The configuration for this is in the `_pkgdown.yml` file. This file typically only needs updating when new functions are added, as they need to be added into the reference structure. The website will contain an HTML version of the Rd files and vignettes but also extra content: for example `README.md` is used to create `index.html` and other markdown files can be used to provide other content.
 
 Rebuilding the website uses two commands:
 
@@ -36,13 +39,19 @@ Rscript -e " pkgdown::clean_site()"
 Rscript -e " pkgdown::build_site()"
 ```
 
-This removes old files and recreates the website in the `docs` directory. This directory is then automatically used by GitHub Pages to create the package website at:
+This removes old files and recreates the website in the `docs` directory (_not_  `doc`!). This directory is then automatically used by GitHub Pages to create the package website at:
 
 https://imperialcollegelondon.github.io/safedata/
 
-These two steps are bundled together in `build_scripts/build_docs.sh`. 
+The website files themselves are _not_ part of the continuous integration of the package and having to build and then commit changes within `docs` is untidy. The `safedata` package therefore includes `docs` in the `.gitignore` file: you can have a local copy of the website but it is not managed by git.
 
-Note that within the normal day-to-day use of the `develop` branch,  you probably **do not have to commit every change** to the `man` and `docs` directories. These files are generated automatically, so working with the R and vignette files and only committing documentation changes when you have got a to a stable point is fine.
+Instead, the package is set up using a recipe described here:
+
+https://www.r-bloggers.com/continuous-deployment-of-package-documentation-with-pkgdown-and-travis-ci/
+
+The basic idea of this plan is that Travis CI is configured to run `pkgdown` and build the `docs` when a build on the `master` branch succeeds. Those files are then deployed from Travis to the `gh-pages` branch of the repository and used in the website. This means that the website only ever refreshes when a release is created and not when any changes are made to the repo. 
+
+For local use, the package and website build steps have been bundled together  in `build_scripts/build_docs.sh`. However, note that there are two different things go
 
 ### Linting
 
@@ -139,16 +148,23 @@ to
 Version: 1.0.6
 ```
 
-You can then commit and push that change:
+You can then commit that change:
 
 ```sh
 git commit -m "Update version number" DESCRIPTION
-git push
 ```
+
+At the moment, the `release` branch is only local. The release branch and code needs to be pushed to Github to be picked up by Travis CI. There is a specific `git flow` command to do this:
+
+```
+ git flow release publish 1.0.6
+```
+
+This sends the release branch up to be checked. In addition, there is now a release branch on origin so any other last minutes fixes and commits can be pushed in order to check those.
 
 ### Checking on different platforms.
 
-Commiting and pushing the change now automatically sets off the Travis CI process for the `release` branch. Travis is configured (see `.travis.yml`) to build the package under R stable on Ubuntu and Mac and R devel on Ubuntu. 
+The Travis CI build process should now be underway for the `release` branch. Travis is configured (see `.travis.yml`) to build the package under R stable on Ubuntu and Mac and R devel on Ubuntu. 
 
 However, Travis CI does not currently check packages under Windows. Instead,  the R Project maintains a Windows test environment that can be used. This needs a built copy of the `release` branch, so run `build_scripts/build_and_check.sh` again. This should create a newly built package with the new version number (e.g. `safedata_1.0.6.tar.gz`). If everything checked out ok before creating the release, this is really just updating the version name. 
 
