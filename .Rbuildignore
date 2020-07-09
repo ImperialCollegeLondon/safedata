@@ -6,3 +6,4 @@
 cran-comments.md
 build_notes.md
 ^build_scripts$
+lint.txt
