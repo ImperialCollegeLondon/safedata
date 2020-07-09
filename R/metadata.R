@@ -257,10 +257,10 @@ fetch_record_metadata <- function(record_set) {
             }
             url <- getOption("safedata.url")
             api <- sprintf("%s/api/record/%i", url, to_get$record)
-            result <- try(curl::curl_download(api, to_get$local_path), 
-                          silent=TRUE)
-            if (inherits(result, 'try-error')){
-                stop('Could not download record metadata')
+            result <- try(curl::curl_download(api, to_get$local_path),
+                          silent = TRUE)
+            if (inherits(result, "try-error")) {
+                stop("Could not download record metadata")
             }
         }
     }

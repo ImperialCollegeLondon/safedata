@@ -29,9 +29,7 @@ get_taxa <- function(obj) {
     #' loaded data worksheet (see \code{\link{add_taxa}}).
     #'
     #' For more details on the structure of the Taxa worksheet see:
-    # nolint start - long URL
     #' \url{https://safedata-validator.readthedocs.io/en/latest/data_format/taxa/}
-    # nolint end
     #'
     #' @param obj A single record id, or an existing safedata dataframe.
     #' @return A taxonomy table of classes "safe_taxa" and "data.frame".

@@ -37,7 +37,6 @@
 #' provided sampling locations or use newly defined locations that are missing
 #' coordinate information.
 #'
-# nolint start - URLs just long.
 #' @section Links:
 #' \describe{
 #'    \item{SAFE data API}{e.g. \url{https://www.safeproject.net/api}}
@@ -46,7 +45,6 @@
 #'          \url{https://www.safeproject.net/info/gazetteer}}
 #'    \item{WKT}{\url{https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry}}
 #' }
-# nolint end
 #' @param dates A vector of length 1 or 2, containing either ISO format date
 #'    character strings ("yyyy-mm-dd") or \code{POSIXt} dates.
 #' @param match_type  A character string (see Details).
