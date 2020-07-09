@@ -1,0 +1,27 @@
+R/index.R:197:52: warning: no visible binding for global variable ‘md5’
+    local_expected$altered <- with(local_expected, md5 != checksum)
+                                                   ^~~
+R/index.R:197:59: warning: no visible binding for global variable ‘checksum’
+    local_expected$altered <- with(local_expected, md5 != checksum)
+                                                          ^~~~~~~~
+R/load_safe.R:1:1: style: functions should have cyclomatic complexity of less than 15, this has 22.
+load_safe_data <- function(record_id, worksheet) {
+^
+R/load_safe.R:248:1: style: functions should have cyclomatic complexity of less than 15, this has 30.
+download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
+^
+R/load_safe.R:541:41: warning: no visible binding for global variable ‘local_path’
+            with(local_files, file.copy(local_path, current_safe_dir_path))
+                                        ^~~~~~~~~~
+R/load_safe.R:541:53: warning: no visible binding for global variable ‘current_safe_dir_path’
+            with(local_files, file.copy(local_path, current_safe_dir_path))
+                                                    ^~~~~~~~~~~~~~~~~~~~~
+R/search_safe.R:252:5: warning: local variable ‘safedir’ assigned but may not be used
+    safedir <- get_data_dir()
+    ^~~~~~~
+R/taxa.R:99:1: style: functions should have cyclomatic complexity of less than 15, this has 17.
+taxon_index_to_taxon_table <- function(taxa) {
+^
+R/taxa.R:237:1: style: functions should have cyclomatic complexity of less than 15, this has 18.
+add_taxa <- function(obj, taxon_field = NULL, taxon_table = NULL,
+^

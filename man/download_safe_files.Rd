@@ -14,46 +14,50 @@ download_safe_files(
 )
 }
 \arguments{
-\item{record_ids}{A vector of SAFE dataset record ids or a 
+\item{record_ids}{A vector of SAFE dataset record ids or a
 \code{\link{safe_record_set}} object.}
 
 \item{confirm}{Requires the user to confirm before download (logical)}
 
-\item{xlsx_only}{Should all files be downloaded or just the core .xslx file (logical)}
+\item{xlsx_only}{Should all files be downloaded or just the core .xslx
+file (logical)}
 
-\item{download_metadata}{Should the metadata record for the file be downloaded (logical)}
+\item{download_metadata}{Should the metadata record for the file be
+downloaded (logical)}
 
-\item{refresh}{Should the function check if local copies have been modified and 
-download fresh copies. This is useful if the local copies have unintentionally 
-been modified but note the warning above.}
+\item{refresh}{Should the function check if local copies have been
+modified and download fresh copies. This is useful if the local
+copies have unintentionally been modified but note the warning above.}
 
-\item{token}{An access token for restricted datasets. Not currently implemented.}
+\item{token}{An access token for restricted datasets. Not currently
+implemented.}
 }
 \value{
 Invisibly, a vector of paths for successfully downloaded files.
 }
 \description{
-This downloads files associated with SAFE datasets, either all of the files 
-included in a set of records (\code{xlsx_only=FALSE}) or just the core .xlsx
-files (\code{xlsx_only=FALSE}), and stores them in the SAFE data directory.
-Currently, there is no mechanism for importing restricted datasets.
+This downloads files associated with SAFE datasets, either all of the
+files included in a set of records (\code{xlsx_only = FALSE}) or just
+the core .xlsx files (\code{xlsx_only = FALSE}), and stores them in the
+SAFE data directory. See \code{\link{insert_dataset}} for details on
+using embargoed or restricted datasets.
 }
 \details{
-By default, the function will also download the dataset metadata. This 
+By default, the function will also download the dataset metadata. This
 information is required by many of the functions in the package but users
 can turn off automatic metadata download.
 }
 \section{Warning}{
 
-Using \code{refresh=TRUE} will \strong{overwrite locally modified files} and 
-replace them with the versions of record from Zenodo.
+Using \code{refresh = TRUE} will \strong{overwrite locally modified
+files} and replace them with the versions of record from Zenodo.
 }
 
 \examples{
    \donttest{
    set_example_safe_dir()
    recs <- validate_record_ids(c(3247631, 3266827, 3266821))
-   download_safe_files(recs, confirm=FALSE)
+   download_safe_files(recs, confirm = FALSE)
    unset_example_safe_dir()
    }
 }

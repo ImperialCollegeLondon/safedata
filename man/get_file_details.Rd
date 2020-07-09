@@ -10,14 +10,14 @@ get_file_details(record_id)
 \item{record_id}{A record id}
 }
 \value{
-A data frame with fields: filename, dataset_access, path 
+A data frame with fields: filename, dataset_access, path
    and local.
 }
 \description{
-This function returns a list of the files associated with a record. 
+This function returns a list of the files associated with a record.
 The access status of the record is reported, along with the local
 absolute file path and whether a local copy is present. If there
-is no local copy and the dataset is open access, you can use 
+is no local copy and the dataset is open access, you can use
 \code{\link{download_safe_files}} to get local copies. If the dataset
 is embargoed or restricted, see \code{\link{insert_dataset}}.
 }

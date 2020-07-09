@@ -10,7 +10,7 @@ file_status(metadata)
 \item{A}{loaded metadata dictionary for a record}
 }
 \description{
-This returns a formatted status string for \code{\link{show_record}} and 
+This returns a formatted status string for \code{\link{show_record}} and
 \code{\link{show_worksheet}} showing if a dataset is available globally
 or locally as a private copy.
 }

@@ -15,46 +15,50 @@ show_worksheet(obj, worksheet = NULL, extended_fields = FALSE)
 \arguments{
 \item{obj}{A reference to SAFE records or a loaded worksheet (see above)}
 
-\item{worksheet}{The name of a worksheet to show. Obviously, if \code{obj} 
-is a loaded worksheet, that will be the worksheet described and this can
-be left as NULL.}
+\item{worksheet}{The name of a worksheet to show. Obviously, if
+\code{obj} is a loaded worksheet, that will be the worksheet
+described and this can be left as NULL.}
 
 \item{extended_fields}{Logical - show a compact description of worksheet
 fields or a longer output including full metadata descriptors.}
 }
 \value{
-Invisibly, a SAFE metadata object or a list of such objects. These
-   are not really intended for end user consumption.
+Invisibly, a SAFE metadata object or a list of such objects.
+    These are not really intended for end user consumption.
 }
 \description{
 These functions provide access to the metadata associated with SAFE
-datasets. The functions provide three levels of information: 
+datasets. The functions provide three levels of information:
 \describe{
-     \item{\code{show_concepts}}{displays the record versions grouped under 
-         dataset concepts,}
-     \item{\code{show_record}}{displays summary information about a 
+     \item{\code{show_concepts}}{displays the record versions grouped
+           under dataset concepts,}
+     \item{\code{show_record}}{displays summary information about a
            specific record, and }
      \item{\code{show_worksheet}}{displays metadata about data worksheet
            fields within a record.}
 }
-All three functions accept a first argument \code{obj}, which can be one 
+All three functions accept a first argument \code{obj}, which can be one
 of three things:
 \enumerate{
-   \item A character or numeric vector of SAFE dataset records or concepts, 
-         which will be validated using \code{\link{validate_record_ids}}, or
+   \item A character or numeric vector of SAFE dataset records or
+         concepts, which will be validated using
+         \code{\link{validate_record_ids}}, or
    \item An already validated \code{\link{safe_record_set}} object, or
-   \item A \code{safedata} data frame loaded using \code{\link{load_safe_data}}.
+   \item A \code{safedata} data frame loaded using
+         \code{\link{load_safe_data}}.
 }
-If \code{show_concepts} is passed a record id, then the function looks up the
-relevant concept. The version table indicates which versions are available ('*' 
-for the most recent available version and 'o' for older available versions),
-and which are unavailable due to embargo or retriction ('x'). A '!' is used 
-to show that a private local copy of an embargoed or restricted dataset has 
-been inserted using \code{\link{insert_dataset}}.
+If \code{show_concepts} is passed a record id, then the function looks
+up the relevant concept. The version table indicates which versions
+are available ("*" for the most recent available version and "o"
+for older available versions), and which are unavailable due to
+embargo or retriction ("x"). A "!" is used to show that a private
+local copy of an embargoed or restricted dataset has been inserted
+using \code{\link{insert_dataset}}.
 }
 \section{Functions}{
 \itemize{
-\item \code{show_concepts}: Show the records associated with a dataset concept.
+\item \code{show_concepts}: Show the records associated with a
+dataset concept.
 
 \item \code{show_record}: Show details of a specific dataset
 
@@ -67,8 +71,8 @@ been inserted using \code{\link{insert_dataset}}.
    show_concepts(recs)
    show_record(recs[1,])
    # Show worksheet metadata from a record or from a loaded worksheet
-   show_worksheet(1400562, 'EnvironVariables')
-   beetle_abund <- load_safe_data(1400562, 'Ant-Psel')
-   show_worksheet(beetle_abund, extended_fields=TRUE)
+   show_worksheet(1400562, "EnvironVariables")
+   beetle_abund <- load_safe_data(1400562, "Ant-Psel")
+   show_worksheet(beetle_abund, extended_fields = TRUE)
    unset_example_safe_dir()
 }

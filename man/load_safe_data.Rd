@@ -28,22 +28,23 @@ A data frame with the additional \code{safedata} class and
    additional attribute data containing metadata for the data.
 }
 \description{
-This function returns a data frame containing the data from a data 
+This function returns a data frame containing the data from a data
 worksheet in a SAFE dataset. Note that SAFE dataset .xlsx files include
-the other (non-data) worksheets Summary, Taxa, Locations that contain 
-metadata: see  \code{\link{get_taxa}}, \code{\link{get_locations}}, 
-\code{\link{add_taxa}} and \code{\link{add_locations}} for accessing 
+the other (non-data) worksheets Summary, Taxa, Locations that contain
+metadata: see  \code{\link{get_taxa}}, \code{\link{get_locations}},
+\code{\link{add_taxa}} and \code{\link{add_locations}} for accessing
 and using this metadata.
 }
 \details{
 In particular, the large amount of data worksheet summary metadata is
 not attached as attributes to the data frame returned by this function.
-This is largely to avoid excessive output to the console during normal use 
-of the data frame: an extended description of a worksheet can be displayed
-using \code{\link{show_worksheet}}.
+This is largely to avoid excessive output to the console during normal
+use of the data frame: an extended description of a worksheet can be
+displayed using \code{\link{show_worksheet}}.
 
-Currently, this function only loads data from SAFE formatted \code{.xlsx}
-files - data stored in external files is not yet handled.
+Currently, this function only loads data from SAFE formatted
+\code{.xlsx} files - data stored in external files is not yet
+handled.
 }
 \section{Methods (by generic)}{
 \itemize{
@@ -54,7 +55,7 @@ files - data stored in external files is not yet handled.
 
 \examples{
    set_example_safe_dir()
-   beetle_abund <- load_safe_data(1400562, 'Ant-Psel')
+   beetle_abund <- load_safe_data(1400562, "Ant-Psel")
    str(beetle_abund)
    # See also the show_worksheet function for further worksheet metadata
    show_worksheet(beetle_abund)

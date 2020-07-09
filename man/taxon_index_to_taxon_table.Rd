@@ -14,10 +14,10 @@ A data frame adding higher taxon level information for each taxon
 }
 \description{
 Taxon data is stored as a set of taxa with taxon ids and parent taxon
-ids. For any given dataset, the set should include all parent taxa required.
-This internal function takes such list of taxon data and adds columns showing
-the taxonomic hierarchy for each row. It is used by \code{\link{get_taxa}} and
-\code{\link{get_taxon_coverage}}.
+ids. For any given dataset, the set should include all parent taxa
+required. This internal function takes such list of taxon data and
+adds columns showing the taxonomic hierarchy for each row. It is used by
+\code{\link{get_taxa}} and \code{\link{get_taxon_coverage}}.
 }
 \seealso{
 \code{\link{get_taxa}}

@@ -7,7 +7,8 @@
 load_gazetteer()
 }
 \value{
-An \code{\link[sf]{sf}} object containing the SAFE gazetteer locations.
+An \code{\link[sf]{sf}} object containing the SAFE gazetteer
+   locations.
 }
 \description{
 This function loads the SAFE gazetteer, stored as a geojson file in the
@@ -18,27 +19,31 @@ The GIS data uses the WGS84 (EPSG:4326) geographic coordinate system.
 The gazetteer contains the following fields:
 \describe{
 \item{location}{The official gazetteer name for a sampling site.}
-\item{type}{A short description of location type - typically the project 
+\item{type}{A short description of location type - typically the project
       that created the location}
-\item{plot_size}{Where applicable, the size of the plot at a location. 
-      Note that point locations may define a sampling area with a plot 
+\item{plot_size}{Where applicable, the size of the plot at a location.
+      Note that point locations may define a sampling area with a plot
       size.}
 \item{display_order}{DELETE}
 \item{parent}{DELETE}
-\item{region}{One of the four major large scale sampling areas: SAFE, Maliau, 
-      Danum and VJR}
-\item{fractal_order}{Only defined for the SAFE core sampling points, which 
-      follow a fractal layout.}
-\item{transect_order}{Again, for SAFE core sampling points, the location of 
-      a point along the sampling design transect.}
+\item{region}{One of the four major large scale sampling areas: SAFE,
+      Maliau, Danum and VJR}
+\item{fractal_order}{Only defined for the SAFE core sampling points,
+      which follow a fractal layout.}
+\item{transect_order}{Again, for SAFE core sampling points, the
+      location of a point along the sampling design transect.}
 \item{centroid_x, centroid_y}{The centroid of the feature}
-\item{source}{The original source GIS file that the feature was described in.}
-\item{bbox_xmin, bbox_ymin, bbox_xmax, bbox_ymax}{The bounding box of the feature.}
-\item{geometry}{The GIS geometry for the data - a column of class \code{\link[sf]{sfc}}.}
+\item{source}{The original source GIS file that the feature was
+      described in.}
+\item{bbox_xmin, bbox_ymin, bbox_xmax, bbox_ymax}{The bounding box of
+      the feature.}
+\item{geometry}{The GIS geometry for the data - a column of class
+      \code{\link[sf]{sfc}}.}
 }
 
-When this function is first called in a session, the loaded \code{\link[sf]{sf}}
-object is cached for re-use (see \code{\link{load_index}}).
+When this function is first called in a session, the loaded
+\code{\link[sf]{sf}} object is cached for re-use (see
+\code{\link{load_index}}).
 }
 \seealso{
 \code{\link{load_location_aliases}}, \code{\link{load_index}}

@@ -13,17 +13,19 @@ load_index(reload = FALSE)
 A data frame containing the dataset index details.
 }
 \description{
-This function loads the dataset record index from the JSON file in the SAFE
-data directory and sets which datasets are currently available and which 
-records are the most recent available under a given concept.
+This function loads the dataset record index from the JSON file in
+the SAFE data directory and sets which datasets are currently available
+and which records are the most recent available under a given concept.
 }
 \details{
-When any of the three index files (\code{index.json}, \code{gazetteer.geojson}
-and \code{location_aliases.csv}) are loaded, the file contents are cached in
-memory to reduce load times. The cache is within an environment that is not
-exported in the package namespace and is not intended to be user accessible.
+When any of the three index files (\code{index.json},
+\code{gazetteer.geojson} and \code{location_aliases.csv}) are loaded,
+the file contents are cached in memory to reduce load times. The cache
+is within an environment that is not exported in the package namespace
+and is not intended to be user accessible.
 }
 \seealso{
-\code{\link{load_location_aliases}}, \code{\link{load_gazetteer}}
+\code{\link{load_location_aliases}},
+    \code{\link{load_gazetteer}}
 }
 \keyword{internal}

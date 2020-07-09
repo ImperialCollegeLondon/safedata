@@ -1,8 +1,8 @@
 Package: safedata
 Type: Package
 Title: Interface to Data from the SAFE Project 
-Version: 1.0.5
-Date: 2020-07-07
+Version: 1.0.6
+Date: 2020-07-09
 Authors@R: c(
     person('Andy', 'Aldersley', email='a.aldersley@imperial.ac.uk', role=c('aut')),
     person('David', 'Orme', email='d.orme@imperial.ac.uk', role=c('aut','cre'),
