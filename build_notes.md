@@ -154,11 +154,13 @@ You can then commit that change:
 git commit -m "Update version number" DESCRIPTION
 ```
 
-At the moment, the `release` branch is only local and it needs to be pushed to Github to be picked up by Travis CI. There is a specific `git flow` command to do this:
+At the moment, the `release` branch is only local. The release branch and code needs to be pushed to Github to be picked up by Travis CI. There is a specific `git flow` command to do this:
 
 ```
  git flow release publish 1.0.6
 ```
+
+This sends the release branch up to be checked. In addition, there is now a release branch on origin so any other last minutes fixes and commits can be pushed in order to check those.
 
 ### Checking on different platforms.
 
