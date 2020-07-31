@@ -1,0 +1,5 @@
+1.0.7
+    - Moved download_safe_files to use the website download URLs not API
+    - Added ability to use tokens for restricted datasets (pretty rare, 
+      but requires website URLS)
+    - Fixed checking for field names to handle what early versions of safedata_validator missed
