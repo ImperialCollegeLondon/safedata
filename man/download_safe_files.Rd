@@ -29,8 +29,10 @@ downloaded (logical)}
 modified and download fresh copies. This is useful if the local
 copies have unintentionally been modified but note the warning above.}
 
-\item{token}{An access token for restricted datasets. Not currently
-implemented.}
+\item{token}{An access token for restricted datasets. These tokens are 
+requested through the Zenodo page for a restricted dataset and are 
+long alphanumeric strings. If you are providing a token, you should
+only provide the record id for that dataset.}
 }
 \value{
 Invisibly, a vector of paths for successfully downloaded files.
@@ -55,9 +57,14 @@ files} and replace them with the versions of record from Zenodo.
 
 \examples{
    \donttest{
-   set_example_safe_dir()
-   recs <- validate_record_ids(c(3247631, 3266827, 3266821))
-   download_safe_files(recs, confirm = FALSE)
-   unset_example_safe_dir()
+       set_example_safe_dir()
+       recs <- validate_record_ids(c(3247631, 3266827, 3266821))
+       download_safe_files(recs, confirm = FALSE)
+       unset_example_safe_dir()
+   }
+   \dontrun{
+       # This example requires a private token
+       download_safe_files(1237730, confirm = FALSE,
+                           token="longStringFromZenodo")
    }
 }
