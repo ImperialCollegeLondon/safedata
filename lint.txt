@@ -7,13 +7,22 @@ R/index.R:197:59: warning: no visible binding for global variable ‘checksum’
 R/load_safe.R:1:1: style: functions should have cyclomatic complexity of less than 15, this has 22.
 load_safe_data <- function(record_id, worksheet) {
 ^
-R/load_safe.R:248:1: style: functions should have cyclomatic complexity of less than 15, this has 30.
+R/load_safe.R:153:1: style: Lines should not be more than 80 characters.
+    if (! identical(make.names(fields$field_name, unique = TRUE), names(data))) {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+R/load_safe.R:295:1: style: functions should have cyclomatic complexity of less than 15, this has 30.
 download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
 ^
-R/load_safe.R:541:41: warning: no visible binding for global variable ‘local_path’
+R/load_safe.R:441:1: style: Lines should not be more than 80 characters.
+            these_files$public_url <- sprintf("https://www.zenodo.org/record/%s/files/%s",
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+R/load_safe.R:447:1: style: Lines should not be more than 80 characters.
+                these_files$public_url <- paste0(these_files$public_url, "?token=", token)
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+R/load_safe.R:574:41: warning: no visible binding for global variable ‘local_path’
             with(local_files, file.copy(local_path, current_safe_dir_path))
                                         ^~~~~~~~~~
-R/load_safe.R:541:53: warning: no visible binding for global variable ‘current_safe_dir_path’
+R/load_safe.R:574:53: warning: no visible binding for global variable ‘current_safe_dir_path’
             with(local_files, file.copy(local_path, current_safe_dir_path))
                                                     ^~~~~~~~~~~~~~~~~~~~~
 R/search_safe.R:252:5: warning: local variable ‘safedir’ assigned but may not be used

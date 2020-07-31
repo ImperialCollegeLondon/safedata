@@ -149,7 +149,7 @@ load_safe_data <- function(record_id, worksheet) {
     class(data) <- "data.frame"
     data <- data[, -1]
 
-    # Check field name matching. 
+    # Check field name matching.,
     if (! identical(make.names(fields$field_name, unique = TRUE), names(data))) {
         stop("Mismatch between data field names and local metadata")
     }
@@ -256,14 +256,14 @@ print.safedata <- function(x, n = 10, ...) {
 #
 # ** API URLs **
 # The API link requires that hex 'bucket' id - and these are not stable
-# so need to be retrieved when a user requests a download. The record 
+# so need to be retrieved when a user requests a download. The record,
 # details are available from an API call:
-# 
+#,
 # https://zenodo.org/api/records/3906082
-# 
+#,
 # If the record is _open_ then the JSON response contains a files array
 # giving the API download path. However, if the record is not open, that
-# files array is not present in the response. 
+# files array is not present in the response.,
 #
 # An access token can be passed to the records API call, which will then
 # report file URLs for any record in the community. The same token can then
@@ -276,15 +276,15 @@ print.safedata <- function(x, n = 10, ...) {
 # URL for any file - only the record number and filename are needed. The
 # filenames are not typically known for embargoed and restricted files,
 # but safedata stores them. However, the file URL will raise a 404 error
-# unless the file is open access. 
-# 
-# There is a special case - if a user requests access to restricted 
+# unless the file is open access.,
+#,
+# There is a special case - if a user requests access to restricted,
 # dataset, then they get a token that will allow that file to be downloaded
 # from the appropriate WWW URL (_not_ via the API URL):
 #
 # https://sandbox.zenodo.org/record/315677/files/test.xlsx?token=eyJhbGc...
 #
-# There is currently no such mechanism for embargoed data - you just have 
+# There is currently no such mechanism for embargoed data - you just have,
 # to wait it out or contact the authors.
 #
 # The download_safe_files function uses the WWW URLs to support restricted
@@ -322,8 +322,8 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
     #' @param refresh Should the function check if local copies have been
     #'    modified and download fresh copies. This is useful if the local
     #'    copies have unintentionally been modified but note the warning above.
-    #' @param token An access token for restricted datasets. These tokens are 
-    #'    requested through the Zenodo page for a restricted dataset and are 
+    #' @param token An access token for restricted datasets. These tokens are,
+    #'    requested through the Zenodo page for a restricted dataset and are,
     #'    long alphanumeric strings. If you are providing a token, you should
     #'    only provide the record id for that dataset.
     #' @return Invisibly, a vector of paths for successfully downloaded files.
@@ -349,8 +349,9 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
     if (! length(records_to_get)) {
         verbose_message("No valid record ids provided")
         return(invisible())
-    } else if (! is.null(token) & length(records_to_get) > 1){
-        verbose_message("When using an access token, please download the single record")
+    } else if (! is.null(token) & length(records_to_get) > 1) {
+        verbose_message("When using an access token, please download ",
+                        "the single record")
         return(invisible())
     }
 
@@ -420,7 +421,7 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
 
         current_record <- these_files$zenodo_record_id[1]
 
-        if (! is.null(token) & these_files$dataset_access == "restricted"){
+        if (! is.null(token) & these_files$dataset_access == "restricted") {
             verbose_message("Using token to access restricted record")
         } else if (! these_files$available[1]) {
             msg <- "%i files for record %i: under embargo or restricted"
@@ -442,7 +443,7 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
                                               these_files$filename)
 
             # Handle token if provided
-            if(! is.null(token)){
+            if (! is.null(token)) {
                 these_files$public_url <- paste0(these_files$public_url, "?token=", token)
             }
 
