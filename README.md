@@ -14,13 +14,13 @@ The homepage for the package is at:
 
 In particular, the following links provide:
 
-* the `safedata` [function reference](reference/index.html),
-* an vignette providing an [overview](articles/overview.html) of the SAFE project data, and
-* a short [user guide](articles/using_safe_data.html) for the package.
+* the `safedata` [function reference](https://imperialcollegelondon.github.io/safedata/reference/index.html),
+* an vignette providing an [overview](https://imperialcollegelondon.github.io/safedata/articles/overview.html) of the SAFE project data, and
+* a short [user guide](https://imperialcollegelondon.github.io/safedata/articles/using_safe_data.html) for the package.
 
 ## Building `safedata`
 
-The package repository structure and build processes are described [here](build_notes.html)
+The package repository structure and build processes are described [here](https://imperialcollegelondon.github.io/safedata/build_notes.html)
 
 <!-- badges: start -->
 [![Travis build status](https://travis-ci.org/ImperialCollegeLondon/safedata.svg?branch=master)](https://travis-ci.org/ImperialCollegeLondon/safedata)
