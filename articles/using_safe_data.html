@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.7</span>
       </span>
     </div>
 
@@ -85,7 +85,7 @@
       <h1 data-toc-skip>Using the <code>safedata</code> package</h1>
                         <h4 class="author">Andy Aldersley and David Orme</h4>
             
-            <h4 class="date">2020-07-09</h4>
+            <h4 class="date">2020-08-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ImperialCollegeLondon/safedata/blob/master/vignettes/using_safe_data.Rmd"><code>vignettes/using_safe_data.Rmd</code></a></small>
       <div class="hidden name"><code>using_safe_data.Rmd</code></div>
@@ -245,10 +245,10 @@
 <p>The <code><a href="https://rdrr.io/pkg/safedata/man/search_safe.html">search_spatial()</a></code> function allows users to search for datasets by sampling locations. Accepted location names from the gazetteer can be used to search for datasets but users can also provide their own search geometries using the Well Known Text format. The search includes simple GIS capabilities to look for sampling within a given distance of the query location.</p>
 <div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="co"># Datasets that include sampling within experimental block A</span>
 <span class="no">within_a</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/safedata/man/search_safe.html">search_spatial</a></span>(<span class="kw">location</span><span class="kw">=</span><span class="st">'BL_A'</span>)
-<span class="co">## Search returned 30 records</span>
+<span class="co">## Search returned 32 records</span>
 <span class="co"># Datasets that sampled within 2 km of the Maliau Basin Field Study Centre</span>
 <span class="no">near_maliau</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/safedata/man/search_safe.html">search_spatial</a></span>(<span class="kw">wkt</span><span class="kw">=</span><span class="st">'POINT(116.97394 4.73481)'</span>, <span class="kw">distance</span><span class="kw">=</span><span class="fl">2000</span>)
-<span class="co">## Search returned 56 records</span></pre></body></html></div>
+<span class="co">## Search returned 58 records</span></pre></body></html></div>
 <p>Note that WKT coordinates should be supplied as WGS84 longitude and latitude - typically the output of GPS receivers - but the database uses the local UTM 50N projected coordinate system for all distance calculations and GIS operations.</p>
 </div>
 </div>
@@ -432,13 +432,13 @@
 ## Concept: 1400561; Record 1400562; Worksheet: Ant-Psel
 ## 'data.frame':    20 obs. of  3 variables:
 ##  $ Site                : chr  "SAFE_E" "SAFE_D" "SAFE_F" "SAFE_C" ...
-##  $ ant species richness: num  31 31 27 29 31 21 31 25 32 26 ...
-##  $ ant abundance       : num  561 713 392 481 1036 ...</code></pre>
+##  $ ant.species.richness: num  31 31 27 29 31 21 31 25 32 26 ...
+##  $ ant.abundance       : num  561 713 392 481 1036 ...</code></pre>
 <div class="sourceCode" id="cb30"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">beetle_abund</span>)</pre></body></html></div>
 <pre><code>## SAFE dataset:
 ## Concept: 1400561; Record 1400562; Worksheet: Ant-Psel
 ## First 10 rows:
-##        Site ant species richness ant abundance
+##        Site ant.species.richness ant.abundance
 ## 1    SAFE_E                   31           561
 ## 2    SAFE_D                   31           713
 ## 3    SAFE_F                   27           392
@@ -553,7 +553,7 @@
 <p>The <code>get_taxon_coverage</code> function can be used to get a taxon table of all taxa currently referenced in <em>all</em> datasets.</p>
 <div class="sourceCode" id="cb42"><html><body><pre class="r"><span class="no">all_taxa</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/safedata/man/get_taxon_coverage.html">get_taxon_coverage</a></span>()
 <span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(<span class="no">all_taxa</span>)</pre></body></html></div>
-<pre><code>## Classes 'safe_taxa' and 'data.frame':   5811 obs. of  13 variables:
+<pre><code>## Classes 'safe_taxa' and 'data.frame':   5819 obs. of  13 variables:
 ##  $ kingdom    : chr  "Plantae" "Plantae" "Animalia" "Plantae" ...
 ##  $ phylum     : chr  "Tracheophyta" "Tracheophyta" "Chordata" "Tracheophyta" ...
 ##  $ class      : chr  "Magnoliopsida" "Magnoliopsida" "Aves" "Magnoliopsida" ...
@@ -646,7 +646,7 @@
 <p><code><a href="https://rdrr.io/pkg/safedata/man/get_locations.html">get_locations()</a></code>: This function returns an <code>sf</code> object containing the locations used within a dataset. For known locations, the GIS data for the location are taken directly from the gazetteer. If the locations are new sampling sites, then GIS data provided in the dataset is used. Note that it is possible for dataset providers to create a new locations without including GIS data - these will be represented using empty GIS geometries.</p>
 <p>By default, the returned <code>sf</code> object will only include the location name used in the dataset, the gazetteer name for known sampling sites and an indication of whether the location is new or known, but <code>gazetteer_info=TRUE</code> can be used to include the gazetteer attributes for known locations.</p>
 <div class="sourceCode" id="cb47"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">sf</span>)</pre></body></html></div>
-<pre><code>## Linking to GEOS 3.7.2, GDAL 2.4.2, PROJ 5.2.0</code></pre>
+<pre><code>## Linking to GEOS 3.7.1, GDAL 2.2.2, PROJ 4.9.2</code></pre>
 <div class="sourceCode" id="cb49"><html><body><pre class="r"><span class="no">beetle_locs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/safedata/man/get_locations.html">get_locations</a></span>(<span class="fl">1400562</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">beetle_locs</span>)</pre></body></html></div>
 <pre><code>## Simple feature collection with 20 features and 3 fields
@@ -728,7 +728,7 @@
 <div class="sourceCode" id="cb60"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(<span class="no">dat</span>)</pre></body></html></div>
 <pre><code>## SAFE dataset
 ## Concept: 1198840; Record 1237719; Worksheet: Data
-## 'data.frame':    34 obs. of  10 variables:
+## 'data.frame':    34 obs. of  11 variables:
 ##  $ taxon_name              : chr  "Anguilla.borneensis" "Anguilla.marmorata" "Barbodes.sealei" "Barbonymus.balleroides" ...
 ##  $ Body_size               : num  24.14 30.56 8.51 11.36 7.59 ...
 ##  $ body_shape              : Factor w/ 3 levels "Compressed","Cylindrical",..: 2 2 1 1 1 2 1 2 1 2 ...
@@ -738,7 +738,8 @@
 ##  $ gregariousness          : Factor w/ 2 levels "no","yes": 1 1 2 2 1 1 1 2 2 2 ...
 ##  $ presence_barbels        : Factor w/ 2 levels "no","yes": 2 2 2 2 1 2 2 2 1 2 ...
 ##  $ vertical_position_water : Factor w/ 4 levels "Benthic","Benthopelagic",..: 2 2 3 3 2 2 2 2 3 1 ...
-##  $ air-breathing_capability: Factor w/ 2 levels "no","yes": 2 2 1 1 2 2 1 1 1 1 ...</code></pre>
+##  $ air.breathing_capability: chr  "yes" "yes" "no" "no" ...
+##  $ air-breathing_capability: Factor w/ 0 levels: NA NA NA NA NA NA NA NA NA NA ...</code></pre>
 </div>
 <div id="file-details-and-accessing-files" class="section level1">
 <h1 class="hasAnchor">

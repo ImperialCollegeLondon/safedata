@@ -76,7 +76,7 @@ using embargoed or restricted datasets." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.7</span>
       </span>
     </div>
 
@@ -179,8 +179,10 @@ copies have unintentionally been modified but note the warning above.</p></td>
     </tr>
     <tr>
       <th>token</th>
-      <td><p>An access token for restricted datasets. Not currently
-implemented.</p></td>
+      <td><p>An access token for restricted datasets. These tokens are,
+requested through the Zenodo page for a restricted dataset and are,
+long alphanumeric strings. If you are providing a token, you should
+only provide the record id for that dataset.</p></td>
     </tr>
     </table>
 
@@ -201,12 +203,16 @@ files</strong> and replace them with the versions of record from Zenodo.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>   <span class='co'># \donttest{</span>
-   <span class='fu'>set_example_safe_dir</span>()</div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div><div class='input'>   <span class='no'>recs</span> <span class='kw'>&lt;-</span> <span class='fu'>validate_record_ids</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3247631</span>, <span class='fl'>3266827</span>, <span class='fl'>3266821</span>))
-   <span class='fu'>download_safe_files</span>(<span class='no'>recs</span>, <span class='kw'>confirm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>2 files requested from 2 records</span>
+       <span class='fu'>set_example_safe_dir</span>()</div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div><div class='input'>       <span class='no'>recs</span> <span class='kw'>&lt;-</span> <span class='fu'>validate_record_ids</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3247631</span>, <span class='fl'>3266827</span>, <span class='fl'>3266821</span>))
+       <span class='fu'>download_safe_files</span>(<span class='no'>recs</span>, <span class='kw'>confirm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>2 files requested from 2 records</span>
 #&gt; <span class='message'> - 0 local (0 bytes)</span>
 #&gt; <span class='message'> - 1 embargoed or restricted (647.1 Kb)</span>
-#&gt; <span class='message'> - 1 to download (27.9 Kb)</span></div><div class='output co'>#&gt; <span class='message'>Downloading 2 record metadata files</span></div><div class='output co'>#&gt; <span class='message'>1 files for record 3247631: under embargo or restricted</span></div><div class='output co'>#&gt; <span class='message'>1 files for record 3266827: 1 to download</span></div><div class='output co'>#&gt; <span class='message'> - Downloaded: template_Symes.xlsx</span></div><div class='input'>   <span class='fu'>unset_example_safe_dir</span>()</div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div><div class='input'>   # }
-</div></pre>
+#&gt; <span class='message'> - 1 to download (27.9 Kb)</span></div><div class='output co'>#&gt; <span class='message'>Downloading 2 record metadata files</span></div><div class='output co'>#&gt; <span class='message'>1 files for record 3247631: under embargo or restricted</span></div><div class='output co'>#&gt; <span class='message'>1 files for record 3266827: 1 to download</span></div><div class='output co'>#&gt; <span class='message'> - Downloaded: template_Symes.xlsx</span></div><div class='input'>       <span class='fu'>unset_example_safe_dir</span>()</div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div><div class='input'>   <span class='co'># }</span>
+   <span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+       <span class='co'># This example requires a private token</span>
+       <span class='fu'>download_safe_files</span>(<span class='fl'>1237730</span>, <span class='kw'>confirm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+                           <span class='kw'>token</span><span class='kw'>=</span><span class='st'>"longStringFromZenodo"</span>)
+   }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
