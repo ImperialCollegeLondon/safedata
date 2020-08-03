@@ -1,6 +1,7 @@
 exclusions: list(# Linting exclusions - specific reasoned exclusions only!
                  "R/zzz.R" = 1, # .onAttach is require hook name
                  "R/search_safe.R" = 43, # URL - remove line length restriction
-                 "R/search_safe.R" = 46, # URL - remove line length restriction
-                 "R/taxa.R" = 32) # URL - remove line length restriction
-
+                 "R/search_safe.R" = 46, # URL
+                 "R/taxa.R" = 32, # URL 
+                 "R/load_safe.R" = 254, # URL 
+                 "R/load_safe.R" = 255) # URL 

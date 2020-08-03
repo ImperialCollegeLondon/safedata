@@ -32,4 +32,4 @@ if (getRversion() >= "2.15.1")  utils::globalVariables(c("available", "col_idx",
     "most_recent_available", "publication_date", "record", "str", "to_download",
     "zenodo_concept_id", "zenodo_record_id", "local_copy", "dataset_access",
     "path", "gbif_id", "gbif_status", "taxon_name", "taxon_rank",
-    "worksheet_name"))
+    "worksheet_name", "local_path", "current_safe_dir_path", "md5", "checksum"))
