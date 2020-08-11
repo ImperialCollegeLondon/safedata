@@ -8,10 +8,13 @@ matrix:
   include:
   - r: release
     os: linux
+    env: DEPLOY="true"	
   - r: devel
     os: linux
+    env: DEPLOY="false"	
   - r: release
     os: osx
+    env: DEPLOY="false"	
 
 addons:
   apt:
@@ -35,6 +38,7 @@ deploy:
   local-dir: docs
   on:
     branch: master
+    condition: $DEPLOY = 'true'
 
 r_packages:
 - Rcpp
