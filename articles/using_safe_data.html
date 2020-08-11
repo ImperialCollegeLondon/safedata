@@ -85,7 +85,7 @@
       <h1 data-toc-skip>Using the <code>safedata</code> package</h1>
                         <h4 class="author">Andy Aldersley and David Orme</h4>
             
-            <h4 class="date">2020-08-03</h4>
+            <h4 class="date">2020-08-11</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ImperialCollegeLondon/safedata/blob/master/vignettes/using_safe_data.Rmd"><code>vignettes/using_safe_data.Rmd</code></a></small>
       <div class="hidden name"><code>using_safe_data.Rmd</code></div>
@@ -216,7 +216,9 @@
 <p>Published datasets contain a taxonomic index of any organisms referred to within the data - see <a href="https://safedata-validator.readthedocs.io/en/latest/data_format/taxa/">here</a> for details of the Taxa worksheet containing the index.</p>
 <p>The taxa in this index, along with all of the parent taxa in the taxonomic hierarchy leading up to that those taxa, are added to a taxonomic database on the SAFE Project website. The <code><a href="https://rdrr.io/pkg/safedata/man/search_safe.html">search_taxa()</a></code> function searches that index to identify all the datasets that contain a particular taxon.</p>
 <div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">ants</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/safedata/man/search_safe.html">search_taxa</a></span>(<span class="st">'Formicidae'</span>))
-<span class="co">## Search returned 11 records</span>
+<span class="co">## Search returned 12 records</span>
+<span class="co">## Warning in validate_record_ids(content$entries$zenodo_record_id): Unknown record</span>
+<span class="co">## ids in record_set: 3975973</span>
 <span class="co">## Set includes 10 concept ids and 11 record ids: </span>
 <span class="co">##  - 8 open and most recent (*)</span>
 <span class="co">##  - 1 open and outdated (o)</span>
@@ -236,7 +238,9 @@
 <span class="co">## 11 3354067 3354068         *</span></pre></body></html></div>
 <p>The taxonomic index is built around the GBIF backbone taxonomic database and include the following core taxonomic levels: kingdom, phylum, class, order, family, genus, species and subspecies. It is also possible to search by <a href="https://www.gbif.org/species/4342">GBIF ID</a>.</p>
 <div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="no">ants</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/safedata/man/search_safe.html">search_taxa</a></span>(<span class="kw">gbif_id</span><span class="kw">=</span><span class="fl">4342</span>)
-<span class="co">## Search returned 11 records</span></pre></body></html></div>
+<span class="co">## Search returned 12 records</span>
+<span class="co">## Warning in validate_record_ids(content$entries$zenodo_record_id): Unknown record</span>
+<span class="co">## ids in record_set: 3975973</span></pre></body></html></div>
 </div>
 <div id="spatial-search-details" class="section level3">
 <h3 class="hasAnchor">
@@ -245,10 +249,14 @@
 <p>The <code><a href="https://rdrr.io/pkg/safedata/man/search_safe.html">search_spatial()</a></code> function allows users to search for datasets by sampling locations. Accepted location names from the gazetteer can be used to search for datasets but users can also provide their own search geometries using the Well Known Text format. The search includes simple GIS capabilities to look for sampling within a given distance of the query location.</p>
 <div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="co"># Datasets that include sampling within experimental block A</span>
 <span class="no">within_a</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/safedata/man/search_safe.html">search_spatial</a></span>(<span class="kw">location</span><span class="kw">=</span><span class="st">'BL_A'</span>)
-<span class="co">## Search returned 32 records</span>
+<span class="co">## Search returned 34 records</span>
+<span class="co">## Warning in validate_record_ids(content$entries$zenodo_record_id): Unknown record</span>
+<span class="co">## ids in record_set: 3976021,3975205</span>
 <span class="co"># Datasets that sampled within 2 km of the Maliau Basin Field Study Centre</span>
 <span class="no">near_maliau</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/safedata/man/search_safe.html">search_spatial</a></span>(<span class="kw">wkt</span><span class="kw">=</span><span class="st">'POINT(116.97394 4.73481)'</span>, <span class="kw">distance</span><span class="kw">=</span><span class="fl">2000</span>)
-<span class="co">## Search returned 58 records</span></pre></body></html></div>
+<span class="co">## Search returned 60 records</span>
+<span class="co">## Warning in validate_record_ids(content$entries$zenodo_record_id): Unknown record</span>
+<span class="co">## ids in record_set: 3975205,3973691</span></pre></body></html></div>
 <p>Note that WKT coordinates should be supplied as WGS84 longitude and latitude - typically the output of GPS receivers - but the database uses the local UTM 50N projected coordinate system for all distance calculations and GIS operations.</p>
 </div>
 </div>
@@ -419,6 +427,19 @@
 <span class="co">## </span>
 <span class="co">## Selection:</span></pre></body></html></div>
 <p>By default, the <code><a href="https://rdrr.io/pkg/safedata/man/download_safe_files.html">download_safe_files()</a></code> function downloads all of the files associated with the record. This will include <em>external</em> data files which may contain primary data that is not suited to the Excel format or additional information. Although many external files are likely to be readable in R, the<code>safedata</code> does not currently provide a mechanism to load them automatically. The function will also download the JSON metadata for the specified datasets.</p>
+<div class="sourceCode" id="cb28"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/safedata/man/download_safe_files.html">download_safe_files</a></span>(<span class="fl">3697804</span>, <span class="kw">xlsx_only</span><span class="kw">=</span><span class="fl">FALSE</span>)
+<span class="co"># 2 files requested from 1 records</span>
+<span class="co">#  - 1 local (11.3 Kb)</span>
+<span class="co">#  - 0 embargoed or restricted (0 bytes)</span>
+<span class="co">#  - 1 to download (74.1 Kb) </span>
+<span class="co"># </span>
+<span class="co"># 1: Yes</span>
+<span class="co"># 2: No</span>
+<span class="co"># </span>
+<span class="co"># Selection: 1</span>
+<span class="co"># 2 files for record 3697804: 1 to download</span>
+<span class="co">#  - Downloaded: Sampling_area_borders.xlsx, </span>
+<span class="co"># - Downloaded: Sampling_area_borders_UTM50N_WGS84.zip</span></pre></body></html></div>
 <p>The function will warn you if the local copies of data files have been altered and the <code>refresh=TRUE</code> argument can be used to restore data files to the version of record. Note that this will <strong>delete local changes</strong>.</p>
 </div>
 <div id="loading-data" class="section level1">
@@ -426,7 +447,7 @@
 <a href="#loading-data" class="anchor"></a>Loading data</h1>
 <p>The <code><a href="https://rdrr.io/pkg/safedata/man/load_safe_data.html">load_safe_data()</a></code> function is used to load a named data worksheet from a dataset into a <code>safedata</code> object. This is just a data frame with some additional attribute data and it will in general behave just like any other data frame - the additional attributes are used for further data processing and adding brief metadata to the <code>str</code> and <code>print</code> methods.</p>
 <p>Some data formatting takes place based on <a href="https://safedata-validator.readthedocs.io/en/latest/data_format/data/#field-types">field types</a>: categorical variables are converted to factors; dates and datetimes are converted to <code>POSIXct</code> and times are converted to <code>chron::time</code> objects.</p>
-<div class="sourceCode" id="cb28"><html><body><pre class="r"><span class="no">beetle_abund</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/safedata/man/load_safe_data.html">load_safe_data</a></span>(<span class="fl">1400562</span>, <span class="st">'Ant-Psel'</span>)
+<div class="sourceCode" id="cb29"><html><body><pre class="r"><span class="no">beetle_abund</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/safedata/man/load_safe_data.html">load_safe_data</a></span>(<span class="fl">1400562</span>, <span class="st">'Ant-Psel'</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(<span class="no">beetle_abund</span>)</pre></body></html></div>
 <pre><code>## SAFE dataset
 ## Concept: 1400561; Record 1400562; Worksheet: Ant-Psel
@@ -434,7 +455,7 @@
 ##  $ Site                : chr  "SAFE_E" "SAFE_D" "SAFE_F" "SAFE_C" ...
 ##  $ ant.species.richness: num  31 31 27 29 31 21 31 25 32 26 ...
 ##  $ ant.abundance       : num  561 713 392 481 1036 ...</code></pre>
-<div class="sourceCode" id="cb30"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">beetle_abund</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb31"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">beetle_abund</span>)</pre></body></html></div>
 <pre><code>## SAFE dataset:
 ## Concept: 1400561; Record 1400562; Worksheet: Ant-Psel
 ## First 10 rows:
@@ -450,7 +471,7 @@
 ## 9  Maliau_3                   32           613
 ## 10 Maliau_4                   26          1036</code></pre>
 <p>The display of <code>safedata</code> objects is kept deliberately simple to avoid cluttering the screen with metadata. You can always view additional metadata for a loaded worksheet by using the <code>show</code> functions directly on the loaded <code>safedata</code> object:</p>
-<div class="sourceCode" id="cb32"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/safedata/man/show_concepts.html">show_concepts</a></span>(<span class="no">beetle_abund</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb33"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/safedata/man/show_concepts.html">show_concepts</a></span>(<span class="no">beetle_abund</span>)</pre></body></html></div>
 <pre><code>## 
 ## Concept ID: 1400561
 ## Title: Myrmecophilous Pselaphine beetles in tropical forests
@@ -458,7 +479,7 @@
 ## 
 ##  record_id  published embargo available
 ##    1400562 2018-08-20      --         *</code></pre>
-<div class="sourceCode" id="cb34"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/safedata/man/show_concepts.html">show_record</a></span>(<span class="no">beetle_abund</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb35"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/safedata/man/show_concepts.html">show_record</a></span>(<span class="no">beetle_abund</span>)</pre></body></html></div>
 <pre><code>## 
 ## Record summary
 ## Title: Myrmecophilous Pselaphine beetles in tropical forests
@@ -472,7 +493,7 @@
 ##         Ant-Psel    4   20 Ant-Pselaphine data
 ##   MorphAbundance   44   20 Morphospeices abundance
 ## MorphFunctTraits   18   42 Morphospecies_Functional Traits</code></pre>
-<div class="sourceCode" id="cb36"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/safedata/man/show_concepts.html">show_worksheet</a></span>(<span class="no">beetle_abund</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb37"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/safedata/man/show_concepts.html">show_worksheet</a></span>(<span class="no">beetle_abund</span>)</pre></body></html></div>
 <pre><code>## Record ID: 1400562
 ## Worksheet name: Ant-Psel
 ## Number of data rows: 20
@@ -493,7 +514,7 @@
 <ol style="list-style-type: decimal">
 <li>
 <p><code><a href="https://rdrr.io/pkg/safedata/man/get_taxa.html">get_taxa()</a></code>: This function loads a dataframe containing all of the taxa used within a dataset, with fields including the core GBIF taxonomic levels, the taxonomic label used within the dataset and the taxonomic status of the each taxon. You can load a taxonomic dataframe from a <code>safe_record_set</code> row or using an existing loaded <code>safedata</code> object.</p>
-<div class="sourceCode" id="cb38"><html><body><pre class="r"><span class="no">beetle_taxa</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/safedata/man/get_taxa.html">get_taxa</a></span>(<span class="no">beetle_abund</span>)
+<div class="sourceCode" id="cb39"><html><body><pre class="r"><span class="no">beetle_taxa</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/safedata/man/get_taxa.html">get_taxa</a></span>(<span class="no">beetle_abund</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(<span class="no">beetle_taxa</span>)</pre></body></html></div>
 <pre><code>## Classes 'safe_taxa' and 'data.frame':    43 obs. of  13 variables:
 ##  $ kingdom    : chr  "Animalia" "Animalia" "Animalia" "Animalia" ...
@@ -512,7 +533,7 @@
 </li>
 <li>
 <p><code><a href="https://rdrr.io/pkg/safedata/man/add_taxa.html">add_taxa()</a></code>: This function adds taxonomic details to an already loaded data worksheet.</p>
-<div class="sourceCode" id="cb40"><html><body><pre class="r"><span class="no">beetle_morph</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/safedata/man/load_safe_data.html">load_safe_data</a></span>(<span class="fl">1400562</span>, <span class="st">'MorphFunctTraits'</span>)
+<div class="sourceCode" id="cb41"><html><body><pre class="r"><span class="no">beetle_morph</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/safedata/man/load_safe_data.html">load_safe_data</a></span>(<span class="fl">1400562</span>, <span class="st">'MorphFunctTraits'</span>)
 <span class="no">beetle_morph</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/safedata/man/add_taxa.html">add_taxa</a></span>(<span class="no">beetle_morph</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(<span class="no">beetle_morph</span>)</pre></body></html></div>
 <pre><code>## SAFE dataset
@@ -551,9 +572,9 @@
 </li>
 <li>
 <p>The <code>get_taxon_coverage</code> function can be used to get a taxon table of all taxa currently referenced in <em>all</em> datasets.</p>
-<div class="sourceCode" id="cb42"><html><body><pre class="r"><span class="no">all_taxa</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/safedata/man/get_taxon_coverage.html">get_taxon_coverage</a></span>()
+<div class="sourceCode" id="cb43"><html><body><pre class="r"><span class="no">all_taxa</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/safedata/man/get_taxon_coverage.html">get_taxon_coverage</a></span>()
 <span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(<span class="no">all_taxa</span>)</pre></body></html></div>
-<pre><code>## Classes 'safe_taxa' and 'data.frame':   5819 obs. of  13 variables:
+<pre><code>## Classes 'safe_taxa' and 'data.frame':   5877 obs. of  13 variables:
 ##  $ kingdom    : chr  "Plantae" "Plantae" "Animalia" "Plantae" ...
 ##  $ phylum     : chr  "Tracheophyta" "Tracheophyta" "Chordata" "Tracheophyta" ...
 ##  $ class      : chr  "Magnoliopsida" "Magnoliopsida" "Aves" "Magnoliopsida" ...
@@ -575,7 +596,7 @@
 <li><p>The <code>igraph_to_phylo</code> function tests whether a taxon graph can be converted to a phylogeny and returns a <code>phylo</code> object (package <code>ape</code>). The tips and internal nodes are labelled with taxon names but the <code>phylo</code> structure does not store other node information.</p></li>
 <li>
 <p><code><a href="https://rdrr.io/pkg/safedata/man/igraph_to_phylo.html">get_phylogeny()</a></code>: This is simply a wrapper that runs both functions above in turn to go straight to a phylogeny.</p>
-<div class="sourceCode" id="cb44"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ape</span>)
+<div class="sourceCode" id="cb45"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ape</span>)
 <span class="no">beetle_phylo</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/safedata/man/igraph_to_phylo.html">get_phylogeny</a></span>(<span class="fl">1400562</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">beetle_phylo</span>, <span class="kw">show.node.label</span><span class="kw">=</span><span class="fl">TRUE</span>, <span class="kw">font</span><span class="kw">=</span><span class="fl">1</span>, <span class="kw">no.margin</span><span class="kw">=</span><span class="fl">TRUE</span>)</pre></body></html></div>
 <p><img src="using_safe_data_files/figure-html/get_phylo-1.png" width="700"></p>
@@ -589,13 +610,13 @@
 <ol style="list-style-type: decimal">
 <li>
 <p><code><a href="https://rdrr.io/pkg/safedata/man/load_gazetteer.html">load_gazetteer()</a></code>: The gazetteer is one of the three key index files saved in the SAFE data directory and updated when <code><a href="https://rdrr.io/pkg/safedata/man/set_safe_dir.html">set_safe_dir()</a></code> is run. It includes sampling locations drawn from across a wide range of projects running at SAFE and is intended to hold all locations that are likely to see repeated sampling. Locations included the gazetteer can be used directly as <strong>known locations</strong> in datasets, although data providers can also include <strong>new locations</strong>.</p>
-<div class="sourceCode" id="cb45"><html><body><pre class="r"><span class="no">gazetteer</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/safedata/man/load_gazetteer.html">load_gazetteer</a></span>()
+<div class="sourceCode" id="cb46"><html><body><pre class="r"><span class="no">gazetteer</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/safedata/man/load_gazetteer.html">load_gazetteer</a></span>()
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">gazetteer</span>)</pre></body></html></div>
 <pre><code>## Simple feature collection with 5171 features and 15 fields
 ## geometry type:  GEOMETRY
 ## dimension:      XY
 ## bbox:           xmin: 116.9471 ymin: 4.41215 xmax: 117.9959 ymax: 4.961828
-## geographic CRS: WGS 84
+## CRS:            4326
 ## First 10 features:
 ##      location                type plot_size display_order parent region
 ## 1   SAFE_camp       SAFE basecamp      &lt;NA&gt;             3   &lt;NA&gt;   SAFE
@@ -645,15 +666,15 @@
 <li>
 <p><code><a href="https://rdrr.io/pkg/safedata/man/get_locations.html">get_locations()</a></code>: This function returns an <code>sf</code> object containing the locations used within a dataset. For known locations, the GIS data for the location are taken directly from the gazetteer. If the locations are new sampling sites, then GIS data provided in the dataset is used. Note that it is possible for dataset providers to create a new locations without including GIS data - these will be represented using empty GIS geometries.</p>
 <p>By default, the returned <code>sf</code> object will only include the location name used in the dataset, the gazetteer name for known sampling sites and an indication of whether the location is new or known, but <code>gazetteer_info=TRUE</code> can be used to include the gazetteer attributes for known locations.</p>
-<div class="sourceCode" id="cb47"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">sf</span>)</pre></body></html></div>
-<pre><code>## Linking to GEOS 3.8.1, GDAL 3.1.1, PROJ 6.3.1</code></pre>
-<div class="sourceCode" id="cb49"><html><body><pre class="r"><span class="no">beetle_locs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/safedata/man/get_locations.html">get_locations</a></span>(<span class="fl">1400562</span>)
+<div class="sourceCode" id="cb48"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">sf</span>)</pre></body></html></div>
+<pre><code>## Linking to GEOS 3.7.1, GDAL 2.2.2, PROJ 4.9.2</code></pre>
+<div class="sourceCode" id="cb50"><html><body><pre class="r"><span class="no">beetle_locs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/safedata/man/get_locations.html">get_locations</a></span>(<span class="fl">1400562</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">beetle_locs</span>)</pre></body></html></div>
 <pre><code>## Simple feature collection with 20 features and 3 fields
 ## geometry type:  POINT
 ## dimension:      XY
 ## bbox:           xmin: 116.967 ymin: 4.69223 xmax: 117.7981 ymax: 4.97022
-## geographic CRS: WGS 84
+## CRS:            4326
 ## First 10 features:
 ##          gazetteer_name new_location dataset_name                 geometry
 ## Maliau_1             NA         TRUE     Maliau_1 POINT (116.9707 4.74462)
@@ -666,7 +687,7 @@
 ## Maliau_8             NA         TRUE     Maliau_8 POINT (116.9701 4.74607)
 ## Danum_1              NA         TRUE      Danum_1  POINT (117.796 4.96444)
 ## Danum_2              NA         TRUE      Danum_2 POINT (117.7932 4.96486)</code></pre>
-<div class="sourceCode" id="cb51"><html><body><pre class="r"><span class="no">fragments</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span>(<span class="no">gazetteer</span>, <span class="no">type</span><span class="kw">==</span><span class="st">'SAFE forest fragment'</span>)
+<div class="sourceCode" id="cb52"><html><body><pre class="r"><span class="no">fragments</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span>(<span class="no">gazetteer</span>, <span class="no">type</span><span class="kw">==</span><span class="st">'SAFE forest fragment'</span>)
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span>(<span class="kw">mar</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">3</span>,<span class="fl">3</span>,<span class="fl">1</span>,<span class="fl">1</span>))
 <span class="fu"><a href="https://rdrr.io/pkg/sf/man/plot.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/pkg/sf/man/st_geometry.html">st_geometry</a></span>(<span class="no">fragments</span>), <span class="kw">col</span><span class="kw">=</span><span class="st">'khaki'</span>, <span class="kw">graticule</span><span class="kw">=</span><span class="fl">TRUE</span>)
 <span class="fu"><a href="https://rdrr.io/pkg/sf/man/plot.html">plot</a></span>(<span class="fu"><a href="https://rdrr.io/pkg/sf/man/st_geometry.html">st_geometry</a></span>(<span class="no">beetle_locs</span>), <span class="kw">add</span><span class="kw">=</span><span class="fl">TRUE</span>, <span class="kw">col</span><span class="kw">=</span><span class="st">'red'</span>, <span class="kw">pch</span><span class="kw">=</span><span class="fl">4</span>)</pre></body></html></div>
@@ -674,7 +695,7 @@
 </li>
 <li>
 <p><code><a href="https://rdrr.io/pkg/safedata/man/add_locations.html">add_locations()</a></code>: This functions adds location data to an already loaded worksheet. The result is a <code>safedata</code> object that is also an <code>sf</code> object.</p>
-<div class="sourceCode" id="cb52"><html><body><pre class="r"><span class="no">beetle_env</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/safedata/man/load_safe_data.html">load_safe_data</a></span>(<span class="fl">1400562</span>, <span class="st">'EnvironVariables'</span>)
+<div class="sourceCode" id="cb53"><html><body><pre class="r"><span class="no">beetle_env</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/safedata/man/load_safe_data.html">load_safe_data</a></span>(<span class="fl">1400562</span>, <span class="st">'EnvironVariables'</span>)
 <span class="no">beetle_env</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/safedata/man/add_locations.html">add_locations</a></span>(<span class="no">beetle_env</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">beetle_env</span>)</pre></body></html></div>
 <pre><code>## SAFE dataset:
@@ -683,7 +704,7 @@
 ## geometry type:  POINT
 ## dimension:      XY
 ## bbox:           xmin: 116.967 ymin: 4.69223 xmax: 117.7981 ymax: 4.97022
-## geographic CRS: WGS 84
+## CRS:            4326
 ## First 10 features:
 ##              Site     Temp Moisture Cover gazetteer_name new_location
 ## SAFE_E     SAFE_E 23.26667 40.73333    16             NA         TRUE
@@ -707,7 +728,7 @@
 ## Maliau_2     Maliau_2 POINT (116.9748 4.74548)
 ## Maliau_3     Maliau_3 POINT (116.9675 4.74757)
 ## Maliau_4     Maliau_4 POINT (116.9714 4.74565)</code></pre>
-<div class="sourceCode" id="cb54"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/sf/man/plot.html">plot</a></span>(<span class="no">beetle_env</span>[<span class="st">'Cover'</span>], <span class="kw">key.pos</span><span class="kw">=</span><span class="fl">4</span>, <span class="kw">breaks</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>,<span class="fl">100</span>, <span class="kw">by</span><span class="kw">=</span><span class="fl">5</span>))</pre></body></html></div>
+<div class="sourceCode" id="cb55"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/pkg/sf/man/plot.html">plot</a></span>(<span class="no">beetle_env</span>[<span class="st">'Cover'</span>], <span class="kw">key.pos</span><span class="kw">=</span><span class="fl">4</span>, <span class="kw">breaks</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>,<span class="fl">100</span>, <span class="kw">by</span><span class="kw">=</span><span class="fl">5</span>))</pre></body></html></div>
 <p><img src="using_safe_data_files/figure-html/add_locations-1.png" width="700"></p>
 </li>
 </ol>
@@ -718,14 +739,14 @@
 <a href="#inserting-datasets" class="anchor"></a>Inserting datasets</h1>
 <p>If you want access to a dataset that is currently embargoed or restricted, then you can approach the authors listed on the Zenodo record to ask for permission to use the data. If you are then provided with the files for the dataset, then they need to be inserted into your local SAFE data directory so that they can be accessed by the <code>safedata</code> functions.</p>
 <p>The <code>insert_dataset</code> function does this: it will check to see if a set of files are part of specified Zenodo record and then copy them into the correct places in the current SAFE data directory.</p>
-<div class="sourceCode" id="cb55"><html><body><pre class="r"><span class="no">files</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">'safedata_example_dir'</span>, <span class="st">'template_ClareWfunctiondata.xlsx'</span>,
+<div class="sourceCode" id="cb56"><html><body><pre class="r"><span class="no">files</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">'safedata_example_dir'</span>, <span class="st">'template_ClareWfunctiondata.xlsx'</span>,
                      <span class="kw">package</span><span class="kw">=</span><span class="st">'safedata'</span>)
 <span class="fu"><a href="https://rdrr.io/pkg/safedata/man/insert_dataset.html">insert_dataset</a></span>(<span class="fl">1237719</span>, <span class="no">files</span>)</pre></body></html></div>
 <pre><code>## Inserting files: template_ClareWfunctiondata.xlsx</code></pre>
 <pre><code>## NULL</code></pre>
-<div class="sourceCode" id="cb58"><html><body><pre class="r"><span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/safedata/man/load_safe_data.html">load_safe_data</a></span>(<span class="fl">1237719</span>, <span class="st">'Data'</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb59"><html><body><pre class="r"><span class="no">dat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/safedata/man/load_safe_data.html">load_safe_data</a></span>(<span class="fl">1237719</span>, <span class="st">'Data'</span>)</pre></body></html></div>
 <pre><code>## Downloading 1 record metadata files</code></pre>
-<div class="sourceCode" id="cb60"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(<span class="no">dat</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb61"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(<span class="no">dat</span>)</pre></body></html></div>
 <pre><code>## SAFE dataset
 ## Concept: 1198840; Record 1237719; Worksheet: Data
 ## 'data.frame':    34 obs. of  11 variables:
