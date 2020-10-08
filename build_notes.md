@@ -59,6 +59,11 @@ The linting process inspects the R code files in the package to check they have 
 
 The `.lintr` file in the package root is used to configure the linting and set any exclusions. This is currently done on a line by line basis to note specific exceptions. It is also possible to exclude code from linting using `# nolint` tags in the source code, but I'm avoiding this to keep the code files relatively clean. It does mean that `.lintr` has to be updated if the line numbers of exceptions change.
 
+```sh
+cd build_scripts
+./collect_lint.sh
+```
+
 ### Repository structure
 
 The package uses the Gitflow branching model for the package repository  and the `git-flow` extensions to help manage this (https://github.com/nvie/gitflow).
@@ -95,11 +100,21 @@ The `safedata` package ships with a zipped `safedata` directory that is used in 
 
 The file `build_scripts/refresh_example_dir.R` contains the code needed to the example directory with a freshly zipped copy with up to date indices. Of course, if someone publishes a new dataset before the release occurs, you may still get an error and have to repeat this step!
 
+```sh
+cd build_scripts
+Rscript refresh_example_dir.R
+```
+
 ### Check the code.
 
-Releases start from the `develop` branch, with a bunch of commits that you want to release as a new version. Before you do anything, you should check that the current commit in `develop` is building correctly.
+Releases start from the `develop` branch, with a bunch of commits that you want to release as a new version. Before you do anything, you should check that the current commit in `develop` is building correctly:
 
-Because nearly all of the actual user changes happen in the vignette and R files, it is easy to forget to update the documentation, so a full checking process starts there. The code below runs the full checking process on your local machine. The code is also in `build_scripts/build_and_check.sh` but is reproduced here to show the steps.
+```sh
+cd build_scripts
+./build_and_check.sh
+```
+
+Because nearly all of the actual user changes happen in the vignette and R files, it is easy to forget to update the documentation, so a full checking process starts there. The code below runs the full checking process on your local machine. The code in `build_and_check.sh` but is reproduced here to show the steps.
 
 ```sh
 # a) Move into the source directory and update the documents
@@ -169,6 +184,10 @@ The Travis CI build process should now be underway for the `release` branch. Tra
 However, Travis CI does not currently check packages under Windows. Instead,  the R Project maintains a Windows test environment that can be used. This needs a built copy of the `release` branch, so run `build_scripts/build_and_check.sh` again. This should create a newly built package with the new version number (e.g. `safedata_1.0.6.tar.gz`). If everything checked out ok before creating the release, this is really just updating the version name. 
 
 You then need to upload that file to `win-builder`. The python script `build_scripts/upload_to_win-builder.py`  will do this for you - it is simply automating the process of using FTP to upload the current version for checking under both R stable and R devel. Note that `win-builder` communicates by email with the package maintainer (whoever has the `cre` flag in the `authors` section of the `DESCRIPTION` file.
+
+```sh
+python build_scripts/upload_to_win-builder.py
+```
 
 ### Wait.
 
