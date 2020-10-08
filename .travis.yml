@@ -1,7 +1,7 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
 language: R
-dist: xenial
+dist: bionic
 cache: packages
 
 matrix:
@@ -44,7 +44,9 @@ r_packages:
 - Rcpp
 - units
 - devtools
-- ape # from here down used to use r_binary_packages but the PPA that supplied those is temporarily down
+- ape
+
+r_binary_packages:
 - assertthat
 - backports
 - base64enc
