@@ -139,8 +139,8 @@ load_safe_data <- function(record_id, worksheet) {
     # as expected from the metadata. This is complicated by the fact that,
     # although field names in metadata should be syntactically valid R as
     # of safedata_validator 1.2.7, they weren't before that. So, enforce
-    # make.names on both to avoid trivial mismatches. Turn off trim_ws in 
-    # read_xlsx because that occurs before name repair and makes names 
+    # make.names on both to avoid trivial mismatches. Turn off trim_ws in
+    # read_xlsx because that occurs before name repair and makes names
     # with whitespace diverge between metadata and data names
     data <- readxl::read_xlsx(local_path, worksheet,
                               skip = dwksh$field_name_row - 1,
