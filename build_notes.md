@@ -203,9 +203,10 @@ Once the `release` branch is passing checks on all platforms, then the candidate
 git flow release finish 1.0.6
 ```
 
-You will be asked for some commit messages and a new tag comment, which will simply be the version number. You should then be on the `master` branch in a fresh commit tagged with the version number. You can now push this to create the release - if you've set the config described above then a single push will create the commit and tag.
+You will be asked for some commit messages and a new tag comment, which will simply be the version number. You should then be on the `develop` branch. You now need to checkout the `master` branch which should now have all the commits since the last release and a new tag with the version number. You can now push this to create the release - if you've set the config described above then a single push will create the commit and tag.
 
 ```sh
+git checkout master
 git push
 ```
 
