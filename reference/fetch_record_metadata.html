@@ -74,7 +74,7 @@ data from file." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.8</span>
       </span>
     </div>
 
@@ -136,16 +136,16 @@ fetching it from the SAFE project website if needed and ii) load that
 data from file.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>fetch_record_metadata</span>(<span class='no'>record_set</span>)
+    <pre class="usage"><span class='fu'>fetch_record_metadata</span><span class='op'>(</span><span class='va'>record_set</span><span class='op'>)</span>
 
-<span class='fu'>load_record_metadata</span>(<span class='no'>record_set</span>)</pre>
+<span class='fu'>load_record_metadata</span><span class='op'>(</span><span class='va'>record_set</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>record_set</th>
-      <td><p>An object of class <code>safe_record_set</code>.</p></td>
+      <td><p>An object of class <code><a href='validate_record_ids.html'>safe_record_set</a></code>.</p></td>
     </tr>
     </table>
 
@@ -170,10 +170,12 @@ a record</p></li>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>   <span class='co'># \donttest{</span>
-   <span class='fu'>set_example_safe_dir</span>()</div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div><div class='input'>   <span class='no'>rec</span> <span class='kw'>&lt;-</span> <span class='fu'>validate_record_ids</span>(<span class='fl'>1400562</span>)
-   <span class='kw pkg'>safedata</span><span class='kw ns'>:::</span><span class='fu'>fetch_record_metadata</span>(<span class='no'>rec</span>)
-   <span class='no'>metadata</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>safedata</span><span class='kw ns'>:::</span><span class='fu'>load_record_metadata</span>(<span class='no'>rec</span>)
-   <span class='fu'>unset_example_safe_dir</span>()</div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div><div class='input'>   # }
+   <span class='fu'><a href='set_example_safe_dir.html'>set_example_safe_dir</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='input'>   <span class='va'>rec</span> <span class='op'>&lt;-</span> <span class='fu'><a href='validate_record_ids.html'>validate_record_ids</a></span><span class='op'>(</span><span class='fl'>1400562</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='input'>   <span class='fu'>safedata</span><span class='fu'>:::</span><span class='fu'>fetch_record_metadata</span><span class='op'>(</span><span class='va'>rec</span><span class='op'>)</span>
+   <span class='va'>metadata</span> <span class='op'>&lt;-</span> <span class='fu'>safedata</span><span class='fu'>:::</span><span class='fu'>load_record_metadata</span><span class='op'>(</span><span class='va'>rec</span><span class='op'>)</span>
+   <span class='fu'><a href='set_example_safe_dir.html'>unset_example_safe_dir</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div><div class='input'>   <span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -190,7 +192,7 @@ a record</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

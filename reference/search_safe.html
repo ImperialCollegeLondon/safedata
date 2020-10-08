@@ -75,7 +75,7 @@ identifying datasets that match a particular query." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.8</span>
       </span>
     </div>
 
@@ -134,38 +134,38 @@ identifying datasets that match a particular query." />
     <div class="ref-description">
     <p>In addition to the datasets stored on Zenodo, the SAFE Project website
 provides an API to search dataset metadata in more depth. The search
-functions access this API and return <code>safe_record_set</code> objects
+functions access this API and return <code><a href='validate_record_ids.html'>safe_record_set</a></code> objects
 identifying datasets that match a particular query.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>search_dates</span>(<span class='no'>dates</span>, <span class='kw'>match_type</span> <span class='kw'>=</span> <span class='st'>"intersect"</span>, <span class='kw'>most_recent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+    <pre class="usage"><span class='fu'>search_dates</span><span class='op'>(</span><span class='va'>dates</span>, match_type <span class='op'>=</span> <span class='st'>"intersect"</span>, most_recent <span class='op'>=</span> <span class='cn'>FALSE</span>, ids <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 
-<span class='fu'>search_fields</span>(
-  <span class='kw'>field_text</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>field_type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>most_recent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)
+<span class='fu'>search_fields</span><span class='op'>(</span>
+  field_text <span class='op'>=</span> <span class='cn'>NULL</span>,
+  field_type <span class='op'>=</span> <span class='cn'>NULL</span>,
+  ids <span class='op'>=</span> <span class='cn'>NULL</span>,
+  most_recent <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span>
 
-<span class='fu'>search_authors</span>(<span class='no'>author</span>, <span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>most_recent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>search_authors</span><span class='op'>(</span><span class='va'>author</span>, ids <span class='op'>=</span> <span class='cn'>NULL</span>, most_recent <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
-<span class='fu'>search_taxa</span>(
-  <span class='kw'>taxon_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>taxon_rank</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>gbif_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>most_recent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)
+<span class='fu'>search_taxa</span><span class='op'>(</span>
+  taxon_name <span class='op'>=</span> <span class='cn'>NULL</span>,
+  taxon_rank <span class='op'>=</span> <span class='cn'>NULL</span>,
+  gbif_id <span class='op'>=</span> <span class='cn'>NULL</span>,
+  ids <span class='op'>=</span> <span class='cn'>NULL</span>,
+  most_recent <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span>
 
-<span class='fu'>search_text</span>(<span class='no'>text</span>, <span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>most_recent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>search_text</span><span class='op'>(</span><span class='va'>text</span>, ids <span class='op'>=</span> <span class='cn'>NULL</span>, most_recent <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
-<span class='fu'>search_spatial</span>(
-  <span class='kw'>wkt</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>location</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>distance</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>most_recent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)</pre>
+<span class='fu'>search_spatial</span><span class='op'>(</span>
+  wkt <span class='op'>=</span> <span class='cn'>NULL</span>,
+  location <span class='op'>=</span> <span class='cn'>NULL</span>,
+  distance <span class='op'>=</span> <span class='cn'>NULL</span>,
+  ids <span class='op'>=</span> <span class='cn'>NULL</span>,
+  most_recent <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -188,9 +188,9 @@ all versions of matching dataset concepts are returned.</p></td>
     <tr>
       <th>ids</th>
       <td><p>A set of SAFE dataset record IDs to restrict a search. This will
-typically be a <code>safe_record_set</code> object returned by another
+typically be a <code><a href='validate_record_ids.html'>safe_record_set</a></code> object returned by another
 search but can also be a vector of record ids in any of the formats
-accepted by <code>validate_record_ids</code>.</p></td>
+accepted by <code><a href='validate_record_ids.html'>validate_record_ids</a></code>.</p></td>
     </tr>
     <tr>
       <th>field_text</th>
@@ -241,7 +241,7 @@ in metres within which to match either location or wkt searches.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of class <code>safe_record_set</code> of datasets that
+    <p>An object of class <code><a href='validate_record_ids.html'>safe_record_set</a></code> of datasets that
    match the query.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
@@ -250,7 +250,7 @@ worksheet fields, authors, taxa, free text and by spatial query. All
 of the functions accept the argument <code>most_recent</code>, which restricts
 the returned datasets to the most recent versions of each matching dataset
 concept. The functions can also be passed an existing
-<code>safe_record_set</code> object to search within the results
+<code><a href='validate_record_ids.html'>safe_record_set</a></code> object to search within the results
 of a previous search.</p>
 <p>The <code>match_type</code> parameter specifies how to match date ranges and must
 be one of "intersect" (default), "contain", or "within". The "contain" option
@@ -276,7 +276,7 @@ and descriptions</p></li>
 
 <p>For spatial searches, users can select a location name from a SAFE
 data gazetteer (see e.g. <a href='https://www.safeproject.net/info/gazetteer'>https://www.safeproject.net/info/gazetteer</a>
-or <code>load_gazetteer</code>) or provide a WKT geometry. The sampling
+or <code><a href='load_gazetteer.html'>load_gazetteer</a></code>) or provide a WKT geometry. The sampling
 locations provided in each SAFE dataset are tested to see if they intersect
 the search geometry.</p>
 <p>A buffer <code>distance</code> can aso be provided to extend the search around the
@@ -291,10 +291,10 @@ coordinate information.</p>
 
     
 
-<dl'>
+<dl>
    <dt>SAFE data API</dt><dd><p>e.g. <a href='https://www.safeproject.net/api'>https://www.safeproject.net/api</a></p></dd>
-   <dt>Worksheet field types</dt><dd><p><a href='https://safedata-validator.readthedocs.io/en/latest/data_format/data/#field-types'>https://safedata-validator.readthedocs.io/en/latest/data_format/data/#field-types</a></p></dd>
-   <dt>SAFE gazetteer</dt><dd><p>See <code>load_gazetteer</code> and e.g.
+   <dt>Worksheet field types</dt><dd><p><a href='https://safedata-validator.readthedocs.io/en/latest/data_format/data.html#field-types'>https://safedata-validator.readthedocs.io/en/latest/data_format/data.html#field-types</a></p></dd>
+   <dt>SAFE gazetteer</dt><dd><p>See <code><a href='load_gazetteer.html'>load_gazetteer</a></code> and e.g.
          <a href='https://www.safeproject.net/info/gazetteer'>https://www.safeproject.net/info/gazetteer</a></p></dd>
    <dt>WKT</dt><dd><p><a href='https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry'>https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry</a></p></dd>
 
@@ -303,10 +303,11 @@ coordinate information.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>   <span class='co'># \donttest{</span>
-   <span class='fu'>search_dates</span>(<span class='st'>"2014-06-12"</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 60 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: 3971012</span></div><div class='output co'>#&gt; Set includes 46 concept ids and 59 record ids: 
-#&gt;  - 38 open and most recent (*)
-#&gt;  - 12 open and outdated (o)
-#&gt;  - 9 under embargo or restricted (x)
+   <span class='fu'>search_dates</span><span class='op'>(</span><span class='st'>"2014-06-12"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Search returned 62 records</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; Set includes 46 concept ids and 62 record ids: 
+#&gt;  - 39 open and most recent (*)
+#&gt;  - 13 open and outdated (o)
+#&gt;  - 10 under embargo or restricted (x)
 #&gt; 
 #&gt;    concept  record available
 #&gt; 1   629855 3490675         *
@@ -343,34 +344,38 @@ coordinate information.</p>
 #&gt; 32 1400563 1400564         *
 #&gt; 33 1441584 1441585         *
 #&gt; 34 1478523 3955050         x
-#&gt; 35 ------- 1478524         x
-#&gt; 36 1478525 1478526         *
-#&gt; 37 1995247 1995439         *
-#&gt; 38 ------- 1995248         o
-#&gt; 39 3247601 3247602         x
-#&gt; 40 3247630 3247631         x
-#&gt; 41 3247638 3247639         *
-#&gt; 42 3266770 3266771         x
-#&gt; 43 3266826 3266827         *
-#&gt; 44 3342494 3342495         *
-#&gt; 45 3354067 3354068         *
-#&gt; 46 3366103 3366104         *
-#&gt; 47 3402745 3402746         x
-#&gt; 48 3402747 3402748         x
-#&gt; 49 3402751 3402752         x
-#&gt; 50 3476357 3476390         *
-#&gt; 51 ------- 3476358         o
-#&gt; 52 3485120 3906082         *
-#&gt; 53 ------- 3833856         o
-#&gt; 54 ------- 3485121         o
-#&gt; 55 3780390 3780391         x
-#&gt; 56 3888374 3888375         *
-#&gt; 57 3901504 3901505         *
-#&gt; 58 3908248 3908249         *
-#&gt; 59 3948442 3948443         *</div><div class='input'>   <span class='fu'>search_dates</span>(<span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"2014-06-12"</span>, <span class='st'>"2015-06-11"</span>)))</div><div class='output co'>#&gt; <span class='message'>Search returned 82 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: 3971012,3973691,3974971</span></div><div class='output co'>#&gt; Set includes 62 concept ids and 79 record ids: 
-#&gt;  - 50 open and most recent (*)
-#&gt;  - 16 open and outdated (o)
-#&gt;  - 13 under embargo or restricted (x)
+#&gt; 35 ------- 1478524         *
+#&gt; 36 1478525 4072959         x
+#&gt; 37 ------- 3982665         x
+#&gt; 38 ------- 1478526         *
+#&gt; 39 1995247 1995439         *
+#&gt; 40 ------- 1995248         o
+#&gt; 41 3247601 3247602         x
+#&gt; 42 3247630 3247631         x
+#&gt; 43 3247638 3247639         *
+#&gt; 44 3266770 3266771         x
+#&gt; 45 3266826 3266827         *
+#&gt; 46 3342494 3342495         *
+#&gt; 47 3354067 3354068         *
+#&gt; 48 3366103 3366104         *
+#&gt; 49 3402745 3402746         x
+#&gt; 50 3402747 3402748         x
+#&gt; 51 3402751 3402752         x
+#&gt; 52 3476357 3476390         *
+#&gt; 53 ------- 3476358         o
+#&gt; 54 3485120 3906082         *
+#&gt; 55 ------- 3833856         o
+#&gt; 56 ------- 3485121         o
+#&gt; 57 3780390 3780391         x
+#&gt; 58 3888374 3888375         *
+#&gt; 59 3901504 3971012         *
+#&gt; 60 ------- 3901505         o
+#&gt; 61 3908248 3908249         *
+#&gt; 62 3948442 3948443         *</div><div class='input'>   <span class='fu'>search_dates</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/as.POSIXlt.html'>as.POSIXct</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"2014-06-12"</span>, <span class='st'>"2015-06-11"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Search returned 86 records</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; Set includes 66 concept ids and 86 record ids: 
+#&gt;  - 54 open and most recent (*)
+#&gt;  - 17 open and outdated (o)
+#&gt;  - 15 under embargo or restricted (x)
 #&gt; 
 #&gt;    concept  record available
 #&gt; 1   629855 3490675         *
@@ -410,49 +415,57 @@ coordinate information.</p>
 #&gt; 35 1400563 1400564         *
 #&gt; 36 1441584 1441585         *
 #&gt; 37 1478523 3955050         x
-#&gt; 38 ------- 1478524         x
-#&gt; 39 1478525 1478526         *
-#&gt; 40 1487594 1487595         *
-#&gt; 41 1995247 1995439         *
-#&gt; 42 ------- 1995248         o
-#&gt; 43 2020339 2020340         *
-#&gt; 44 2536268 3476542         *
-#&gt; 45 ------- 2536269         o
-#&gt; 46 3081058 3247699         *
-#&gt; 47 ------- 3081059         o
-#&gt; 48 3247464 3247465         x
-#&gt; 49 3247493 3247494         x
-#&gt; 50 3247601 3247602         x
-#&gt; 51 3247630 3247631         x
-#&gt; 52 3247638 3247639         *
-#&gt; 53 3251899 3258117         *
-#&gt; 54 ------- 3251900         o
-#&gt; 55 3265703 3265704         *
-#&gt; 56 3265745 3265746         *
-#&gt; 57 3265747 3265748         *
-#&gt; 58 3266770 3266771         x
-#&gt; 59 3266826 3266827         *
-#&gt; 60 3342494 3342495         *
-#&gt; 61 3354067 3354068         *
-#&gt; 62 3366103 3366104         *
-#&gt; 63 3402745 3402746         x
-#&gt; 64 3402747 3402748         x
-#&gt; 65 3402751 3402752         x
-#&gt; 66 3476357 3476390         *
-#&gt; 67 ------- 3476358         o
-#&gt; 68 3485120 3906082         *
-#&gt; 69 ------- 3833856         o
-#&gt; 70 ------- 3485121         o
-#&gt; 71 3698114 3698115         x
-#&gt; 72 3780390 3780391         x
-#&gt; 73 3888374 3888375         *
-#&gt; 74 3901504 3901505         *
-#&gt; 75 3906117 3906118         x
-#&gt; 76 3908127 3908128         *
-#&gt; 77 3908248 3908249         *
-#&gt; 78 3929631 3929632         *
-#&gt; 79 3948442 3948443         *</div><div class='input'>   <span class='fu'>search_dates</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"2014-06-12"</span>, <span class='st'>"2015-06-11"</span>), <span class='kw'>match_type</span> <span class='kw'>=</span> <span class='st'>"contain"</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 5 records</span></div><div class='output co'>#&gt; Set includes 4 concept ids and 5 record ids: 
-#&gt;  - 3 open and most recent (*)
+#&gt; 38 ------- 1478524         *
+#&gt; 39 1478525 4072959         x
+#&gt; 40 ------- 3982665         x
+#&gt; 41 ------- 1478526         *
+#&gt; 42 1487594 1487595         *
+#&gt; 43 1995247 1995439         *
+#&gt; 44 ------- 1995248         o
+#&gt; 45 2020339 2020340         *
+#&gt; 46 2536268 3476542         *
+#&gt; 47 ------- 2536269         o
+#&gt; 48 3081058 3247699         *
+#&gt; 49 ------- 3081059         o
+#&gt; 50 3247464 3247465         x
+#&gt; 51 3247493 3247494         x
+#&gt; 52 3247601 3247602         x
+#&gt; 53 3247630 3247631         x
+#&gt; 54 3247638 3247639         *
+#&gt; 55 3251899 3258117         *
+#&gt; 56 ------- 3251900         o
+#&gt; 57 3265703 3265704         *
+#&gt; 58 3265745 3265746         *
+#&gt; 59 3265747 3265748         *
+#&gt; 60 3266770 3266771         x
+#&gt; 61 3266826 3266827         *
+#&gt; 62 3342494 3342495         *
+#&gt; 63 3354067 3354068         *
+#&gt; 64 3366103 3366104         *
+#&gt; 65 3402745 3402746         x
+#&gt; 66 3402747 3402748         x
+#&gt; 67 3402751 3402752         x
+#&gt; 68 3476357 3476390         *
+#&gt; 69 ------- 3476358         o
+#&gt; 70 3485120 3906082         *
+#&gt; 71 ------- 3833856         o
+#&gt; 72 ------- 3485121         o
+#&gt; 73 3698114 3698115         x
+#&gt; 74 3780390 3780391         x
+#&gt; 75 3888374 3888375         *
+#&gt; 76 3901504 3971012         *
+#&gt; 77 ------- 3901505         o
+#&gt; 78 3906117 3906118         x
+#&gt; 79 3908127 3908128         *
+#&gt; 80 3908248 3908249         *
+#&gt; 81 3929631 3929632         *
+#&gt; 82 3948442 3948443         *
+#&gt; 83 3973690 3973691         *
+#&gt; 84 3974970 3974971         x
+#&gt; 85 4010756 4010757         *
+#&gt; 86 4020696 4020697         *</div><div class='input'>   <span class='fu'>search_dates</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"2014-06-12"</span>, <span class='st'>"2015-06-11"</span><span class='op'>)</span>, match_type <span class='op'>=</span> <span class='st'>"contain"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Search returned 6 records</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; Set includes 5 concept ids and 6 record ids: 
+#&gt;  - 4 open and most recent (*)
 #&gt;  - 1 open and outdated (o)
 #&gt;  - 1 under embargo or restricted (x)
 #&gt; 
@@ -461,32 +474,39 @@ coordinate information.</p>
 #&gt; 2 3081058 3247699         *
 #&gt; 3 ------- 3081059         o
 #&gt; 4 3247493 3247494         x
-#&gt; 5 3265703 3265704         *</div><div class='input'>   <span class='fu'>search_fields</span>(<span class='kw'>field_text</span> <span class='kw'>=</span> <span class='st'>"temperature"</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 17 records</span></div><div class='output co'>#&gt; Set includes 14 concept ids and 17 record ids: 
-#&gt;  - 11 open and most recent (*)
+#&gt; 5 3265703 3265704         *
+#&gt; 6 4020696 4020697         *</div><div class='input'>   <span class='fu'>search_fields</span><span class='op'>(</span>field_text <span class='op'>=</span> <span class='st'>"temperature"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Search returned 21 records</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; Set includes 17 concept ids and 21 record ids: 
+#&gt;  - 12 open and most recent (*)
 #&gt;  - 2 open and outdated (o)
-#&gt;  - 4 under embargo or restricted (x)
+#&gt;  - 7 under embargo or restricted (x)
 #&gt; 
 #&gt;    concept  record available
-#&gt; 1  3247484 3876227         *
-#&gt; 2  ------- 3247485         o
-#&gt; 3  3247591 3247592         *
-#&gt; 4  3251886 3258079         *
-#&gt; 5  3251899 3258117         *
-#&gt; 6  ------- 3251900         o
-#&gt; 7  3266770 3266771         x
-#&gt; 8  3266821 3266822         *
-#&gt; 9  3475407 3475408         *
-#&gt; 10 3479170 3479171         *
-#&gt; 11 3698114 3698115         x
-#&gt; 12 3888374 3888375         *
-#&gt; 13 3908146 3929764         x
-#&gt; 14 ------- 3908147         x
-#&gt; 15 3926373 3926374         *
-#&gt; 16 3948442 3948443         *
-#&gt; 17 3952831 3952832         *</div><div class='input'>   <span class='fu'>search_fields</span>(<span class='kw'>field_type</span> <span class='kw'>=</span> <span class='st'>"numeric"</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 74 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: 3973551,3976021,3971012,3973691,3974971,3975973</span></div><div class='output co'>#&gt; Set includes 56 concept ids and 68 record ids: 
-#&gt;  - 40 open and most recent (*)
-#&gt;  - 10 open and outdated (o)
-#&gt;  - 18 under embargo or restricted (x)
+#&gt; 1  1478525 4072959         x
+#&gt; 2  ------- 3982665         x
+#&gt; 3  3247484 3876227         *
+#&gt; 4  ------- 3247485         o
+#&gt; 5  3247591 3247592         *
+#&gt; 6  3251886 3258079         *
+#&gt; 7  3251899 3258117         *
+#&gt; 8  ------- 3251900         o
+#&gt; 9  3266770 3266771         x
+#&gt; 10 3266821 3266822         *
+#&gt; 11 3475407 3475408         *
+#&gt; 12 3479170 3479171         *
+#&gt; 13 3698114 3698115         x
+#&gt; 14 3888374 3888375         *
+#&gt; 15 3908146 3929764         x
+#&gt; 16 ------- 3908147         x
+#&gt; 17 3926373 3926374         *
+#&gt; 18 3948442 3948443         *
+#&gt; 19 3952831 3952832         *
+#&gt; 20 3994259 3994260         x
+#&gt; 21 4000206 4000207         *</div><div class='input'>   <span class='fu'>search_fields</span><span class='op'>(</span>field_type <span class='op'>=</span> <span class='st'>"numeric"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Search returned 83 records</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; Set includes 68 concept ids and 83 record ids: 
+#&gt;  - 48 open and most recent (*)
+#&gt;  - 11 open and outdated (o)
+#&gt;  - 24 under embargo or restricted (x)
 #&gt; 
 #&gt;    concept  record available
 #&gt; 1   629855 3490675         *
@@ -498,89 +518,110 @@ coordinate information.</p>
 #&gt; 7   630241 3492126         *
 #&gt; 8  1198564 3857210         *
 #&gt; 9  1478523 3955050         x
-#&gt; 10 2536268 3476542         *
-#&gt; 11 2537072 3901735         x
-#&gt; 12 3081058 3247699         *
-#&gt; 13 3237506 3237507         x
-#&gt; 14 3247464 3247465         x
-#&gt; 15 3247484 3876227         *
-#&gt; 16 ------- 3247485         o
-#&gt; 17 3247491 3247492         *
-#&gt; 18 3247493 3247494         x
-#&gt; 19 3247591 3247592         *
-#&gt; 20 3247601 3247602         x
-#&gt; 21 3247630 3247631         x
-#&gt; 22 3247638 3247639         *
-#&gt; 23 3251886 3258079         *
-#&gt; 24 ------- 3251887         o
-#&gt; 25 3251899 3258117         *
-#&gt; 26 ------- 3251900         o
-#&gt; 27 3251901 3897394         *
-#&gt; 28 ------- 3614876         o
-#&gt; 29 ------- 3258082         o
-#&gt; 30 ------- 3251902         o
-#&gt; 31 3265703 3265704         *
-#&gt; 32 3265711 3742834         x
-#&gt; 33 ------- 3265712         x
-#&gt; 34 3265721 3265722         *
-#&gt; 35 3265745 3265746         *
-#&gt; 36 3265747 3265748         *
-#&gt; 37 3266770 3266771         x
-#&gt; 38 3266821 3266822         *
-#&gt; 39 3342494 3342495         *
-#&gt; 40 3354067 3354068         *
-#&gt; 41 3366103 3366104         *
-#&gt; 42 3402745 3402746         x
-#&gt; 43 3475405 3475406         *
-#&gt; 44 3475407 3475408         *
-#&gt; 45 3476357 3476390         *
-#&gt; 46 ------- 3476358         o
-#&gt; 47 3479170 3479171         *
-#&gt; 48 3485085 3485086         x
-#&gt; 49 3485120 3906082         *
-#&gt; 50 ------- 3833856         o
-#&gt; 51 ------- 3485121         o
-#&gt; 52 3698114 3698115         x
-#&gt; 53 3780390 3780391         x
-#&gt; 54 3888374 3888375         *
-#&gt; 55 3897376 3897377         x
-#&gt; 56 3901504 3901505         *
-#&gt; 57 3906117 3906118         x
-#&gt; 58 3908117 3908118         *
-#&gt; 59 3908127 3908128         *
-#&gt; 60 3908146 3929764         x
-#&gt; 61 ------- 3908147         x
-#&gt; 62 3908248 3908249         *
-#&gt; 63 3926373 3926374         *
-#&gt; 64 3929631 3929632         *
-#&gt; 65 3948442 3948443         *
-#&gt; 66 3952831 3952832         *
-#&gt; 67 3966236 3966277         *
-#&gt; 68 ------- 3966237         o</div><div class='input'>   <span class='fu'>search_fields</span>(<span class='kw'>field_text</span> <span class='kw'>=</span> <span class='st'>"temperature"</span>, <span class='kw'>field_type</span> <span class='kw'>=</span> <span class='st'>"numeric"</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 16 records</span></div><div class='output co'>#&gt; Set includes 13 concept ids and 16 record ids: 
-#&gt;  - 10 open and most recent (*)
+#&gt; 10 1478525 4072959         x
+#&gt; 11 ------- 3982665         x
+#&gt; 12 2536268 3476542         *
+#&gt; 13 2537072 3901735         x
+#&gt; 14 3081058 3247699         *
+#&gt; 15 3237506 3237507         x
+#&gt; 16 3247464 3247465         x
+#&gt; 17 3247484 3876227         *
+#&gt; 18 ------- 3247485         o
+#&gt; 19 3247491 3247492         *
+#&gt; 20 3247493 3247494         x
+#&gt; 21 3247591 3247592         *
+#&gt; 22 3247601 3247602         x
+#&gt; 23 3247630 3247631         x
+#&gt; 24 3247638 3247639         *
+#&gt; 25 3251886 3258079         *
+#&gt; 26 ------- 3251887         o
+#&gt; 27 3251899 3258117         *
+#&gt; 28 ------- 3251900         o
+#&gt; 29 3251901 3897394         *
+#&gt; 30 ------- 3614876         o
+#&gt; 31 ------- 3258082         o
+#&gt; 32 ------- 3251902         o
+#&gt; 33 3265703 3265704         *
+#&gt; 34 3265711 3997172         x
+#&gt; 35 ------- 3742834         x
+#&gt; 36 ------- 3265712         x
+#&gt; 37 3265721 3265722         *
+#&gt; 38 3265745 3265746         *
+#&gt; 39 3265747 3265748         *
+#&gt; 40 3266770 3266771         x
+#&gt; 41 3266821 3266822         *
+#&gt; 42 3342494 3342495         *
+#&gt; 43 3354067 3354068         *
+#&gt; 44 3366103 3366104         *
+#&gt; 45 3402745 3402746         x
+#&gt; 46 3475405 3475406         *
+#&gt; 47 3475407 3475408         *
+#&gt; 48 3476357 3476390         *
+#&gt; 49 ------- 3476358         o
+#&gt; 50 3479170 3479171         *
+#&gt; 51 3485085 3485086         x
+#&gt; 52 3485120 3906082         *
+#&gt; 53 ------- 3833856         o
+#&gt; 54 ------- 3485121         o
+#&gt; 55 3698114 3698115         x
+#&gt; 56 3780390 3780391         x
+#&gt; 57 3888374 3888375         *
+#&gt; 58 3897376 3897377         x
+#&gt; 59 3901504 3971012         *
+#&gt; 60 ------- 3901505         o
+#&gt; 61 3906117 3906118         x
+#&gt; 62 3908117 3908118         *
+#&gt; 63 3908127 3908128         *
+#&gt; 64 3908146 3929764         x
+#&gt; 65 ------- 3908147         x
+#&gt; 66 3908248 3908249         *
+#&gt; 67 3926373 3926374         *
+#&gt; 68 3929631 3929632         *
+#&gt; 69 3948442 3948443         *
+#&gt; 70 3952831 3952832         *
+#&gt; 71 3966236 3966277         *
+#&gt; 72 ------- 3966237         o
+#&gt; 73 3973550 3973551         *
+#&gt; 74 3973690 3973691         *
+#&gt; 75 3974970 3974971         x
+#&gt; 76 3975972 3975973         *
+#&gt; 77 3976020 3976021         *
+#&gt; 78 3979295 3979296         x
+#&gt; 79 3981221 3981222         *
+#&gt; 80 3994259 3994260         x
+#&gt; 81 4000206 4000207         *
+#&gt; 82 4010756 4010757         *
+#&gt; 83 4020696 4020697         *</div><div class='input'>   <span class='fu'>search_fields</span><span class='op'>(</span>field_text <span class='op'>=</span> <span class='st'>"temperature"</span>, field_type <span class='op'>=</span> <span class='st'>"numeric"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Search returned 20 records</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; Set includes 16 concept ids and 20 record ids: 
+#&gt;  - 11 open and most recent (*)
 #&gt;  - 2 open and outdated (o)
-#&gt;  - 4 under embargo or restricted (x)
+#&gt;  - 7 under embargo or restricted (x)
 #&gt; 
 #&gt;    concept  record available
-#&gt; 1  3247484 3876227         *
-#&gt; 2  ------- 3247485         o
-#&gt; 3  3247591 3247592         *
-#&gt; 4  3251886 3258079         *
-#&gt; 5  3251899 3258117         *
-#&gt; 6  ------- 3251900         o
-#&gt; 7  3266770 3266771         x
-#&gt; 8  3266821 3266822         *
-#&gt; 9  3475407 3475408         *
-#&gt; 10 3479170 3479171         *
-#&gt; 11 3698114 3698115         x
-#&gt; 12 3888374 3888375         *
-#&gt; 13 3908146 3929764         x
-#&gt; 14 ------- 3908147         x
-#&gt; 15 3926373 3926374         *
-#&gt; 16 3952831 3952832         *</div><div class='input'>   <span class='fu'>search_authors</span>(<span class='st'>"Ewers"</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 76 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: 3973551,3973691,3974971,3975973</span></div><div class='output co'>#&gt; Set includes 56 concept ids and 72 record ids: 
-#&gt;  - 49 open and most recent (*)
+#&gt; 1  1478525 4072959         x
+#&gt; 2  ------- 3982665         x
+#&gt; 3  3247484 3876227         *
+#&gt; 4  ------- 3247485         o
+#&gt; 5  3247591 3247592         *
+#&gt; 6  3251886 3258079         *
+#&gt; 7  3251899 3258117         *
+#&gt; 8  ------- 3251900         o
+#&gt; 9  3266770 3266771         x
+#&gt; 10 3266821 3266822         *
+#&gt; 11 3475407 3475408         *
+#&gt; 12 3479170 3479171         *
+#&gt; 13 3698114 3698115         x
+#&gt; 14 3888374 3888375         *
+#&gt; 15 3908146 3929764         x
+#&gt; 16 ------- 3908147         x
+#&gt; 17 3926373 3926374         *
+#&gt; 18 3952831 3952832         *
+#&gt; 19 3994259 3994260         x
+#&gt; 20 4000206 4000207         *</div><div class='input'>   <span class='fu'>search_authors</span><span class='op'>(</span><span class='st'>"Ewers"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Search returned 81 records</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; Set includes 63 concept ids and 81 record ids: 
+#&gt;  - 53 open and most recent (*)
 #&gt;  - 13 open and outdated (o)
-#&gt;  - 10 under embargo or restricted (x)
+#&gt;  - 15 under embargo or restricted (x)
 #&gt; 
 #&gt;    concept  record available
 #&gt; 1   629855 3490675         *
@@ -634,30 +675,40 @@ coordinate information.</p>
 #&gt; 49 1400563 1400564         *
 #&gt; 50 1441584 1441585         *
 #&gt; 51 1478523 3955050         x
-#&gt; 52 2537072 3901735         x
-#&gt; 53 ------- 2537073         x
-#&gt; 54 3081058 3247699         *
-#&gt; 55 ------- 3081059         o
-#&gt; 56 3237506 3237507         x
-#&gt; 57 3247484 3876227         *
-#&gt; 58 ------- 3247485         o
-#&gt; 59 3265711 3742834         x
-#&gt; 60 ------- 3265712         x
-#&gt; 61 3265721 3265722         *
-#&gt; 62 3266770 3266771         x
-#&gt; 63 3354067 3354068         *
-#&gt; 64 3476357 3476390         *
-#&gt; 65 ------- 3476358         o
-#&gt; 66 3479170 3479171         *
-#&gt; 67 3888374 3888375         *
-#&gt; 68 3908117 3908118         *
-#&gt; 69 3908146 3929764         x
-#&gt; 70 ------- 3908147         x
-#&gt; 71 3966236 3966277         *
-#&gt; 72 ------- 3966237         o</div><div class='input'>   <span class='fu'>search_taxa</span>(<span class='kw'>taxon_name</span> <span class='kw'>=</span> <span class='st'>"Formicidae"</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 12 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: 3975973</span></div><div class='output co'>#&gt; Set includes 10 concept ids and 11 record ids: 
-#&gt;  - 8 open and most recent (*)
+#&gt; 52 1478525 4072959         x
+#&gt; 53 ------- 3982665         x
+#&gt; 54 2537072 3901735         x
+#&gt; 55 ------- 2537073         x
+#&gt; 56 3081058 3247699         *
+#&gt; 57 ------- 3081059         o
+#&gt; 58 3237506 3237507         x
+#&gt; 59 3247484 3876227         *
+#&gt; 60 ------- 3247485         o
+#&gt; 61 3265711 3997172         x
+#&gt; 62 ------- 3742834         x
+#&gt; 63 ------- 3265712         x
+#&gt; 64 3265721 3265722         *
+#&gt; 65 3266770 3266771         x
+#&gt; 66 3354067 3354068         *
+#&gt; 67 3476357 3476390         *
+#&gt; 68 ------- 3476358         o
+#&gt; 69 3479170 3479171         *
+#&gt; 70 3888374 3888375         *
+#&gt; 71 3908117 3908118         *
+#&gt; 72 3908146 3929764         x
+#&gt; 73 ------- 3908147         x
+#&gt; 74 3966236 3966277         *
+#&gt; 75 ------- 3966237         o
+#&gt; 76 3973550 3973551         *
+#&gt; 77 3973690 3973691         *
+#&gt; 78 3974970 3974971         x
+#&gt; 79 3975972 3975973         *
+#&gt; 80 3981221 3981222         *
+#&gt; 81 3994259 3994260         x</div><div class='input'>   <span class='fu'>search_taxa</span><span class='op'>(</span>taxon_name <span class='op'>=</span> <span class='st'>"Formicidae"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Search returned 13 records</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; Set includes 12 concept ids and 13 record ids: 
+#&gt;  - 9 open and most recent (*)
 #&gt;  - 1 open and outdated (o)
-#&gt;  - 2 under embargo or restricted (x)
+#&gt;  - 3 under embargo or restricted (x)
 #&gt; 
 #&gt;    concept  record available
 #&gt; 1  1198301 1198302         *
@@ -670,10 +721,13 @@ coordinate information.</p>
 #&gt; 8  3247484 3876227         *
 #&gt; 9  ------- 3247485         o
 #&gt; 10 3265745 3265746         *
-#&gt; 11 3354067 3354068         *</div><div class='input'>   <span class='fu'>search_taxa</span>(<span class='kw'>gbif_id</span> <span class='kw'>=</span> <span class='fl'>4342</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 12 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: 3975973</span></div><div class='output co'>#&gt; Set includes 10 concept ids and 11 record ids: 
-#&gt;  - 8 open and most recent (*)
+#&gt; 11 3354067 3354068         *
+#&gt; 12 3975972 3975973         *
+#&gt; 13 3979295 3979296         x</div><div class='input'>   <span class='fu'>search_taxa</span><span class='op'>(</span>gbif_id <span class='op'>=</span> <span class='fl'>4342</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Search returned 13 records</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; Set includes 12 concept ids and 13 record ids: 
+#&gt;  - 9 open and most recent (*)
 #&gt;  - 1 open and outdated (o)
-#&gt;  - 2 under embargo or restricted (x)
+#&gt;  - 3 under embargo or restricted (x)
 #&gt; 
 #&gt;    concept  record available
 #&gt; 1  1198301 1198302         *
@@ -686,10 +740,13 @@ coordinate information.</p>
 #&gt; 8  3247484 3876227         *
 #&gt; 9  ------- 3247485         o
 #&gt; 10 3265745 3265746         *
-#&gt; 11 3354067 3354068         *</div><div class='input'>   <span class='fu'>search_taxa</span>(<span class='kw'>taxon_rank</span> <span class='kw'>=</span> <span class='st'>"family"</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 79 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: 3973551,3976021,3971012,3975205,3973691,3974971,3975973</span></div><div class='output co'>#&gt; Set includes 66 concept ids and 72 record ids: 
-#&gt;  - 49 open and most recent (*)
-#&gt;  - 3 open and outdated (o)
-#&gt;  - 20 under embargo or restricted (x)
+#&gt; 11 3354067 3354068         *
+#&gt; 12 3975972 3975973         *
+#&gt; 13 3979295 3979296         x</div><div class='input'>   <span class='fu'>search_taxa</span><span class='op'>(</span>taxon_rank <span class='op'>=</span> <span class='st'>"family"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Search returned 86 records</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; Set includes 76 concept ids and 86 record ids: 
+#&gt;  - 57 open and most recent (*)
+#&gt;  - 4 open and outdated (o)
+#&gt;  - 25 under embargo or restricted (x)
 #&gt; 
 #&gt;    concept  record available
 #&gt; 1  1198301 1198302         *
@@ -720,166 +777,211 @@ coordinate information.</p>
 #&gt; 26 1400561 1400562         *
 #&gt; 27 1400563 1400564         *
 #&gt; 28 1478523 3955050         x
-#&gt; 29 ------- 1478524         x
-#&gt; 30 1478525 1478526         *
-#&gt; 31 1487594 1487595         *
-#&gt; 32 1995247 1995439         *
-#&gt; 33 2020339 2020340         *
-#&gt; 34 2024580 2536270         *
-#&gt; 35 2536268 3476542         *
-#&gt; 36 ------- 2536269         o
-#&gt; 37 2537072 3901735         x
-#&gt; 38 2579791 2579792         *
-#&gt; 39 3237506 3237507         x
-#&gt; 40 3247464 3247465         x
-#&gt; 41 3247484 3876227         *
-#&gt; 42 ------- 3247485         o
-#&gt; 43 3247491 3247492         *
-#&gt; 44 3247493 3247494         x
-#&gt; 45 3247630 3247631         x
-#&gt; 46 3265703 3265704         *
-#&gt; 47 3265711 3742834         x
-#&gt; 48 ------- 3265712         x
-#&gt; 49 3265745 3265746         *
-#&gt; 50 3342494 3342495         *
-#&gt; 51 3354067 3354068         *
-#&gt; 52 3366103 3366104         *
-#&gt; 53 3402747 3402748         x
-#&gt; 54 3402751 3402752         x
-#&gt; 55 3475405 3475406         *
-#&gt; 56 3475407 3475408         *
-#&gt; 57 3485085 3485086         x
-#&gt; 58 3780390 3780391         x
-#&gt; 59 3832075 3832076         x
-#&gt; 60 3897376 3897377         x
-#&gt; 61 3901504 3901505         *
-#&gt; 62 3906117 3906118         x
-#&gt; 63 3906440 3906441         x
-#&gt; 64 3908127 3908128         *
-#&gt; 65 3908146 3929764         x
-#&gt; 66 ------- 3908147         x
-#&gt; 67 3908248 3908249         *
-#&gt; 68 3926373 3926374         *
-#&gt; 69 3948442 3948443         *
-#&gt; 70 3952831 3952832         *
-#&gt; 71 3966236 3966277         *
-#&gt; 72 ------- 3966237         o</div><div class='input'>   <span class='fu'>search_text</span>(<span class='st'>"forest"</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 57 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: 3976021,3971012,3975205,3973691,3974971</span></div><div class='output co'>#&gt; Set includes 43 concept ids and 52 record ids: 
-#&gt;  - 28 open and most recent (*)
-#&gt;  - 7 open and outdated (o)
-#&gt;  - 17 under embargo or restricted (x)
+#&gt; 29 ------- 1478524         *
+#&gt; 30 1478525 4072959         x
+#&gt; 31 ------- 3982665         x
+#&gt; 32 ------- 1478526         *
+#&gt; 33 1487594 1487595         *
+#&gt; 34 1995247 1995439         *
+#&gt; 35 2020339 2020340         *
+#&gt; 36 2024580 2536270         *
+#&gt; 37 2536268 3476542         *
+#&gt; 38 ------- 2536269         o
+#&gt; 39 2537072 3901735         x
+#&gt; 40 2579791 2579792         *
+#&gt; 41 3237506 3237507         x
+#&gt; 42 3247464 3247465         x
+#&gt; 43 3247484 3876227         *
+#&gt; 44 ------- 3247485         o
+#&gt; 45 3247491 3247492         *
+#&gt; 46 3247493 3247494         x
+#&gt; 47 3247630 3247631         x
+#&gt; 48 3265703 3265704         *
+#&gt; 49 3265711 3997172         x
+#&gt; 50 ------- 3742834         x
+#&gt; 51 ------- 3265712         x
+#&gt; 52 3265745 3265746         *
+#&gt; 53 3342494 3342495         *
+#&gt; 54 3354067 3354068         *
+#&gt; 55 3366103 3366104         *
+#&gt; 56 3402747 3402748         x
+#&gt; 57 3402751 3402752         x
+#&gt; 58 3475405 3475406         *
+#&gt; 59 3475407 3475408         *
+#&gt; 60 3485085 3485086         x
+#&gt; 61 3780390 3780391         x
+#&gt; 62 3832075 3832076         x
+#&gt; 63 3897376 3897377         x
+#&gt; 64 3901504 3971012         *
+#&gt; 65 ------- 3901505         o
+#&gt; 66 3906117 3906118         x
+#&gt; 67 3906440 3906441         x
+#&gt; 68 3908127 3908128         *
+#&gt; 69 3908146 3929764         x
+#&gt; 70 ------- 3908147         x
+#&gt; 71 3908248 3908249         *
+#&gt; 72 3926373 3926374         *
+#&gt; 73 3948442 3948443         *
+#&gt; 74 3952831 3952832         *
+#&gt; 75 3966236 3966277         *
+#&gt; 76 ------- 3966237         o
+#&gt; 77 3973550 3973551         *
+#&gt; 78 3973690 3973691         *
+#&gt; 79 3974970 3974971         x
+#&gt; 80 3975204 3975205         *
+#&gt; 81 3975972 3975973         *
+#&gt; 82 3976020 3976021         *
+#&gt; 83 3979295 3979296         x
+#&gt; 84 3981221 3981222         *
+#&gt; 85 3994259 3994260         x
+#&gt; 86 4010756 4010757         *</div><div class='input'>   <span class='fu'>search_text</span><span class='op'>(</span><span class='st'>"forest"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Search returned 66 records</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; Set includes 54 concept ids and 66 record ids: 
+#&gt;  - 35 open and most recent (*)
+#&gt;  - 8 open and outdated (o)
+#&gt;  - 23 under embargo or restricted (x)
 #&gt; 
 #&gt;    concept  record available
 #&gt; 1   629942 3492153         *
 #&gt; 2   630132 3490613         *
 #&gt; 3   630161 3492064         *
 #&gt; 4  1478523 3955050         x
-#&gt; 5  2536268 3476542         *
-#&gt; 6  2537072 3901735         x
-#&gt; 7  3081058 3247699         *
-#&gt; 8  3237506 3237507         x
-#&gt; 9  3247464 3247465         x
-#&gt; 10 3247484 3876227         *
-#&gt; 11 ------- 3247485         o
-#&gt; 12 3247591 3247592         *
-#&gt; 13 3247601 3247602         x
-#&gt; 14 3247630 3247631         x
-#&gt; 15 3247638 3247639         *
-#&gt; 16 3251886 3258079         *
-#&gt; 17 ------- 3251887         o
-#&gt; 18 3251899 3258117         *
-#&gt; 19 ------- 3251900         o
-#&gt; 20 3265703 3265704         *
-#&gt; 21 3265711 3742834         x
-#&gt; 22 ------- 3265712         x
-#&gt; 23 3265745 3265746         *
-#&gt; 24 3265747 3265748         *
-#&gt; 25 3266770 3266771         x
-#&gt; 26 3266821 3266822         *
-#&gt; 27 3266826 3266827         *
-#&gt; 28 3366103 3366104         *
-#&gt; 29 3402747 3402748         x
-#&gt; 30 3402751 3402752         x
-#&gt; 31 3475405 3475406         *
-#&gt; 32 3475407 3475408         *
-#&gt; 33 3476357 3476390         *
-#&gt; 34 ------- 3476358         o
-#&gt; 35 3485085 3485086         x
-#&gt; 36 3485120 3906082         *
-#&gt; 37 ------- 3833856         o
-#&gt; 38 ------- 3485121         o
-#&gt; 39 3698114 3698115         x
-#&gt; 40 3780390 3780391         x
-#&gt; 41 3897376 3897377         x
-#&gt; 42 3901504 3901505         *
-#&gt; 43 3908117 3908118         *
-#&gt; 44 3908127 3908128         *
-#&gt; 45 3908146 3929764         x
-#&gt; 46 ------- 3908147         x
-#&gt; 47 3926373 3926374         *
-#&gt; 48 3929631 3929632         *
-#&gt; 49 3948442 3948443         *
-#&gt; 50 3952831 3952832         *
-#&gt; 51 3966236 3966277         *
-#&gt; 52 ------- 3966237         o</div><div class='input'>   <span class='fu'>search_text</span>(<span class='st'>"ant"</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 50 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: 3976021,3971012,3975205,3975973,3973551</span></div><div class='output co'>#&gt; Set includes 41 concept ids and 45 record ids: 
-#&gt;  - 24 open and most recent (*)
-#&gt;  - 2 open and outdated (o)
-#&gt;  - 19 under embargo or restricted (x)
+#&gt; 5  1478525 4072959         x
+#&gt; 6  ------- 3982665         x
+#&gt; 7  2536268 3476542         *
+#&gt; 8  2537072 3901735         x
+#&gt; 9  3081058 3247699         *
+#&gt; 10 3237506 3237507         x
+#&gt; 11 3247464 3247465         x
+#&gt; 12 3247484 3876227         *
+#&gt; 13 ------- 3247485         o
+#&gt; 14 3247591 3247592         *
+#&gt; 15 3247601 3247602         x
+#&gt; 16 3247630 3247631         x
+#&gt; 17 3247638 3247639         *
+#&gt; 18 3251886 3258079         *
+#&gt; 19 ------- 3251887         o
+#&gt; 20 3251899 3258117         *
+#&gt; 21 ------- 3251900         o
+#&gt; 22 3265703 3265704         *
+#&gt; 23 3265711 3997172         x
+#&gt; 24 ------- 3742834         x
+#&gt; 25 ------- 3265712         x
+#&gt; 26 3265745 3265746         *
+#&gt; 27 3265747 3265748         *
+#&gt; 28 3266770 3266771         x
+#&gt; 29 3266821 3266822         *
+#&gt; 30 3266826 3266827         *
+#&gt; 31 3366103 3366104         *
+#&gt; 32 3402747 3402748         x
+#&gt; 33 3402751 3402752         x
+#&gt; 34 3475405 3475406         *
+#&gt; 35 3475407 3475408         *
+#&gt; 36 3476357 3476390         *
+#&gt; 37 ------- 3476358         o
+#&gt; 38 3485085 3485086         x
+#&gt; 39 3485120 3906082         *
+#&gt; 40 ------- 3833856         o
+#&gt; 41 ------- 3485121         o
+#&gt; 42 3698114 3698115         x
+#&gt; 43 3780390 3780391         x
+#&gt; 44 3897376 3897377         x
+#&gt; 45 3901504 3971012         *
+#&gt; 46 ------- 3901505         o
+#&gt; 47 3908117 3908118         *
+#&gt; 48 3908127 3908128         *
+#&gt; 49 3908146 3929764         x
+#&gt; 50 ------- 3908147         x
+#&gt; 51 3926373 3926374         *
+#&gt; 52 3929631 3929632         *
+#&gt; 53 3948442 3948443         *
+#&gt; 54 3952831 3952832         *
+#&gt; 55 3966236 3966277         *
+#&gt; 56 ------- 3966237         o
+#&gt; 57 3973690 3973691         *
+#&gt; 58 3974970 3974971         x
+#&gt; 59 3975204 3975205         *
+#&gt; 60 3976020 3976021         *
+#&gt; 61 3979295 3979296         x
+#&gt; 62 3981221 3981222         *
+#&gt; 63 3994259 3994260         x
+#&gt; 64 4000206 4000207         *
+#&gt; 65 4010756 4010757         *
+#&gt; 66 4020696 4020697         *</div><div class='input'>   <span class='fu'>search_text</span><span class='op'>(</span><span class='st'>"ant"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Search returned 58 records</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; Set includes 51 concept ids and 58 record ids: 
+#&gt;  - 31 open and most recent (*)
+#&gt;  - 3 open and outdated (o)
+#&gt;  - 24 under embargo or restricted (x)
 #&gt; 
 #&gt;    concept  record available
 #&gt; 1   630119 3492148         *
 #&gt; 2   630161 3492064         *
 #&gt; 3  1478523 3955050         x
-#&gt; 4  2536268 3476542         *
-#&gt; 5  2537072 3901735         x
-#&gt; 6  3081058 3247699         *
-#&gt; 7  3247464 3247465         x
-#&gt; 8  3247484 3876227         *
-#&gt; 9  ------- 3247485         o
-#&gt; 10 3247491 3247492         *
-#&gt; 11 3247493 3247494         x
-#&gt; 12 3247601 3247602         x
-#&gt; 13 3247630 3247631         x
-#&gt; 14 3247638 3247639         *
-#&gt; 15 3265703 3265704         *
-#&gt; 16 3265711 3742834         x
-#&gt; 17 ------- 3265712         x
-#&gt; 18 3265745 3265746         *
-#&gt; 19 3265747 3265748         *
-#&gt; 20 3266770 3266771         x
-#&gt; 21 3266821 3266822         *
-#&gt; 22 3266826 3266827         *
-#&gt; 23 3354067 3354068         *
-#&gt; 24 3402745 3402746         x
-#&gt; 25 3402751 3402752         x
-#&gt; 26 3475405 3475406         *
-#&gt; 27 3475407 3475408         *
-#&gt; 28 3485085 3485086         x
-#&gt; 29 3780390 3780391         x
-#&gt; 30 3832075 3832076         x
-#&gt; 31 3888374 3888375         *
-#&gt; 32 3897376 3897377         x
-#&gt; 33 3901504 3901505         *
-#&gt; 34 3906117 3906118         x
-#&gt; 35 3906440 3906441         x
-#&gt; 36 3908117 3908118         *
-#&gt; 37 3908127 3908128         *
-#&gt; 38 3908146 3929764         x
-#&gt; 39 ------- 3908147         x
-#&gt; 40 3926373 3926374         *
-#&gt; 41 3929631 3929632         *
-#&gt; 42 3948442 3948443         *
-#&gt; 43 3952831 3952832         *
-#&gt; 44 3966236 3966277         *
-#&gt; 45 ------- 3966237         o</div><div class='input'>   <span class='fu'>search_spatial</span>(<span class='kw'>wkt</span> <span class='kw'>=</span> <span class='st'>"Point(116.5 4.75)"</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 0 records</span></div><div class='output co'>#&gt; Set includes 0 concept ids and 0 record ids: 
+#&gt; 4  1478525 4072959         x
+#&gt; 5  ------- 3982665         x
+#&gt; 6  2536268 3476542         *
+#&gt; 7  2537072 3901735         x
+#&gt; 8  3081058 3247699         *
+#&gt; 9  3247464 3247465         x
+#&gt; 10 3247484 3876227         *
+#&gt; 11 ------- 3247485         o
+#&gt; 12 3247491 3247492         *
+#&gt; 13 3247493 3247494         x
+#&gt; 14 3247601 3247602         x
+#&gt; 15 3247630 3247631         x
+#&gt; 16 3247638 3247639         *
+#&gt; 17 3265703 3265704         *
+#&gt; 18 3265711 3997172         x
+#&gt; 19 ------- 3742834         x
+#&gt; 20 ------- 3265712         x
+#&gt; 21 3265745 3265746         *
+#&gt; 22 3265747 3265748         *
+#&gt; 23 3266770 3266771         x
+#&gt; 24 3266821 3266822         *
+#&gt; 25 3266826 3266827         *
+#&gt; 26 3354067 3354068         *
+#&gt; 27 3402745 3402746         x
+#&gt; 28 3402751 3402752         x
+#&gt; 29 3475405 3475406         *
+#&gt; 30 3475407 3475408         *
+#&gt; 31 3485085 3485086         x
+#&gt; 32 3780390 3780391         x
+#&gt; 33 3832075 3832076         x
+#&gt; 34 3888374 3888375         *
+#&gt; 35 3897376 3897377         x
+#&gt; 36 3901504 3971012         *
+#&gt; 37 ------- 3901505         o
+#&gt; 38 3906117 3906118         x
+#&gt; 39 3906440 3906441         x
+#&gt; 40 3908117 3908118         *
+#&gt; 41 3908127 3908128         *
+#&gt; 42 3908146 3929764         x
+#&gt; 43 ------- 3908147         x
+#&gt; 44 3926373 3926374         *
+#&gt; 45 3929631 3929632         *
+#&gt; 46 3948442 3948443         *
+#&gt; 47 3952831 3952832         *
+#&gt; 48 3966236 3966277         *
+#&gt; 49 ------- 3966237         o
+#&gt; 50 3973550 3973551         *
+#&gt; 51 3975204 3975205         *
+#&gt; 52 3975972 3975973         *
+#&gt; 53 3976020 3976021         *
+#&gt; 54 3979295 3979296         x
+#&gt; 55 3981221 3981222         *
+#&gt; 56 3994259 3994260         x
+#&gt; 57 4000206 4000207         *
+#&gt; 58 4020696 4020697         *</div><div class='input'>   <span class='fu'>search_spatial</span><span class='op'>(</span>wkt <span class='op'>=</span> <span class='st'>"Point(116.5 4.75)"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Search returned 0 records</span></div><div class='output co'>#&gt; Set includes 0 concept ids and 0 record ids: 
 #&gt;  - 0 open and most recent (*)
 #&gt;  - 0 open and outdated (o)
 #&gt;  - 0 under embargo or restricted (x)
 #&gt; 
 #&gt; [1] concept   record    available
-#&gt; &lt;0 rows&gt; (or 0-length row.names)</div><div class='input'>   <span class='fu'>search_spatial</span>(<span class='kw'>wkt</span> <span class='kw'>=</span> <span class='st'>"Point(116.5 4.75)"</span>, <span class='kw'>distance</span> <span class='kw'>=</span> <span class='fl'>100000</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 62 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: 3975205,3973691</span></div><div class='output co'>#&gt; Set includes 48 concept ids and 60 record ids: 
-#&gt;  - 37 open and most recent (*)
+#&gt; &lt;0 rows&gt; (or 0-length row.names)</div><div class='input'>   <span class='fu'>search_spatial</span><span class='op'>(</span>wkt <span class='op'>=</span> <span class='st'>"Point(116.5 4.75)"</span>, distance <span class='op'>=</span> <span class='fl'>100000</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Search returned 62 records</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; Set includes 50 concept ids and 62 record ids: 
+#&gt;  - 40 open and most recent (*)
 #&gt;  - 10 open and outdated (o)
-#&gt;  - 13 under embargo or restricted (x)
+#&gt;  - 12 under embargo or restricted (x)
 #&gt; 
 #&gt;    concept  record available
 #&gt; 1   630015 3492009         *
@@ -918,7 +1020,7 @@ coordinate information.</p>
 #&gt; 34 1400563 1400564         *
 #&gt; 35 1441584 1441585         *
 #&gt; 36 1478523 3955050         x
-#&gt; 37 ------- 1478524         x
+#&gt; 37 ------- 1478524         *
 #&gt; 38 2537072 3901735         x
 #&gt; 39 ------- 2537073         x
 #&gt; 40 3247484 3876227         *
@@ -941,10 +1043,13 @@ coordinate information.</p>
 #&gt; 57 3906440 3906441         x
 #&gt; 58 3908117 3908118         *
 #&gt; 59 3908127 3908128         *
-#&gt; 60 3952831 3952832         *</div><div class='input'>   <span class='fu'>search_spatial</span>(<span class='kw'>wkt</span> <span class='kw'>=</span> <span class='st'>"Polygon((110 0, 110 10,120 10,120 0,110 0))"</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 111 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: 3975973,3973551,3976021,3971012,3975205,3973691,3974971</span></div><div class='output co'>#&gt; Set includes 79 concept ids and 104 record ids: 
-#&gt;  - 62 open and most recent (*)
-#&gt;  - 22 open and outdated (o)
-#&gt;  - 20 under embargo or restricted (x)
+#&gt; 60 3952831 3952832         *
+#&gt; 61 3973690 3973691         *
+#&gt; 62 3975204 3975205         *</div><div class='input'>   <span class='fu'>search_spatial</span><span class='op'>(</span>wkt <span class='op'>=</span> <span class='st'>"Polygon((110 0, 110 10,120 10,120 0,110 0))"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Search returned 115 records</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; Set includes 87 concept ids and 115 record ids: 
+#&gt;  - 69 open and most recent (*)
+#&gt;  - 23 open and outdated (o)
+#&gt;  - 23 under embargo or restricted (x)
 #&gt; 
 #&gt;     concept  record available
 #&gt; 1    629855 3490675         *
@@ -1001,56 +1106,68 @@ coordinate information.</p>
 #&gt; 52  1400563 1400564         *
 #&gt; 53  1441584 1441585         *
 #&gt; 54  1478523 3955050         x
-#&gt; 55  ------- 1478524         x
-#&gt; 56  1478525 1478526         *
-#&gt; 57  1995247 1995439         *
-#&gt; 58  ------- 1995248         o
-#&gt; 59  2024580 2536270         *
-#&gt; 60  ------- 2024581         o
-#&gt; 61  2536268 3476542         *
-#&gt; 62  ------- 2536269         o
-#&gt; 63  2537072 3901735         x
-#&gt; 64  ------- 2537073         x
-#&gt; 65  3081058 3247699         *
-#&gt; 66  ------- 3081059         o
-#&gt; 67  3237506 3237507         x
-#&gt; 68  3247484 3876227         *
-#&gt; 69  ------- 3247485         o
-#&gt; 70  3247491 3247492         *
-#&gt; 71  3247493 3247494         x
-#&gt; 72  3247591 3247592         *
-#&gt; 73  3247601 3247602         x
-#&gt; 74  3247630 3247631         x
-#&gt; 75  3247638 3247639         *
-#&gt; 76  3265721 3265722         *
-#&gt; 77  3265745 3265746         *
-#&gt; 78  3265747 3265748         *
-#&gt; 79  3266770 3266771         x
-#&gt; 80  3342494 3342495         *
-#&gt; 81  3354067 3354068         *
-#&gt; 82  3402747 3402748         x
-#&gt; 83  3402751 3402752         x
-#&gt; 84  3475407 3475408         *
-#&gt; 85  3476357 3476390         *
-#&gt; 86  ------- 3476358         o
-#&gt; 87  3479170 3479171         *
-#&gt; 88  3485085 3485086         x
-#&gt; 89  3780390 3780391         x
-#&gt; 90  3832075 3832076         x
-#&gt; 91  3897376 3897377         x
-#&gt; 92  3901504 3901505         *
-#&gt; 93  3906117 3906118         x
-#&gt; 94  3906440 3906441         x
-#&gt; 95  3908117 3908118         *
-#&gt; 96  3908127 3908128         *
-#&gt; 97  3908146 3929764         x
-#&gt; 98  ------- 3908147         x
-#&gt; 99  3926373 3926374         *
-#&gt; 100 3929631 3929632         *
-#&gt; 101 3948442 3948443         *
-#&gt; 102 3952831 3952832         *
-#&gt; 103 3966236 3966277         *
-#&gt; 104 ------- 3966237         o</div><div class='input'>   <span class='fu'>search_spatial</span>(<span class='kw'>location</span> <span class='kw'>=</span> <span class='st'>"A_1"</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 9 records</span></div><div class='output co'>#&gt; Set includes 7 concept ids and 9 record ids: 
+#&gt; 55  ------- 1478524         *
+#&gt; 56  1478525 4072959         x
+#&gt; 57  ------- 3982665         x
+#&gt; 58  ------- 1478526         *
+#&gt; 59  1995247 1995439         *
+#&gt; 60  ------- 1995248         o
+#&gt; 61  2024580 2536270         *
+#&gt; 62  ------- 2024581         o
+#&gt; 63  2536268 3476542         *
+#&gt; 64  ------- 2536269         o
+#&gt; 65  2537072 3901735         x
+#&gt; 66  ------- 2537073         x
+#&gt; 67  3081058 3247699         *
+#&gt; 68  ------- 3081059         o
+#&gt; 69  3237506 3237507         x
+#&gt; 70  3247484 3876227         *
+#&gt; 71  ------- 3247485         o
+#&gt; 72  3247491 3247492         *
+#&gt; 73  3247493 3247494         x
+#&gt; 74  3247591 3247592         *
+#&gt; 75  3247601 3247602         x
+#&gt; 76  3247630 3247631         x
+#&gt; 77  3247638 3247639         *
+#&gt; 78  3265721 3265722         *
+#&gt; 79  3265745 3265746         *
+#&gt; 80  3265747 3265748         *
+#&gt; 81  3266770 3266771         x
+#&gt; 82  3342494 3342495         *
+#&gt; 83  3354067 3354068         *
+#&gt; 84  3402747 3402748         x
+#&gt; 85  3402751 3402752         x
+#&gt; 86  3475407 3475408         *
+#&gt; 87  3476357 3476390         *
+#&gt; 88  ------- 3476358         o
+#&gt; 89  3479170 3479171         *
+#&gt; 90  3485085 3485086         x
+#&gt; 91  3780390 3780391         x
+#&gt; 92  3832075 3832076         x
+#&gt; 93  3897376 3897377         x
+#&gt; 94  3901504 3971012         *
+#&gt; 95  ------- 3901505         o
+#&gt; 96  3906117 3906118         x
+#&gt; 97  3906440 3906441         x
+#&gt; 98  3908117 3908118         *
+#&gt; 99  3908127 3908128         *
+#&gt; 100 3908146 3929764         x
+#&gt; 101 ------- 3908147         x
+#&gt; 102 3926373 3926374         *
+#&gt; 103 3929631 3929632         *
+#&gt; 104 3948442 3948443         *
+#&gt; 105 3952831 3952832         *
+#&gt; 106 3966236 3966277         *
+#&gt; 107 ------- 3966237         o
+#&gt; 108 3973550 3973551         *
+#&gt; 109 3973690 3973691         *
+#&gt; 110 3974970 3974971         x
+#&gt; 111 3975204 3975205         *
+#&gt; 112 3975972 3975973         *
+#&gt; 113 3976020 3976021         *
+#&gt; 114 3981221 3981222         *
+#&gt; 115 3994259 3994260         x</div><div class='input'>   <span class='fu'>search_spatial</span><span class='op'>(</span>location <span class='op'>=</span> <span class='st'>"A_1"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Search returned 9 records</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; Set includes 7 concept ids and 9 record ids: 
 #&gt;  - 7 open and most recent (*)
 #&gt;  - 2 open and outdated (o)
 #&gt;  - 0 under embargo or restricted (x)
@@ -1064,10 +1181,11 @@ coordinate information.</p>
 #&gt; 6 1344568 1344569         *
 #&gt; 7 3354067 3354068         *
 #&gt; 8 3966236 3966277         *
-#&gt; 9 ------- 3966237         o</div><div class='input'>   <span class='fu'>search_spatial</span>(<span class='kw'>location</span> <span class='kw'>=</span> <span class='st'>"A_1"</span>, <span class='kw'>distance</span> <span class='kw'>=</span> <span class='fl'>2500</span>)</div><div class='output co'>#&gt; <span class='message'>Search returned 50 records</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown record ids in record_set: 3976021,3971012,3975205,3974971,3973551</span></div><div class='output co'>#&gt; Set includes 35 concept ids and 45 record ids: 
-#&gt;  - 29 open and most recent (*)
-#&gt;  - 10 open and outdated (o)
-#&gt;  - 6 under embargo or restricted (x)
+#&gt; 9 ------- 3966237         o</div><div class='input'>   <span class='fu'>search_spatial</span><span class='op'>(</span>location <span class='op'>=</span> <span class='st'>"A_1"</span>, distance <span class='op'>=</span> <span class='fl'>2500</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Search returned 52 records</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; Set includes 39 concept ids and 52 record ids: 
+#&gt;  - 32 open and most recent (*)
+#&gt;  - 11 open and outdated (o)
+#&gt;  - 9 under embargo or restricted (x)
 #&gt; 
 #&gt;    concept  record available
 #&gt; 1   629855 3490675         *
@@ -1091,30 +1209,45 @@ coordinate information.</p>
 #&gt; 19 1344568 1344569         *
 #&gt; 20 1400563 1400564         *
 #&gt; 21 1441584 1441585         *
-#&gt; 22 1478525 1478526         *
-#&gt; 23 1995247 1995439         *
-#&gt; 24 ------- 1995248         o
-#&gt; 25 2024580 2536270         *
-#&gt; 26 ------- 2024581         o
-#&gt; 27 2536268 3476542         *
-#&gt; 28 ------- 2536269         o
-#&gt; 29 3247484 3876227         *
-#&gt; 30 ------- 3247485         o
-#&gt; 31 3247491 3247492         *
-#&gt; 32 3247493 3247494         x
-#&gt; 33 3265721 3265722         *
-#&gt; 34 3354067 3354068         *
-#&gt; 35 3476357 3476390         *
-#&gt; 36 ------- 3476358         o
-#&gt; 37 3485085 3485086         x
-#&gt; 38 3832075 3832076         x
-#&gt; 39 3897376 3897377         x
-#&gt; 40 3901504 3901505         *
-#&gt; 41 3906117 3906118         x
-#&gt; 42 3908127 3908128         *
-#&gt; 43 3926373 3926374         *
-#&gt; 44 3966236 3966277         *
-#&gt; 45 ------- 3966237         o</div><div class='input'>   # }
+#&gt; 22 1478525 4072959         x
+#&gt; 23 ------- 3982665         x
+#&gt; 24 ------- 1478526         *
+#&gt; 25 1995247 1995439         *
+#&gt; 26 ------- 1995248         o
+#&gt; 27 2024580 2536270         *
+#&gt; 28 ------- 2024581         o
+#&gt; 29 2536268 3476542         *
+#&gt; 30 ------- 2536269         o
+#&gt; 31 3247484 3876227         *
+#&gt; 32 ------- 3247485         o
+#&gt; 33 3247491 3247492         *
+#&gt; 34 3247493 3247494         x
+#&gt; 35 3265721 3265722         *
+#&gt; 36 3354067 3354068         *
+#&gt; 37 3476357 3476390         *
+#&gt; 38 ------- 3476358         o
+#&gt; 39 3485085 3485086         x
+#&gt; 40 3832075 3832076         x
+#&gt; 41 3897376 3897377         x
+#&gt; 42 3901504 3971012         *
+#&gt; 43 ------- 3901505         o
+#&gt; 44 3906117 3906118         x
+#&gt; 45 3908127 3908128         *
+#&gt; 46 3926373 3926374         *
+#&gt; 47 3966236 3966277         *
+#&gt; 48 ------- 3966237         o
+#&gt; 49 3973550 3973551         *
+#&gt; 50 3974970 3974971         x
+#&gt; 51 3975204 3975205         *
+#&gt; 52 3976020 3976021         *</div><div class='input'>
+   <span class='co'># combining searches using logical operators</span>
+   <span class='va'>fish</span> <span class='op'>&lt;-</span> <span class='fu'>search_taxa</span><span class='op'>(</span><span class='st'>'Actinopterygii'</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Search returned 6 records</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='input'>   <span class='va'>odonates</span> <span class='op'>&lt;-</span> <span class='fu'>search_taxa</span><span class='op'>(</span><span class='st'>"Odonata"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Search returned 3 records</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='input'>   <span class='va'>ewers</span> <span class='op'>&lt;-</span> <span class='fu'>search_authors</span><span class='op'>(</span><span class='st'>"Ewers"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Search returned 81 records</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='input'>   <span class='va'>aquatic</span> <span class='op'>&lt;-</span> <span class='va'>fish</span> <span class='op'>|</span> <span class='va'>odonates</span>
+   <span class='va'>aquatic_ewers</span> <span class='op'>&lt;-</span> <span class='va'>aquatic</span> <span class='op'>&amp;</span> <span class='va'>ewers</span>
+   <span class='va'>all_in_one</span> <span class='op'>&lt;-</span> <span class='op'>(</span><span class='va'>fish</span> <span class='op'>|</span> <span class='va'>odonates</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='va'>ewers</span>
+   <span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -1131,7 +1264,7 @@ coordinate information.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

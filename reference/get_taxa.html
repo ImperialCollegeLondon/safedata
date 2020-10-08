@@ -75,7 +75,7 @@ GBIF, for those taxa." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.8</span>
       </span>
     </div>
 
@@ -138,7 +138,7 @@ dataset and the table fields show the taxonomic hierarchy, taken from
 GBIF, for those taxa.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_taxa</span>(<span class='no'>obj</span>)</pre>
+    <pre class="usage"><span class='fu'>get_taxa</span><span class='op'>(</span><span class='va'>obj</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -171,16 +171,18 @@ record the original taxa provided in the Taxa worksheet and show
 where the taxonomic name used in a dataset differs from the canonical
 name used in GBIF. The row names of the taxon table are the labels
 used in data worksheets and are used to match a taxonomy table to a
-loaded data worksheet (see <code>add_taxa</code>).</p>
+loaded data worksheet (see <code><a href='add_taxa.html'>add_taxa</a></code>).</p>
 <p>For more details on the structure of the Taxa worksheet see:
-<a href='https://safedata-validator.readthedocs.io/en/latest/data_format/taxa/'>https://safedata-validator.readthedocs.io/en/latest/data_format/taxa/</a></p>
+<a href='https://safedata-validator.readthedocs.io/en/latest/data_format/taxa.html'>https://safedata-validator.readthedocs.io/en/latest/data_format/taxa.html</a></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code>add_taxa</code></p></div>
+    <div class='dont-index'><p><code><a href='add_taxa.html'>add_taxa</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>   <span class='fu'>set_example_safe_dir</span>()</div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div><div class='input'>   <span class='no'>taxa</span> <span class='kw'>&lt;-</span> <span class='fu'>get_taxa</span>(<span class='fl'>1400562</span>)
-   <span class='fu'>unset_example_safe_dir</span>()</div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div></pre>
+    <pre class="examples"><div class='input'>   <span class='fu'><a href='set_example_safe_dir.html'>set_example_safe_dir</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='input'>   <span class='va'>taxa</span> <span class='op'>&lt;-</span> <span class='fu'>get_taxa</span><span class='op'>(</span><span class='fl'>1400562</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='input'>   <span class='fu'><a href='set_example_safe_dir.html'>unset_example_safe_dir</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -196,7 +198,7 @@ loaded data worksheet (see <code>add_taxa</code>).</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

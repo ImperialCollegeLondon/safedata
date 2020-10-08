@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.8</span>
       </span>
     </div>
 
@@ -172,6 +172,8 @@
 <a href="#linting" class="anchor"></a>Linting</h3>
 <p>The linting process inspects the R code files in the package to check they have a consistent coding and syntax style. The file <code>build_scripts/collect_lint.sh</code> runs the code linting and updates the file <code>lint.txt</code> in the package root.</p>
 <p>The <code>.lintr</code> file in the package root is used to configure the linting and set any exclusions. This is currently done on a line by line basis to note specific exceptions. It is also possible to exclude code from linting using <code># nolint</code> tags in the source code, but I’m avoiding this to keep the code files relatively clean. It does mean that <code>.lintr</code> has to be updated if the line numbers of exceptions change.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="bu">cd</span> build_scripts</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="ex">./collect_lint.sh</span></a></code></pre></div>
 </div>
 <div id="repository-structure" class="section level3">
 <h3 class="hasAnchor">
@@ -197,34 +199,38 @@
 <a href="#configure-git" class="anchor"></a>Configure <code>git</code>
 </h3>
 <p>It is easier if <code>git</code> is configured to push new tags along with commits. This essentially just means that new releases can be sent with a single commit, which is simpler and saves Travis from building both the the code commit and then the tagged version. This only needs to be set once.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">set</span> <span class="fu">git</span> config --global push.followTags true</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">set</span> <span class="fu">git</span> config --global push.followTags true</a></code></pre></div>
 </div>
 <div id="update-the-example-directory" class="section level3">
 <h3 class="hasAnchor">
 <a href="#update-the-example-directory" class="anchor"></a>Update the example directory</h3>
 <p>The <code>safedata</code> package ships with a zipped <code>safedata</code> directory that is used in the code examples. The search functionality in <code>safedata</code> uses the live database via the API so, unless you update this example directory, running the search examples may return Zenodo record IDs that are missing from the example directory. This will create checking errors.</p>
 <p>The file <code>build_scripts/refresh_example_dir.R</code> contains the code needed to the example directory with a freshly zipped copy with up to date indices. Of course, if someone publishes a new dataset before the release occurs, you may still get an error and have to repeat this step!</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="bu">cd</span> build_scripts</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="ex">Rscript</span> refresh_example_dir.R</a></code></pre></div>
 </div>
 <div id="check-the-code-" class="section level3">
 <h3 class="hasAnchor">
 <a href="#check-the-code-" class="anchor"></a>Check the code.</h3>
-<p>Releases start from the <code>develop</code> branch, with a bunch of commits that you want to release as a new version. Before you do anything, you should check that the current commit in <code>develop</code> is building correctly.</p>
-<p>Because nearly all of the actual user changes happen in the vignette and R files, it is easy to forget to update the documentation, so a full checking process starts there. The code below runs the full checking process on your local machine. The code is also in <code>build_scripts/build_and_check.sh</code> but is reproduced here to show the steps.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># a) Move into the source directory and update the documents</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#    using Roxygen and pkgdown</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="bu">cd</span> safedata</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="ex">Rscript</span> -e <span class="st">"devtools::document()"</span></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="ex">Rscript</span> -e <span class="st">" pkgdown::clean_site()"</span></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="ex">Rscript</span> -e <span class="st">" pkgdown::build_site()"</span></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="bu">cd</span> ../</a>
-<a class="sourceLine" id="cb4-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co"># b) Build the package from the source directory</span></a>
-<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="ex">R</span> CMD BUILD safedata</a>
-<a class="sourceLine" id="cb4-11" data-line-number="11"></a>
-<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co"># c) Identify the version name that just got built from the </span></a>
-<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="co">#    package DESCRIPTION file and then check it for CRAN</span></a>
-<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="va">VERSION=$(</span><span class="fu">sed</span> -n -e <span class="st">'4p'</span> safedata/DESCRIPTION  <span class="kw">|</span> <span class="fu">cut</span> -d <span class="st">" "</span>  -f 2<span class="va">)</span></a>
-<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="ex">R</span> CMD CHECK --as-cran --run-donttest safedata_<span class="va">$VERSION</span>.tar.gz </a></code></pre></div>
+<p>Releases start from the <code>develop</code> branch, with a bunch of commits that you want to release as a new version. Before you do anything, you should check that the current commit in <code>develop</code> is building correctly:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="bu">cd</span> build_scripts</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="ex">./build_and_check.sh</span></a></code></pre></div>
+<p>Because nearly all of the actual user changes happen in the vignette and R files, it is easy to forget to update the documentation, so a full checking process starts there. The code below runs the full checking process on your local machine. The code in <code>build_and_check.sh</code> but is reproduced here to show the steps.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># a) Move into the source directory and update the documents</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#    using Roxygen and pkgdown</span></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="bu">cd</span> safedata</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="ex">Rscript</span> -e <span class="st">"devtools::document()"</span></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="ex">Rscript</span> -e <span class="st">" pkgdown::clean_site()"</span></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="ex">Rscript</span> -e <span class="st">" pkgdown::build_site()"</span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="bu">cd</span> ../</a>
+<a class="sourceLine" id="cb7-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co"># b) Build the package from the source directory</span></a>
+<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="ex">R</span> CMD BUILD safedata</a>
+<a class="sourceLine" id="cb7-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co"># c) Identify the version name that just got built from the </span></a>
+<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">#    package DESCRIPTION file and then check it for CRAN</span></a>
+<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="va">VERSION=$(</span><span class="fu">sed</span> -n -e <span class="st">'4p'</span> safedata/DESCRIPTION  <span class="kw">|</span> <span class="fu">cut</span> -d <span class="st">" "</span>  -f 2<span class="va">)</span></a>
+<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="ex">R</span> CMD CHECK --as-cran --run-donttest safedata_<span class="va">$VERSION</span>.tar.gz </a></code></pre></div>
 <p>Two points to note:</p>
 <ol>
 <li>The built package and check output are saved in the parent directory of the repository, not in the repository itself.</li>
@@ -236,14 +242,14 @@
 <h3 class="hasAnchor">
 <a href="#create-the-new-release-branch" class="anchor"></a>Create the new release branch</h3>
 <p>If all is ok then the code is in theory to release. The following creates a new candidate branch containing the current <code>develop</code> code. You need to specify the upcoming release version number, so for example to release version <code>1.0.6</code>:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="fu">git</span> flow release start 1.0.6</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="fu">git</span> flow release start 1.0.6</a></code></pre></div>
 <p>This will create the <code>release/1.0.6</code> branch and check it out.</p>
 <p>You should now immediately update the <code>DESCRIPTION</code> file to match that version number. In this example, that should mean changing the previous development version number (<code>-9000</code> is used to indicate code in development between versions ):</p>
 <pre><code>Version: 1.0.5-9000</code></pre>
 <p>to</p>
 <pre><code>Version: 1.0.6</code></pre>
 <p>You can then commit that change:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="fu">git</span> commit -m <span class="st">"Update version number"</span> DESCRIPTION</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="fu">git</span> commit -m <span class="st">"Update version number"</span> DESCRIPTION</a></code></pre></div>
 <p>At the moment, the <code>release</code> branch is only local. The release branch and code needs to be pushed to Github to be picked up by Travis CI. There is a specific <code>git flow</code> command to do this:</p>
 <pre><code> git flow release publish 1.0.6</code></pre>
 <p>This sends the release branch up to be checked. In addition, there is now a release branch on origin so any other last minutes fixes and commits can be pushed in order to check those.</p>
@@ -254,6 +260,7 @@
 <p>The Travis CI build process should now be underway for the <code>release</code> branch. Travis is configured (see <code>.travis.yml</code>) to build the package under R stable on Ubuntu and Mac and R devel on Ubuntu.</p>
 <p>However, Travis CI does not currently check packages under Windows. Instead, the R Project maintains a Windows test environment that can be used. This needs a built copy of the <code>release</code> branch, so run <code>build_scripts/build_and_check.sh</code> again. This should create a newly built package with the new version number (e.g. <code>safedata_1.0.6.tar.gz</code>). If everything checked out ok before creating the release, this is really just updating the version name.</p>
 <p>You then need to upload that file to <code>win-builder</code>. The python script <code>build_scripts/upload_to_win-builder.py</code> will do this for you - it is simply automating the process of using FTP to upload the current version for checking under both R stable and R devel. Note that <code>win-builder</code> communicates by email with the package maintainer (whoever has the <code>cre</code> flag in the <code>authors</code> section of the <code>DESCRIPTION</code> file.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="ex">python</span> build_scripts/upload_to_win-builder.py</a></code></pre></div>
 </div>
 <div id="wait-" class="section level3">
 <h3 class="hasAnchor">
@@ -265,15 +272,15 @@
 <h3 class="hasAnchor">
 <a href="#finish-the-release" class="anchor"></a>Finish the release</h3>
 <p>Once the <code>release</code> branch is passing checks on all platforms, then the candidate release is ready to be released as a version. Again using <code>1.0.6</code> as the example version number, the command is: .</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="fu">git</span> flow release finish 1.0.6</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="fu">git</span> flow release finish 1.0.6</a></code></pre></div>
 <p>You will be asked for some commit messages and a new tag comment, which will simply be the version number. You should then be on the <code>master</code> branch in a fresh commit tagged with the version number. You can now push this to create the release - if you’ve set the config described above then a single push will create the commit and tag.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="fu">git</span> push</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="fu">git</span> push</a></code></pre></div>
 <p>This will set off another round of Travis CI checking - you should see the tagged version being built and checked.</p>
 <p>You should now <strong>immediately</strong> get off the <code>master</code> branch, before you accidentally change the files or commit to it, You should also <strong>immediately</strong> update the version number in <code>DESCRIPTION</code>, adding <code>-9000</code> to show that this is now the development version from the new release. This is a trivial change, so we can use <code>[ci skip]</code> to avoid triggering a Travis build.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="fu">git</span> checkout develop</a>
-<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="co"># Edit DESCRIPTION to e.g. version 1.0.6-9000</span></a>
-<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="fu">git</span> commit -m <span class="st">"Bump develop version [ci skip]"</span> DESCRIPTION</a>
-<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="fu">git</span> push</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="fu">git</span> checkout develop</a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="co"># Edit DESCRIPTION to e.g. version 1.0.6-9000</span></a>
+<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="fu">git</span> commit -m <span class="st">"Bump develop version [ci skip]"</span> DESCRIPTION</a>
+<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="fu">git</span> push</a></code></pre></div>
 </div>
 <div id="release-to-cran" class="section level3">
 <h3 class="hasAnchor">
@@ -302,7 +309,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

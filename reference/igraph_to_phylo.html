@@ -77,7 +77,7 @@ should happen in datasets but they do." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.8</span>
       </span>
     </div>
 
@@ -135,23 +135,23 @@ should happen in datasets but they do." />
 
     <div class="ref-description">
     <p>The function <code>igraph_to_phylo</code> takes a taxon graph (see
-<code>get_taxon_graph</code>) and attempts to convert that to a
+<code><a href='get_taxon_graph.html'>get_taxon_graph</a></code>) and attempts to convert that to a
 a <code><a href='https://rdrr.io/pkg/ape/man/read.tree.html'>phylo</a></code> object from <span class="pkg">ape</span>.
 This will fail if the graph is not simple (no loops or multiple edges)
 or is not connected (has isolated taxa). Neither of these conditions
 should happen in datasets but they do.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>igraph_to_phylo</span>(<span class='no'>g</span>)
+    <pre class="usage"><span class='fu'>igraph_to_phylo</span><span class='op'>(</span><span class='va'>g</span><span class='op'>)</span>
 
-<span class='fu'>get_phylogeny</span>(<span class='no'>record</span>)</pre>
+<span class='fu'>get_phylogeny</span><span class='op'>(</span><span class='va'>record</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>g</th>
-      <td><p>A taxon graph returned by <code>get_taxon_graph</code></p></td>
+      <td><p>A taxon graph returned by <code><a href='get_taxon_graph.html'>get_taxon_graph</a></code></p></td>
     </tr>
     <tr>
       <th>record</th>
@@ -173,7 +173,7 @@ see the example below showing internal node labels. The
 <code><a href='https://rdrr.io/pkg/ape/man/collapse.singles.html'>collapse.singles</a></code> can be used to detect and remove
 these if required.</p>
 <p>The function <code>get_phylogeny</code> is simply a wrapper that calls
-<code>get_taxon_graph</code> and then <code>igraph_to_phylo</code>.</p>
+<code><a href='get_taxon_graph.html'>get_taxon_graph</a></code> and then <code>igraph_to_phylo</code>.</p>
     <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
 
     
@@ -182,14 +182,18 @@ these if required.</p>
 </ul>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code>get_taxon_graph</code></p></div>
+    <div class='dont-index'><p><code><a href='get_taxon_graph.html'>get_taxon_graph</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>   <span class='fu'>set_example_safe_dir</span>()</div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div><div class='input'>   <span class='no'>beetle_graph</span> <span class='kw'>&lt;-</span> <span class='fu'>get_taxon_graph</span>(<span class='fl'>1400562</span>)
-   <span class='no'>beetle_phylo</span> <span class='kw'>&lt;-</span> <span class='fu'>igraph_to_phylo</span>(<span class='no'>beetle_graph</span>)
-   <span class='kw pkg'>ape</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/ape/man/plot.phylo.html'>plot.phylo</a></span>(<span class='no'>beetle_phylo</span>, <span class='kw'>show.node.label</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='input'>   <span class='co'># Or wrapped into a single function</span>
-   <span class='no'>beetle_phylo</span> <span class='kw'>&lt;-</span> <span class='fu'>get_phylogeny</span>(<span class='fl'>1400562</span>)
-   <span class='kw pkg'>ape</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/ape/man/plot.phylo.html'>plot.phylo</a></span>(<span class='no'>beetle_phylo</span>, <span class='kw'>show.node.label</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='igraph_to_phylo-1.png' alt='' width='700' height='433' /></div><div class='input'>   <span class='fu'>unset_example_safe_dir</span>()</div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div></pre>
+    <pre class="examples"><div class='input'>   <span class='fu'><a href='set_example_safe_dir.html'>set_example_safe_dir</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='input'>   <span class='va'>beetle_graph</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_taxon_graph.html'>get_taxon_graph</a></span><span class='op'>(</span><span class='fl'>1400562</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='input'>   <span class='va'>beetle_phylo</span> <span class='op'>&lt;-</span> <span class='fu'>igraph_to_phylo</span><span class='op'>(</span><span class='va'>beetle_graph</span><span class='op'>)</span>
+   <span class='fu'>ape</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/ape/man/plot.phylo.html'>plot.phylo</a></span><span class='op'>(</span><span class='va'>beetle_phylo</span>, show.node.label <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='input'>   <span class='co'># Or wrapped into a single function</span>
+   <span class='va'>beetle_phylo</span> <span class='op'>&lt;-</span> <span class='fu'>get_phylogeny</span><span class='op'>(</span><span class='fl'>1400562</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='input'>   <span class='fu'>ape</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/ape/man/plot.phylo.html'>plot.phylo</a></span><span class='op'>(</span><span class='va'>beetle_phylo</span>, show.node.label <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='img'><img src='igraph_to_phylo-1.png' alt='' width='700' height='433' /></div><div class='input'>   <span class='fu'><a href='set_example_safe_dir.html'>unset_example_safe_dir</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -205,7 +209,7 @@ these if required.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

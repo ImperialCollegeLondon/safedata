@@ -74,7 +74,7 @@ integers, but the function will also handle Zenodo URLs and DOIs." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.8</span>
       </span>
     </div>
 
@@ -136,10 +136,16 @@ them against the index. Typically the identifiers are provided as
 integers, but the function will also handle Zenodo URLs and DOIs.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>validate_record_ids</span>(<span class='no'>record_set</span>)
+    <pre class="usage">validate_record_ids(record_set)
 
-<span class='co'># S3 method for safe_record_set</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+# S3 method for safe_record_set
+print(x, ...)
+
+# S3 method for safe_record_set
+&amp;amp;(x, y)
+
+# S3 method for safe_record_set
+|(x, y)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -150,8 +156,8 @@ integers, but the function will also handle Zenodo URLs and DOIs.</p>
 record ids.</p></td>
     </tr>
     <tr>
-      <th>x</th>
-      <td><p>An object of class <code>safe_record_set</code></p></td>
+      <th>x, y</th>
+      <td><p>Objects of class <code>safe_record_set</code></p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -182,10 +188,16 @@ using the print method.</p>
 <ul>
 <li><p><code>print</code>: Print a brief summary of
 "safe_record_set" objects.</p></li>
+<li><p><code>&amp;</code>: Combine two record sets, retaining only
+records that are present in both.</p></li>
+<li><p><code><a href='https://rdrr.io/r/base/Logic.html'>|</a></code>: Combine two record sets, including the
+records that are present in either.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>   <span class='fu'>set_example_safe_dir</span>()</div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div><div class='input'>   <span class='fu'>validate_record_ids</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3247631</span>, <span class='fl'>3266827</span>, <span class='fl'>3266821</span>, -<span class='fl'>1000</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Invalid numeric record ids: -1000</span></div><div class='output co'>#&gt; Set includes 3 concept ids and 2 record ids: 
+    <pre class="examples"><div class='input'>   <span class='fu'><a href='set_example_safe_dir.html'>set_example_safe_dir</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='input'>   <span class='fu'>validate_record_ids</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3247631</span>, <span class='fl'>3266827</span>, <span class='fl'>3266821</span>, <span class='op'>-</span><span class='fl'>1000</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Invalid numeric record ids: -1000</span></div><div class='output co'>#&gt; Set includes 3 concept ids and 2 record ids: 
 #&gt;  - 1 open and most recent (*)
 #&gt;  - 0 open and outdated (o)
 #&gt;  - 1 under embargo or restricted (x)
@@ -193,10 +205,11 @@ using the print method.</p>
 #&gt;   concept  record available
 #&gt; 1 3247630 3247631         x
 #&gt; 2 3266821 -------          
-#&gt; 3 3266826 3266827         *</div><div class='input'>   <span class='fu'>validate_record_ids</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"https://doi.org/10.5281/zenodo.3247631"</span>,
+#&gt; 3 3266826 3266827         *</div><div class='input'>   <span class='fu'>validate_record_ids</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"https://doi.org/10.5281/zenodo.3247631"</span>,
                          <span class='st'>"10.5281/zenodo.3266827"</span>,
                          <span class='st'>"https://zenodo.org/record/3266821"</span>,
-                         <span class='st'>"not_this_one/3266821"</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Invalid character record ids: not_this_one/3266821</span></div><div class='output co'>#&gt; Set includes 3 concept ids and 2 record ids: 
+                         <span class='st'>"not_this_one/3266821"</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Invalid character record ids: not_this_one/3266821</span></div><div class='output co'>#&gt; Set includes 3 concept ids and 2 record ids: 
 #&gt;  - 1 open and most recent (*)
 #&gt;  - 0 open and outdated (o)
 #&gt;  - 1 under embargo or restricted (x)
@@ -204,7 +217,8 @@ using the print method.</p>
 #&gt;   concept  record available
 #&gt; 1 3247630 3247631         x
 #&gt; 2 3266821 -------          
-#&gt; 3 3266826 3266827         *</div><div class='input'>   <span class='fu'>unset_example_safe_dir</span>()</div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div></pre>
+#&gt; 3 3266826 3266827         *</div><div class='input'>   <span class='fu'><a href='set_example_safe_dir.html'>unset_example_safe_dir</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -220,7 +234,7 @@ using the print method.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

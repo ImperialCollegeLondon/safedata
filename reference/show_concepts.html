@@ -95,7 +95,7 @@ using insert_dataset." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.8</span>
       </span>
     </div>
 
@@ -153,7 +153,7 @@ using insert_dataset." />
 
     <div class="ref-description">
     <p>These functions provide access to the metadata associated with SAFE
-datasets. The functions provide three levels of information:</p><dl'>
+datasets. The functions provide three levels of information:</p><dl>
      <dt><code>show_concepts</code></dt><dd><p>displays the record versions grouped
            under dataset concepts,</p></dd>
      <dt><code>show_record</code></dt><dd><p>displays summary information about a
@@ -165,24 +165,24 @@ datasets. The functions provide three levels of information:</p><dl'>
 of three things:</p><ol>
 <li><p>A character or numeric vector of SAFE dataset records or
          concepts, which will be validated using
-         <code>validate_record_ids</code>, or</p></li>
-<li><p>An already validated <code>safe_record_set</code> object, or</p></li>
+         <code><a href='validate_record_ids.html'>validate_record_ids</a></code>, or</p></li>
+<li><p>An already validated <code><a href='validate_record_ids.html'>safe_record_set</a></code> object, or</p></li>
 <li><p>A <code>safedata</code> data frame loaded using
-         <code>load_safe_data</code>.</p></li>
+         <code><a href='load_safe_data.html'>load_safe_data</a></code>.</p></li>
 </ol><p>If <code>show_concepts</code> is passed a record id, then the function looks
 up the relevant concept. The version table indicates which versions
 are available ("*" for the most recent available version and "o"
 for older available versions), and which are unavailable due to
 embargo or retriction ("x"). A "!" is used to show that a private
 local copy of an embargoed or restricted dataset has been inserted
-using <code>insert_dataset</code>.</p>
+using <code><a href='insert_dataset.html'>insert_dataset</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>show_concepts</span>(<span class='no'>obj</span>)
+    <pre class="usage"><span class='fu'>show_concepts</span><span class='op'>(</span><span class='va'>obj</span><span class='op'>)</span>
 
-<span class='fu'>show_record</span>(<span class='no'>obj</span>)
+<span class='fu'>show_record</span><span class='op'>(</span><span class='va'>obj</span><span class='op'>)</span>
 
-<span class='fu'>show_worksheet</span>(<span class='no'>obj</span>, <span class='kw'>worksheet</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>extended_fields</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+<span class='fu'>show_worksheet</span><span class='op'>(</span><span class='va'>obj</span>, worksheet <span class='op'>=</span> <span class='cn'>NULL</span>, extended_fields <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -219,8 +219,10 @@ dataset concept.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>   <span class='fu'>set_example_safe_dir</span>()</div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div><div class='input'>   <span class='no'>recs</span> <span class='kw'>&lt;-</span> <span class='fu'>validate_record_ids</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1400562</span>, <span class='fl'>3266827</span>, <span class='fl'>3266821</span>))
-   <span class='fu'>show_concepts</span>(<span class='no'>recs</span>)</div><div class='output co'>#&gt; 
+    <pre class="examples"><div class='input'>   <span class='fu'><a href='set_example_safe_dir.html'>set_example_safe_dir</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='input'>   <span class='va'>recs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='validate_record_ids.html'>validate_record_ids</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1400562</span>, <span class='fl'>3266827</span>, <span class='fl'>3266821</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='input'>   <span class='fu'>show_concepts</span><span class='op'>(</span><span class='va'>recs</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; 
 #&gt; Concept ID: 1400561
 #&gt; Title: Myrmecophilous Pselaphine beetles in tropical forests
 #&gt; Versions: 1 available, 0 embargoed or restricted
@@ -245,10 +247,10 @@ dataset concept.</p></li>
 #&gt; 
 #&gt;  record_id  published embargo available
 #&gt;    3266827 2019-07-03      --         *
-#&gt; </div><div class='input'>   <span class='fu'>show_record</span>(<span class='no'>recs</span>[<span class='fl'>1</span>,])</div><div class='output co'>#&gt; 
+#&gt; </div><div class='input'>   <span class='fu'>show_record</span><span class='op'>(</span><span class='va'>recs</span><span class='op'>[</span><span class='fl'>1</span>,<span class='op'>]</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; 
 #&gt; Record summary
-#&gt; Title: Myrmecophilous Pselaphine beetles in tropical forests
-#&gt; Status: open
+#&gt; Title: Myrmecophilous Pselaphine beetles in tropical forests</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; Status: open
 #&gt; Taxa: 67 taxa reported
 #&gt; Locations: 20 locations reported
 #&gt; 
@@ -259,27 +261,27 @@ dataset concept.</p></li>
 #&gt;   MorphAbundance   44   20 Morphospeices abundance
 #&gt; MorphFunctTraits   18   42 Morphospecies_Functional Traits
 #&gt; </div><div class='input'>   <span class='co'># Show worksheet metadata from a record or from a loaded worksheet</span>
-   <span class='fu'>show_worksheet</span>(<span class='fl'>1400562</span>, <span class='st'>"EnvironVariables"</span>)</div><div class='output co'>#&gt; Record ID: 1400562
+   <span class='fu'>show_worksheet</span><span class='op'>(</span><span class='fl'>1400562</span>, <span class='st'>"EnvironVariables"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; Record ID: 1400562
 #&gt; Worksheet name: EnvironVariables
 #&gt; Number of data rows: 20
 #&gt; Number of data fields: 4
 #&gt; Description:
-#&gt; Environmental variables
-#&gt; Status: open
+#&gt; Environmental variables</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; Status: open
 #&gt; 
 #&gt; Fields:
 #&gt;   field_name field_type description         
 #&gt; 1 Site       Location   Site of measurements
 #&gt; 2 Temp       Numeric    Soil temperature    
 #&gt; 3 Moisture   Numeric    Soil moisture       
-#&gt; 4 Cover      Numeric    Canopy cover        </div><div class='input'>   <span class='no'>beetle_abund</span> <span class='kw'>&lt;-</span> <span class='fu'>load_safe_data</span>(<span class='fl'>1400562</span>, <span class='st'>"Ant-Psel"</span>)
-   <span class='fu'>show_worksheet</span>(<span class='no'>beetle_abund</span>, <span class='kw'>extended_fields</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; Record ID: 1400562
+#&gt; 4 Cover      Numeric    Canopy cover        </div><div class='input'>   <span class='va'>beetle_abund</span> <span class='op'>&lt;-</span> <span class='fu'><a href='load_safe_data.html'>load_safe_data</a></span><span class='op'>(</span><span class='fl'>1400562</span>, <span class='st'>"Ant-Psel"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='input'>   <span class='fu'>show_worksheet</span><span class='op'>(</span><span class='va'>beetle_abund</span>, extended_fields <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Record ID: 1400562
 #&gt; Worksheet name: Ant-Psel
 #&gt; Number of data rows: 20
 #&gt; Number of data fields: 3
 #&gt; Description:
-#&gt; Ant-Pselaphine data
-#&gt; Status: open
+#&gt; Ant-Pselaphine data</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; Status: open
 #&gt; 
 #&gt; Fields:
 #&gt; Site :
@@ -297,7 +299,8 @@ dataset concept.</p></li>
 #&gt;  - taxon_name: Ants
 #&gt;  - units: #
 #&gt;  - method: Winkler bag
-#&gt; </div><div class='input'>   <span class='fu'>unset_example_safe_dir</span>()</div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div></pre>
+#&gt; </div><div class='input'>   <span class='fu'><a href='set_example_safe_dir.html'>unset_example_safe_dir</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -313,7 +316,7 @@ dataset concept.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

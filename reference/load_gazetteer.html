@@ -74,7 +74,7 @@ The GIS data uses the WGS84 (EPSG:4326) geographic coordinate system." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.8</span>
       </span>
     </div>
 
@@ -132,20 +132,20 @@ The GIS data uses the WGS84 (EPSG:4326) geographic coordinate system." />
 
     <div class="ref-description">
     <p>This function loads the SAFE gazetteer, stored as a geojson file in the
-root of the SAFE data directory, as an <code><a href='https://rdrr.io/pkg/sf/man/sf.html'>sf</a></code> GIS object.
+root of the SAFE data directory, as an <code><a href='https://r-spatial.github.io/sf/reference/sf.html'>sf</a></code> GIS object.
 The GIS data uses the WGS84 (EPSG:4326) geographic coordinate system.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>load_gazetteer</span>()</pre>
+    <pre class="usage"><span class='fu'>load_gazetteer</span><span class='op'>(</span><span class='op'>)</span></pre>
 
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An <code><a href='https://rdrr.io/pkg/sf/man/sf.html'>sf</a></code> object containing the SAFE gazetteer
+    <p>An <code><a href='https://r-spatial.github.io/sf/reference/sf.html'>sf</a></code> object containing the SAFE gazetteer
    locations.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The gazetteer contains the following fields:</p><dl'>
+    <p>The gazetteer contains the following fields:</p><dl>
 <dt>location</dt><dd><p>The official gazetteer name for a sampling site.</p></dd>
 <dt>type</dt><dd><p>A short description of location type - typically the project
       that created the location</p></dd>
@@ -166,16 +166,16 @@ The GIS data uses the WGS84 (EPSG:4326) geographic coordinate system.</p>
 <dt>bbox_xmin, bbox_ymin, bbox_xmax, bbox_ymax</dt><dd><p>The bounding box of
       the feature.</p></dd>
 <dt>geometry</dt><dd><p>The GIS geometry for the data - a column of class
-      <code><a href='https://rdrr.io/pkg/sf/man/sfc.html'>sfc</a></code>.</p></dd>
+      <code><a href='https://r-spatial.github.io/sf/reference/sfc.html'>sfc</a></code>.</p></dd>
 
 </dl>
 
 <p>When this function is first called in a session, the loaded
-<code><a href='https://rdrr.io/pkg/sf/man/sf.html'>sf</a></code> object is cached for re-use (see
-<code>load_index</code>).</p>
+<code><a href='https://r-spatial.github.io/sf/reference/sf.html'>sf</a></code> object is cached for re-use (see
+<code><a href='load_index.html'>load_index</a></code>).</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code>load_location_aliases</code>, <code>load_index</code></p></div>
+    <div class='dont-index'><p><code><a href='load_location_aliases.html'>load_location_aliases</a></code>, <code><a href='load_index.html'>load_index</a></code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -192,7 +192,7 @@ The GIS data uses the WGS84 (EPSG:4326) geographic coordinate system.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
