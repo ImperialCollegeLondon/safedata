@@ -1,7 +1,7 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
 language: R
-dist: xenial
+dist: bionic
 cache: packages
 
 matrix:
@@ -23,6 +23,8 @@ addons:
       - libproj-dev
       - libgeos-dev
       - libgdal-dev
+      - libharfbuzz-dev
+      - libfribidi-dev 
 
 brew_packages:
   - udunits
@@ -44,8 +46,7 @@ r_packages:
 - Rcpp
 - units
 - devtools
-- ape # from here down used to use r_binary_packages but the PPA that supplied those is temporarily down
-- assertthat
+- ape
 - backports
 - base64enc
 - cellranger
@@ -90,4 +91,7 @@ r_packages:
 - xfun
 - yaml
 - zeallot
+
+r-binary-packages:
+- assertthat
 
