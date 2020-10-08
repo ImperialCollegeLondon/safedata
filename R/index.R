@@ -68,8 +68,6 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
     #' @return NULL
     #' @export
 
-    # path expand to make paths work in md5sum, which fails with ~/.
-    safedir <- path.expand(safedir)
 
     index_path <- file.path(safedir, "index.json")
     gazetteer_path <- file.path(safedir, "gazetteer.geojson")
@@ -94,7 +92,7 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
 
         # download the index file, then cache it
         download_index()
-        index <- load_index()
+        load_index()
 
         # download the gazetteer and location aliases
         download_gazetteer()
@@ -126,14 +124,10 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
         stop("Location aliases not found.")
     }
 
-    # Set the data directory and then load the index file and URL. Only load
-    # the gazetteer and location aliases if the user starts using locations.
+    # Set the data directory and URL in options.
     options(safedata.dir = safedir)
-
     url <- jsonlite::read_json(url_path)$url
     options(safedata.url = url)
-
-    index <- load_index()
 
     # Look for updates
     if (update) {
@@ -149,7 +143,6 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
             verbose_message(" - Updating index")
             # reload the index into the cache and get it
             download_index()
-            index <- load_index(reload = TRUE)
         } else {
             verbose_message(" - Index up to date")
         }
@@ -172,42 +165,8 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
         }
     }
 
-    # Validate the directory contents
-    verbose_message("Validating directory")
-
-    # Run a check on directory structure
-    local_files <- dir(safedir, recursive = TRUE)
-
-    # Exclude the three index files and local metadata json files
-    index_files <- c(basename(index_path), basename(gazetteer_path),
-                     basename(location_aliases_path), basename(url_path))
-    json_files <- grepl("[0-9]+/[0-9]+/[0-9]+.json$", local_files)
-    metadata_json <- local_files[json_files]
-    local_files <- setdiff(local_files, c(index_files, metadata_json))
-
-    local_unexpected <- setdiff(local_files, index$path)
-    if (length(local_unexpected)) {
-        warning("SAFE data directory contains unexpected files: ",
-                paste(local_unexpected, collapse = ", "))
-    }
-
-    # Run a check on file modification
-    local_expected <- subset(index, file.exists(file.path(safedir, index$path)))
-    local_expected$md5 <- tools::md5sum(file.path(safedir, local_expected$path))
-    local_expected$altered <- with(local_expected, md5 != checksum)
-
-    if (sum(local_expected$altered)) {
-        warning("Local copies of dataset files have been modified",
-                paste(local_expected$filename[local_expected$altered],
-                      collapse = ", "))
-    }
-
-    # Update index to note which files have unaltered local copies (this
-    # could include embargoed and restricted datasets, so this is used as a
-    # flag to note which can be loaded from private local copies).
-    local_unaltered <- local_expected$checksum[! local_expected$altered]
-    index$local_copy <- index$checksum %in% local_unaltered
-    assign("index", index, safedata_env)
+    # Load the index
+    load_index()
 
     return(invisible())
 }
@@ -310,10 +269,23 @@ load_index <- function(reload = FALSE) {
     #'     \code{\link{load_gazetteer}}
     #' @keywords internal
 
+    verbose_message("Loading index")
+
     if (exists("index", safedata_env) & ! reload) {
+        # Load from cache in safedata_env environment
         index <- get("index", safedata_env)
     } else {
+        # Load from file and convert into data frame
         safedir <- get_data_dir()
+
+        # path expand to make paths work in md5sum, which fails with ~/.
+        safedir <- path.expand(safedir)
+
+        index_path <- file.path(safedir, "index.json")
+        gazetteer_path <- file.path(safedir, "gazetteer.geojson")
+        location_aliases_path <- file.path(safedir, "location_aliases.csv")
+        url_path <-  file.path(safedir, "url.json")
+
         index_path <- file.path(safedir, "index.json")
 
         index <- jsonlite::fromJSON(index_path)
@@ -357,6 +329,43 @@ load_index <- function(reload = FALSE) {
                     ifelse(zenodo_record_id %in% unlist(mr_avail),
                            TRUE, FALSE))
         index$most_recent_available <- mra
+
+        # Validate the directory contents
+        verbose_message("Validating directory")
+
+        # Run a check on directory structure
+        local_files <- dir(safedir, recursive = TRUE)
+
+        # Exclude the three index files and local metadata json files
+        index_files <- c(basename(index_path), basename(gazetteer_path),
+                         basename(location_aliases_path), basename(url_path))
+        json_files <- grepl("[0-9]+/[0-9]+/[0-9]+.json$", local_files)
+        metadata_json <- local_files[json_files]
+        local_files <- setdiff(local_files, c(index_files, metadata_json))
+
+        # Check for additional files in directory structure
+        local_unexpected <- setdiff(local_files, index$path)
+        if (length(local_unexpected)) {
+            warning("SAFE data directory contains unexpected files: ",
+                    paste(local_unexpected, collapse = ", "))
+        }
+
+        # Run a check on file modification
+        local_expected <- subset(index, file.exists(file.path(safedir, index$path)))
+        local_expected$md5 <- tools::md5sum(file.path(safedir, local_expected$path))
+        local_expected$altered <- with(local_expected, md5 != checksum)
+
+        if (sum(local_expected$altered)) {
+            warning("Local copies of dataset files have been modified",
+                    paste(local_expected$filename[local_expected$altered],
+                          collapse = ", "))
+        }
+
+        # Update index to note which files have unaltered local copies (this
+        # could include embargoed and restricted datasets, so this is used as a
+        # flag to note which can be loaded from private local copies).
+        local_unaltered <- local_expected$checksum[! local_expected$altered]
+        index$local_copy <- index$checksum %in% local_unaltered
 
         # save the index into the cache
         assign("index", index, safedata_env)
