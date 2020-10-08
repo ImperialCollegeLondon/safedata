@@ -40,7 +40,7 @@
 #' @section Links:
 #' \describe{
 #'    \item{SAFE data API}{e.g. \url{https://www.safeproject.net/api}}
-#'    \item{Worksheet field types}{\url{https://safedata-validator.readthedocs.io/en/latest/data_format/data/#field-types}}
+#'    \item{Worksheet field types}{\url{https://safedata-validator.readthedocs.io/en/latest/data_format/data.html#field-types}}
 #'    \item{SAFE gazetteer}{See \code{\link{load_gazetteer}} and e.g.
 #'          \url{https://www.safeproject.net/info/gazetteer}}
 #'    \item{WKT}{\url{https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry}}
@@ -91,6 +91,14 @@
 #'    search_spatial(wkt = "Polygon((110 0, 110 10,120 10,120 0,110 0))")
 #'    search_spatial(location = "A_1")
 #'    search_spatial(location = "A_1", distance = 2500)
+#'
+#'    # combining searches using logical operators
+#'    fish <- search_taxa('Actinopterygii')
+#'    odonates <- search_taxa("Odonata")
+#'    ewers <- search_authors("Ewers")
+#'    aquatic <- fish | odonates
+#'    aquatic_ewers <- aquatic & ewers
+#'    all_in_one <- (fish | odonates) & ewers
 #'    }
 #' @name search_safe
 
@@ -262,6 +270,8 @@ safe_api_search <- function(endpoint, params, ids = NULL,
             if (! nrow(ids)) {
                 stop("No valid record identifiers found in ids")
             }
+        } else if (nrow(ids) == 0) {
+            stop("Empty record set passed as ids")
         }
 
         # reduce to record ids (not concept ids)
