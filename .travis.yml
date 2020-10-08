@@ -45,8 +45,6 @@ r_packages:
 - units
 - devtools
 - ape
-
-r_binary_packages:
 - assertthat
 - backports
 - base64enc
