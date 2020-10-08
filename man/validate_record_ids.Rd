@@ -4,17 +4,23 @@
 \alias{validate_record_ids}
 \alias{safe_record_set}
 \alias{print.safe_record_set}
+\alias{&.safe_record_set}
+\alias{|.safe_record_set}
 \title{Validates dataset record ids from user input}
 \usage{
 validate_record_ids(record_set)
 
 \method{print}{safe_record_set}(x, ...)
+
+\method{&}{safe_record_set}(x, y)
+
+\method{|}{safe_record_set}(x, y)
 }
 \arguments{
 \item{record_set}{A vector of values containing Zenodo concept or
 record ids.}
 
-\item{x}{An object of class \code{safe_record_set}}
+\item{x, y}{Objects of class \code{safe_record_set}}
 
 \item{...}{Further arguments to print methods, unused.}
 }
@@ -46,6 +52,12 @@ using the print method.
 \itemize{
 \item \code{print}: Print a brief summary of
 "safe_record_set" objects.
+
+\item \code{&}: Combine two record sets, retaining only
+records that are present in both.
+
+\item \code{|}: Combine two record sets, including the
+records that are present in either.
 }}
 
 \examples{
