@@ -23,7 +23,7 @@ validate_record_ids <- function(record_set) {
     #'
     #' @param record_set A vector of values containing Zenodo concept or
     #'    record ids.
-    #' @param x An object of class \code{safe_record_set}
+    #' @param x,y Objects of class \code{safe_record_set}
     #' @param ... Further arguments to print methods, unused.
     #' @return An object of class \code{safe_record_set} (see Details)
     #' @examples
@@ -191,6 +191,39 @@ print.safe_record_set <- function(x, ...) {
     print(subset(x, select = c(concept, record, available)))
 
     return(invisible())
+}
+
+
+"&.safe_record_set" <- function(x, y) {
+
+    #' @describeIn validate_record_ids Combine two record sets, retaining only
+    #'    records that are present in both.
+    #' @export
+
+    in_both <- intersect(x$record, y$record)
+    in_both <- subset(x, x$record %in% in_both)
+
+    if (nrow(in_both)) {
+        rownames(in_both) <- seq(nrow(in_both))
+    }
+
+    return(in_both)
+
+}
+
+
+"|.safe_record_set" <- function(x, y) {
+
+    #' @describeIn validate_record_ids Combine two record sets, including the
+    #'    records that are present in either.
+    #' @export
+
+    only_in_y <- setdiff(y$record, x$record)
+    only_in_y <- subset(y, y$record %in% only_in_y)
+    all <- rbind(x, only_in_y)
+    rownames(all) <- seq(nrow(all))
+    return(all)
+
 }
 
 

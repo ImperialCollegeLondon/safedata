@@ -164,7 +164,7 @@ print(soil_datasets)
 ### Taxon search details
 
 Published datasets contain a taxonomic index of any organisms referred to within the data - see
-[here](https://safedata-validator.readthedocs.io/en/latest/data_format/taxa/) for details of the
+[here](https://safedata-validator.readthedocs.io/en/latest/data_format/taxa.html) for details of the
 Taxa worksheet containing the index.
 
 The taxa in this index, along with all of the parent taxa in the taxonomic hierarchy leading up to
@@ -199,9 +199,32 @@ within_a <- search_spatial(location='BL_A')
 near_maliau <- search_spatial(wkt='POINT(116.97394 4.73481)', distance=2000)
 ```
 
-Note that WKT coordinates should be supplied as WGS84 longitude and latitude - typically the output
+Note that WKT coordinates should be supplied as WGS84 longitude and latitude - typically the output 
 of GPS receivers - but the database uses the local UTM 50N projected coordinate system for all
 distance calculations and GIS operations.
+
+### Combining searches
+
+It is possible to combine searches using logical operators (`&` and `|`), which simply find the intersection and unions of sets of SAFE records.
+
+```{r combining_searches, collapse=TRUE}
+# Three searches
+fish <- search_taxa('Actinopterygii')
+odonates <- search_taxa("Odonata")
+ewers <- search_authors("Ewers")
+# Logical combinations
+aquatic <- fish | odonates
+aquatic_ewers <- aquatic & ewers
+all_in_one <- (fish | odonates) & ewers
+```
+
+Another approach is to restrict the records that will be searched in the online database. You can pass a search result into a second search result to only search within those records. This cuts down on the amount of information that has to be retrieved from the server, so might be faster on poor networks. However, this obviously only works for repeated narrowing of a search, so has less functionality.
+
+```{r restricting_searches, collapse=TRUE}
+fish <- search_taxa('Actinopterygii')
+ewers <- search_authors("Ewers", ids=fish)
+```
+
 
 ## Look up a specific dataset
 
@@ -323,6 +346,22 @@ to the Excel format or additional information. Although many external files are 
 readable in R, the`safedata` does not currently provide a mechanism to load them automatically. The
 function will also download the JSON metadata for the specified datasets.
 
+```{r download_safe_external, eval=FALSE}
+download_safe_files(3697804, xlsx_only=FALSE)
+# 2 files requested from 1 records
+#  - 1 local (11.3 Kb)
+#  - 0 embargoed or restricted (0 bytes)
+#  - 1 to download (74.1 Kb) 
+# 
+# 1: Yes
+# 2: No
+# 
+# Selection: 1
+# 2 files for record 3697804: 1 to download
+#  - Downloaded: Sampling_area_borders.xlsx, 
+# - Downloaded: Sampling_area_borders_UTM50N_WGS84.zip
+```
+
 The function will warn you if the local copies of data files have been altered and the
 `refresh=TRUE` argument can be used to restore data files to the version of record. Note that this
 will **delete local changes**.
@@ -331,7 +370,7 @@ will **delete local changes**.
 
 The `load_safe_data()` function is used to load a named data worksheet from a dataset into a `safedata` object. This is just a data frame with some additional attribute data and it will in general behave just like any other data frame - the additional attributes are used for further data processing and adding brief metadata to the `str` and `print` methods.
 
-Some data formatting takes place based on [field types](https://safedata-validator.readthedocs.io/en/latest/data_format/data/#field-types): categorical variables are converted to factors; dates and datetimes are converted to `POSIXct` and times are converted to `chron::time` objects. 
+Some data formatting takes place based on [field types](https://safedata-validator.readthedocs.io/en/latest/data_format/data.html#field-types): categorical variables are converted to factors; dates and datetimes are converted to `POSIXct` and times are converted to `chron::time` objects. 
 
 ```{r load_safe_data}
 beetle_abund <- load_safe_data(1400562, 'Ant-Psel')

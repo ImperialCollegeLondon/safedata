@@ -46,7 +46,7 @@ worksheets:
 * **Locations**: a description of all sampling locations in the dataset
 * **Data worksheets**: the actual data tables, described in the **Summary** sheet
 
-The formatting details for each worksheet are described here: https://safedata-validator.readthedocs.io/en/latest/data_format/overview/
+The formatting details for each worksheet are described here: https://safedata-validator.readthedocs.io/en/latest/data_format/overview.html
 
 Once a dataset has been formatted, researchers can submit the dataset to
 the SAFE Project website for validation and publication.

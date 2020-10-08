@@ -40,7 +40,7 @@ used in data worksheets and are used to match a taxonomy table to a
 loaded data worksheet (see \code{\link{add_taxa}}).
 
 For more details on the structure of the Taxa worksheet see:
-\url{https://safedata-validator.readthedocs.io/en/latest/data_format/taxa/}
+\url{https://safedata-validator.readthedocs.io/en/latest/data_format/taxa.html}
 }
 \examples{
    set_example_safe_dir()

@@ -139,13 +139,15 @@ load_safe_data <- function(record_id, worksheet) {
     # as expected from the metadata. This is complicated by the fact that,
     # although field names in metadata should be syntactically valid R as
     # of safedata_validator 1.2.7, they weren't before that. So, enforce
-    # make.names on both to avoid trivial mismatches
+    # make.names on both to avoid trivial mismatches. Turn off trim_ws in
+    # read_xlsx because that occurs before name repair and makes names
+    # with whitespace diverge between metadata and data names
     data <- readxl::read_xlsx(local_path, worksheet,
                               skip = dwksh$field_name_row - 1,
                               n_max = dwksh$n_data_row, na = "NA",
                               col_types = col_types,
-                              .name_repair = ~ make.names(.x, unique = TRUE)
-                             )
+                              trim_ws = FALSE,
+                              .name_repair = ~ make.names(.x, unique = TRUE))
     class(data) <- "data.frame"
     data <- data[, -1]
 
@@ -421,7 +423,7 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
 
         current_record <- these_files$zenodo_record_id[1]
 
-        if (! is.null(token) & these_files$dataset_access == "restricted") {
+        if (! is.null(token) & all(these_files$dataset_access == "restricted")) {
             verbose_message("Using token to access restricted record")
         } else if (! these_files$available[1]) {
             msg <- "%i files for record %i: under embargo or restricted"
