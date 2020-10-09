@@ -195,10 +195,28 @@ Ideally what happens now is that the build and check process on Travis CI and `w
 
 Obviously, if any errors or warnings crop up in the checking process, those should be fixed in the `release` branch. The changes should be committed and pushed to start a new round of Travis CI checking and you will need to rebuild and resubmit to `win-builder`
 
+### Final edits
+
+There are some final edits to check you have made:
+
+- Update `NEWS` to document the changes since the previous version
+- Update `cran-comments.md` to record the R versions and environments used for testing and the outcomes of those builds. This should all be `status: OK` but there might be notes that should be explained.
+
+You now should also build the final version of the release code to be submitted to CRAN:
+
+```sh
+cd build_scripts
+./build_and_check.sh
+```
+
+That should create the source package in the parent directory (e.g. `safedata-1.0.6.tar.gz`).
+
+These edits and building will obviously also need to be committed and so there is likely to be one last round of CI runs, but this will just be documentation and information changes and so is unlikely to reveal new issues. Of course, if it does, you'll have to fix them!
+
 ### Finish the release
 
-Once the `release` branch is passing checks on all platforms, then the candidate release is ready to be released as a version. Again using `1.0.6` as the example version number, the command is:
-.
+Once the `release` branch is passing checks on all platforms, then the candidate release is ready to be released as a version.  Again using `1.0.6` as the example version number, the command is:
+
 ```sh
 git flow release finish 1.0.6
 ```
@@ -210,9 +228,9 @@ git checkout master
 git push
 ```
 
-This will set off another round of Travis CI checking - you should see the tagged version being built and checked.
+This will set off another round of Travis CI checking - you should see the tagged version being built and checked. This should all go cleanly! 
 
-You should now **immediately** get off the `master` branch, before you accidentally change the files or commit to it, You should also **immediately** update the version number in `DESCRIPTION`, adding `-9000` to show that this is now the development version from the new release. This is a trivial change, so we can use `[ci skip]` to avoid triggering a Travis build.
+You should now **immediately** get off the `master` branch and back onto `develop`, before you accidentally change the files or commit to it, You should also **immediately** update the version number in `DESCRIPTION`, adding `-9000` to show that this is now the development version from the new release. This is a trivial change, so we can use `[ci skip]` to avoid triggering a Travis build.
 
 ```sh
 git checkout develop
@@ -224,7 +242,8 @@ git push
 
 ### Release to CRAN
 
-You  should now use the outputs from Travis CI and `win-builder` to update the file `cran-comments.md` and the contents of that should be copied into in the comments section of the submission form. The CRAN maintainers expect submitted packages to be functional and fully checked and these notes will help them see that the package has been properly checked.
-
-You can then submit the built package at:
+You can then submit the built version of the source package that was created during the release process at:
 https://cran.r-project.org/submit.html
+
+You  should  take the up-to-date contents of `cran-comments.md` and  copy that in the comments section of the submission form. The CRAN maintainers expect submitted packages to be functional and fully checked and these notes will help them see that the package has been properly checked.
+
