@@ -68,6 +68,8 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
     #' @return NULL
     #' @export
 
+    # Clear any cached data in the safedata environment
+    do.call(rm, list(...=ls(envir=safedata_env), envir=safedata_env))
 
     index_path <- file.path(safedir, "index.json")
     gazetteer_path <- file.path(safedir, "gazetteer.geojson")
