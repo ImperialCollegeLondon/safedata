@@ -14,7 +14,7 @@
 * using R Under development (unstable) (2020-10-05 r79298)
 * using platform: x86_64-w64-mingw32 (64-bit)
 
-## Ubuntu (Travis/Xenial)
+## Ubuntu (Travis/Bionic)
 
 ### release
 
