@@ -252,7 +252,7 @@ needs to be pushed to Github to be picked up by Travis CI. There is a specific
 `git flow` command to do this:
 
 ```
- git flow release publish 1.0.6
+git flow release publish 1.0.6
 ```
 
 This sends the release branch up to be checked. In addition, there is now a
