@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Load and cache the dataset index — load_index • safedata</title>
+<title>Get the cached dataset index — get_index • safedata</title>
 
 
 <!-- jquery -->
@@ -39,10 +39,9 @@
 
 
 
-<meta property="og:title" content="Load and cache the dataset index — load_index" />
-<meta property="og:description" content="This function loads the dataset record index from the JSON file in
-the SAFE data directory and sets which datasets are currently available
-and which records are the most recent available under a given concept." />
+<meta property="og:title" content="Get the cached dataset index — get_index" />
+<meta property="og:description" content="This function just safely retrieves the safedata index from the
+package cache." />
 
 
 
@@ -125,35 +124,25 @@ and which records are the most recent available under a given concept." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Load and cache the dataset index</h1>
+    <h1>Get the cached dataset index</h1>
     <small class="dont-index">Source: <a href='https://github.com/ImperialCollegeLondon/safedata/blob/master/R/index.R'><code>R/index.R</code></a></small>
-    <div class="hidden name"><code>load_index.Rd</code></div>
+    <div class="hidden name"><code>get_index.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This function loads the dataset record index from the JSON file in
-the SAFE data directory and sets which datasets are currently available
-and which records are the most recent available under a given concept.</p>
+    <p>This function just safely retrieves the safedata index from the
+package cache.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>load_index</span><span class='op'>(</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_index</span><span class='op'>(</span><span class='op'>)</span></pre>
 
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns NULL invisibly - use get_index() to obtain the
-   index data.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>When any of the three index files (<code>index.json</code>,
-<code>gazetteer.geojson</code> and <code>location_aliases.csv</code>) are loaded,
-the file contents are cached in memory to reduce load times. The cache
-is within an environment that is not exported in the package namespace
-and is not intended to be user accessible.</p>
+    <p>A data frame containing the dataset index details.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='load_location_aliases.html'>load_location_aliases</a></code>,
-   <code><a href='load_gazetteer.html'>load_gazetteer</a></code></p></div>
+    <div class='dont-index'><p><code><a href='load_index.html'>load_index</a></code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -74,7 +74,7 @@ integers, but the function will also handle Zenodo URLs and DOIs." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.9</span>
       </span>
     </div>
 
@@ -196,8 +196,8 @@ records that are present in either.</p></li>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>   <span class='fu'><a href='set_example_safe_dir.html'>set_example_safe_dir</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='input'>   <span class='fu'>validate_record_ids</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3247631</span>, <span class='fl'>3266827</span>, <span class='fl'>3266821</span>, <span class='op'>-</span><span class='fl'>1000</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Invalid numeric record ids: -1000</span></div><div class='output co'>#&gt; Set includes 3 concept ids and 2 record ids: 
+</div><div class='output co'>#&gt; <span class='message'>Loading and caching index</span></div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div><div class='input'>   <span class='fu'>validate_record_ids</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3247631</span>, <span class='fl'>3266827</span>, <span class='fl'>3266821</span>, <span class='op'>-</span><span class='fl'>1000</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: Invalid numeric record ids: -1000</span></div><div class='output co'>#&gt; Set includes 3 concept ids and 2 record ids: 
 #&gt;  - 1 open and most recent (*)
 #&gt;  - 0 open and outdated (o)
 #&gt;  - 1 under embargo or restricted (x)
@@ -209,7 +209,7 @@ records that are present in either.</p></li>
                          <span class='st'>"10.5281/zenodo.3266827"</span>,
                          <span class='st'>"https://zenodo.org/record/3266821"</span>,
                          <span class='st'>"not_this_one/3266821"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Invalid character record ids: not_this_one/3266821</span></div><div class='output co'>#&gt; Set includes 3 concept ids and 2 record ids: 
+</div><div class='output co'>#&gt; <span class='warning'>Warning: Invalid character record ids: not_this_one/3266821</span></div><div class='output co'>#&gt; Set includes 3 concept ids and 2 record ids: 
 #&gt;  - 1 open and most recent (*)
 #&gt;  - 0 open and outdated (o)
 #&gt;  - 1 under embargo or restricted (x)
@@ -218,7 +218,7 @@ records that are present in either.</p></li>
 #&gt; 1 3247630 3247631         x
 #&gt; 2 3266821 -------          
 #&gt; 3 3266826 3266827         *</div><div class='input'>   <span class='fu'><a href='set_example_safe_dir.html'>unset_example_safe_dir</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div></pre>
+</div><div class='output co'>#&gt; <span class='message'>Loading and caching index</span></div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -95,7 +95,7 @@ using insert_dataset." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.9</span>
       </span>
     </div>
 
@@ -220,9 +220,9 @@ dataset concept.</p></li>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>   <span class='fu'><a href='set_example_safe_dir.html'>set_example_safe_dir</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='input'>   <span class='va'>recs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='validate_record_ids.html'>validate_record_ids</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1400562</span>, <span class='fl'>3266827</span>, <span class='fl'>3266821</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='input'>   <span class='fu'>show_concepts</span><span class='op'>(</span><span class='va'>recs</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; 
+</div><div class='output co'>#&gt; <span class='message'>Loading and caching index</span></div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div><div class='input'>   <span class='va'>recs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='validate_record_ids.html'>validate_record_ids</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1400562</span>, <span class='fl'>3266827</span>, <span class='fl'>3266821</span><span class='op'>)</span><span class='op'>)</span>
+   <span class='fu'>show_concepts</span><span class='op'>(</span><span class='va'>recs</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; 
 #&gt; Concept ID: 1400561
 #&gt; Title: Myrmecophilous Pselaphine beetles in tropical forests
 #&gt; Versions: 1 available, 0 embargoed or restricted
@@ -250,7 +250,8 @@ dataset concept.</p></li>
 #&gt; </div><div class='input'>   <span class='fu'>show_record</span><span class='op'>(</span><span class='va'>recs</span><span class='op'>[</span><span class='fl'>1</span>,<span class='op'>]</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; 
 #&gt; Record summary
-#&gt; Title: Myrmecophilous Pselaphine beetles in tropical forests</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; Status: open
+#&gt; Title: Myrmecophilous Pselaphine beetles in tropical forests
+#&gt; Status: open
 #&gt; Taxa: 67 taxa reported
 #&gt; Locations: 20 locations reported
 #&gt; 
@@ -262,12 +263,13 @@ dataset concept.</p></li>
 #&gt; MorphFunctTraits   18   42 Morphospecies_Functional Traits
 #&gt; </div><div class='input'>   <span class='co'># Show worksheet metadata from a record or from a loaded worksheet</span>
    <span class='fu'>show_worksheet</span><span class='op'>(</span><span class='fl'>1400562</span>, <span class='st'>"EnvironVariables"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; Record ID: 1400562
+</div><div class='output co'>#&gt; Record ID: 1400562
 #&gt; Worksheet name: EnvironVariables
 #&gt; Number of data rows: 20
 #&gt; Number of data fields: 4
 #&gt; Description:
-#&gt; Environmental variables</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; Status: open
+#&gt; Environmental variables
+#&gt; Status: open
 #&gt; 
 #&gt; Fields:
 #&gt;   field_name field_type description         
@@ -275,13 +277,14 @@ dataset concept.</p></li>
 #&gt; 2 Temp       Numeric    Soil temperature    
 #&gt; 3 Moisture   Numeric    Soil moisture       
 #&gt; 4 Cover      Numeric    Canopy cover        </div><div class='input'>   <span class='va'>beetle_abund</span> <span class='op'>&lt;-</span> <span class='fu'><a href='load_safe_data.html'>load_safe_data</a></span><span class='op'>(</span><span class='fl'>1400562</span>, <span class='st'>"Ant-Psel"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='input'>   <span class='fu'>show_worksheet</span><span class='op'>(</span><span class='va'>beetle_abund</span>, extended_fields <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+   <span class='fu'>show_worksheet</span><span class='op'>(</span><span class='va'>beetle_abund</span>, extended_fields <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Record ID: 1400562
 #&gt; Worksheet name: Ant-Psel
 #&gt; Number of data rows: 20
 #&gt; Number of data fields: 3
 #&gt; Description:
-#&gt; Ant-Pselaphine data</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; Status: open
+#&gt; Ant-Pselaphine data
+#&gt; Status: open
 #&gt; 
 #&gt; Fields:
 #&gt; Site :
@@ -300,7 +303,7 @@ dataset concept.</p></li>
 #&gt;  - units: #
 #&gt;  - method: Winkler bag
 #&gt; </div><div class='input'>   <span class='fu'><a href='set_example_safe_dir.html'>unset_example_safe_dir</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div></pre>
+</div><div class='output co'>#&gt; <span class='message'>Loading and caching index</span></div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

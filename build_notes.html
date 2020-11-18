@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.9</span>
       </span>
     </div>
 
@@ -241,7 +241,7 @@
 <div id="create-the-new-release-branch" class="section level3">
 <h3 class="hasAnchor">
 <a href="#create-the-new-release-branch" class="anchor"></a>Create the new release branch</h3>
-<p>If all is ok then the code is in theory to release. The following creates a new candidate branch containing the current <code>develop</code> code. You need to specify the upcoming release version number, so for example to release version <code>1.0.6</code>:</p>
+<p>If all is ok then the code is in theory ready to release. The following creates a new candidate branch containing the current <code>develop</code> code. You need to specify the upcoming release version number, so for example to release version <code>1.0.6</code>:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="fu">git</span> flow release start 1.0.6</a></code></pre></div>
 <p>This will create the <code>release/1.0.6</code> branch and check it out.</p>
 <p>You should now immediately update the <code>DESCRIPTION</code> file to match that version number. In this example, that should mean changing the previous development version number (<code>-9000</code> is used to indicate code in development between versions ):</p>
@@ -251,7 +251,7 @@
 <p>You can then commit that change:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="fu">git</span> commit -m <span class="st">"Update version number"</span> DESCRIPTION</a></code></pre></div>
 <p>At the moment, the <code>release</code> branch is only local. The release branch and code needs to be pushed to Github to be picked up by Travis CI. There is a specific <code>git flow</code> command to do this:</p>
-<pre><code> git flow release publish 1.0.6</code></pre>
+<pre><code>git flow release publish 1.0.6</code></pre>
 <p>This sends the release branch up to be checked. In addition, there is now a release branch on origin so any other last minutes fixes and commits can be pushed in order to check those.</p>
 </div>
 <div id="checking-on-different-platforms-" class="section level3">
@@ -268,25 +268,40 @@
 <p>Ideally what happens now is that the build and check process on Travis CI and <code>win-builder</code> all pass. You <strong>must</strong> wait for these checks to complete!</p>
 <p>Obviously, if any errors or warnings crop up in the checking process, those should be fixed in the <code>release</code> branch. The changes should be committed and pushed to start a new round of Travis CI checking and you will need to rebuild and resubmit to <code>win-builder</code></p>
 </div>
+<div id="final-edits" class="section level3">
+<h3 class="hasAnchor">
+<a href="#final-edits" class="anchor"></a>Final edits</h3>
+<p>There are some final edits to check you have made:</p>
+<ul>
+<li>Update <code>NEWS</code> to document the changes since the previous version</li>
+<li>Update <code>cran-comments.md</code> to record the R versions and environments used for testing and the outcomes of those builds. This should all be <code>status: OK</code> but there might be notes that should be explained.</li>
+</ul>
+<p>You now should also build the final version of the release code to be submitted to CRAN:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="bu">cd</span> build_scripts</a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="ex">./build_and_check.sh</span></a></code></pre></div>
+<p>That should create the source package in the parent directory (e.g. <code>safedata-1.0.6.tar.gz</code>).</p>
+<p>These edits and building will obviously also need to be committed and so there is likely to be one last round of CI runs, but this will just be documentation and information changes and so is unlikely to reveal new issues. Of course, if it does, you’ll have to fix them!</p>
+</div>
 <div id="finish-the-release" class="section level3">
 <h3 class="hasAnchor">
 <a href="#finish-the-release" class="anchor"></a>Finish the release</h3>
-<p>Once the <code>release</code> branch is passing checks on all platforms, then the candidate release is ready to be released as a version. Again using <code>1.0.6</code> as the example version number, the command is: .</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="fu">git</span> flow release finish 1.0.6</a></code></pre></div>
-<p>You will be asked for some commit messages and a new tag comment, which will simply be the version number. You should then be on the <code>master</code> branch in a fresh commit tagged with the version number. You can now push this to create the release - if you’ve set the config described above then a single push will create the commit and tag.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="fu">git</span> push</a></code></pre></div>
-<p>This will set off another round of Travis CI checking - you should see the tagged version being built and checked.</p>
-<p>You should now <strong>immediately</strong> get off the <code>master</code> branch, before you accidentally change the files or commit to it, You should also <strong>immediately</strong> update the version number in <code>DESCRIPTION</code>, adding <code>-9000</code> to show that this is now the development version from the new release. This is a trivial change, so we can use <code>[ci skip]</code> to avoid triggering a Travis build.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="fu">git</span> checkout develop</a>
-<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="co"># Edit DESCRIPTION to e.g. version 1.0.6-9000</span></a>
-<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="fu">git</span> commit -m <span class="st">"Bump develop version [ci skip]"</span> DESCRIPTION</a>
-<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="fu">git</span> push</a></code></pre></div>
+<p>Once the <code>release</code> branch is passing checks on all platforms, then the candidate release is ready to be released as a version. Again using <code>1.0.6</code> as the example version number, the command is:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="fu">git</span> flow release finish 1.0.6</a></code></pre></div>
+<p>You will be asked for some commit messages and a new tag comment, which will simply be the version number. You should then be on the <code>develop</code> branch. You now need to checkout the <code>master</code> branch which should now have all the commits since the last release and a new tag with the version number. You can now push this to create the release - if you’ve set the config described above then a single push will create the commit and tag.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="fu">git</span> checkout master</a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="fu">git</span> push</a></code></pre></div>
+<p>This will set off another round of Travis CI checking - you should see the tagged version being built and checked. This should all go cleanly!</p>
+<p>You should now <strong>immediately</strong> get off the <code>master</code> branch and back onto <code>develop</code>, before you accidentally change the files or commit to it, You should also <strong>immediately</strong> update the version number in <code>DESCRIPTION</code>, adding <code>-9000</code> to show that this is now the development version from the new release. This is a trivial change, so we can use <code>[ci skip]</code> to avoid triggering a Travis build.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="fu">git</span> checkout develop</a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="co"># Edit DESCRIPTION to e.g. version 1.0.6-9000</span></a>
+<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="fu">git</span> commit -m <span class="st">"Bump develop version [ci skip]"</span> DESCRIPTION</a>
+<a class="sourceLine" id="cb17-4" data-line-number="4"><span class="fu">git</span> push</a></code></pre></div>
 </div>
 <div id="release-to-cran" class="section level3">
 <h3 class="hasAnchor">
 <a href="#release-to-cran" class="anchor"></a>Release to CRAN</h3>
-<p>You should now use the outputs from Travis CI and <code>win-builder</code> to update the file <code>cran-comments.md</code> and the contents of that should be copied into in the comments section of the submission form. The CRAN maintainers expect submitted packages to be functional and fully checked and these notes will help them see that the package has been properly checked.</p>
-<p>You can then submit the built package at: <a href="https://cran.r-project.org/submit.html" class="uri">https://cran.r-project.org/submit.html</a></p>
+<p>You can then submit the built version of the source package that was created during the release process at: <a href="https://cran.r-project.org/submit.html" class="uri">https://cran.r-project.org/submit.html</a></p>
+<p>You should take the up-to-date contents of <code>cran-comments.md</code> and copy that in the comments section of the submission form. The CRAN maintainers expect submitted packages to be functional and fully checked and these notes will help them see that the package has been properly checked.</p>
 </div>
 </div>
 </div>

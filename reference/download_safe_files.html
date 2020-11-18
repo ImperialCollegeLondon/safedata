@@ -76,7 +76,7 @@ using embargoed or restricted datasets." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.9</span>
       </span>
     </div>
 
@@ -188,7 +188,8 @@ only provide the record id for that dataset.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Invisibly, a vector of paths for successfully downloaded files.</p>
+    <p>Invisibly, a vector of paths within the `safe_dir` for
+   successfully downloaded files.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>By default, the function will also download the dataset metadata. This
@@ -204,13 +205,13 @@ files</strong> and replace them with the versions of record from Zenodo.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>   <span class='co'># \donttest{</span>
        <span class='fu'><a href='set_example_safe_dir.html'>set_example_safe_dir</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='input'>       <span class='va'>recs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='validate_record_ids.html'>validate_record_ids</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3247631</span>, <span class='fl'>3266827</span>, <span class='fl'>3266821</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='input'>       <span class='fu'>download_safe_files</span><span class='op'>(</span><span class='va'>recs</span>, confirm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; <span class='message'>2 files requested from 2 records</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading and caching index</span></div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div><div class='input'>       <span class='va'>recs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='validate_record_ids.html'>validate_record_ids</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3247631</span>, <span class='fl'>3266827</span>, <span class='fl'>3266821</span><span class='op'>)</span><span class='op'>)</span>
+       <span class='fu'>download_safe_files</span><span class='op'>(</span><span class='va'>recs</span>, confirm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>2 files requested from 2 records</span>
 #&gt; <span class='message'> - 0 local (0 bytes)</span>
 #&gt; <span class='message'> - 1 embargoed or restricted (647.1 Kb)</span>
 #&gt; <span class='message'> - 1 to download (27.9 Kb)</span></div><div class='output co'>#&gt; <span class='message'>Downloading 2 record metadata files</span></div><div class='output co'>#&gt; <span class='message'>1 files for record 3247631: under embargo or restricted</span></div><div class='output co'>#&gt; <span class='message'>1 files for record 3266827: 1 to download</span></div><div class='output co'>#&gt; <span class='message'> - Downloaded: template_Symes.xlsx</span></div><div class='input'>       <span class='fu'><a href='set_example_safe_dir.html'>unset_example_safe_dir</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; <span class='message'>Loading index</span></div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div><div class='input'>   <span class='co'># }</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading and caching index</span></div><div class='output co'>#&gt; <span class='message'>Validating directory</span></div><div class='input'>   <span class='co'># }</span>
    <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
        <span class='co'># This example requires a private token</span>
        <span class='fu'>download_safe_files</span><span class='op'>(</span><span class='fl'>1237730</span>, confirm <span class='op'>=</span> <span class='cn'>FALSE</span>,
