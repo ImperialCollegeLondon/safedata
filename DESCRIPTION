@@ -1,7 +1,7 @@
 Package: safedata
 Type: Package
 Title: Interface to Data from the SAFE Project 
-Version: 1.0.8-9000
+Version: 1.0.9
 Date: 2020-11-18
 Authors@R: c(
     person('Andy', 'Aldersley', email='a.aldersley@imperial.ac.uk', role=c('aut')),
