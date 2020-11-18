@@ -10,7 +10,7 @@ This is an R package for discovering and using datasets produced by scientific r
 
 The homepage for the package is at:
 
-[https://imperialcollegelondon.github.io/safedata](https://imperialcollegelondon.github.io/safedata).
+[https://imperialcollegelondon.github.io/safedata/](https://imperialcollegelondon.github.io/safedata/).
 
 In particular, the following links provide:
 

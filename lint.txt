@@ -1,9 +1,3 @@
-R/index.R:354:1: style: Lines should not be more than 80 characters.
-        local_expected <- subset(index, file.exists(file.path(safedir, index$path)))
-^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-R/index.R:355:1: style: Lines should not be more than 80 characters.
-        local_expected$md5 <- tools::md5sum(file.path(safedir, local_expected$path))
-^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 R/load_safe.R:1:1: style: functions should have cyclomatic complexity of less than 15, this has 22.
 load_safe_data <- function(record_id, worksheet) {
 ^
@@ -25,6 +19,9 @@ R/load_safe.R:443:1: style: Lines should not be more than 80 characters.
 R/load_safe.R:449:1: style: Lines should not be more than 80 characters.
                 these_files$public_url <- paste0(these_files$public_url, "?token=", token)
 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+R/load_safe.R:584:41: warning: no visible binding for global variable ‘local_path’
+            with(local_files, file.copy(local_path, current_safe_dir_path))
+                                        ^~~~~~~~~~
 R/metadata.R:197:1: style: Variable and function name style should be snake_case.
 "&.safe_record_set" <- function(x, y) {
 ^~~~~~~~~~~~~~~~~~~

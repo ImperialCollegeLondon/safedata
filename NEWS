@@ -1,3 +1,16 @@
+1.0.9
+    - Further fixing of indexing functions to separate load_index from get_index
+      to get clearer separation of setting safe dir and just wanting the indexing
+      contents.
+    - Fixed download_safe_files so that it updates the cached index to record the
+      new local file copies.
+
+
+1.0.8
+    - Reorganised set_safe_dir and load_index to fix bug with new directories and 
+      give cleaner code flow and organisation.
+    - Added logical operators & and | for combining searches
+
 1.0.7
     - Moved download_safe_files to use the website download URLs not API
     - Added ability to use tokens for restricted datasets (pretty rare, 

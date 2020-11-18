@@ -37,7 +37,7 @@ validate_record_ids <- function(record_set) {
     #' @aliases safe_record_set
     #' @export
 
-    index <- load_index()
+    index <- get_index()
 
     # Only run validation if the input is not already a record set
     if (! inherits(record_set, "safe_record_set")) {
@@ -388,7 +388,7 @@ show_concepts <- function(obj) {
 
     # get the rows for the XLSX file to report, sort by publication date
     # and cut into record chunks
-    index <- load_index()
+    index <- get_index()
 
     rows <- subset(index, zenodo_concept_id %in% record_set$concept &
                           grepl(".xlsx$", filename),
@@ -614,7 +614,7 @@ file_status <- function(metadata) {
     #' @keywords internal
 
     # Data access status - check for local private copy
-    index <- load_index()
+    index <- get_index()
     file_row <- subset(index, grepl(".xlsx$", filename) &
                               zenodo_record_id == metadata$zenodo_record_id)
 
