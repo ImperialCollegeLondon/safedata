@@ -35,7 +35,8 @@ long alphanumeric strings. If you are providing a token, you should
 only provide the record id for that dataset.}
 }
 \value{
-Invisibly, a vector of paths for successfully downloaded files.
+Invisibly, a vector of paths within the `safe_dir` for
+   successfully downloaded files.
 }
 \description{
 This downloads files associated with SAFE datasets, either all of the

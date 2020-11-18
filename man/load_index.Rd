@@ -4,13 +4,11 @@
 \alias{load_index}
 \title{Load and cache the dataset index}
 \usage{
-load_index(reload = FALSE)
-}
-\arguments{
-\item{reload}{Force a refresh of the cached index from the file.}
+load_index()
 }
 \value{
-A data frame containing the dataset index details.
+Returns NULL invisibly - use get_index() to obtain the
+   index data.
 }
 \description{
 This function loads the dataset record index from the JSON file in
@@ -26,6 +24,6 @@ and is not intended to be user accessible.
 }
 \seealso{
 \code{\link{load_location_aliases}},
-    \code{\link{load_gazetteer}}
+   \code{\link{load_gazetteer}}
 }
 \keyword{internal}
