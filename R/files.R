@@ -22,7 +22,7 @@ get_file_details <- function(record_id) {
 
     # validate the record id
     record_set <- validate_record_ids(record_id)
-    index <- load_index()
+    index <- get_index()
 
     # Check for a single _record_ id
     if (nrow(record_set) != 1 | is.na(record_set$record)) {

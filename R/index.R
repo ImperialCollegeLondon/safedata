@@ -101,7 +101,7 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
         download_location_aliases()
 
         verbose_message("Safe data directory created")
-        return(invisible())
+        invisible()
     }
 
     # Now validate an existing directory
@@ -170,7 +170,7 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
     # Load the index
     load_index()
 
-    return(invisible())
+    invisible()
 }
 
 
@@ -251,7 +251,7 @@ download_location_aliases <- function() {
 }
 
 
-load_index <- function(reload = FALSE) {
+load_index <- function() {
 
     #' Load and cache the dataset index
     #'
@@ -265,115 +265,129 @@ load_index <- function(reload = FALSE) {
     #' is within an environment that is not exported in the package namespace
     #' and is not intended to be user accessible.
     #'
-    #' @param reload Force a refresh of the cached index from the file.
-    #' @return A data frame containing the dataset index details.
+    #' @return Returns NULL invisibly - use get_index() to obtain the index data.
     #' @seealso \code{\link{load_location_aliases}},
     #'     \code{\link{load_gazetteer}}
     #' @keywords internal
 
-    verbose_message("Loading index")
+    verbose_message("Loading and caching index")
+    # Load from file and convert into data frame
+    safedir <- get_data_dir()
 
-    if (exists("index", safedata_env) & ! reload) {
-        # Load from cache in safedata_env environment
-        index <- get("index", safedata_env)
-    } else {
-        # Load from file and convert into data frame
-        safedir <- get_data_dir()
+    # path expand to make paths work in md5sum, which fails with ~/.
+    safedir <- path.expand(safedir)
 
-        # path expand to make paths work in md5sum, which fails with ~/.
-        safedir <- path.expand(safedir)
+    index_path <- file.path(safedir, "index.json")
+    gazetteer_path <- file.path(safedir, "gazetteer.geojson")
+    location_aliases_path <- file.path(safedir, "location_aliases.csv")
+    url_path <-  file.path(safedir, "url.json")
 
-        index_path <- file.path(safedir, "index.json")
-        gazetteer_path <- file.path(safedir, "gazetteer.geojson")
-        location_aliases_path <- file.path(safedir, "location_aliases.csv")
-        url_path <-  file.path(safedir, "url.json")
+    index_path <- file.path(safedir, "index.json")
 
-        index_path <- file.path(safedir, "index.json")
+    index <- jsonlite::fromJSON(index_path)
+    index <- index$entries
 
-        index <- jsonlite::fromJSON(index_path)
-        index <- index$entries
+    # format the datetime classes
+    index$publication_date <- as.POSIXct(index$publication_date)
+    index$dataset_embargo <- as.POSIXct(index$dataset_embargo)
 
-        # format the datetime classes
-        index$publication_date <- as.POSIXct(index$publication_date)
-        index$dataset_embargo <- as.POSIXct(index$dataset_embargo)
+    # Add the path relative to the data directory
+    index$path <- with(index, file.path(zenodo_concept_id,
+                                        zenodo_record_id, filename))
 
-        # Add the path relative to the data directory
-        index$path <- with(index, file.path(zenodo_concept_id,
-                                            zenodo_record_id, filename))
+    # Identify availability and most recent available records
+    index$available <- with(index,
+                            ifelse(dataset_access == "embargo" &
+                                    dataset_embargo >= Sys.time(), FALSE,
+                                    ifelse(dataset_access == "restricted",
+                                            FALSE, TRUE)))
 
-        # Identify availability and most recent available records
-        index$available <- with(index,
-                                ifelse(dataset_access == "embargo" &
-                                       dataset_embargo >= Sys.time(), FALSE,
-                                       ifelse(dataset_access == "restricted",
-                                              FALSE, TRUE)))
+    # Get the index rows by concept, reduce to the unique set of records
+    # (dropping the multiple files), drop unavailable records, sort by
+    # publication date and return the first zenodo_record_id.
+    concepts <- split(subset(index, select = c(available, zenodo_record_id,
+                                                publication_date)),
+                        f = index$zenodo_concept_id)
 
-        # Get the index rows by concept, reduce to the unique set of records
-        # (dropping the multiple files), drop unavailable records, sort by
-        # publication date and return the first zenodo_record_id.
-        concepts <- split(subset(index, select = c(available, zenodo_record_id,
-                                                   publication_date)),
-                          f = index$zenodo_concept_id)
+    mr_avail <- sapply(concepts, function(recs) {
+        recs <- unique(recs)
+        recs <- subset(recs, available)
+        recs <- recs[order(recs$publication_date, decreasing = TRUE), ]
 
-        mr_avail <- sapply(concepts, function(recs) {
-            recs <- unique(recs)
-            recs <- subset(recs, available)
-            recs <- recs[order(recs$publication_date, decreasing = TRUE), ]
-
-            if (nrow(recs)) {
-                return(recs$zenodo_record_id[1])
-            } else {
-                return(numeric(0))
-            }
-        })
-
-        mra <- with(index,
-                    ifelse(zenodo_record_id %in% unlist(mr_avail),
-                           TRUE, FALSE))
-        index$most_recent_available <- mra
-
-        # Validate the directory contents
-        verbose_message("Validating directory")
-
-        # Run a check on directory structure
-        local_files <- dir(safedir, recursive = TRUE)
-
-        # Exclude the three index files and local metadata json files
-        index_files <- c(basename(index_path), basename(gazetteer_path),
-                         basename(location_aliases_path), basename(url_path))
-        json_files <- grepl("[0-9]+/[0-9]+/[0-9]+.json$", local_files)
-        metadata_json <- local_files[json_files]
-        local_files <- setdiff(local_files, c(index_files, metadata_json))
-
-        # Check for additional files in directory structure
-        local_unexpected <- setdiff(local_files, index$path)
-        if (length(local_unexpected)) {
-            warning("SAFE data directory contains unexpected files: ",
-                    paste(local_unexpected, collapse = ", "))
+        if (nrow(recs)) {
+            return(recs$zenodo_record_id[1])
+        } else {
+            return(numeric(0))
         }
+    })
 
-        # Run a check on file modification
-        local_expected <- subset(index, file.exists(file.path(safedir, index$path)))
-        local_expected$md5 <- tools::md5sum(file.path(safedir, local_expected$path))
-        local_expected$altered <- with(local_expected, md5 != checksum)
+    mra <- with(index,
+                ifelse(zenodo_record_id %in% unlist(mr_avail),
+                        TRUE, FALSE))
+    index$most_recent_available <- mra
 
-        if (sum(local_expected$altered)) {
-            warning("Local copies of dataset files have been modified",
-                    paste(local_expected$filename[local_expected$altered],
-                          collapse = ", "))
-        }
+    # Validate the directory contents
+    verbose_message("Validating directory")
 
-        # Update index to note which files have unaltered local copies (this
-        # could include embargoed and restricted datasets, so this is used as a
-        # flag to note which can be loaded from private local copies).
-        local_unaltered <- local_expected$checksum[! local_expected$altered]
-        index$local_copy <- index$checksum %in% local_unaltered
+    # Run a check on directory structure
+    local_files <- dir(safedir, recursive = TRUE)
 
-        # save the index into the cache
-        assign("index", index, safedata_env)
+    # Exclude the three index files and local metadata json files
+    index_files <- c(basename(index_path), basename(gazetteer_path),
+                        basename(location_aliases_path), basename(url_path))
+    json_files <- grepl("[0-9]+/[0-9]+/[0-9]+.json$", local_files)
+    metadata_json <- local_files[json_files]
+    local_files <- setdiff(local_files, c(index_files, metadata_json))
+
+    # Check for additional files in directory structure
+    local_unexpected <- setdiff(local_files, index$path)
+    if (length(local_unexpected)) {
+        warning("SAFE data directory contains unexpected files: ",
+                paste(local_unexpected, collapse = ", "))
     }
 
-    invisible(index)
+    # Run a check on file modification
+    local_expected <- subset(index, file.exists(file.path(safedir, index$path)))
+    local_expected$md5 <- tools::md5sum(file.path(safedir, local_expected$path))
+    local_expected$altered <- with(local_expected, md5 != checksum)
+
+    if (sum(local_expected$altered)) {
+        warning("Local copies of dataset files have been modified",
+                paste(local_expected$filename[local_expected$altered],
+                        collapse = ", "))
+    }
+
+    # Update index to note which files have unaltered local copies (this
+    # could include embargoed and restricted datasets, so this is used as a
+    # flag to note which can be loaded from private local copies).
+    local_unaltered <- local_expected$checksum[! local_expected$altered]
+    index$local_copy <- index$checksum %in% local_unaltered
+
+    # save the index into the cache
+    assign("index", index, safedata_env)
+
+    invisible()
+}
+
+
+get_index <- function() {
+
+    #' Get the cached dataset index
+    #'
+    #' This function just safely retrieves the safedata index from the 
+    #' package cache.
+    #'
+    #' @return A data frame containing the dataset index details.
+    #' @seealso \code{\link{locar_index}}
+    #' @keywords internal
+
+    if (exists("index", safedata_env)) {
+        # Load from cache in safedata_env environment
+        return(get("index", safedata_env))
+    } else {
+        # Something is wrong
+        stop('The safedata index is not loaded.')
+    }
 }
 
 
@@ -544,5 +558,4 @@ unset_example_safe_dir <- function() {
     if (! is.null(udir)) {
         set_safe_dir(udir, update = FALSE)
     }
-    load_index(reload = TRUE)
 }

@@ -45,7 +45,7 @@ load_safe_data <- function(record_id, worksheet) {
 
     # Look for a local copy of the file. If it doesn't exist, download it
     # if possible
-    index <- load_index()
+    index <- get_index()
     index_row <- subset(index, zenodo_record_id == record_set$record &
                                grepl(".xlsx$", filename))
 
@@ -358,7 +358,7 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
     }
 
     # Get the target files
-    index <- load_index()
+    index <- get_index()
     safedir <- get_data_dir()
 
     # Get the set of files
@@ -522,7 +522,7 @@ insert_dataset <- function(record_id, files) {
     }
 
     # Get the list of possible files for this record
-    index <- load_index()
+    index <- get_index()
     record_files <- subset(index, zenodo_record_id == record_set$record)
 
     # Validate incoming files
