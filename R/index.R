@@ -69,8 +69,12 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
     #' @export
 
     # Clear any cached data in the safedata environment
-    do.call(rm, list(...=ls(envir=safedata_env), envir=safedata_env))
+    cached <- ls(envir = safedata_env)
+    if (length(cached) > 0) {
+        do.call(rm, list(list = cached, envir = safedata_env))
+    }
 
+    # Get the expected index and data file paths
     index_path <- file.path(safedir, "index.json")
     gazetteer_path <- file.path(safedir, "gazetteer.geojson")
     location_aliases_path <- file.path(safedir, "location_aliases.csv")
@@ -265,9 +269,10 @@ load_index <- function() {
     #' is within an environment that is not exported in the package namespace
     #' and is not intended to be user accessible.
     #'
-    #' @return Returns NULL invisibly - use get_index() to obtain the index data.
+    #' @return Returns NULL invisibly - use get_index() to obtain the
+    #'    index data.
     #' @seealso \code{\link{load_location_aliases}},
-    #'     \code{\link{load_gazetteer}}
+    #'    \code{\link{load_gazetteer}}
     #' @keywords internal
 
     verbose_message("Loading and caching index")
@@ -374,11 +379,11 @@ get_index <- function() {
 
     #' Get the cached dataset index
     #'
-    #' This function just safely retrieves the safedata index from the 
+    #' This function just safely retrieves the safedata index from the
     #' package cache.
     #'
     #' @return A data frame containing the dataset index details.
-    #' @seealso \code{\link{locar_index}}
+    #' @seealso \code{\link{load_index}}
     #' @keywords internal
 
     if (exists("index", safedata_env)) {
@@ -386,7 +391,7 @@ get_index <- function() {
         return(get("index", safedata_env))
     } else {
         # Something is wrong
-        stop('The safedata index is not loaded.')
+        stop("The safedata index is not loaded.")
     }
 }
 

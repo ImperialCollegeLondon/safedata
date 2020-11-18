@@ -328,7 +328,8 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
     #'    requested through the Zenodo page for a restricted dataset and are,
     #'    long alphanumeric strings. If you are providing a token, you should
     #'    only provide the record id for that dataset.
-    #' @return Invisibly, a vector of paths for successfully downloaded files.
+    #' @return Invisibly, a vector of paths within the `safe_dir` for
+    #'    successfully downloaded files.
     #' @examples
     #'    \donttest{
     #'        set_example_safe_dir()
@@ -369,13 +370,12 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
         targets <- subset(index, zenodo_record_id %in% records_to_get)
     }
 
-    # See what is stored locally
-    targets$local_path <- file.path(safedir, targets$path)
-    targets$local_exists <- file.exists(targets$local_path)
+    # Work with the full file path
+    targets$full_path <- file.path(safedir, targets$path)
 
     # Check which files are already local and optionally which have bad MD5 sums
     if (refresh) {
-        targets$refresh <- targets$checksum != tools::md5sum(targets$local_path)
+        targets$refresh <- targets$checksum != tools::md5sum(targets$full_path)
     } else {
         targets$refresh <- FALSE
     }
@@ -386,9 +386,9 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
                   " - %i embargoed or restricted (%s)\n",
                   " - %i to download (%s)")
 
-    local <- subset(targets, (! refresh) & local_exists)
+    local <- subset(targets, (! refresh) & local_copy)
     unavail <- subset(targets, ! available)
-    to_download <- subset(targets, (refresh | (! local_exists)) & available)
+    to_download <- subset(targets, (refresh | (! local_copy)) & available)
 
     size_to_human <- function(size) {
         return(format(structure(size, class = "object_size"), units = "auto"))
@@ -404,7 +404,7 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
         confirm_response <- utils::menu(c("Yes", "No"), title = msg)
         if (confirm_response != 1) {
             message("Aborting download")
-            return(invisible())
+            invisible()
         }
     } else {
         verbose_message(msg)
@@ -433,10 +433,10 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
 
         verbose_message(sprintf("%i files for record %i: %i to download",
                                 nrow(these_files), current_record,
-                                sum((! these_files$local_exists) |
+                                sum((! these_files$local_copy) |
                                     these_files$refresh)))
 
-        these_files <- subset(these_files, (! local_exists) | refresh)
+        these_files <- subset(these_files, (! local_copy) | refresh)
 
         if (nrow(these_files)) {
             # create download urls
@@ -455,19 +455,19 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
                 this_file <- these_files[row_idx, ]
 
                 # Look to see if the target directory exists.
-                if (! file.exists(dirname(this_file$local_path))) {
-                    dir.create(dirname(this_file$local_path),
+                if (! file.exists(dirname(this_file$full_path))) {
+                    dir.create(dirname(this_file$full_path),
                                recursive = TRUE)
                 }
 
                 # Download the target file to the directory
                 result <-  try(
                     curl::curl_download(this_file$public_url,
-                                        dest = this_file$local_path),
+                                        dest = this_file$full_path),
                                silent = TRUE)
 
                 if (inherits(result, "try-error")) {
-                    if (this_file$local_exists) {
+                    if (this_file$local_copy) {
                         verbose_message(" - Failed to refresh: ",
                                         this_file$filename)
                     } else {
@@ -475,19 +475,27 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
                                         this_file$filename)
                     }
                 } else {
-                    if (this_file$local_exists) {
+                    if (this_file$local_copy) {
                         verbose_message(" - Refreshed: ",
                                         this_file$filename)
                     } else {
                         verbose_message(" - Downloaded: ",
                                         this_file$filename)
                     }
-                    downloaded <- c(downloaded, this_file$local_path)
+                    downloaded <- c(downloaded, this_file$path)
                 }
             }
         }
     }
-    return(invisible(downloaded))
+
+    # Update the index to record new local copies
+    if (length(downloaded) > 0) {
+        index$local_copy[index$path %in% downloaded] <- TRUE
+        # save the index into the cache
+        assign("index", index, safedata_env)
+    }
+
+    invisible(downloaded)
 }
 
 
