@@ -71,6 +71,13 @@ NULL
 #' is downloaded to that path and the function returns TRUE to indicate
 #' success.
 #'
+#' @section Note:
+#'
+#' This function contains code to simulate network failures of varying
+#' kinds (no network, no API, specific resource unavailable) for use
+#' in unit testing that the safedata package handles theses errors
+#' gracefully.
+#'
 #' @param url The URL to download
 #' @param local_path A path to save the URL content to
 #' @return An \code{httr::response} object or a boolean showing if the
@@ -80,9 +87,9 @@ NULL
 try_to_download <- function(url, local_path=NULL, timeout=10) {
 
     # Dummy variables used to implement unit testing of network failures
-    # TODO - Tests not yet implemented
     network_down <- as.logical(Sys.getenv("NETWORK_DOWN", unset = FALSE))
     url_down <- as.logical(Sys.getenv("URL_DOWN", unset = FALSE))
+    resource_down <- Sys.getenv("RESOURCE_DOWN", unset=FALSE)
 
     # Is there a network connection _at all_
     if (! curl::has_internet() | network_down) {
@@ -115,13 +122,19 @@ try_to_download <- function(url, local_path=NULL, timeout=10) {
             message("Unknown URL response: ", response)
             return(FALSE)
         }
-    } else if (inherits(response, "response")){
-        # Responses that are response objects with status code
-        if (httr::http_error(response) | url_down) {
-            # An error?
-            message(sprintf("URL error: %s", response$status_code))
-            return(FALSE)
-        }
+    }
+
+    # Otherwise, should have response objects but check now if this
+    # resource is _specifically_ being blocked for testing purposes
+    if (! isFALSE(resource_down)) {
+        resource_down <- grepl(resource_down, url)
+    }
+
+    if (httr::http_error(response) || url_down || resource_down) {
+        # An error? Deliberately letting this message report the
+        # true status code for faked failures
+        message(sprintf("URL error: %s", response$status_code))
+        return(FALSE)
     }
 
     # Now (unless something happened in the last few milliseconds)

@@ -162,8 +162,9 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
         index_hashes <- try_to_download(paste0(url, "/api/index_hashes"))
 
         if (! inherits(index_hashes, 'response')){
-            message("Cannot access index API - unable to update")
-            return(invisible(FALSE))
+            message("Unable to check for updates, using existing index files")
+            load_index()
+            return(invisible(TRUE))
         } else {
             index_hashes <- httr::content(index_hashes)
         }
@@ -175,22 +176,25 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
 
         # Check the files - do exactly the same thing for three files, three
         # hashes, three download wrapper functions and three reporting names
-        update_details <- list(list("Index", index_path,
+        update_details <- list(list("Index",
+                                    index_path,
                                     index_hashes$index,
                                     download_index),
-                               list("Gazetteer", gazetteer_path,
+                               list("Gazetteer",
+                                    gazetteer_path,
                                     index_hashes$gazetteer,
                                     download_gazetteer),
-                               list("Location aliases", location_aliases_path,
+                               list("Location aliases",
+                                    location_aliases_path,
                                     index_hashes$location_aliases,
                                     download_location_aliases))
 
         for (details in update_details) {
-            fname <- details[1]
-            local_path <- details[2]
-            current_hash <- details[3]
-            download_func <- details[4]
-
+            fname <- details[[1]]
+            local_path <- details[[2]]
+            current_hash <- details[[3]]
+            download_func <- details[[4]]
+            
             if (tools::md5sum(local_path) != current_hash) {
                 verbose_message(sprintf(" - Updating %s", fname))
                 # Save the current version in case we need to roll back
@@ -207,17 +211,20 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
         }
 
         if (! update_successful) {
-            # reverse downloads
+            # Delete successful downloads and restore backups
             for (local_path in backed_up) {
-                file.remove(local_path)
+                if (file.exists(local_path)) {
+                    file.remove(local_path)
+                }
                 file.rename(paste0(local_path, ".oldbkp"), local_path)
             }
-            message("Downloading failure: index files are outdated but have been left as is")
+            message("Unable to download updates, using existing index files")
         } else {
             # remove backups
             for (local_path in backed_up) {
                 file.remove(paste0(local_path, ".oldbkp"))
             }
+            message("Index files successfully updated")
         }
     }
 

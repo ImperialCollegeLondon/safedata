@@ -2,16 +2,15 @@ context("Test that the safedata network comms fail gracefully")
 library(safedata)
 
 test_that("no internet fails gracefully", {
-
     Sys.setenv(NETWORK_DOWN = TRUE)
+
     success <- expect_message(
         safedata:::try_to_download("https://httpbin.org"),
         regexp = "No internet connection.",
     )
     expect_false(success)
 
-    Sys.setenv(NETWORK_DOWN = FALSE)
-
+    Sys.unsetenv("NETWORK_DOWN")
 })
 
 test_that("bad host fails gracefully", {
@@ -31,7 +30,6 @@ test_that("timeout fails gracefully", {
         regexp = "URL timed out",
     )
     expect_false(success)
-
 })
 
 test_that("URL errors fails gracefully", {
@@ -41,7 +39,6 @@ test_that("URL errors fails gracefully", {
         regexp = "URL error",
     )
     expect_false(success)
-
 })
 
 test_that("Good URL works and returns object to memory", {
@@ -52,7 +49,6 @@ test_that("Good URL works and returns object to memory", {
     expect_false(is.logical(success) && success == TRUE)
     # Check the content is as expected
     expect_equal(rawToChar(success$content), "safedata")
-
 })
 
 test_that("no internet and safedata dir creation fails gracefully", {
@@ -64,14 +60,11 @@ test_that("no internet and safedata dir creation fails gracefully", {
         safedata::set_safe_dir(temp_safe_dir, create = TRUE),
         regexp = "Could not download required files: SAFE data directory not created",
     )
-
     expect_false(success)
 
     # Check it tidied up
     expect_false(file.exists(temp_safe_dir))
-
-    Sys.setenv(NETWORK_DOWN = FALSE)
-
+    Sys.unsetenv("NETWORK_DOWN")
 })
 
 test_that("API down and safedata dir creation fails gracefully", {
@@ -85,10 +78,7 @@ test_that("API down and safedata dir creation fails gracefully", {
     )
 
     expect_false(success)
-
     # Check it tidied up
     expect_false(file.exists(temp_safe_dir))
-
-    Sys.setenv(URL_DOWN = FALSE)
-
+    Sys.unsetenv("URL_DOWN")
 })
