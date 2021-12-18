@@ -1,0 +1,135 @@
+# This file contains functionality to support graceful failure of safedata
+# actions if an internet connection is not available or the safedata.url is
+# not available. Graceful failure (not an error or warning) is a requirement
+# for CRAN packages.
+
+# The implementation borrows heavily from discussion here:
+# https://community.rstudio.com/t/internet-resources-should-fail-gracefully/49199/4
+# and the implementation of that discussion in:
+# https://github.com/jlacko/RCzechia/
+
+# Summary of when connection is required and appropriate action:
+#
+# index.R
+# - set_safe_dir(create = TRUE): cannot create new dir without network
+# - set_safe_dir(update = TRUE): cannot update indices - 'offline' mode
+#
+# These are accessing the index, gazetter, location aliases and file hashes
+# APIs, and we cannot assume that a single check within set_safe_dir is
+# sufficient as the connection could fail at any time, so needs to be graceful
+# at the file level.
+#
+# metadata.R
+# - fetch_record_metata: cannot retrieve JSON data from api/record: offline
+
+
+#' Data downloading and the safedata package.
+#'
+#' @description
+#' The safedata package requires access to the internet in order to:
+#'
+#' 1) maintain an up-to-date index of datasets and the locations gazeteer,
+#' 2) download datasets and their metadata,
+#' 3) download metadata about the taxonomic coverage of datasets, and
+#' 4) search dataset metadata for relevant datasets.
+#'
+#' These actions use two resources. The first is the safedata web server API
+#' which provides everything except the actual datasets. The second is the
+#' Zenodo API, which provides the datasets.
+#'
+#' If you do not have an internet connection - or if either of the two APIs is
+#' unavailable - the safedata package can be used as normal to load and use
+#' datasets that have already been downloaded to the local safedata directory.
+#' However, it will not be possible to update the dataset index, download new
+#' datasets or search for datasets until the APIs are available. The package
+#' should handle internet failures gracefully and provide meaningful messages.
+#'
+#' @section Note on SSL certificates:
+#'
+#' Downloading data uses the curl package and the underlying libcurl library.
+#' Some older versions of Mac OS X (10.14 and earlier) provide a built-in
+#' libcurl with an outdated set of certificates that prevents curl from
+#' connecting to resources using LetsEncrypt, which includes 
+#' https://safeproject.net. To use safedata on these systems, you have to 
+#' install a newer version of curl (e.g. using brew) and then compile curl
+#' from source, linking it to that newer libcurl.
+#'
+#' @docType package
+#' @name safedata_network
+NULL
+
+#' Attempt to download a URL resource, failing gracefully.
+#'
+#' This function tries to fetch the HEAD for the resource and handles
+#' failure to resolve (such as a bad safedata API url), timeouts and
+#' then actual HTTP error codes. If none of those occur, the resource
+#' is downloaded.
+#'
+#' If the download fails, a message is printed and the function returns
+#' FALSE. Otherwise, an \link{\code{httr::response}} object is returned
+#' containing the resource. If a local path is provided, the resource
+#' is downloaded to that path and the function returns TRUE to indicate
+#' success.
+#'
+#' @param url The URL to download
+#' @param local_path A path to save the URL content to
+#' @return An \code{httr::response} object or a boolean showing if the
+#'    download attempt was successful
+#' @keywords internal
+
+try_to_download <- function(url, local_path=NULL, timeout=10) {
+
+    # Dummy variables used to implement unit testing of network failures
+    # TODO - Tests not yet implemented
+    network_down <- as.logical(Sys.getenv("NETWORK_DOWN", unset = FALSE))
+    url_down <- as.logical(Sys.getenv("URL_DOWN", unset = FALSE))
+
+    # Is there a network connection _at all_
+    if (! curl::has_internet() | network_down) {
+        message("No internet connection.")
+        return(FALSE)
+    }
+
+    # Check if URL is available - use HEAD via httr to minimise traffic
+    response <- tryCatch(
+      httr::HEAD(url = url, httr::timeout(timeout)),
+      error = function(e) conditionMessage(e),
+      warning = function(w) conditionMessage(w)
+    )
+
+    if (inherits(response, "character")) {
+        # Responses that are not response objects - error strings
+        if (grepl("Could not resolve host", response)) {
+            # URL is garbage - cannot resolve
+            message("URL not found")
+            return(FALSE)
+        } else if (grepl("Timeout was reached", response)) {
+            # No timely response
+            message("URL timed out")
+            return(FALSE)
+        } else if (grepl("SSL certificate problem", response)) {
+            # Letsencrypt + old Mac OS?
+            message("SSL certificate issue: see ?safedata_network")
+            return(FALSE)
+        } else {
+            message("Unknown URL response: ", response)
+            return(FALSE)
+        }
+    } else if (inherits(response, "response")){
+        # Responses that are response objects with status code
+        if (httr::http_error(response) | url_down) {
+            # An error?
+            message(sprintf("URL error: %s", response$status_code))
+            return(FALSE)
+        }
+    }
+
+    # Now (unless something happened in the last few milliseconds)
+    # all is good to download the actual resource
+    if (is.null(local_path)) {
+        return(httr::GET(url = url))
+    } else {
+        httr::GET(url = url, httr::write_disk(local_path))
+        return(TRUE)
+    }
+}
