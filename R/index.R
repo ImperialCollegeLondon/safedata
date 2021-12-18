@@ -65,7 +65,8 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
     #'    path (logical)?
     #' @param url A URL providing the SAFE Data API, defaulting to the SAFE
     #'    Project's own URL.
-    #' @return NULL
+    #' @return Invisibly, a boolean showing whether a SAFE data directory was
+    #'    set successfully.
     #' @export
 
     # Clear any cached data in the safedata environment
@@ -88,93 +89,142 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
             stop("Directory already exists")
         }
 
-        # create the directory and set it as safe data directory
+        # create the directory and set the safe data directory and url
         dir.create(safedir)
-        options(safedata.dir = safedir)
+        options(safedata.dir = safedir, safedata.url = url)
 
-        # Save the URL and set it
+        # Save the URL
         jsonlite::write_json(list(url = url), url_path)
-        options(safedata.url = url)
 
         # download the index file, then cache it
-        download_index()
-        load_index()
+        got_index <- download_index()
+        got_gazetteer <- download_gazetteer()
+        got_loc_aliases <- download_location_aliases()
 
-        # download the gazetteer and location aliases
-        download_gazetteer()
-        download_location_aliases()
+        # If any of these fail then remove the directory since we already
+        # checked it didn't exist, and then tidy up options
+        if (! (got_index && got_gazetteer && got_loc_aliases)) {
+            unlink(safedir, recursive = TRUE)
+            options(safedata.dir = NULL, safedata.url = NULL)
+            message("Could not download required files: ",
+                    "SAFE data directory not created")
+            return(invisible(FALSE))
+        }
 
         verbose_message("Safe data directory created")
-        invisible()
+        load_index()
+        return(invisible(TRUE))
     }
 
     # Now validate an existing directory
+    all_good <- TRUE
 
     if (! dir.exists(safedir)) {
-        stop("Directory not found.")
+        message("Directory not found.")
+        all_good <- FALSE
     }
 
     if (! file.exists(url_path)) {
-        stop("API URL not found.")
+        message("API URL not found.")
+        all_good <- FALSE
     }
 
     if (! file.exists(index_path)) {
-        stop("Dataset index not found.")
+        message("Dataset index not found.")
+        all_good <- FALSE
     }
 
     if (! file.exists(gazetteer_path)) {
-        stop("Gazetteer not found.")
+        message("Gazetteer not found.")
+        all_good <- FALSE
     }
 
     if (! file.exists(location_aliases_path)) {
-        stop("Location aliases not found.")
+        message("Location aliases not found.")
+        all_good <- FALSE
+    }
+
+    if (! all_good){
+        return(invisible(FALSE))
     }
 
     # Set the data directory and URL in options.
-    options(safedata.dir = safedir)
     url <- jsonlite::read_json(url_path)$url
-    options(safedata.url = url)
+    options(safedata.dir = safedir, safedata.url = url)
 
     # Look for updates
     if (update) {
 
         verbose_message("Checking for updates")
 
-        # Get the current index hashes from the SAFE Data API and
+        # Try to get the current index hashes from the SAFE Data API and
         # then check each of the three index files
-        index_hashes <- jsonlite::fromJSON(paste0(url, "/api/index_hashes"))
+        index_hashes <- try_to_download(paste0(url, "/api/index_hashes"))
 
-        # Check the index
-        if (tools::md5sum(index_path) != index_hashes$index) {
-            verbose_message(" - Updating index")
-            # reload the index into the cache and get it
-            download_index()
+        if (! inherits(index_hashes, 'response')){
+            message("Cannot access index API - unable to update")
+            return(invisible(FALSE))
         } else {
-            verbose_message(" - Index up to date")
+            index_hashes <- httr::content(index_hashes)
         }
 
-        # Check the gazetteer
-        if (tools::md5sum(gazetteer_path) != index_hashes$gazetteer) {
-            verbose_message(" - Updating gazetteer")
-            download_gazetteer()
-        } else {
-            verbose_message(" - Gazetteer up to date")
+        # Update the indexing files as an atomic commit - there is unlikely
+        # to be an issue in having non-contemporary versions, but why risk it
+        update_successful <- TRUE
+        backed_up <- character()
+
+        # Check the files - do exactly the same thing for three files, three
+        # hashes, three download wrapper functions and three reporting names
+        update_details <- list(list("Index", index_path,
+                                    index_hashes$index,
+                                    download_index),
+                               list("Gazetteer", gazetteer_path,
+                                    index_hashes$gazetteer,
+                                    download_gazetteer),
+                               list("Location aliases", location_aliases_path,
+                                    index_hashes$location_aliases,
+                                    download_location_aliases))
+
+        for (details in update_details) {
+            fname <- details[1]
+            local_path <- details[2]
+            current_hash <- details[3]
+            download_func <- details[4]
+
+            if (tools::md5sum(local_path) != current_hash) {
+                verbose_message(sprintf(" - Updating %s", fname))
+                # Save the current version in case we need to roll back
+                file.rename(local_path, paste0(local_path, ".oldbkp"))
+                backed_up <- c(backed_up, local_path)
+                # Try and get the new version
+                got_update <- download_func()
+                if (! got_update) {
+                    update_successful <- FALSE
+                }
+            } else {
+                verbose_message(sprintf(" - %s up to date", fname))
+            }
         }
 
-        # Check the location aliases
-        loc_alias_hash <- tools::md5sum(location_aliases_path)
-        if (loc_alias_hash != index_hashes$location_aliases) {
-            verbose_message(" - Updating location aliases")
-            download_location_aliases()
+        if (! update_successful) {
+            # reverse downloads
+            for (local_path in backed_up) {
+                file.remove(local_path)
+                file.rename(paste0(local_path, ".oldbkp"), local_path)
+            }
+            message("Downloading failure: index files are outdated but have been left as is")
         } else {
-            verbose_message(" - Location aliases up to date")
+            # remove backups
+            for (local_path in backed_up) {
+                file.remove(paste0(local_path, ".oldbkp"))
+            }
         }
     }
 
     # Load the index
     load_index()
 
-    invisible()
+    return(invisible(TRUE))
 }
 
 
@@ -193,13 +243,14 @@ download_index <- function() {
     path <- file.path(safedir, "index.json")
     url <- getOption("safedata.url")
     api <- paste0(url, "/api/index")
-    result <- try(curl::curl_download(api, path), silent = TRUE)
 
-    if (inherits(result, "try-error")) {
-        stop("Failed to download index")
+    success <- try_to_download(api, path)
+
+    if (! success) {
+        message("Failed to download index")
     }
 
-    return(NULL)
+    return(success)
 
 }
 
@@ -219,13 +270,14 @@ download_gazetteer <- function() {
     path <- file.path(safedir, "gazetteer.geojson")
     url <- getOption("safedata.url")
     api <- paste0(url, "/api/gazetteer")
-    result <- try(curl::curl_download(api, path), silent = TRUE)
 
-    if (inherits(result, "try-error")) {
-        stop("Failed to download gazetteer")
+    success <- try_to_download(api, path)
+
+    if (! success) {
+        message("Failed to download index")
     }
 
-    return(NULL)
+    return(success)
 }
 
 
@@ -245,13 +297,13 @@ download_location_aliases <- function() {
     path <- file.path(safedir, "location_aliases.csv")
     url <- getOption("safedata.url")
     api <- paste0(url, "/api/location_aliases")
-    result <- try(curl::curl_download(api, path), silent = TRUE)
+    success <- try_to_download(api, path)
 
-    if (inherits(result, "try-error")) {
-        stop("Failed to download location aliases")
+    if (! success) {
+        message("Failed to download location aliases")
     }
 
-    return(NULL)
+    return(success)
 }
 
 
@@ -524,11 +576,13 @@ set_example_safe_dir <- function() {
     #' the package structure. The \code{set_example_safe_dir} function is used
     #' in code examples to unpack this example directory into a temporary
     #' folder and set it for use in  the example code. The function
-    #' \code{unset_demo_dir()} is then used to restore any existing data
+    #' \code{unset_example_safe_dir} is then used to restore any existing data
     #' directory set by the user. The example directory should only be created
     #' once per session.
     #'
     #' @seealso \code{\link{set_safe_dir}}
+    #' @return The set_example_safe_dir function returns the path of the example
+    #'    directory invisibly.
     #' @export
 
     # record the user data directory if one has been set
@@ -550,6 +604,7 @@ set_example_safe_dir <- function() {
     }
 
     set_safe_dir(demo_dir, update = FALSE)
+    return(invisible(demo_dir))
 }
 
 unset_example_safe_dir <- function() {

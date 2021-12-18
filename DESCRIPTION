@@ -20,11 +20,13 @@ Imports:
     chron,
     curl,
     sf,
+    httr,
     igraph
 Suggests:
     knitr,
     rmarkdown,
-    ape
+    ape,
+    testthat (>= 2.1.0)
 Encoding: UTF-8
 URL: https://imperialcollegelondon.github.io/safedata/index.html
 BugReports: https://github.com/ImperialCollegeLondon/safedata/issues
