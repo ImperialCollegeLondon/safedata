@@ -4,41 +4,38 @@ library(safedata)
 test_that("no internet fails gracefully", {
     Sys.setenv(NETWORK_DOWN = TRUE)
 
-    success <- expect_message(
-        safedata:::try_to_download("https://httpbin.org"),
-        regexp = "No internet connection.",
-    )
+    success <- safedata:::try_to_download("https://httpbin.org")
+
     expect_false(success)
+    expect_match(attr(success, "fail_msg"), regexp = "No internet connection")
 
     Sys.unsetenv("NETWORK_DOWN")
 })
 
 test_that("bad host fails gracefully", {
 
-    success <- expect_message(
-        safedata:::try_to_download("https://httpbinzzzzz.org"),
-        regexp = "URL not found",
-    )
+    success <- safedata:::try_to_download("https://httpbinzzzzz.org")
+
     expect_false(success)
+    expect_match(attr(success, "fail_msg"), regexp = "URL not found")
 
 })
 
 test_that("timeout fails gracefully", {
 
-    success <- expect_message(
-        safedata:::try_to_download("https://httpbin.org/delay/2", timeout = 1),
-        regexp = "URL timed out",
-    )
+    success <- safedata:::try_to_download("https://httpbin.org/delay/2",
+                                          timeout = 1)
     expect_false(success)
+    expect_match(attr(success, "fail_msg"), regexp = "URL timed out")
+
 })
 
 test_that("URL errors fails gracefully", {
 
-    success <- expect_message(
-        safedata:::try_to_download("https://httpbin.org/status/404"),
-        regexp = "URL error",
-    )
+    success <- safedata:::try_to_download("https://httpbin.org/status/404")
     expect_false(success)
+    expect_match(attr(success, "fail_msg"), regexp = "URL error")
+
 })
 
 test_that("Good URL works and returns object to memory", {
