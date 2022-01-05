@@ -411,7 +411,7 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
         verbose_message(msg)
     }
 
-    # download metadata if requested
+    # download metadata if requested - bail if metadata requested and unavailable
     if (download_metadata) {
         success <- fetch_record_metadata(record_set)
 
@@ -453,7 +453,7 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
 
             # Handle token if provided
             if (! is.null(token)) {
-                these_files$public_url <- paste0(these_files$public_url, 
+                these_files$public_url <- paste0(these_files$public_url,
                                                  "?token=", token)
             }
 
@@ -468,7 +468,8 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
                                recursive = TRUE)
                 }
 
-                # Download the target file to the directory
+                # Download the target file to the directory - report failures but
+                # don't abort - try and get as much as possible.
                 result <-  try_to_download(this_file$public_url,
                                            local_path = this_file$full_path)
 
