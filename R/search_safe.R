@@ -287,18 +287,24 @@ safe_api_search <- function(endpoint, params, ids = NULL,
     url <- getOption("safedata.url")
     url <- sprintf("%s/%s/%s?%s", url, "api/search", endpoint, params)
     url <- utils::URLencode(url)
-    content <- jsonlite::fromJSON(url)
+    # Get the URL content as a response object
+    content <- try_to_download(url)
 
-    if ("error" %in% names(content)) {
-        print(url)
-        stop(sprintf("%s: %s", content$error, content$message))
+    if (isFALSE(content)) {
+        message("Search API unavailable:")
+        message(attr(content, "fail_msg"))
+        return(invisible(NULL))
+    } else {
+        # extract the content - auto conversion from JSON to list
+        content <- httr::content(content)
     }
 
     verbose_message(sprintf("Search returned %i records", content$count))
 
     # convert search results to safe_record_set
     if (content$count > 0) {
-        ret <- validate_record_ids(content$entries$zenodo_record_id)
+        recids <-  sapply(content$entries, '[[', 'zenodo_record_id')
+        ret <- validate_record_ids(recids)
     } else {
         ret <- data.frame(concept = numeric(0), record = numeric(0),
                           available = logical(0), most_recent = numeric(0),

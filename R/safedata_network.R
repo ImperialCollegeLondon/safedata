@@ -14,13 +14,15 @@
 # - set_safe_dir(create = TRUE): cannot create new dir without network
 # - set_safe_dir(update = TRUE): cannot update indices - 'offline' mode
 #
-# These are accessing the index, gazetter, location aliases and file hashes
-# APIs, and we cannot assume that a single check within set_safe_dir is
-# sufficient as the connection could fail at any time, so needs to be graceful
-# at the file level.
+#   These are accessing the index, gazetter, location aliases and file hashes
+#   APIs, and we cannot assume that a single check within set_safe_dir is
+#   sufficient as the connection could fail at any time, so needs to be graceful
+#   at the file level.
 #
 # metadata.R
-# - fetch_record_metata: cannot retrieve JSON data from api/record: offline
+# - fetch_record_metata: cannot retrieve JSON data from api/record: 'offline' mode
+#
+# 
 
 
 #' Data downloading and the safedata package.
@@ -49,8 +51,8 @@
 #' Downloading data uses the curl package and the underlying libcurl library.
 #' Some older versions of Mac OS X (10.14 and earlier) provide a built-in
 #' libcurl with an outdated set of certificates that prevents curl from
-#' connecting to resources using LetsEncrypt, which includes 
-#' https://safeproject.net. To use safedata on these systems, you have to 
+#' connecting to resources using LetsEncrypt for HTTPS, which includes
+#' https://safeproject.net. To use safedata on these systems, you have to
 #' install a newer version of curl (e.g. using brew) and then compile curl
 #' from source, linking it to that newer libcurl.
 #'
@@ -65,11 +67,11 @@ NULL
 #' then actual HTTP error codes. If none of those occur, the resource
 #' is downloaded.
 #'
-#' If the download fails, a message is printed and the function returns
-#' FALSE. Otherwise, an \link{\code{httr::response}} object is returned
-#' containing the resource. If a local path is provided, the resource
-#' is downloaded to that path and the function returns TRUE to indicate
-#' success.
+#' If the download fails, the function returns FALSE and the return
+#' value attribute 'fail_msg' is used to provide details. Otherwise,
+#' an \link{\code{httr::response}} object is returned containing the
+#' resource. If a local path is provided, the resource is downloaded
+#' to that path and the function returns TRUE to indicate success.
 #'
 #' @section Note:
 #'
@@ -91,36 +93,40 @@ try_to_download <- function(url, local_path=NULL, timeout=10) {
     url_down <- as.logical(Sys.getenv("URL_DOWN", unset = FALSE))
     resource_down <- Sys.getenv("RESOURCE_DOWN", unset=FALSE)
 
+    # Create a failure object to add failure messages to.
+    fail <- FALSE
+
     # Is there a network connection _at all_
-    if (! curl::has_internet() | network_down) {
-        message("No internet connection.")
-        return(FALSE)
+    if (! curl::has_internet() || network_down) {
+        attr(fail, "fail_msg") <- "No internet connection."
+        return(fail)
     }
 
-    # Check if URL is available - use HEAD via httr to minimise traffic
+    # Check if URL is available - use HEAD not GET from httr to minimise
+    # network traffic during checking
     response <- tryCatch(
-      httr::HEAD(url = url, httr::timeout(timeout)),
-      error = function(e) conditionMessage(e),
-      warning = function(w) conditionMessage(w)
+        httr::HEAD(url = url, httr::timeout(timeout)),
+        error = function(e) conditionMessage(e),
+        warning = function(w) conditionMessage(w)
     )
 
+    # Responses that are not httr response objects - error strings
     if (inherits(response, "character")) {
-        # Responses that are not response objects - error strings
         if (grepl("Could not resolve host", response)) {
             # URL is garbage - cannot resolve
-            message("URL not found")
-            return(FALSE)
+            attr(fail, "fail_msg") <- "URL not found"
+            return(fail)
         } else if (grepl("Timeout was reached", response)) {
             # No timely response
-            message("URL timed out")
-            return(FALSE)
+            attr(fail, "fail_msg") <- "URL timed out"
+            return(fail)
         } else if (grepl("SSL certificate problem", response)) {
             # Letsencrypt + old Mac OS?
-            message("SSL certificate issue: see ?safedata_network")
-            return(FALSE)
+            attr(fail, "fail_msg") <- "SSL issue: see ?safedata_network"
+            return(fail)
         } else {
-            message("Unknown URL response: ", response)
-            return(FALSE)
+            attr(fail, "fail_msg") <- paste0("Unknown URL response: ", response)
+            return(fail)
         }
     }
 
@@ -133,8 +139,8 @@ try_to_download <- function(url, local_path=NULL, timeout=10) {
     if (httr::http_error(response) || url_down || resource_down) {
         # An error? Deliberately letting this message report the
         # true status code for faked failures
-        message(sprintf("URL error: %s", response$status_code))
-        return(FALSE)
+        attr(fail, "fail_msg") <- sprintf("URL error: %s", response$status_code)
+        return(fail)
     }
 
     # Now (unless something happened in the last few milliseconds)

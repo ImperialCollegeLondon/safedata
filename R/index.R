@@ -161,8 +161,9 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
         # then check each of the three index files
         index_hashes <- try_to_download(paste0(url, "/api/index_hashes"))
 
-        if (! inherits(index_hashes, 'response')){
-            message("Unable to check for updates, using existing index files")
+        if (isFALSE(index_hashes)) {
+            message("Unable to check for updates, using existing index files: ")
+            message(attr(index_hashes, "fail_msg"))
             load_index()
             return(invisible(TRUE))
         } else {
@@ -190,11 +191,12 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
                                     download_location_aliases))
 
         for (details in update_details) {
+
             fname <- details[[1]]
             local_path <- details[[2]]
             current_hash <- details[[3]]
             download_func <- details[[4]]
-            
+
             if (tools::md5sum(local_path) != current_hash) {
                 verbose_message(sprintf(" - Updating %s", fname))
                 # Save the current version in case we need to roll back
@@ -254,11 +256,11 @@ download_index <- function() {
     success <- try_to_download(api, path)
 
     if (! success) {
-        message("Failed to download index")
+        message("Failed to download index:")
+        message(attr(success, "fail_msg"))
     }
 
     return(success)
-
 }
 
 
@@ -281,7 +283,8 @@ download_gazetteer <- function() {
     success <- try_to_download(api, path)
 
     if (! success) {
-        message("Failed to download index")
+        message("Failed to download index:")
+        message(attr(success, "fail_msg"))
     }
 
     return(success)
@@ -307,7 +310,8 @@ download_location_aliases <- function() {
     success <- try_to_download(api, path)
 
     if (! success) {
-        message("Failed to download location aliases")
+        message("Failed to download location aliases:")
+        message(attr(success, "fail_msg"))
     }
 
     return(success)
