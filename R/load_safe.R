@@ -324,12 +324,13 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
     #' @param refresh Should the function check if local copies have been
     #'    modified and download fresh copies. This is useful if the local
     #'    copies have unintentionally been modified but note the warning above.
-    #' @param token An access token for restricted datasets. These tokens are,
-    #'    requested through the Zenodo page for a restricted dataset and are,
+    #' @param token An access token for restricted datasets. These tokens are
+    #'    requested through the Zenodo page for a restricted dataset and are
     #'    long alphanumeric strings. If you are providing a token, you should
     #'    only provide the record id for that dataset.
     #' @return Invisibly, a vector of paths within the `safe_dir` for
-    #'    successfully downloaded files.
+    #'    successfully downloaded files. If the download is not successful then
+    #'    the function returns FALSE.
     #' @examples
     #'    \donttest{
     #'        set_example_safe_dir()
@@ -351,11 +352,11 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
 
     if (! length(records_to_get)) {
         verbose_message("No valid record ids provided")
-        return(invisible())
+        return(invisible(FALSE))
     } else if (! is.null(token) & length(records_to_get) > 1) {
         verbose_message("When using an access token, please download ",
                         "the single record")
-        return(invisible())
+        return(invisible(FALSE))
     }
 
     # Get the target files
@@ -404,7 +405,7 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
         confirm_response <- utils::menu(c("Yes", "No"), title = msg)
         if (confirm_response != 1) {
             message("Aborting download")
-            invisible()
+            return(invisible(FALSE))
         }
     } else {
         verbose_message(msg)
@@ -412,7 +413,13 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
 
     # download metadata if requested
     if (download_metadata) {
-        fetch_record_metadata(record_set)
+        success <- fetch_record_metadata(record_set)
+
+        if (isFALSE(success)) {
+            message('Could not download metadata, aborting download: ')
+            message(attr(success, 'fail_msg'))
+            return(invisible(FALSE))
+        }
     }
 
     # split by records
@@ -423,7 +430,7 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
 
         current_record <- these_files$zenodo_record_id[1]
 
-        if (! is.null(token) & all(these_files$dataset_access == "restricted")) {
+        if (! is.null(token) && all(these_files$dataset_access == "restricted")) {
             verbose_message("Using token to access restricted record")
         } else if (! these_files$available[1]) {
             msg <- "%i files for record %i: under embargo or restricted"
@@ -446,7 +453,8 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
 
             # Handle token if provided
             if (! is.null(token)) {
-                these_files$public_url <- paste0(these_files$public_url, "?token=", token)
+                these_files$public_url <- paste0(these_files$public_url, 
+                                                 "?token=", token)
             }
 
             # Now download the required files
@@ -461,18 +469,18 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
                 }
 
                 # Download the target file to the directory
-                result <-  try(
-                    curl::curl_download(this_file$public_url,
-                                        dest = this_file$full_path),
-                               silent = TRUE)
+                result <-  try_to_download(this_file$public_url,
+                                           local_path = this_file$full_path)
 
-                if (inherits(result, "try-error")) {
+                if (isFALSE(result)) {
                     if (this_file$local_copy) {
                         verbose_message(" - Failed to refresh: ",
                                         this_file$filename)
+                        message(attr(result, 'fail_msg'))
                     } else {
                         verbose_message(" - Failed to download: ",
                                         this_file$filename)
+                        message(attr(result, 'fail_msg'))
                     }
                 } else {
                     if (this_file$local_copy) {
@@ -491,7 +499,7 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
     # Update the index to record new local copies
     if (length(downloaded) > 0) {
         index$local_copy[index$path %in% downloaded] <- TRUE
-        # save the index into the cache
+        # save the updated index into the cache
         assign("index", index, safedata_env)
     }
 
