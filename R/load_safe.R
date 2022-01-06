@@ -123,7 +123,9 @@ load_safe_data <- function(record_id, worksheet) {
                     "id" = "text", "categorical" = "text",
                     "ordered categorical" = "text", "numeric" = "numeric",
                     "taxa" = "text", "abundance" = "numeric",
-                    "categorical trait" = "text", "numeric trait" = "numeric",
+                    "ordered categorical trait" = "text", 
+                    "categorical trait" = "text", 
+                    "numeric trait" = "numeric",
                     "categorical interaction" = "text",
                     "numeric interaction" = "numeric", "file" = "text",
                     "comments" = "text")
