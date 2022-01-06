@@ -12,7 +12,8 @@
 #
 # index.R
 # - set_safe_dir(create = TRUE): cannot create new dir without network
-# - set_safe_dir(update = TRUE): cannot update indices - 'offline' mode
+# - set_safe_dir(update = TRUE): cannot update indices - 'offline' mode but done
+#   atomically so that the index files are always left in new or old config.
 #
 #   These are accessing the index, gazetter, location aliases and file hashes
 #   APIs, and we cannot assume that a single check within set_safe_dir is
@@ -20,9 +21,15 @@
 #   at the file level.
 #
 # metadata.R
-# - fetch_record_metata: cannot retrieve JSON data from api/record: 'offline' mode
+# - fetch_record_metata: cannot retrieve JSON data from api/record: 'offline'
+#   mode
 #
-# 
+# load_safe.R
+# - download actual data files - offline mode, not worrying too much about 
+#   partial metadata downloads, these don't cause problems
+#
+# taxa.R
+# - download taxon coverage - offline mode.
 
 
 #' Network resources and the safedata package.

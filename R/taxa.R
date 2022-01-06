@@ -72,7 +72,8 @@ get_taxon_coverage <- function() {
     #' "user" taxon with Animalia as a parent taxon.
     #'
     #' @return A data frame containing higher taxon level information for
-    #'   each taxon in the database taxon index.
+    #'   each taxon in the database taxon index. If the API is unavailable,
+    #'   the function returns NULL.
     #' @seealso \code{\link{get_taxa}}
     #' @examples
     #'     \donttest{
@@ -82,10 +83,18 @@ get_taxon_coverage <- function() {
 
     url <- getOption("safedata.url")
     api <- paste0(url, "/api/taxa")
-    taxa <- try(jsonlite::fromJSON(api), silent = TRUE)
+    response <- try_to_download(api)
 
-    if (inherits(taxa, "try-error")) {
-        stop("Failed to download taxon index")
+    if (isFALSE(response)) {
+        message("Unable to download taxon index: ")
+        message(attr(response, "fail_msg"))
+        return(invisible())
+    } else {
+        # Use jsonlite::fromJSON (and simplification routines),
+        # not the httr::content conversion
+        taxa <- jsonlite::fromJSON(
+                    httr::content(response, as = "text", encoding = "UTF-8")
+                    )
     }
 
     # This API does not bring in worksheet names (they will clash across
@@ -93,6 +102,7 @@ get_taxon_coverage <- function() {
     taxa$worksheet_name <- taxa$taxon_name
     taxa <- taxon_index_to_taxon_table(taxa)
 
+    return(taxa)
 }
 
 
