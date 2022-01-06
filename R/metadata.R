@@ -268,7 +268,7 @@ fetch_record_metadata <- function(record_set) {
 
         safedir <- get_data_dir()
 
-        # Find missing RDS files
+        # Find missing JSON files
         local_path <- file.path(safedir,
                                 record_set$concept,
                                 record_set$record,
@@ -306,8 +306,9 @@ fetch_record_metadata <- function(record_set) {
                 if (! dir.exists(dirname(to_get$local_path))) {
                     dir.create(dirname(to_get$local_path), recursive = TRUE)
                 }
-                jsonlite::write_json(httr::content(response),
-                                     path = to_get$local_path)
+                # Write the binary content to avoid issues with conversion of the
+                # JSON payload to and from R objects.
+                writeBin(httr::content(response, as='raw'), con = to_get$local_path)
             }
         }
     }
@@ -488,12 +489,12 @@ show_record <- function(obj) {
     cat(sprintf("Title: %s\n", metadata$title))
 
     surnames <- sapply(strsplit(metadata$authors$name, ","), "[", 1)
-    cat(sprintf(paste0("Authors: %s\nPublication date: %s\n,",
+    cat(sprintf(paste0("Authors: %s\nPublication date: %s\n",
                        "Record ID: %i\nConcept ID: %i\n"),
                 paste(surnames, collapse = ", "),
                 format(as.POSIXct(metadata$publication_date), "%Y-%m-%d"),
-                record_set$zenodo_record_id,
-                record_set$zenodo_concept_id))
+                record_set$record,
+                record_set$concept))
 
     status <- file_status(metadata)
     cat(sprintf("Status: %s\n", status))
