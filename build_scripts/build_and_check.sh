@@ -1,6 +1,11 @@
 #!/bin/bash
 # Script to build and check safedata
 
+# 0) Show R version being used
+R --version
+
+printf "\n------------\n\n"
+
 # 1) Move down into the source directory and update the documents using Roxygen and pkgdown
 cd ../
 Rscript -e "devtools::document()"
