@@ -9,6 +9,10 @@ set_example_safe_dir()
 
 unset_example_safe_dir()
 }
+\value{
+The set_example_safe_dir function returns the path of the example
+   directory invisibly.
+}
 \description{
 The documentation of \code{safedata} includes code examples using a data
 directory. A zipped example directory is included in the package files
@@ -16,7 +20,7 @@ directory. A zipped example directory is included in the package files
 the package structure. The \code{set_example_safe_dir} function is used
 in code examples to unpack this example directory into a temporary
 folder and set it for use in  the example code. The function
-\code{unset_demo_dir()} is then used to restore any existing data
+\code{unset_example_safe_dir} is then used to restore any existing data
 directory set by the user. The example directory should only be created
 once per session.
 }
