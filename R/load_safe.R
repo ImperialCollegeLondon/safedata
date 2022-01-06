@@ -602,5 +602,5 @@ insert_dataset <- function(record_id, files) {
         }
     }
 
-    return()
+    return(invisible())
 }
