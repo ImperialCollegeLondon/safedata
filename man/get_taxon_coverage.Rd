@@ -8,7 +8,8 @@ get_taxon_coverage()
 }
 \value{
 A data frame containing higher taxon level information for
-  each taxon in the database taxon index.
+  each taxon in the database taxon index. If the API is unavailable,
+  the function returns NULL.
 }
 \description{
 This function downloads the current taxon index across published
