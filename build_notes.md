@@ -170,7 +170,18 @@ Rscript refresh_example_dir.R
 
 Releases start from the `develop` branch, with a bunch of commits that you want
 to release as a new version. Before you do anything, you should check that the
-current commit in `develop` is building correctly:
+current commit in `develop` is building correctly. 
+
+There are two steps. First, the package contains a test suite, which currently 
+only checks that network failures are handled gracefully. Those have to be passing
+before the package can be built so:
+
+```sh
+Rscript -e "devtools::test()
+```
+
+If the tests pass, then the second step is to verify that the code packaging, 
+documentation and formal CRAN checking passes.
 
 ```sh
 cd build_scripts
@@ -180,7 +191,7 @@ cd build_scripts
 Because nearly all of the actual user changes happen in the vignette and R
 files, it is easy to forget to update the documentation, so a full checking
 process starts there. The code below runs the full checking process on your
-local machine. The code in `build_and_check.sh` but is reproduced here to show
+local machine. The code in `build_and_check.sh`  is reproduced here to show
 the steps.
 
 ```sh
