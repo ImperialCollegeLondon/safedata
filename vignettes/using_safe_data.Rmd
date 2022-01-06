@@ -32,6 +32,24 @@ if (length(lines)==1) {        # first n lines
 	x <- paste(c(x, ""), collapse = "\n")
 	hook_output(x, options)
 })
+# Comments as #> not ##
+knitr::opts_chunk$set(
+  comment = '#>'
+)
+```
+
+```{r load_remote_data, echo=FALSE}
+# All the remote data used in building this vignette is downloaded
+# and cached in R/sysdata.rda, so that vignette code checking and 
+# building does not rely on remote resources. The vignette_objects.R
+# script _does_ need to be run before fresh releases to update the file.
+
+use_remote <- as.logical(Sys.getenv('BUILD_VIGNETTE_USING_REMOTE', FALSE))
+if (! use_remote){
+  soil_datasets <- safedata:::vignette_soil_search
+  ants <- safedata:::vignette_ants_search
+  all_taxa <- safedata:::vignette_taxon_coverage
+}
 ```
 
 The `safedata` package makes it easy to search for and use datasets collected at
@@ -165,8 +183,10 @@ All of these functions return a `safe_record_set` objects, which is just a data
 frame containing validated record ids and access information and so you can use
 the normal data frame indices (e.g. `recs[1,]`) to select particular records. 
 
-```{r search_text, echo=TRUE}
+
+```{r search_text, eval=use_remote}
 soil_datasets <- search_text('soil')
+```{r search_text_out, collapse=TRUE}
 print(soil_datasets)
 ```
 
@@ -182,8 +202,10 @@ hierarchy leading up to that those taxa, are added to a taxonomic database on
 the SAFE Project website. The `search_taxa()` function searches that index to
 identify all the datasets that contain a particular taxon.
 
-```{r search_taxa, collapse=TRUE}
-print(ants <- search_taxa('Formicidae'))
+```{r search_taxa, eval=use_remote}
+ants <- search_taxa('Formicidae')
+```{r search_taxa_out, collapse=TRUE}
+print(ants)
 ```
 
 The taxonomic index is built around the GBIF backbone taxonomic database and
@@ -191,7 +213,7 @@ include the following core taxonomic levels: kingdom, phylum, class, order,
 family, genus, species and subspecies. It is also possible to search by [GBIF
 ID](https://www.gbif.org/species/4342).
 
-```{r search_taxa_id, collapse=TRUE}
+```{r search_taxa_id, eval=use_remote}
 ants <- search_taxa(gbif_id=4342)
 ```
 
@@ -209,7 +231,7 @@ datasets but users can also provide their own search geometries using the Well
 Known Text format. The search includes simple GIS capabilities to look for
 sampling within a  given distance of the query location.
 
-```{r search_spatial, collapse=TRUE}
+```{r search_spatial, eval=use_remote}
 # Datasets that include sampling within experimental block A
 within_a <- search_spatial(location='BL_A')
 # Datasets that sampled within 2 km of the Maliau Basin Field Study Centre
@@ -225,9 +247,9 @@ projected coordinate system for all distance calculations and GIS operations.
 It is possible to combine searches using logical operators (`&` and `|`), which
 simply find the intersection and unions of sets of SAFE records.
 
-```{r combining_searches, collapse=TRUE}
+```{r combining_searches, collapse=TRUE, eval=use_remote}
 # Three searches
-fish <- search_taxa('Actinopterygii')
+fish <- search_taxa("Actinopterygii")
 odonates <- search_taxa("Odonata")
 ewers <- search_authors("Ewers")
 # Logical combinations
@@ -243,8 +265,8 @@ has to be retrieved from the server, so might be faster on poor networks.
 However, this obviously only works for repeated narrowing of a search, so has
 less functionality.
 
-```{r restricting_searches, collapse=TRUE}
-fish <- search_taxa('Actinopterygii')
+```{r restricting_searches, collapse=TRUE, eval=use_remote}
+fish <- search_taxa("Actinopterygii")
 ewers <- search_authors("Ewers", ids=fish)
 ```
 
@@ -327,11 +349,11 @@ metadata and then a summary of the data worksheets contained in the dataset.
 Note that - because a `safe_record_set` is just a data frame with some extra
 information attached - you can use the usual data frame indexing to select a row
 to pass to other functions. Running `show_record()` also _requires an internet
-connection_: the package downloads a JSON file of the record metadata and stores
-it in the SAFE data directory.
+connection_ when a record is first examined: the package downloads a JSON file
+of the record metadata and stores it in the SAFE data directory.
 
 ```{r show_record}
-show_record(recs[3,])
+show_record(1400562)
 ```
 
 ## `show_worksheet()`
@@ -341,14 +363,14 @@ The default is to show a compact table of field names, field types and truncated
 descriptions: 
 
 ```{r show_worksheet}
-show_worksheet(recs[3,], 'Data')
+show_worksheet(1400562, 'EnvironVariables')
 ```
 
 There is also an extended display (`extended_fields=TRUE`) that will print out a
 list of all the available metadata for each field.
 
 ```{r show_worksheet_long, output.lines=15}
-show_worksheet(recs[3,], 'Data', extended_fields=TRUE)
+show_worksheet(1400562, 'EnvironVariables', extended_fields=TRUE)
 ```
 
 
@@ -459,8 +481,9 @@ dataset. Some generate simple tables of taxa:
 3. The `get_taxon_coverage` function can be used to get a taxon table of all
    taxa currently referenced in _all_ datasets.
 
-     ```{r get_taxon_coverage}
+     ```{r get_taxon_coverage, eval=use_remote}
      all_taxa <- get_taxon_coverage()
+     ```{r get_taxon_coverage_out}
      str(all_taxa)
      ```
  
