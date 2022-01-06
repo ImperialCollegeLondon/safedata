@@ -25,15 +25,15 @@
 # 
 
 
-#' Data downloading and the safedata package.
+#' Network resources and the safedata package.
 #'
 #' @description
 #' The safedata package requires access to the internet in order to:
 #'
-#' 1) maintain an up-to-date index of datasets and the locations gazeteer,
-#' 2) download datasets and their metadata,
-#' 3) download metadata about the taxonomic coverage of datasets, and
-#' 4) search dataset metadata for relevant datasets.
+#' 1. maintain an up-to-date index of datasets and the locations gazeteer,
+#' 2. download datasets and their metadata,
+#' 3. download metadata about the taxonomic coverage of datasets, and
+#' 4. search dataset metadata for relevant datasets.
 #'
 #' These actions use two resources. The first is the safedata web server API
 #' which provides everything except the actual datasets. The second is the
@@ -54,36 +54,38 @@
 #' connecting to resources using LetsEncrypt for HTTPS, which includes
 #' https://safeproject.net. To use safedata on these systems, you have to
 #' install a newer version of curl (e.g. using brew) and then compile curl
-#' from source, linking it to that newer libcurl.
+#' from source, linking it to that newer libcurl. The simplest way to do this
+#' is to use \code{export PKG_CONFIG_PATH="/usr/local/opt/curl/lib/pkgconfig"}
+#' before installing the package: this points the installation to the package
+#' configuration for the brew installed version of curl.
 #'
-#' @docType package
 #' @name safedata_network
 NULL
 
 #' Attempt to download a URL resource, failing gracefully.
 #'
-#' This function tries to fetch the HEAD for the resource and handles
-#' failure to resolve (such as a bad safedata API url), timeouts and
-#' then actual HTTP error codes. If none of those occur, the resource
-#' is downloaded.
+#' This function tries to fetch the HEAD for the resource and handles failure to
+#' resolve (such as a bad safedata API url), timeouts and then actual HTTP error
+#' codes. If none of those occur, the resource is downloaded.
 #'
-#' If the download fails, the function returns FALSE and the return
-#' value attribute 'fail_msg' is used to provide details. Otherwise,
-#' an \link{\code{httr::response}} object is returned containing the
-#' resource. If a local path is provided, the resource is downloaded
-#' to that path and the function returns TRUE to indicate success.
+#' If the download fails, the function returns FALSE and the return value
+#' attribute 'fail_msg' is used to provide details. Otherwise, an
+#' \code{\link[httr]{response}} object is returned containing the resource. If a
+#' local path is provided, the resource is downloaded to that path and the
+#' function returns TRUE to indicate success.
 #'
 #' @section Note:
 #'
-#' This function contains code to simulate network failures of varying
-#' kinds (no network, no API, specific resource unavailable) for use
-#' in unit testing that the safedata package handles theses errors
-#' gracefully.
+#' This function contains code to simulate network failures of varying kinds (no
+#' network, no API, specific resource unavailable) for use in unit testing that
+#' the safedata package handles theses errors gracefully.
 #'
-#' @param url The URL to download
-#' @param local_path A path to save the URL content to
-#' @return An \code{httr::response} object or a boolean showing if the
-#'    download attempt was successful
+#' @param url The URL to download.
+#' @param local_path A path to a file in which to save the URL content.
+#' @param timeout The waiting time in seconds before a request should
+#'    timeout.
+#' @return An \code{response} object or a boolean showing if the
+#'    download attempt was successful.
 #' @keywords internal
 
 try_to_download <- function(url, local_path=NULL, timeout=10) {
