@@ -1,5 +1,5 @@
 ---
-title: "An overview of data at the SAFE Project"
+title: "An overview of the safedata package"
 author: "Andy Aldersley and David Orme"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
