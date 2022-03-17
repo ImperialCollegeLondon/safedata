@@ -1,10 +1,10 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
-language: R
+language: r
 dist: bionic
 cache: packages
 
-matrix:
+jobs:
   include:
   - r: release
     os: linux
@@ -34,16 +34,16 @@ after_success:
   - Rscript -e 'pkgdown::build_site()'
 
 deploy:
+  strategy: git
   provider: pages
-  skip-cleanup: true
-  github-token: $GITHUB_PAT
-  keep-history: true
-  local-dir: docs
+  token: $GITHUB_PAT
+  keep_history: true
+  local_dir: docs
   on:
     branch: master
     condition: $DEPLOY = 'true'
 
-r-binary-packages:
+r_binary_packages:
 - Rcpp
 - units
 - devtools
@@ -73,7 +73,6 @@ r-binary-packages:
 - mime
 - pillar
 - pkgconfig
-- pkgdown
 - prettyunits
 - progress
 - R6
@@ -94,3 +93,5 @@ r-binary-packages:
 - zeallot
 - assertthat
 
+r_packages:
+- pkgdown
