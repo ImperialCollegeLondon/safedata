@@ -240,7 +240,8 @@ fetch_record_metadata <- function(record_set) {
     #' SAFE data directory for reuse.
     #'
     #' @param record_set An object of class \code{\link{safe_record_set}}.
-    #' @return The \code{fetch_record_metadata} function returns NULL and
+    #' @return The \code{fetch_record_metadata} function invisibly returns a
+    #'    logical value indicating if all records were fetched successfully and
     #'    \code{load_record_metadata} returns a list object containing record
     #'    metadata
     #' @describeIn fetch_record_metadata Download and store JSON metadata for
@@ -267,7 +268,7 @@ fetch_record_metadata <- function(record_set) {
 
         safedir <- get_data_dir()
 
-        # Find missing RDS files
+        # Find missing JSON files
         local_path <- file.path(safedir,
                                 record_set$concept,
                                 record_set$record,
@@ -281,24 +282,38 @@ fetch_record_metadata <- function(record_set) {
             verbose_message("Downloading ", nrow(record_set),
                             " record metadata files\n")
         }
+        fetch_successful <- TRUE
 
-         for (idx in seq_along(record_set$record)) {
+        for (idx in seq_along(record_set$record)) {
             to_get <- record_set[idx, ]
 
-            if (! dir.exists(dirname(to_get$local_path))) {
-                dir.create(dirname(to_get$local_path), recursive = TRUE)
-            }
+            # TODO - pop this out into a function with a logical return
+            # to facilitate testing of failure modes. Use expect_message
+            # to test fetch_record_metadata - maybe block specific IDs?
+
             url <- getOption("safedata.url")
             api <- sprintf("%s/api/record/%i", url, to_get$record)
-            result <- try(curl::curl_download(api, to_get$local_path),
-                          silent = TRUE)
-            if (inherits(result, "try-error")) {
-                stop("Could not download record metadata")
+            response <- try_to_download(api)
+
+            if (isFALSE(response)) {
+                message(sprintf("Failed to download metadata: %i",
+                                to_get$record))
+                message(attr(response, "fail_msg"))
+                fetch_successful <- FALSE
+            } else {
+                message(sprintf("Downloaded metadata: %i",
+                                to_get$record))
+                if (! dir.exists(dirname(to_get$local_path))) {
+                    dir.create(dirname(to_get$local_path), recursive = TRUE)
+                }
+                # Write the binary content to avoid issues with conversion of the
+                # JSON payload to and from R objects.
+                writeBin(httr::content(response, as='raw'), con = to_get$local_path)
             }
         }
     }
 
-    return(invisible())
+    return(invisible(fetch_successful))
 }
 
 
@@ -474,12 +489,12 @@ show_record <- function(obj) {
     cat(sprintf("Title: %s\n", metadata$title))
 
     surnames <- sapply(strsplit(metadata$authors$name, ","), "[", 1)
-    cat(sprintf(paste0("Authors: %s\nPublication date: %s\n,",
+    cat(sprintf(paste0("Authors: %s\nPublication date: %s\n",
                        "Record ID: %i\nConcept ID: %i\n"),
                 paste(surnames, collapse = ", "),
                 format(as.POSIXct(metadata$publication_date), "%Y-%m-%d"),
-                record_set$zenodo_record_id,
-                record_set$zenodo_concept_id))
+                record_set$record,
+                record_set$concept))
 
     status <- file_status(metadata)
     cat(sprintf("Status: %s\n", status))

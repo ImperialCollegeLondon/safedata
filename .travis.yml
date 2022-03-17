@@ -1,97 +1,100 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
-language: R
+language: r
 dist: bionic
 cache: packages
 
-matrix:
-  include:
-  - r: release
-    os: linux
-    env: DEPLOY="true"	
-  - r: devel
-    os: linux
-    env: DEPLOY="false"	
-  - r: release
-    os: osx
-    env: DEPLOY="false"	
+# jobs:
+#   include:
+#   - r: release
+#     os: linux
+#     env: DEPLOY="true"
+#   - r: release # test that the graceful failure systems work
+#     os: linux
+#     env: DEPLOY="false" URL_DOWN=TRUE
+#   - r: devel
+#     os: linux
+#     env: DEPLOY="false"
+#   - r: release
+#     os: osx
+#     osx_image: xcode13.2
+#     env: DEPLOY="false"
 
-addons:
-  apt:
-    packages:
-      - libudunits2-dev
-      - libproj-dev
-      - libgeos-dev
-      - libgdal-dev
-      - libharfbuzz-dev
-      - libfribidi-dev 
+# addons:
+#   apt:
+#     packages:
+#       - libudunits2-dev
+#       - libproj-dev
+#       - libgeos-dev
+#       - libgdal-dev
+#       - libharfbuzz-dev
+#       - libfribidi-dev
 
-brew_packages:
-  - udunits
+# brew_packages:
+#   - udunits
 
-after_success:
-  - Rscript -e 'pkgdown::build_site()'
+# after_success:
+#   - Rscript -e 'pkgdown::build_site()'
 
-deploy:
-  provider: pages
-  skip-cleanup: true
-  github-token: $GITHUB_PAT
-  keep-history: true
-  local-dir: docs
-  on:
-    branch: master
-    condition: $DEPLOY = 'true'
+# deploy:
+#   strategy: git
+#   provider: pages
+#   token: $GITHUB_PAT
+#   keep_history: true
+#   local_dir: docs
+#   on:
+#     branch: master
+#     condition: $DEPLOY = 'true'
 
-r_packages:
-- Rcpp
-- units
-- devtools
-- ape
-- backports
-- base64enc
-- cellranger
-- chron
-- classInt
-- cli
-- crayon
-- curl
-- DBI
-- digest
-- e1071
-- ellipsis
-- evaluate
-- fansi
-- glue
-- highr
-- hms
-- htmltools
-- jsonlite
-- knitr
-- magrittr
-- markdown
-- mime
-- pillar
-- pkgconfig
-- pkgdown
-- prettyunits
-- progress
-- R6
-- readxl
-- rematch
-- remotes
-- rlang
-- rmarkdown
-- sf
-- stringi
-- stringr
-- tibble
-- tinytex
-- utf8
-- vctrs
-- xfun
-- yaml
-- zeallot
+# r_binary_packages:
+# - Rcpp
+# - units
+# - devtools
+# - ape
+# - backports
+# - base64enc
+# - cellranger
+# - chron
+# - classInt
+# - cli
+# - crayon
+# - curl
+# - DBI
+# - digest
+# - e1071
+# - ellipsis
+# - evaluate
+# - fansi
+# - glue
+# - highr
+# - hms
+# - htmltools
+# - jsonlite
+# - knitr
+# - magrittr
+# - markdown
+# - mime
+# - pillar
+# - pkgconfig
+# - prettyunits
+# - progress
+# - R6
+# - readxl
+# - rematch
+# - remotes
+# - rlang
+# - rmarkdown
+# - sf
+# - stringi
+# - stringr
+# - tibble
+# - tinytex
+# - utf8
+# - vctrs
+# - xfun
+# - yaml
+# - zeallot
+# - assertthat
 
-r-binary-packages:
-- assertthat
-
+# r_packages:
+# - pkgdown

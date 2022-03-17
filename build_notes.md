@@ -118,20 +118,22 @@ The package uses semantic version numbering (https://semver.org/) and code on
 the development branch should use the prerelease token `9000`. This is explained
 in more detail below in the description of the release cycle.
 
-### Travis CI
+### GitHub Actions
 
 When commits are pushed to the Github origin then the package is automatically
-built and checked by Travis:
+built and checked using GitHub Actions. This used to use Travis CI, but has 
+moved since Travis stopped supporting OSS projects:
 
-https://travis-ci.org/github/ImperialCollegeLondon/safedata
+https://github.com/ImperialCollegeLondon/safedata/actions
 
-This happens on all branches, so day to day commits to `develop` will be built
+Checking happens on all branches, so day to day commits to `develop` will be built
 as well as commits to `release` branches and the creation of new tagged versions
 on `master`.
 
 If you have made changes that you do not want to be built and checked then you
-can include `[ci skip]`, but the idea is that all changes should be checked so
-this is typically only used for documentation changes and the like.
+can include `[ci skip]` in the commit message, but the idea is that all changes
+should be checked so this is typically only used for documentation changes and
+the like.
 
 ## Release cycle
 
@@ -166,11 +168,44 @@ cd build_scripts
 Rscript refresh_example_dir.R
 ```
 
+### Update the vignette objects
+
+The `safedata` package ships with a file `R/sysdata.rda` that contains all of
+the data displayed in the vignettes. This is so that the vignette code does not
+_require_ an internet connection for the code to be run, which is safer for
+CRAN. By default, these files are used in the vignette build and the file is
+created using:
+
+```sh
+cd build_scripts
+Rscript vignette_objects.R
+```
+
 ### Check the code.
 
 Releases start from the `develop` branch, with a bunch of commits that you want
 to release as a new version. Before you do anything, you should check that the
-current commit in `develop` is building correctly:
+current commit in `develop` is building correctly. 
+
+There are three steps. First, the package contains a test suite, which currently 
+only checks that network failures are handled gracefully. Those have to be passing
+before the package can be built so:
+
+```sh
+Rscript -e "devtools::test()
+```
+
+If the tests pass, then the second step is to build and install the package with
+minimal checking to see that this works and to make sure all of the most recent
+updates are available in installed files
+
+```sh
+ R CMD BUILD safedata --no-build-vignettes
+ R CMD CHECK safedata_xxxxxxxx.tar.gz
+```
+
+With these files all in place, you can now verify that the complete code
+packaging, documentation building and formal CRAN checking passes.
 
 ```sh
 cd build_scripts
@@ -180,7 +215,7 @@ cd build_scripts
 Because nearly all of the actual user changes happen in the vignette and R
 files, it is easy to forget to update the documentation, so a full checking
 process starts there. The code below runs the full checking process on your
-local machine. The code in `build_and_check.sh` but is reproduced here to show
+local machine. The code in `build_and_check.sh`  is reproduced here to show
 the steps.
 
 ```sh
@@ -212,6 +247,29 @@ list of checks applied to the code. Look out for `NOTE`, `WARNING` and `ERROR`
 and resolve these issues before moving on. If you are checking in the `develop`
 branch then you will see a note saying `Version contains large components` -
 that is about to be fixed.
+
+#### Vignette building
+
+By default, the vignettes should build without using the network to download
+resources. This can be verified by setting an environment variable and running
+from the package root:
+
+```sh
+export URL_DOWN=TRUE
+Rscript -e "pkgdown::build_articles()"
+```
+
+However, the articles can also be built using the network by setting the
+following:
+
+ ```sh
+export BUILD_VIGNETTE_USING_REMOTE=TRUE
+Rscript -e "pkgdown::build_articles()"
+```
+
+This is marginally better, because it is automatically up to date and contains
+more of the expected messages, which haven't been fully duplicated in the
+offline mode.
 
 ### Create the new release branch
 
@@ -261,13 +319,13 @@ pushed in order to check those.
 
 ### Checking on different platforms.
 
-The Travis CI build process should now be underway for the `release` branch.
-Travis is configured (see `.travis.yml`) to build the package under R stable on
-Ubuntu and Mac and R devel on Ubuntu. 
+The Git Action build process should now be underway for the `release` branch.
+Git Actions is configured (see `.github/workflows/check-standard.yaml`) to build
+the package under R stable on Ubuntu, Mac and Windows and R devel on Ubuntu. 
 
-However, Travis CI does not currently check packages under Windows. Instead,
-the R Project maintains a Windows test environment that can be used. This needs
-a built copy of the `release` branch, so run `build_scripts/build_and_check.sh`
+With the move from Travis to Git actions, Windows is now covered, but the R
+Project also maintains a Windows test environment that can be used. This needs a
+built copy of the `release` branch, so run `build_scripts/build_and_check.sh`
 again. This should create a newly built package with the new version number
 (e.g. `safedata_1.0.6.tar.gz`). If everything checked out ok before creating the
 release, this is really just updating the version name. 

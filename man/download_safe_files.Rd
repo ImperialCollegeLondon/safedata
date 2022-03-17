@@ -29,14 +29,15 @@ downloaded (logical)}
 modified and download fresh copies. This is useful if the local
 copies have unintentionally been modified but note the warning above.}
 
-\item{token}{An access token for restricted datasets. These tokens are,
-requested through the Zenodo page for a restricted dataset and are,
+\item{token}{An access token for restricted datasets. These tokens are
+requested through the Zenodo page for a restricted dataset and are
 long alphanumeric strings. If you are providing a token, you should
 only provide the record id for that dataset.}
 }
 \value{
 Invisibly, a vector of paths within the `safe_dir` for
-   successfully downloaded files.
+   successfully downloaded files. If the download is not successful then
+   the function returns FALSE.
 }
 \description{
 This downloads files associated with SAFE datasets, either all of the

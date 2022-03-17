@@ -23,6 +23,10 @@ path (logical)?}
 \item{url}{A URL providing the SAFE Data API, defaulting to the SAFE
 Project's own URL.}
 }
+\value{
+Invisibly, a boolean showing whether a SAFE data directory was
+   set successfully.
+}
 \description{
 This function sets the local directory used to store SAFE dataset
 files along with record and index metadata. The function can also
