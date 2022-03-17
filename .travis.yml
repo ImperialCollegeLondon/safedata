@@ -13,7 +13,8 @@ matrix:
     os: linux
     env: DEPLOY="false"	
   - r: release
-    os: osx
+    os: 
+    osx_image: xcode11
     env: DEPLOY="false"	
 
 addons:
@@ -42,7 +43,7 @@ deploy:
     branch: master
     condition: $DEPLOY = 'true'
 
-r_packages:
+r-binary-packages:
 - Rcpp
 - units
 - devtools
@@ -91,7 +92,5 @@ r_packages:
 - xfun
 - yaml
 - zeallot
-
-r-binary-packages:
 - assertthat
 

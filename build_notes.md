@@ -199,7 +199,7 @@ updates are available in installed files
 
 ```sh
  R CMD BUILD safedata --no-build-vignettes
- R CMD BUILD safedata_xxxxxxxx.tar.gz
+ R CMD CHECK safedata_xxxxxxxx.tar.gz
 ```
 
 With these files all in place, you can now verify that the complete code
