@@ -1,6 +1,8 @@
 1.1.0
     - Updated functionality and examples to fail gracefully for network issues.
     - Fixed issue with data columns
+    - Moved from Travis to Github Actions for CI.
+    - Added testthat suite - currently just for graceful failure modes.
 
 1.0.9
     - Further fixing of indexing functions to separate load_index from get_index

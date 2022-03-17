@@ -319,13 +319,13 @@ pushed in order to check those.
 
 ### Checking on different platforms.
 
-The Travis CI build process should now be underway for the `release` branch.
-Travis is configured (see `.travis.yml`) to build the package under R stable on
-Ubuntu and Mac and R devel on Ubuntu. 
+The Git Action build process should now be underway for the `release` branch.
+Git Actions is configured (see `.github/workflows/check-standard.yaml`) to build
+the package under R stable on Ubuntu, Mac and Windows and R devel on Ubuntu. 
 
-However, Travis CI does not currently check packages under Windows. Instead,
-the R Project maintains a Windows test environment that can be used. This needs
-a built copy of the `release` branch, so run `build_scripts/build_and_check.sh`
+With the move from Travis to Git actions, Windows is now covered, but the R
+Project also maintains a Windows test environment that can be used. This needs a
+built copy of the `release` branch, so run `build_scripts/build_and_check.sh`
 again. This should create a newly built package with the new version number
 (e.g. `safedata_1.0.6.tar.gz`). If everything checked out ok before creating the
 release, this is really just updating the version name. 
