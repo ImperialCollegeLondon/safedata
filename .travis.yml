@@ -8,14 +8,17 @@ jobs:
   include:
   - r: release
     os: linux
-    env: DEPLOY="true"	
+    env: DEPLOY="true"
+  - r: release # test that the graceful failure systems work
+    os: linux
+    env: DEPLOY="true" URL_DOWN=TRUE
   - r: devel
     os: linux
-    env: DEPLOY="false"	
+    env: DEPLOY="false"
   - r: release
     os: osx
     osx_image: xcode11.3
-    env: DEPLOY="false"	
+    env: DEPLOY="false"
 
 addons:
   apt:
@@ -25,7 +28,7 @@ addons:
       - libgeos-dev
       - libgdal-dev
       - libharfbuzz-dev
-      - libfribidi-dev 
+      - libfribidi-dev
 
 brew_packages:
   - udunits
