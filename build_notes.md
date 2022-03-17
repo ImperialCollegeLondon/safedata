@@ -118,20 +118,22 @@ The package uses semantic version numbering (https://semver.org/) and code on
 the development branch should use the prerelease token `9000`. This is explained
 in more detail below in the description of the release cycle.
 
-### Travis CI
+### GitHub Actions
 
 When commits are pushed to the Github origin then the package is automatically
-built and checked by Travis:
+built and checked using GitHub Actions. This used to use Travis CI, but has 
+moved since Travis stopped supporting OSS projects:
 
-https://travis-ci.org/github/ImperialCollegeLondon/safedata
+https://github.com/ImperialCollegeLondon/safedata/actions
 
-This happens on all branches, so day to day commits to `develop` will be built
+Checking happens on all branches, so day to day commits to `develop` will be built
 as well as commits to `release` branches and the creation of new tagged versions
 on `master`.
 
 If you have made changes that you do not want to be built and checked then you
-can include `[ci skip]`, but the idea is that all changes should be checked so
-this is typically only used for documentation changes and the like.
+can include `[ci skip]` in the commit message, but the idea is that all changes
+should be checked so this is typically only used for documentation changes and
+the like.
 
 ## Release cycle
 
