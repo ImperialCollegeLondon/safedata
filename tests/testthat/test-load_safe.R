@@ -45,6 +45,15 @@ test_that("Download dataset fails gracefully on metadata server down", {
 
 test_that("Download dataset fails gracefully on Zenodo down", {
 
+     # This _specifically_ checks behaviour if Zenodo is down. If there is a
+     # _real_ (not simulated) outage of the internet or SAFE database then this
+     # will fail at the JSON metadata stage (test above), so _only_ run this if
+     # the specific failure case can be simulated.
+
+     if (! curl::has_internet()) {
+         skip("No internet - skipping test")
+     }
+
     Sys.setenv(RESOURCE_DOWN = "www.zenodo.org")
 
     # Use the example safe directory, which explicitly doesn't update,
@@ -55,7 +64,7 @@ test_that("Download dataset fails gracefully on Zenodo down", {
     # to avoid having to interact with the function.
     success <- expect_message(
         download_safe_files(1198475, confirm = FALSE),
-        regexp = "Failed to download:",
+        regexp = "Failed to download data:",
     )
 
     # No successfully downloaded file names

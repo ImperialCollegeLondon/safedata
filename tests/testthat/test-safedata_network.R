@@ -12,6 +12,14 @@ test_that("no internet fails gracefully", {
     Sys.unsetenv("NETWORK_DOWN")
 })
 
+# All of the tests below rely on having the internet available to generate
+# the various error messages from safedata:::try_to_download(), so use a
+# check function to skip if there is a network outage.
+
+internet_unavailable <- function() {
+    return(! curl::has_internet())
+}
+
 test_that("bad host fails gracefully", {
 
     success <- safedata:::try_to_download("https://httpbinzzzzz.org")
