@@ -41,7 +41,7 @@ test_that("no internet fails gracefully on update", {
 
     success <- expect_message(
         set_safe_dir(test_sd, update = TRUE),
-        regexp = "Unable to check for updates, using existing index files",
+        regexp = "Unable to download updates, using existing index files",
     )
     # defaults to existing local copy, so expect true
     expect_true(success)
@@ -55,7 +55,7 @@ test_that("no API fails gracefully on update", {
 
     success <- expect_message(
         set_safe_dir(test_sd, update = TRUE),
-        regexp = "Unable to check for updates, using existing index files",
+        regexp = "Unable to download updates, using existing index files",
     )
     # defaults to existing local copy, so expect true
     expect_true(success)

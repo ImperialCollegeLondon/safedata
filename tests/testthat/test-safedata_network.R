@@ -12,7 +12,19 @@ test_that("no internet fails gracefully", {
     Sys.unsetenv("NETWORK_DOWN")
 })
 
+# All of the tests below rely on having the internet available to generate
+# the various error messages from safedata:::try_to_download(), so use a
+# check function to skip if there is a network outage.
+
+internet_unavailable <- function() {
+    return(! curl::has_internet())
+}
+
 test_that("bad host fails gracefully", {
+
+    if (internet_unavailable()) {
+        skip("No internet - skipping test")
+    }
 
     success <- safedata:::try_to_download("https://httpbinzzzzz.org")
 
@@ -23,7 +35,11 @@ test_that("bad host fails gracefully", {
 
 test_that("timeout fails gracefully", {
 
-    success <- safedata:::try_to_download("https://httpbin.org/delay/2",
+    if (internet_unavailable()) {
+        skip("No internet - skipping test")
+    }
+
+     success <- safedata:::try_to_download("https://httpbin.org/delay/2",
                                           timeout = 1)
     expect_false(success)
     expect_match(attr(success, "fail_msg"), regexp = "URL timed out")
@@ -32,6 +48,10 @@ test_that("timeout fails gracefully", {
 
 test_that("URL errors fails gracefully", {
 
+    if (internet_unavailable()) {
+        skip("No internet - skipping test")
+    }
+
     success <- safedata:::try_to_download("https://httpbin.org/status/404")
     expect_false(success)
     expect_match(attr(success, "fail_msg"), regexp = "URL error")
@@ -39,6 +59,10 @@ test_that("URL errors fails gracefully", {
 })
 
 test_that("Good URL works and returns object to memory", {
+
+    if (internet_unavailable()) {
+        skip("No internet - skipping test")
+    }
 
     success <-  safedata:::try_to_download("https://httpbin.org/base64/c2FmZWRhdGE=")
 

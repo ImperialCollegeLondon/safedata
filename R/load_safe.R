@@ -477,11 +477,11 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
 
                 if (isFALSE(result)) {
                     if (this_file$local_copy) {
-                        verbose_message(" - Failed to refresh: ",
+                        verbose_message(" - Failed to refresh data: ",
                                         this_file$filename)
                         message(attr(result, 'fail_msg'))
                     } else {
-                        verbose_message(" - Failed to download: ",
+                        verbose_message(" - Failed to download data: ",
                                         this_file$filename)
                         message(attr(result, 'fail_msg'))
                     }

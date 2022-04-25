@@ -162,7 +162,7 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
         index_hashes <- try_to_download(paste0(url, "/api/index_hashes"))
 
         if (isFALSE(index_hashes)) {
-            message("Unable to check for updates, using existing index files: ")
+            message("Unable to download updates, using existing index files: ")
             message(attr(index_hashes, "fail_msg"))
             load_index()
             return(invisible(TRUE))
