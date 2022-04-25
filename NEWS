@@ -1,3 +1,7 @@
+1.1.1
+    - Updates of unit testing to gracefully handle _real_ internet failures as
+      well as the failures explicitly simulated in the tests.
+
 1.1.0
     - Updated functionality and examples to fail gracefully for network issues.
     - Fixed issue with data columns
