@@ -17,6 +17,7 @@ package = 'safedata_{}.tar.gz'.format(version)
 print('Connecting to win-builder')
 c = ftplib.FTP('win-builder.r-project.org')
 c.login()
+c.set_pasv(False)
 
 print('Uploading to {} release'.format(package))
 c.cwd('r-release')
