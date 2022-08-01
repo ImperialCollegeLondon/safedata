@@ -2,6 +2,7 @@
     - Bugfix in test suite: test "Download dataset fails gracefully on Zenodo down"
       was not correctly checking for real metadata server failure before simulating 
       Zenodo access failure.
+    - Updated gh-pages build system for GitHub Actions.
 
 1.1.1
     - Updates of unit testing to gracefully handle _real_ internet failures as
