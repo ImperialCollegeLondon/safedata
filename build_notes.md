@@ -7,26 +7,26 @@ of if you plan to work with the codebase:
 * The code should be checked using linting for consistent style.
 * The repository has (now) been set up to use the git flow system for
   controlling development and releases across branches.
-* The repository uses the Travis continuous integration (CI) system. 
+* The repository uses GitHub Actions to carry out continuous integration (CI).
 
 These notes provide a brief walk through for these systems and some package
-specific requirements for releases. 
+specific requirements for releases.
 
-#### Build scripts
+## Build scripts
 
 The `build_scripts` folder in the repository contains scripts containing the
 code blocks used in some of the steps described below. All are set up to be run
 from directly inside the `build_scripts` directory. Scripts are described in
 context below
 
-### Package documentation
+## Package documentation
 
 With the `roxygen` package , all of the package documentation is located in one
 of three places:
 
 1. Markup inside the `R` source files - there are blocks of comments starting
    with `#'` that contain all of the documentation that goes into the normal R
-   documentaion (`.Rd`) files. 
+   documentaion (`.Rd`) files.
 2. Vignettes, formatted as `Rmarkdown` files in the `vignettes` directory.
 
 When the documentation has been changed then the `.Rd` files in `man` and any
@@ -38,9 +38,9 @@ Rscript -e "devtools::document()"
 
 These documentation pages are a key part of the package and so whenever the code
 changes, the documentation should be rebuilt  before commits are made: this
-ensures that the full package is submitted to Travis CI.
+ensures that the full package is submitted to GitHub Actions.
 
-### Website
+## Website
 
 In addition to using `roxygen` to maintain the in-package documentation,
 `safedata` also uses `pkgdown` to create a documentation website. The
@@ -61,28 +61,22 @@ This removes old files and recreates the website in the `docs` directory (_not_
 `doc`!). This directory is then automatically used by GitHub Pages to create the
 package website at:
 
-https://imperialcollegelondon.github.io/safedata/
+()[https://imperialcollegelondon.github.io/safedata/]
 
 The website files themselves are _not_ part of the continuous integration of the
 package and having to build and then commit changes within `docs` is untidy. The
 `safedata` package therefore includes `docs` in the `.gitignore` file: you can
 have a local copy of the website but it is not managed by git.
 
-Instead, the package is set up using a recipe described here:
-
-https://www.r-bloggers.com/continuous-deployment-of-package-documentation-with-pkgdown-and-travis-ci/
-
-The basic idea of this plan is that Travis CI is configured to run `pkgdown` and
-build the `docs` when a build on the `master` branch succeeds. Those files are
-then deployed from Travis to the `gh-pages` branch of the repository and used in
-the website. This means that the website only ever refreshes when a release is
-created and not when any changes are made to the repo. 
+Instead, a GitHub Action has been configured to run `pkgdown` - when a new release has
+passed checks, the action can be triggered in order to update the `gh-pages` branch
+using the most recent code.
 
 For local use, the package and website build steps have been bundled together
 in `build_scripts/build_docs.sh`. However, note that there are two different
 things go
 
-### Linting
+## Linting
 
 The linting process inspects the R code files in the package to check they have
 a consistent coding and syntax style. The file `build_scripts/collect_lint.sh`
@@ -100,10 +94,10 @@ cd build_scripts
 ./collect_lint.sh
 ```
 
-### Repository structure
+## Repository structure
 
 The package uses the Gitflow branching model for the package repository  and the
-`git-flow` extensions to help manage this (https://github.com/nvie/gitflow).
+`git-flow` extensions to help manage this ([](https://github.com/nvie/gitflow)).
 
 Day to day development happens on the `develop` branch, although you can also
 create specific `feature` branches for new features.  When you have code that
@@ -114,17 +108,16 @@ into `develop` to bring back last minute fixes. The `master` branch should
 really only ever see merges in from a `release` branch - you should not work on
 it directly.
 
-The package uses semantic version numbering (https://semver.org/) and code on
+The package uses semantic version numbering ([](https://semver.org/)) and code on
 the development branch should use the prerelease token `9000`. This is explained
 in more detail below in the description of the release cycle.
 
-### GitHub Actions
+## GitHub Actions
 
 When commits are pushed to the Github origin then the package is automatically
-built and checked using GitHub Actions. This used to use Travis CI, but has 
-moved since Travis stopped supporting OSS projects:
+built and checked using GitHub Actions:
 
-https://github.com/ImperialCollegeLondon/safedata/actions
+[](https://github.com/ImperialCollegeLondon/safedata/actions)
 
 Checking happens on all branches, so day to day commits to `develop` will be built
 as well as commits to `release` branches and the creation of new tagged versions
@@ -143,7 +136,7 @@ These are the steps needed to release a new version of `safedata`.
 
 It is easier if `git` is configured to push new tags along with commits. This
 essentially just means that new releases can be sent with a single commit, which
-is simpler and saves Travis from building both the the code commit and then the
+is simpler and saves GitHub Actions from building both the the code commit and then the
 tagged version. This only needs to be set once.
 
 ```sh
@@ -181,13 +174,13 @@ cd build_scripts
 Rscript vignette_objects.R
 ```
 
-### Check the code.
+### Check the code
 
 Releases start from the `develop` branch, with a bunch of commits that you want
 to release as a new version. Before you do anything, you should check that the
-current commit in `develop` is building correctly. 
+current commit in `develop` is building correctly.
 
-There are three steps. First, the package contains a test suite, which currently 
+There are three steps. First, the package contains a test suite, which currently
 only checks that network failures are handled gracefully. Those have to be passing
 before the package can be built so:
 
@@ -240,7 +233,7 @@ Two points to note:
 
 1. The built package and check output are saved in the parent directory of the
    repository, not in the repository itself.
-2. The version built is the one in the _currently checked out branch_. 
+2. The version built is the one in the _currently checked out branch_.
 
 The key file to look at is `safedata.Rcheck/00check.log`. This contains a long
 list of checks applied to the code. Look out for `NOTE`, `WARNING` and `ERROR`
@@ -289,13 +282,13 @@ number. In this example, that should mean changing the previous development
 version number (`-9000` is used to indicate code in development between versions
 ):
 
-```
+```txt
 Version: 1.0.5-9000
 ```
 
 to 
 
-```
+```txt
 Version: 1.0.6
 ```
 
@@ -306,10 +299,10 @@ git commit -m "Update version number" DESCRIPTION
 ```
 
 At the moment, the `release` branch is only local. The release branch and code
-needs to be pushed to Github to be picked up by Travis CI. There is a specific
+needs to be pushed to Github to be picked up GitHub Actions. There is a specific
 `git flow` command to do this:
 
-```
+```sh
 git flow release publish 1.0.6
 ```
 
@@ -317,18 +310,18 @@ This sends the release branch up to be checked. In addition, there is now a
 release branch on origin so any other last minutes fixes and commits can be
 pushed in order to check those.
 
-### Checking on different platforms.
+### Checking on different platforms
 
 The Git Action build process should now be underway for the `release` branch.
 Git Actions is configured (see `.github/workflows/check-standard.yaml`) to build
-the package under R stable on Ubuntu, Mac and Windows and R devel on Ubuntu. 
+the package under R stable on Ubuntu, Mac and Windows and R devel on Ubuntu.
 
-With the move from Travis to Git actions, Windows is now covered, but the R
+Although Windows is included in the GitHub Actions testing environment, the R
 Project also maintains a Windows test environment that can be used. This needs a
 built copy of the `release` branch, so run `build_scripts/build_and_check.sh`
 again. This should create a newly built package with the new version number
 (e.g. `safedata_1.0.6.tar.gz`). If everything checked out ok before creating the
-release, this is really just updating the version name. 
+release, this is really just updating the version name.
 
 You then need to upload that file to `win-builder`. The python script
 `build_scripts/upload_to_win-builder.py`  will do this for you - it is simply
@@ -341,22 +334,22 @@ of the `DESCRIPTION` file.
 python build_scripts/upload_to_win-builder.py
 ```
 
-### Wait.
+### Wait
 
-Ideally what happens now is that the build and check process on Travis CI and
+Ideally what happens now is that the build and check process on GitHub Actions and
 `win-builder` all pass. You **must** wait for these checks to complete!
 
 Obviously, if any errors or warnings crop up in the checking process, those
 should be fixed in the `release` branch. The changes should be committed and
-pushed to start a new round of Travis CI checking and you will need to rebuild
+pushed to start a new round of GitHub Actions checking and you will need to rebuild
 and resubmit to `win-builder`
 
 ### Final edits
 
 There are some final edits to check you have made:
 
-- Update `NEWS` to document the changes since the previous version
-- Update `cran-comments.md` to record the R versions and environments used for
+* Update `NEWS` to document the changes since the previous version
+* Update `cran-comments.md` to record the R versions and environments used for
   testing and the outcomes of those builds. This should all be `status: OK` but
   there might be notes that should be explained.
 
@@ -398,14 +391,14 @@ git checkout master
 git push
 ```
 
-This will set off another round of Travis CI checking - you should see the
-tagged version being built and checked. This should all go cleanly! 
+This will set off another round of GitHub Actions checking - you should see the
+tagged version being built and checked. This should all go cleanly!
 
 You should now **immediately** get off the `master` branch and back onto
 `develop`, before you accidentally change the files or commit to it, You should
 also **immediately** update the version number in `DESCRIPTION`, adding `-9000`
 to show that this is now the development version from the new release. This is a
-trivial change, so we can use `[ci skip]` to avoid triggering a Travis build.
+trivial change, so we can use `[ci skip]` to avoid triggering Github Actions.
 
 ```sh
 git checkout develop
@@ -414,14 +407,12 @@ git commit -m "Bump develop version [ci skip]" DESCRIPTION
 git push
 ```
 
-
 ### Release to CRAN
 
 You can then submit the built version of the source package that was created
-during the release process at: https://cran.r-project.org/submit.html
+during the release process at: ()[https://cran.r-project.org/submit.html]
 
 You  should  take the up-to-date contents of `cran-comments.md` and  copy that
 in the comments section of the submission form. The CRAN maintainers expect
 submitted packages to be functional and fully checked and these notes will help
 them see that the package has been properly checked.
-
