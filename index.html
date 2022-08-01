@@ -24,6 +24,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -36,30 +38,24 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/overview.html">An overview of data at the SAFE Project</a>
+      <a href="articles/overview.html">An overview of the safedata package</a>
     </li>
     <li>
       <a href="articles/using_safe_data.html">Using the `safedata` package</a>
@@ -69,8 +65,8 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/ImperialCollegeLondon/safedata/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+  <a href="https://github.com/ImperialCollegeLondon/safedata/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -86,76 +82,86 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="the-safedata-package" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#the-safedata-package" class="anchor"></a>The <code>safedata</code> package</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="the-safedata-package">The <code>safedata</code> package<a class="anchor" aria-label="anchor" href="#the-safedata-package"></a>
+</h1></div>
 <p>This is an R package for discovering and using datasets produced by scientific research at the SAFE Project. See the following links:</p>
 <ul>
-<li>for more information about the <a href="https://www.safeproject.net/">SAFE Project homepage</a>,</li>
-<li>to browse the published <a href="https://zenodo.org/communities/safe">SAFE project datasets</a>,</li>
-<li>to learn more about the <a href="https://safedata-validator.readthedocs.io/en/latest/">SAFE dataset structure and validation</a>
+<li>for more information about the <a href="https://www.safeproject.net/" class="external-link">SAFE Project homepage</a>,</li>
+<li>to browse the published <a href="https://zenodo.org/communities/safe" class="external-link">SAFE project datasets</a>,</li>
+<li>to learn more about the <a href="https://safedata-validator.readthedocs.io/en/latest/" class="external-link">SAFE dataset structure and validation</a>
 </li>
 </ul>
-<div id="using-safedata" class="section level2">
-<h2 class="hasAnchor">
-<a href="#using-safedata" class="anchor"></a>Using <code>safedata</code>
+<div class="section level2">
+<h2 id="using-safedata">Using <code>safedata</code>
+<a class="anchor" aria-label="anchor" href="#using-safedata"></a>
 </h2>
 <p>The homepage for the package is at:</p>
-<p><a href="https://imperialcollegelondon.github.io/safedata/" class="uri">https://imperialcollegelondon.github.io/safedata/</a>.</p>
+<p><a href="https://imperialcollegelondon.github.io/safedata/" class="external-link">https://imperialcollegelondon.github.io/safedata/</a>.</p>
 <p>In particular, the following links provide:</p>
 <ul>
-<li>the <code>safedata</code> <a href="https://imperialcollegelondon.github.io/safedata/reference/index.html">function reference</a>,</li>
-<li>an vignette providing an <a href="https://imperialcollegelondon.github.io/safedata/articles/overview.html">overview</a> of the SAFE project data, and</li>
-<li>a short <a href="https://imperialcollegelondon.github.io/safedata/articles/using_safe_data.html">user guide</a> for the package.</li>
+<li>the <code>safedata</code> <a href="https://imperialcollegelondon.github.io/safedata/reference/index.html" class="external-link">function reference</a>,</li>
+<li>an vignette providing an <a href="https://imperialcollegelondon.github.io/safedata/articles/overview.html" class="external-link">overview</a> of the SAFE project data, and</li>
+<li>a short <a href="https://imperialcollegelondon.github.io/safedata/articles/using_safe_data.html" class="external-link">user guide</a> for the package.</li>
 </ul>
 </div>
-<div id="building-safedata" class="section level2">
-<h2 class="hasAnchor">
-<a href="#building-safedata" class="anchor"></a>Building <code>safedata</code>
+<div class="section level2">
+<h2 id="building-safedata">Building <code>safedata</code>
+<a class="anchor" aria-label="anchor" href="#building-safedata"></a>
 </h2>
-<p>The package repository structure and build processes are described <a href="https://imperialcollegelondon.github.io/safedata/build_notes.html">here</a></p>
+<p>The package repository structure and build processes are described <a href="https://imperialcollegelondon.github.io/safedata/build_notes.html" class="external-link">here</a></p>
 <!-- badges: start -->
-<p><a href="https://travis-ci.org/ImperialCollegeLondon/safedata"><img src="https://travis-ci.org/ImperialCollegeLondon/safedata.svg?branch=master" alt="Travis build status"></a> <!-- badges: end --></p>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=safedata">https://​cloud.r-project.org/​package=safedata</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/ImperialCollegeLondon/safedata/">https://​github.com/​ImperialCollegeLondon/​safedata/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/ImperialCollegeLondon/safedata/issues">https://​github.com/​ImperialCollegeLondon/​safedata/​issues</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=safedata" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/ImperialCollegeLondon/safedata/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/ImperialCollegeLondon/safedata/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>
+<li><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing safedata</a></li>
+</ul>
+</div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Andy Aldersley <br><small class="roles"> Author </small>  </li>
-<li>David Orme <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-7005-1394" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>David Orme <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-7005-1394" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 </ul>
 </div>
+
+
 
   </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Andy Aldersley, David Orme.</p>
+  <p></p>
+<p>Developed by Andy Aldersley, David Orme.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -163,6 +169,8 @@
 
   
 
+
+  
 
   </body>
 </html>

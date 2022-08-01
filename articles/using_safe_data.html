@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,30 +33,24 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">safedata</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/overview.html">An overview of data at the SAFE Project</a>
+      <a href="../articles/overview.html">An overview of the safedata package</a>
     </li>
     <li>
       <a href="../articles/using_safe_data.html">Using the `safedata` package</a>
@@ -64,8 +60,8 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/ImperialCollegeLondon/safedata/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+  <a href="https://github.com/ImperialCollegeLondon/safedata/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -79,16 +75,15 @@
 
       
 
-      </header><link href="using_safe_data_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="using_safe_data_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
+      </header><script src="using_safe_data_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Using the <code>safedata</code> package</h1>
-                        <h4 class="author">Andy Aldersley and David Orme</h4>
+                        <h4 data-toc-skip class="author">Andy Aldersley and David Orme</h4>
             
-            <h4 class="date">2020-11-18</h4>
+            <h4 data-toc-skip class="date">2022-08-01</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/ImperialCollegeLondon/safedata/blob/master/vignettes/using_safe_data.Rmd"><code>vignettes/using_safe_data.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ImperialCollegeLondon/safedata/blob/HEAD/vignettes/using_safe_data.Rmd" class="external-link"><code>vignettes/using_safe_data.Rmd</code></a></small>
       <div class="hidden name"><code>using_safe_data.Rmd</code></div>
 
     </div>
@@ -97,83 +92,84 @@
     
 <p>The <code>safedata</code> package makes it easy to search for and use datasets collected at the SAFE Project. It provides an interface to download data files and packaged record metadata and then functions to load data worksheets and add taxonomic and spatial data where available.</p>
 <p>For further information on the publication and structure of data through the SAFE Project and within the <code>safedata</code> package, see the Overview vignette: <code><a href="../articles/overview.html">vignette("overview", package = "safedata")</a></code>.</p>
-<div id="installing-safedata" class="section level1">
-<h1 class="hasAnchor">
-<a href="#installing-safedata" class="anchor"></a>Installing <code>safedata</code>
-</h1>
+<div class="section level2">
+<h2 id="installing-safedata">Installing <code>safedata</code><a class="anchor" aria-label="anchor" href="#installing-safedata"></a>
+</h2>
 <p>The <code>safedata</code> package is available from CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"safedata"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"safedata"</span><span class="op">)</span></span></code></pre></div>
 <p>The development version can also be installed from GitHub:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"ImperialCollegeLondon/safedata"</span><span class="op">)</span></code></pre></div>
-<div id="package-dependencies" class="section level2">
-<h2 class="hasAnchor">
-<a href="#package-dependencies" class="anchor"></a>Package dependencies</h2>
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ImperialCollegeLondon/safedata"</span><span class="op">)</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="package-dependencies">Package dependencies<a class="anchor" aria-label="anchor" href="#package-dependencies"></a>
+</h3>
 <p>The <code>safedata</code> package requires the following packages:</p>
 <ul>
 <li>
 <code>readxl</code>, to read data directly from Excel datasets,</li>
 <li>
-<code>jsonlite</code> and <code>curl</code>, to communicate with the SAFE API and to read downloaded JSON data,</li>
+<code>jsonlite</code>, <code>httr</code> and <code>curl</code>, to communicate with the SAFE API and to read downloaded JSON data,</li>
 <li>
-<code>chron</code>, to represent time of day data, and</li>
+<code>chron</code>, to represent time of day data,</li>
+<li>
+<code>igraph</code>, to handle taxonomic data structures, and</li>
 <li>
 <code>sf</code>, to handle spatial data about sampling locations.</li>
 </ul>
 </div>
 </div>
-<div id="the-safe-data-directory" class="section level1">
-<h1 class="hasAnchor">
-<a href="#the-safe-data-directory" class="anchor"></a>The SAFE data directory</h1>
+<div class="section level2">
+<h2 id="the-safe-data-directory">The SAFE data directory<a class="anchor" aria-label="anchor" href="#the-safe-data-directory"></a>
+</h2>
 <p>The <code>safedata</code> package makes use of a local directory to store downloaded data, index and metadata files (<code><a href="../articles/overview.html">vignette("overview", package = "safedata")</a></code> for details) . These files are needed for the <code>safedata</code> functions to work correctly, so the first step in using <code>safedata</code> is to set the location of the directory and the package will remind you to do this when it is loaded.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://imperialcollegelondon.github.io/safedata/index.html">safedata</a></span><span class="op">)</span>
-<span class="co">## SAFE package reminder: Please set SAFE data directory using set_safe_dir()</span></code></pre></div>
-<div id="initialising-a-safe-data-directory" class="section level2">
-<h2 class="hasAnchor">
-<a href="#initialising-a-safe-data-directory" class="anchor"></a>Initialising a SAFE data directory</h2>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://imperialcollegelondon.github.io/safedata/index.html" class="external-link">safedata</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; SAFE package reminder: Please set SAFE data directory using set_safe_dir()</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="initialising-a-safe-data-directory">Initialising a SAFE data directory<a class="anchor" aria-label="anchor" href="#initialising-a-safe-data-directory"></a>
+</h3>
 <p>If this is the first time you are loading <code>safedata</code> – or if you simply want to have two separate SAFE data directories – then you need to create a new, empty directory.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/set_safe_dir.html">set_safe_dir</a></span><span class="op">(</span><span class="st">'my_safe_directory'</span>, create<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
-<span class="co">## Safe data directory created</span></code></pre></div>
-<p>This will create the directory and download the current index files. You cannot use an existing directory: the package wants to start with a fresh, empty directory. Note that the directory path is stored in <code><a href="https://rdrr.io/r/base/options.html">options()</a></code>:</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/set_safe_dir.html">set_safe_dir</a></span><span class="op">(</span><span class="st">'my_safe_directory'</span>, create<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">## Safe data directory created</span></span></code></pre></div>
+<p>This will create the directory and download the current index files. You cannot use an existing directory: the package wants to start with a fresh, empty directory. Note that the directory path is stored in <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">getOption</a></span><span class="op">(</span><span class="st">'safedata.dir'</span><span class="op">)</span>
-<span class="co">## [1] "my_safe_directory"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">'safedata.dir'</span><span class="op">)</span></span>
+<span><span class="co">## [1] "my_safe_directory"</span></span></code></pre></div>
 </div>
-<div id="using-an-existing-safe-data-directory" class="section level2">
-<h2 class="hasAnchor">
-<a href="#using-an-existing-safe-data-directory" class="anchor"></a>Using an existing SAFE data directory</h2>
+<div class="section level3">
+<h3 id="using-an-existing-safe-data-directory">Using an existing SAFE data directory<a class="anchor" aria-label="anchor" href="#using-an-existing-safe-data-directory"></a>
+</h3>
 <p>Once you have a SAFE data directory, the same function is used to tell the <code>safedata</code> package where to look for index and data files:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/set_safe_dir.html">set_safe_dir</a></span><span class="op">(</span><span class="st">'my_safe_directory'</span><span class="op">)</span>
-<span class="co">## Checking for updates</span>
-<span class="co">##  - Index up to date</span>
-<span class="co">##  - Gazetteer up to date</span>
-<span class="co">##  - Location aliases up to date</span>
-<span class="co">## Validating directory</span></code></pre></div>
-<p>You will see that this function checks with the SAFE Project website for updates to the key index files. This can be turned off for offline use (<code><a href="../reference/set_safe_dir.html">set_safe_dir('~/my_safe_directory', update=FALSE)</a></code>). The function also validates local data files: it checks the MD5 hash of local data file copies against the MD5 of the published file.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/set_safe_dir.html">set_safe_dir</a></span><span class="op">(</span><span class="st">'my_safe_directory'</span><span class="op">)</span></span>
+<span><span class="co">## Checking for updates</span></span>
+<span><span class="co">##  - Index up to date</span></span>
+<span><span class="co">##  - Gazetteer up to date</span></span>
+<span><span class="co">##  - Location aliases up to date</span></span>
+<span><span class="co">## Validating directory</span></span></code></pre></div>
+<p>You will see that this function checks with the SAFE Project website for updates to the key index files. This can be turned off for offline use (<code>set_safe_dir('~/my_safe_directory', update=FALSE)</code>). The function also validates local data files: it checks the MD5 hash of local data file copies against the MD5 of the published file.</p>
 <p>The rest of this vignette uses an example SAFE data directory that is included within the package. This is set up for use using the following command but note that this is a temporary data folder and is only used for demonstration purposes.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/set_example_safe_dir.html">set_example_safe_dir</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>## Loading and caching index</code></pre>
-<pre><code>## Validating directory</code></pre>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/set_example_safe_dir.html">set_example_safe_dir</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; Loading and caching index</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; Validating directory</span></span></code></pre>
 </div>
 </div>
-<div id="finding-data" class="section level1">
-<h1 class="hasAnchor">
-<a href="#finding-data" class="anchor"></a>Finding data</h1>
+<div class="section level2">
+<h2 id="finding-data">Finding data<a class="anchor" aria-label="anchor" href="#finding-data"></a>
+</h2>
 <p>You can browse datasets published by the SAFE Project at either:</p>
 <ul>
-<li>our <a href="https://zenodo.org/communities/safe">SAFE Zenodo community</a> or</li>
-<li>the <a href="https://www.safeproject.net/datasets/view_datasets">SAFE Project website</a>.</li>
+<li>our <a href="https://zenodo.org/communities/safe" class="external-link">SAFE Zenodo community</a> or</li>
+<li>the <a href="https://www.safeproject.net/datasets/view_datasets" class="external-link">SAFE Project website</a>.</li>
 </ul>
 <p>If you have done this, or have a dataset DOI from another source, then you can look up the dataset directly.</p>
 <p>However, if you want to search the dataset metadata or the taxa and locations covered by datasets then there are a set of search functions built into the <code>safedata</code> package.</p>
-<div id="search-functions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#search-functions" class="anchor"></a>Search functions</h2>
+<div class="section level3">
+<h3 id="search-functions">Search functions<a class="anchor" aria-label="anchor" href="#search-functions"></a>
+</h3>
 <p>The <code>safedata</code> package contains a set of search functions to explore datasets. These functions make use of a metadata index stored on the SAFE Project website and so need an internet connection to work. These search functions provide structured access to the same metadata shown in project description text but also provide extended taxonomic and spatial searches.</p>
 <p>The functions are:</p>
 <ul>
@@ -190,117 +186,121 @@
 <li>
 <code><a href="../reference/search_safe.html">search_spatial()</a></code>: searches for datasets sampling at or near a particular location.</li>
 </ul>
-<p>All of these functions return a <code>safe_record_set</code> objects, which is just a data frame containing validated record ids and access information and so you can use the normal data frame indices (e.g. <code>recs[1,]</code>) to select particular records.</p>
+<p>All of these functions return a <code>safe_record_set</code> objects, which is just a data frame containing validated record ids and access information and so you can use the normal data frame indices (e.g. <code>recs[1,]</code>) to select particular records.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">soil_datasets</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/search_safe.html">search_text</a></span><span class="op">(</span><span class="st">'soil'</span><span class="op">)</span></code></pre></div>
-<pre><code>## Search returned 20 records</code></pre>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">soil_datasets</span><span class="op">)</span></code></pre></div>
-<pre><code>## Set includes 15 concept ids and 20 record ids: 
-##  - 10 open and most recent (*)
-##  - 5 open and outdated (o)
-##  - 5 under embargo or restricted (x)
-## 
-##    concept  record available
-## 1  1198564 3857210         *
-## 2  3247591 3247592         *
-## 3  3251886 3258079         *
-## 4  ------- 3251887         o
-## 5  3251899 3258117         *
-## 6  ------- 3251900         o
-## 7  3251901 3897394         *
-## 8  ------- 3614876         o
-## 9  ------- 3258082         o
-## 10 ------- 3251902         o
-## 11 3265745 3265746         *
-## 12 3266770 3266771         x
-## 13 3266821 3266822         *
-## 14 3354067 3354068         *
-## 15 3402745 3402746         x
-## 16 3698114 3698115         x
-## 17 3888374 3888375         *
-## 18 3897376 3897377         x
-## 19 3929631 3929632         *
-## 20 3979295 3979296         x</code></pre>
-<div id="taxon-search-details" class="section level3">
-<h3 class="hasAnchor">
-<a href="#taxon-search-details" class="anchor"></a>Taxon search details</h3>
-<p>Published datasets contain a taxonomic index of any organisms referred to within the data - see <a href="https://safedata-validator.readthedocs.io/en/latest/data_format/taxa.html">here</a> for details of the Taxa worksheet containing the index.</p>
+<code class="sourceCode R"><span><span class="va">soil_datasets</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/search_safe.html">search_text</a></span><span class="op">(</span><span class="st">'soil'</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">soil_datasets</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Set includes 22 concept ids and 28 record ids: </span></span>
+<span><span class="co">#&gt;  - 21 open and most recent (*)</span></span>
+<span><span class="co">#&gt;  - 6 open and outdated (o)</span></span>
+<span><span class="co">#&gt;  - 1 under embargo or restricted (x)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;    concept  record available</span></span>
+<span><span class="co">#&gt; 1  1198564 3857210         *</span></span>
+<span><span class="co">#&gt; 2  3247591 3247592         *</span></span>
+<span><span class="co">#&gt; 3  3251886 3258079         *</span></span>
+<span><span class="co">#&gt; 4  ------- 3251887         o</span></span>
+<span><span class="co">#&gt; 5  3251899 3258117         *</span></span>
+<span><span class="co">#&gt; 6  ------- 3251900         o</span></span>
+<span><span class="co">#&gt; 7  3251901 3897394         *</span></span>
+<span><span class="co">#&gt; 8  ------- 3614876         o</span></span>
+<span><span class="co">#&gt; 9  ------- 3258082         o</span></span>
+<span><span class="co">#&gt; 10 ------- 3251902         o</span></span>
+<span><span class="co">#&gt; 11 3265745 3265746         *</span></span>
+<span><span class="co">#&gt; 12 3266770 4542881         *</span></span>
+<span><span class="co">#&gt; 13 ------- 3266771         o</span></span>
+<span><span class="co">#&gt; 14 3266821 3266822         *</span></span>
+<span><span class="co">#&gt; 15 3354067 3354068         *</span></span>
+<span><span class="co">#&gt; 16 3402745 3402746         *</span></span>
+<span><span class="co">#&gt; 17 3698114 3698115         *</span></span>
+<span><span class="co">#&gt; 18 3888374 3888375         *</span></span>
+<span><span class="co">#&gt; 19 3897376 3897377         *</span></span>
+<span><span class="co">#&gt; 20 3929631 3929632         *</span></span>
+<span><span class="co">#&gt; 21 3979295 3979296         *</span></span>
+<span><span class="co">#&gt; 22 4297672 4297673         x</span></span>
+<span><span class="co">#&gt; 23 4630979 4630980         *</span></span>
+<span><span class="co">#&gt; 24 4899609 4899610         *</span></span>
+<span><span class="co">#&gt; 25 5113428 5113429         *</span></span>
+<span><span class="co">#&gt; 26 5113430 5113431         *</span></span>
+<span><span class="co">#&gt; 27 5519571 5519572         *</span></span>
+<span><span class="co">#&gt; 28 5562259 5562260         *</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="taxon-search-details">Taxon search details<a class="anchor" aria-label="anchor" href="#taxon-search-details"></a>
+</h4>
+<p>Published datasets contain a taxonomic index of any organisms referred to within the data - see <a href="https://safedata-validator.readthedocs.io/en/latest/data_format/taxa.html" class="external-link">here</a> for details of the Taxa worksheet containing the index.</p>
 <p>The taxa in this index, along with all of the parent taxa in the taxonomic hierarchy leading up to that those taxa, are added to a taxonomic database on the SAFE Project website. The <code><a href="../reference/search_safe.html">search_taxa()</a></code> function searches that index to identify all the datasets that contain a particular taxon.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ants</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/search_safe.html">search_taxa</a></span><span class="op">(</span><span class="st">'Formicidae'</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">ants</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Set includes 16 concept ids and 17 record ids: </span></span>
+<span><span class="co">#&gt;  - 14 open and most recent (*)</span></span>
+<span><span class="co">#&gt;  - 1 open and outdated (o)</span></span>
+<span><span class="co">#&gt;  - 2 under embargo or restricted (x)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;    concept  record available</span></span>
+<span><span class="co">#&gt; 1  1198301 1198302         *</span></span>
+<span><span class="co">#&gt; 2  1198471 1237732         *</span></span>
+<span><span class="co">#&gt; 3  1198838 1198839         *</span></span>
+<span><span class="co">#&gt; 4  1237729 1237730         x</span></span>
+<span><span class="co">#&gt; 5  1400561 1400562         *</span></span>
+<span><span class="co">#&gt; 6  1995247 1995439         *</span></span>
+<span><span class="co">#&gt; 7  2537072 3901735         *</span></span>
+<span><span class="co">#&gt; 8  3247484 3876227         *</span></span>
+<span><span class="co">#&gt; 9  ------- 3247485         o</span></span>
+<span><span class="co">#&gt; 10 3265745 3265746         *</span></span>
+<span><span class="co">#&gt; 11 3354067 3354068         *</span></span>
+<span><span class="co">#&gt; 12 3975972 3975973         *</span></span>
+<span><span class="co">#&gt; 13 3979295 3979296         *</span></span>
+<span><span class="co">#&gt; 14 4297672 4297673         x</span></span>
+<span><span class="co">#&gt; 15 4630979 4630980         *</span></span>
+<span><span class="co">#&gt; 16 5113428 5113429         *</span></span>
+<span><span class="co">#&gt; 17 5562259 5562260         *</span></span></code></pre></div>
+<p>The taxonomic index is built around the GBIF backbone taxonomic database and include the following core taxonomic levels: kingdom, phylum, class, order, family, genus, species and subspecies. It is also possible to search by <a href="https://www.gbif.org/species/4342" class="external-link">GBIF ID</a>.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">ants</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/search_safe.html">search_taxa</a></span><span class="op">(</span><span class="st">'Formicidae'</span><span class="op">)</span><span class="op">)</span>
-<span class="co">## Search returned 13 records</span>
-<span class="co">## Set includes 12 concept ids and 13 record ids: </span>
-<span class="co">##  - 9 open and most recent (*)</span>
-<span class="co">##  - 1 open and outdated (o)</span>
-<span class="co">##  - 3 under embargo or restricted (x)</span>
-<span class="co">## </span>
-<span class="co">##    concept  record available</span>
-<span class="co">## 1  1198301 1198302         *</span>
-<span class="co">## 2  1198471 1237732         *</span>
-<span class="co">## 3  1198838 1198839         *</span>
-<span class="co">## 4  1237729 1237730         x</span>
-<span class="co">## 5  1400561 1400562         *</span>
-<span class="co">## 6  1995247 1995439         *</span>
-<span class="co">## 7  2537072 3901735         x</span>
-<span class="co">## 8  3247484 3876227         *</span>
-<span class="co">## 9  ------- 3247485         o</span>
-<span class="co">## 10 3265745 3265746         *</span>
-<span class="co">## 11 3354067 3354068         *</span>
-<span class="co">## 12 3975972 3975973         *</span>
-<span class="co">## 13 3979295 3979296         x</span></code></pre></div>
-<p>The taxonomic index is built around the GBIF backbone taxonomic database and include the following core taxonomic levels: kingdom, phylum, class, order, family, genus, species and subspecies. It is also possible to search by <a href="https://www.gbif.org/species/4342">GBIF ID</a>.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ants</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/search_safe.html">search_taxa</a></span><span class="op">(</span>gbif_id<span class="op">=</span><span class="fl">4342</span><span class="op">)</span>
-<span class="co">## Search returned 13 records</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">ants</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/search_safe.html">search_taxa</a></span><span class="op">(</span>gbif_id<span class="op">=</span><span class="fl">4342</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="spatial-search-details" class="section level3">
-<h3 class="hasAnchor">
-<a href="#spatial-search-details" class="anchor"></a>Spatial search details</h3>
-<p>Datasets also have to provide a full index of sampling locations used in the data. Sampling locations are either linked to existing sampling locations included in the <a href="https://www.safeproject.net/info/gazetteer">SAFE gazetteer</a> or users can identify new sampling locations and provide location data if possible.</p>
+<div class="section level4">
+<h4 id="spatial-search-details">Spatial search details<a class="anchor" aria-label="anchor" href="#spatial-search-details"></a>
+</h4>
+<p>Datasets also have to provide a full index of sampling locations used in the data. Sampling locations are either linked to existing sampling locations included in the <a href="https://www.safeproject.net/info/gazetteer" class="external-link">SAFE gazetteer</a> or users can identify new sampling locations and provide location data if possible.</p>
 <p>The <code><a href="../reference/search_safe.html">search_spatial()</a></code> function allows users to search for datasets by sampling locations. Accepted location names from the gazetteer can be used to search for datasets but users can also provide their own search geometries using the Well Known Text format. The search includes simple GIS capabilities to look for sampling within a given distance of the query location.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Datasets that include sampling within experimental block A</span>
-<span class="va">within_a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/search_safe.html">search_spatial</a></span><span class="op">(</span>location<span class="op">=</span><span class="st">'BL_A'</span><span class="op">)</span>
-<span class="co">## Search returned 36 records</span>
-<span class="co"># Datasets that sampled within 2 km of the Maliau Basin Field Study Centre</span>
-<span class="va">near_maliau</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/search_safe.html">search_spatial</a></span><span class="op">(</span>wkt<span class="op">=</span><span class="st">'POINT(116.97394 4.73481)'</span>, distance<span class="op">=</span><span class="fl">2000</span><span class="op">)</span>
-<span class="co">## Search returned 63 records</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Datasets that include sampling within experimental block A</span></span>
+<span><span class="va">within_a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/search_safe.html">search_spatial</a></span><span class="op">(</span>location<span class="op">=</span><span class="st">'BL_A'</span><span class="op">)</span></span>
+<span><span class="co"># Datasets that sampled within 2 km of the Maliau Basin Field Study Centre</span></span>
+<span><span class="va">near_maliau</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/search_safe.html">search_spatial</a></span><span class="op">(</span>wkt<span class="op">=</span><span class="st">'POINT(116.97394 4.73481)'</span>, distance<span class="op">=</span><span class="fl">2000</span><span class="op">)</span></span></code></pre></div>
 <p>Note that WKT coordinates should be supplied as WGS84 longitude and latitude - typically the output of GPS receivers - but the database uses the local UTM 50N projected coordinate system for all distance calculations and GIS operations.</p>
 </div>
-<div id="combining-searches" class="section level3">
-<h3 class="hasAnchor">
-<a href="#combining-searches" class="anchor"></a>Combining searches</h3>
-<p>It is possible to combine searches using logical operators (<code><a href="https://rdrr.io/r/base/Logic.html">&amp;</a></code> and <code><a href="https://rdrr.io/r/base/Logic.html">|</a></code>), which simply find the intersection and unions of sets of SAFE records.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Three searches</span>
-<span class="va">fish</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/search_safe.html">search_taxa</a></span><span class="op">(</span><span class="st">'Actinopterygii'</span><span class="op">)</span>
-<span class="co">## Search returned 6 records</span>
-<span class="va">odonates</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/search_safe.html">search_taxa</a></span><span class="op">(</span><span class="st">"Odonata"</span><span class="op">)</span>
-<span class="co">## Search returned 3 records</span>
-<span class="va">ewers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/search_safe.html">search_authors</a></span><span class="op">(</span><span class="st">"Ewers"</span><span class="op">)</span>
-<span class="co">## Search returned 81 records</span>
-<span class="co"># Logical combinations</span>
-<span class="va">aquatic</span> <span class="op">&lt;-</span> <span class="va">fish</span> <span class="op">|</span> <span class="va">odonates</span>
-<span class="va">aquatic_ewers</span> <span class="op">&lt;-</span> <span class="va">aquatic</span> <span class="op">&amp;</span> <span class="va">ewers</span>
-<span class="va">all_in_one</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">fish</span> <span class="op">|</span> <span class="va">odonates</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">ewers</span></code></pre></div>
+<div class="section level4">
+<h4 id="combining-searches">Combining searches<a class="anchor" aria-label="anchor" href="#combining-searches"></a>
+</h4>
+<p>It is possible to combine searches using logical operators (<code>&amp;</code> and <code>|</code>), which simply find the intersection and unions of sets of SAFE records.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Three searches</span></span>
+<span><span class="va">fish</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/search_safe.html">search_taxa</a></span><span class="op">(</span><span class="st">"Actinopterygii"</span><span class="op">)</span></span>
+<span><span class="va">odonates</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/search_safe.html">search_taxa</a></span><span class="op">(</span><span class="st">"Odonata"</span><span class="op">)</span></span>
+<span><span class="va">ewers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/search_safe.html">search_authors</a></span><span class="op">(</span><span class="st">"Ewers"</span><span class="op">)</span></span>
+<span><span class="co"># Logical combinations</span></span>
+<span><span class="va">aquatic</span> <span class="op">&lt;-</span> <span class="va">fish</span> <span class="op">|</span> <span class="va">odonates</span></span>
+<span><span class="va">aquatic_ewers</span> <span class="op">&lt;-</span> <span class="va">aquatic</span> <span class="op">&amp;</span> <span class="va">ewers</span></span>
+<span><span class="va">all_in_one</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">fish</span> <span class="op">|</span> <span class="va">odonates</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">ewers</span></span></code></pre></div>
 <p>Another approach is to restrict the records that will be searched in the online database. You can pass a search result into a second search result to only search within those records. This cuts down on the amount of information that has to be retrieved from the server, so might be faster on poor networks. However, this obviously only works for repeated narrowing of a search, so has less functionality.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fish</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/search_safe.html">search_taxa</a></span><span class="op">(</span><span class="st">'Actinopterygii'</span><span class="op">)</span>
-<span class="co">## Search returned 6 records</span>
-<span class="va">ewers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/search_safe.html">search_authors</a></span><span class="op">(</span><span class="st">"Ewers"</span>, ids<span class="op">=</span><span class="va">fish</span><span class="op">)</span>
-<span class="co">## Search returned 4 records</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fish</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/search_safe.html">search_taxa</a></span><span class="op">(</span><span class="st">"Actinopterygii"</span><span class="op">)</span></span>
+<span><span class="va">ewers</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/search_safe.html">search_authors</a></span><span class="op">(</span><span class="st">"Ewers"</span>, ids<span class="op">=</span><span class="va">fish</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
-<div id="look-up-a-specific-dataset" class="section level2">
-<h2 class="hasAnchor">
-<a href="#look-up-a-specific-dataset" class="anchor"></a>Look up a specific dataset</h2>
+<div class="section level3">
+<h3 id="look-up-a-specific-dataset">Look up a specific dataset<a class="anchor" aria-label="anchor" href="#look-up-a-specific-dataset"></a>
+</h3>
 <p>Datasets are identified by their record number, which is the number included in both the dataset DOI and Zenodo URL. All of the following point to the same dataset:</p>
 <ul>
-<li><a href="https://doi.org/10.5281/zenodo.3247631" class="uri">https://doi.org/10.5281/zenodo.3247631</a></li>
-<li><a href="https://doi.org/10.5281/zenodo.3247631">10.5281/zenodo.3247631</a></li>
+<li><a href="https://doi.org/10.5281/zenodo.3247631" class="external-link">https://doi.org/10.5281/zenodo.3247631</a></li>
+<li><a href="https://doi.org/10.5281/zenodo.3247631" class="external-link">10.5281/zenodo.3247631</a></li>
 <li>
-<a href="https://zenodo.org/record/3247631">https://zenodo.org/record/3266821</a>)</li>
+<a href="https://zenodo.org/record/3247631" class="external-link">https://zenodo.org/record/3266821</a>)</li>
 </ul>
 <p>Note that all metadata is <em>available for all records</em>, regardless of whether they are open, embargoed or restricted. This includes field descriptions and taxon and location sampling so that users can assess whether a dataset is going to be useful even if it is not yet openly available.</p>
 <p>Once you have the details of a dataset you are interestested in then you can validate a dataset reference to access metadata and available data, using the <code><a href="../reference/validate_record_ids.html">validate_record_ids()</a></code> function. This function does the following:</p>
@@ -311,330 +311,324 @@
 <li>provides an interface to download and import the related data files.</li>
 </ol>
 <p>Like the <code>search</code> functions, the output is <code>safe_record_set</code> object. Note that you can validate multiple references at once.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">recs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate_record_ids.html">validate_record_ids</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'https://doi.org/10.5281/zenodo.3247631'</span>,
-                              <span class="st">'10.5281/zenodo.3266827'</span>,
-                              <span class="st">'https://zenodo.org/record/3266821'</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">recs</span><span class="op">)</span></code></pre></div>
-<pre><code>## Set includes 3 concept ids and 2 record ids: 
-##  - 1 open and most recent (*)
-##  - 0 open and outdated (o)
-##  - 1 under embargo or restricted (x)
-## 
-##   concept  record available
-## 1 3247630 3247631         x
-## 2 3266821 -------          
-## 3 3266826 3266827         *</code></pre>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">recs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate_record_ids.html">validate_record_ids</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'https://doi.org/10.5281/zenodo.3247631'</span>,</span>
+<span>                              <span class="st">'10.5281/zenodo.3266827'</span>,</span>
+<span>                              <span class="st">'https://zenodo.org/record/3266821'</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">recs</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; Set includes 3 concept ids and 2 record ids: </span></span>
+<span><span class="co">#&gt;  - 2 open and most recent (*)</span></span>
+<span><span class="co">#&gt;  - 0 open and outdated (o)</span></span>
+<span><span class="co">#&gt;  - 0 under embargo or restricted (x)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   concept  record available</span></span>
+<span><span class="co">#&gt; 1 3247630 3247631         *</span></span>
+<span><span class="co">#&gt; 2 3266821 -------          </span></span>
+<span><span class="co">#&gt; 3 3266826 3266827         *</span></span></code></pre>
 <p>In addition, all of the main functions in <code>safedata</code> that expect to be passed a dataset id will run <code><a href="../reference/validate_record_ids.html">validate_record_ids()</a></code> on their inputs, so you can simply use those URLs directly with those functions without needing to specifically create a <code>safe_record_set</code> yourself.</p>
 </div>
 </div>
-<div id="displaying-dataset-metadata" class="section level1">
-<h1 class="hasAnchor">
-<a href="#displaying-dataset-metadata" class="anchor"></a>Displaying dataset metadata</h1>
+<div class="section level2">
+<h2 id="displaying-dataset-metadata">Displaying dataset metadata<a class="anchor" aria-label="anchor" href="#displaying-dataset-metadata"></a>
+</h2>
 <p>Printing a <code>safe_record_set</code> object displays a deliberately compact summary of a set of record ids. There are three function that show the detailed metadata for records at three levels:</p>
 <ul>
 <li>the <strong>concept</strong> level: metadata about all the published versions of a particualar dataset,</li>
 <li>the <strong>record</strong> level: metadata about a specific version of a dataset, and</li>
 <li>the <strong>worksheet</strong> level: metadata about the fields available in a particular data worksheet.</li>
 </ul>
-<div id="show_concepts" class="section level2">
-<h2 class="hasAnchor">
-<a href="#show_concepts" class="anchor"></a><code>show_concepts()</code>
-</h2>
+<div class="section level3">
+<h3 id="show_concepts">
+<code>show_concepts()</code><a class="anchor" aria-label="anchor" href="#show_concepts"></a>
+</h3>
 <p>The <code><a href="../reference/show_concepts.html">show_concepts()</a></code> function displays concept level metadata about a set of record ids. This includes the (most recent) dataset title and a short summary of the versions available under the dataset concept. Note that the output is not restricted just to the set of record ids given to the function: it shows metadata for all versions for each of the concept ids included.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/show_concepts.html">show_concepts</a></span><span class="op">(</span><span class="va">recs</span><span class="op">)</span></code></pre></div>
-<pre><code>## 
-## Concept ID: 3247630
-## Title: Functional traits of tree species in old-growth and selectively logged forest
-## Versions: 0 available, 1 embargoed or restricted
-## 
-##  record_id  published    embargo available
-##    3247631 2019-06-17 2020-12-31         x
-## 
-## -------------
-## 
-## Concept ID: 3266821
-## Title: Microclimate proxy measurements from a logging gradient in Malaysian Borneo (BALI project)
-## Versions: 1 available, 0 embargoed or restricted
-## 
-##  record_id  published embargo available
-##    3266822 2019-07-03      --         *
-## 
-## -------------
-## 
-## Concept ID: 3266826
-## Title: Quantifying the spatial heterogeneity of forest conversion costs and how it relates to biodiversity, conservation and land use history
-## Versions: 1 available, 0 embargoed or restricted
-## 
-##  record_id  published embargo available
-##    3266827 2019-07-03      --         *</code></pre>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/show_concepts.html">show_concepts</a></span><span class="op">(</span><span class="va">recs</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Concept ID: 3247630</span></span>
+<span><span class="co">#&gt; Title: Functional traits of tree species in old-growth and selectively logged forest</span></span>
+<span><span class="co">#&gt; Versions: 1 available, 0 embargoed or restricted</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  record_id  published embargo available</span></span>
+<span><span class="co">#&gt;    3247631 2019-06-17      --         *</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; -------------</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Concept ID: 3266821</span></span>
+<span><span class="co">#&gt; Title: Microclimate proxy measurements from a logging gradient in Malaysian Borneo (BALI project)</span></span>
+<span><span class="co">#&gt; Versions: 1 available, 0 embargoed or restricted</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  record_id  published embargo available</span></span>
+<span><span class="co">#&gt;    3266822 2019-07-03      --         *</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; -------------</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Concept ID: 3266826</span></span>
+<span><span class="co">#&gt; Title: Quantifying the spatial heterogeneity of forest conversion costs and how it relates to biodiversity, conservation and land use history</span></span>
+<span><span class="co">#&gt; Versions: 1 available, 0 embargoed or restricted</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  record_id  published embargo available</span></span>
+<span><span class="co">#&gt;    3266827 2019-07-03      --         *</span></span></code></pre>
 </div>
-<div id="show_record" class="section level2">
-<h2 class="hasAnchor">
-<a href="#show_record" class="anchor"></a><code>show_record()</code>
-</h2>
+<div class="section level3">
+<h3 id="show_record">
+<code>show_record()</code><a class="anchor" aria-label="anchor" href="#show_record"></a>
+</h3>
 <p>This function shows metadata for a specific version of a dataset: if you give it a concept ID then it will display the available versions for that concept. Otherwise, the function prints out information about the dataset with that record id: it includes the dataset title, status and other dataset level metadata and then a summary of the data worksheets contained in the dataset.</p>
-<p>Note that - because a <code>safe_record_set</code> is just a data frame with some extra information attached - you can use the usual data frame indexing to select a row to pass to other functions. Running <code><a href="../reference/show_concepts.html">show_record()</a></code> also <em>requires an internet connection</em>: the package downloads a JSON file of the record metadata and stores it in the SAFE data directory.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/show_concepts.html">show_record</a></span><span class="op">(</span><span class="va">recs</span><span class="op">[</span><span class="fl">3</span>,<span class="op">]</span><span class="op">)</span></code></pre></div>
-<pre><code>## Downloading 1 record metadata files</code></pre>
-<pre><code>## 
-## Record summary
-## Title: Quantifying the spatial heterogeneity of forest conversion costs and how it relates to biodiversity, conservation and land use history
-## Status: open
-## External files: SAFE_COUPE.zip
-## Locations: 187 locations reported
-## 
-## Data worksheets:
-## name ncol nrow description
-## Data   11  187 Dates of earliest and latest known salvage logging activity in logging coupes</code></pre>
+<p>Note that - because a <code>safe_record_set</code> is just a data frame with some extra information attached - you can use the usual data frame indexing to select a row to pass to other functions. Running <code><a href="../reference/show_concepts.html">show_record()</a></code> also <em>requires an internet connection</em> when a record is first examined: the package downloads a JSON file of the record metadata and stores it in the SAFE data directory.</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/show_concepts.html">show_record</a></span><span class="op">(</span><span class="fl">1400562</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Record summary</span></span>
+<span><span class="co">#&gt; Title: Myrmecophilous Pselaphine beetles in tropical forests</span></span>
+<span><span class="co">#&gt; Authors: Psomas</span></span>
+<span><span class="co">#&gt; Publication date: 2018-08-20</span></span>
+<span><span class="co">#&gt; Record ID: 1400562</span></span>
+<span><span class="co">#&gt; Concept ID: 1400561</span></span>
+<span><span class="co">#&gt; Status: open</span></span>
+<span><span class="co">#&gt; Taxa: 67 taxa reported</span></span>
+<span><span class="co">#&gt; Locations: 20 locations reported</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Data worksheets:</span></span>
+<span><span class="co">#&gt;             name ncol nrow description</span></span>
+<span><span class="co">#&gt; EnvironVariables    5   20 Environmental variables</span></span>
+<span><span class="co">#&gt;         Ant-Psel    4   20 Ant-Pselaphine data</span></span>
+<span><span class="co">#&gt;   MorphAbundance   44   20 Morphospeices abundance</span></span>
+<span><span class="co">#&gt; MorphFunctTraits   18   42 Morphospecies_Functional Traits</span></span></code></pre>
 </div>
-<div id="show_worksheet" class="section level2">
-<h2 class="hasAnchor">
-<a href="#show_worksheet" class="anchor"></a><code>show_worksheet()</code>
-</h2>
+<div class="section level3">
+<h3 id="show_worksheet">
+<code>show_worksheet()</code><a class="anchor" aria-label="anchor" href="#show_worksheet"></a>
+</h3>
 <p>This function shows metadata for a named worksheet within a specific record. The default is to show a compact table of field names, field types and truncated descriptions:</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/show_concepts.html">show_worksheet</a></span><span class="op">(</span><span class="va">recs</span><span class="op">[</span><span class="fl">3</span>,<span class="op">]</span>, <span class="st">'Data'</span><span class="op">)</span></code></pre></div>
-<pre><code>## Record ID: 3266827
-## Worksheet name: Data
-## Number of data rows: 187
-## Number of data fields: 10
-## Description:
-## Dates of earliest and latest known salvage logging activity in logging coupes
-## Status: open
-## 
-## Fields:
-##    field_name           field_type
-## 1  CoupeNumber          Location  
-## 2  StartDateTrack       Date      
-## 3  EndDateTrack         Date      
-## 4  StartDateLocation    Date      
-## 5  EndDateLocation      Date      
-## 6  StartDateMeasurement Date      
-## 7  EndDateMeasurement   Date      
-## 8  Contractor           ID        
-## 9  GlobalStart          Date      
-## 10 GlobalEnd            Date      
-##    description                                     
-## 1  Coupe number                                    
-## 2  Earliest date of logging activity recorded th...
-## 3  Last date of logging activity recorded throug...
-## 4  Earliest date of logging activity recorded th...
-## 5  Last date of logging activity recorded throug...
-## 6  Earliest date of logging activity recorded th...
-## 7  Last date of logging activity recorded throug...
-## 8  Name of the contractor responsible for the co...
-## 9  Earliest date of any recorded salvage logging...
-## 10 Last date of any recorded salvage logging act...</code></pre>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/show_concepts.html">show_worksheet</a></span><span class="op">(</span><span class="fl">1400562</span>, <span class="st">'EnvironVariables'</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; Record ID: 1400562</span></span>
+<span><span class="co">#&gt; Worksheet name: EnvironVariables</span></span>
+<span><span class="co">#&gt; Number of data rows: 20</span></span>
+<span><span class="co">#&gt; Number of data fields: 4</span></span>
+<span><span class="co">#&gt; Description:</span></span>
+<span><span class="co">#&gt; Environmental variables</span></span>
+<span><span class="co">#&gt; Status: open</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Fields:</span></span>
+<span><span class="co">#&gt;   field_name field_type description         </span></span>
+<span><span class="co">#&gt; 1 Site       Location   Site of measurements</span></span>
+<span><span class="co">#&gt; 2 Temp       Numeric    Soil temperature    </span></span>
+<span><span class="co">#&gt; 3 Moisture   Numeric    Soil moisture       </span></span>
+<span><span class="co">#&gt; 4 Cover      Numeric    Canopy cover</span></span></code></pre>
 <p>There is also an extended display (<code>extended_fields=TRUE</code>) that will print out a list of all the available metadata for each field.</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/show_concepts.html">show_worksheet</a></span><span class="op">(</span><span class="va">recs</span><span class="op">[</span><span class="fl">3</span>,<span class="op">]</span>, <span class="st">'Data'</span>, extended_fields<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<pre><code>## Record ID: 3266827
-## Worksheet name: Data
-## Number of data rows: 187
-## Number of data fields: 10
-## Description:
-## Dates of earliest and latest known salvage logging activity in logging coupes
-## Status: open
-## 
-## Fields:
-## CoupeNumber :
-##  - field_type: Location
-##  - description: Coupe number
-## StartDateTrack :
-##  - field_type: Date
-##  - description: Earliest date of logging activity recorded through GPS loggers on bulldozers
-...</code></pre>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/show_concepts.html">show_worksheet</a></span><span class="op">(</span><span class="fl">1400562</span>, <span class="st">'EnvironVariables'</span>, extended_fields<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; Record ID: 1400562</span></span>
+<span><span class="co">#&gt; Worksheet name: EnvironVariables</span></span>
+<span><span class="co">#&gt; Number of data rows: 20</span></span>
+<span><span class="co">#&gt; Number of data fields: 4</span></span>
+<span><span class="co">#&gt; Description:</span></span>
+<span><span class="co">#&gt; Environmental variables</span></span>
+<span><span class="co">#&gt; Status: open</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Fields:</span></span>
+<span><span class="co">#&gt; Site :</span></span>
+<span><span class="co">#&gt;  - field_type: Location</span></span>
+<span><span class="co">#&gt;  - description: Site of measurements</span></span>
+<span><span class="co">#&gt;  - method: NA</span></span>
+<span><span class="co">#&gt; Temp :</span></span>
+<span><span class="co">#&gt;  - field_type: Numeric</span></span>
+<span><span class="va">...</span></span></code></pre>
 </div>
 </div>
-<div id="downloading-data" class="section level1">
-<h1 class="hasAnchor">
-<a href="#downloading-data" class="anchor"></a>Downloading data</h1>
+<div class="section level2">
+<h2 id="downloading-data">Downloading data<a class="anchor" aria-label="anchor" href="#downloading-data"></a>
+</h2>
 <p>Once you have found records for which you want to explore the actual data, then you first need to download the data files for the dataset from Zenodo. This uses the <code><a href="../reference/download_safe_files.html">download_safe_files()</a></code> function and you can either give that a URL or number for a dataset or pass it an existing <code>safe_record_set</code>. The function will check which datasets are currently available and download them to the SAFE data directory. The default behaviour is to present a brief report on the number and size of available files to be downloaded before actually doing anything:</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/download_safe_files.html">download_safe_files</a></span><span class="op">(</span><span class="va">within_a</span><span class="op">)</span>
-<span class="co">## 26 files requested from 26 records</span>
-<span class="co">##  - 0 local (0 bytes)</span>
-<span class="co">##  - 4 embargoed or restricted (2.2 Mb)</span>
-<span class="co">##  - 22 to download (43.6 Mb) </span>
-<span class="co">## </span>
-<span class="co">## 1: Yes</span>
-<span class="co">## 2: No</span>
-<span class="co">## </span>
-<span class="co">## Selection:</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/download_safe_files.html">download_safe_files</a></span><span class="op">(</span><span class="va">within_a</span><span class="op">)</span></span>
+<span><span class="co">## 26 files requested from 26 records</span></span>
+<span><span class="co">##  - 0 local (0 bytes)</span></span>
+<span><span class="co">##  - 4 embargoed or restricted (2.2 Mb)</span></span>
+<span><span class="co">##  - 22 to download (43.6 Mb) </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## 1: Yes</span></span>
+<span><span class="co">## 2: No</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Selection:</span></span></code></pre></div>
 <p>By default, the <code><a href="../reference/download_safe_files.html">download_safe_files()</a></code> function downloads all of the files associated with the record. This will include <em>external</em> data files which may contain primary data that is not suited to the Excel format or additional information. Although many external files are likely to be readable in R, the<code>safedata</code> does not currently provide a mechanism to load them automatically. The function will also download the JSON metadata for the specified datasets.</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/download_safe_files.html">download_safe_files</a></span><span class="op">(</span><span class="fl">3697804</span>, xlsx_only<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span>
-<span class="co"># 2 files requested from 1 records</span>
-<span class="co">#  - 1 local (11.3 Kb)</span>
-<span class="co">#  - 0 embargoed or restricted (0 bytes)</span>
-<span class="co">#  - 1 to download (74.1 Kb) </span>
-<span class="co"># </span>
-<span class="co"># 1: Yes</span>
-<span class="co"># 2: No</span>
-<span class="co"># </span>
-<span class="co"># Selection: 1</span>
-<span class="co"># 2 files for record 3697804: 1 to download</span>
-<span class="co">#  - Downloaded: Sampling_area_borders.xlsx, </span>
-<span class="co"># - Downloaded: Sampling_area_borders_UTM50N_WGS84.zip</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/download_safe_files.html">download_safe_files</a></span><span class="op">(</span><span class="fl">3697804</span>, xlsx_only<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co"># 2 files requested from 1 records</span></span>
+<span><span class="co">#  - 1 local (11.3 Kb)</span></span>
+<span><span class="co">#  - 0 embargoed or restricted (0 bytes)</span></span>
+<span><span class="co">#  - 1 to download (74.1 Kb) </span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># 1: Yes</span></span>
+<span><span class="co"># 2: No</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># Selection: 1</span></span>
+<span><span class="co"># 2 files for record 3697804: 1 to download</span></span>
+<span><span class="co">#  - Downloaded: Sampling_area_borders.xlsx, </span></span>
+<span><span class="co"># - Downloaded: Sampling_area_borders_UTM50N_WGS84.zip</span></span></code></pre></div>
 <p>The function will warn you if the local copies of data files have been altered and the <code>refresh=TRUE</code> argument can be used to restore data files to the version of record. Note that this will <strong>delete local changes</strong>.</p>
 </div>
-<div id="loading-data" class="section level1">
-<h1 class="hasAnchor">
-<a href="#loading-data" class="anchor"></a>Loading data</h1>
+<div class="section level2">
+<h2 id="loading-data">Loading data<a class="anchor" aria-label="anchor" href="#loading-data"></a>
+</h2>
 <p>The <code><a href="../reference/load_safe_data.html">load_safe_data()</a></code> function is used to load a named data worksheet from a dataset into a <code>safedata</code> object. This is just a data frame with some additional attribute data and it will in general behave just like any other data frame - the additional attributes are used for further data processing and adding brief metadata to the <code>str</code> and <code>print</code> methods.</p>
-<p>Some data formatting takes place based on <a href="https://safedata-validator.readthedocs.io/en/latest/data_format/data.html#field-types">field types</a>: categorical variables are converted to factors; dates and datetimes are converted to <code>POSIXct</code> and times are converted to <code>chron::time</code> objects.</p>
+<p>Some data formatting takes place based on <a href="https://safedata-validator.readthedocs.io/en/latest/data_format/data.html#field-types" class="external-link">field types</a>: categorical variables are converted to factors; dates and datetimes are converted to <code>POSIXct</code> and times are converted to <code>chron::time</code> objects.</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">beetle_abund</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_safe_data.html">load_safe_data</a></span><span class="op">(</span><span class="fl">1400562</span>, <span class="st">'Ant-Psel'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">beetle_abund</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; SAFE dataset</span></span>
+<span><span class="co">#&gt; Concept: 1400561; Record 1400562; Worksheet: Ant-Psel</span></span>
+<span><span class="co">#&gt; 'data.frame':    20 obs. of  3 variables:</span></span>
+<span><span class="co">#&gt;  $ Site                : chr  "SAFE_E" "SAFE_D" "SAFE_F" "SAFE_C" ...</span></span>
+<span><span class="co">#&gt;  $ ant.species.richness: num  31 31 27 29 31 21 31 25 32 26 ...</span></span>
+<span><span class="co">#&gt;  $ ant.abundance       : num  561 713 392 481 1036 ...</span></span></code></pre>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">beetle_abund</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_safe_data.html">load_safe_data</a></span><span class="op">(</span><span class="fl">1400562</span>, <span class="st">'Ant-Psel'</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">beetle_abund</span><span class="op">)</span></code></pre></div>
-<pre><code>## SAFE dataset
-## Concept: 1400561; Record 1400562; Worksheet: Ant-Psel
-## 'data.frame':    20 obs. of  3 variables:
-##  $ Site                : chr  "SAFE_E" "SAFE_D" "SAFE_F" "SAFE_C" ...
-##  $ ant.species.richness: num  31 31 27 29 31 21 31 25 32 26 ...
-##  $ ant.abundance       : num  561 713 392 481 1036 ...</code></pre>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">beetle_abund</span><span class="op">)</span></code></pre></div>
-<pre><code>## SAFE dataset:
-## Concept: 1400561; Record 1400562; Worksheet: Ant-Psel
-## First 10 rows:
-##        Site ant.species.richness ant.abundance
-## 1    SAFE_E                   31           561
-## 2    SAFE_D                   31           713
-## 3    SAFE_F                   27           392
-## 4    SAFE_C                   29           481
-## 5    SAFE_B                   31          1036
-## 6    SAFE_A                   21           272
-## 7  Maliau_1                   31          1889
-## 8  Maliau_2                   25           409
-## 9  Maliau_3                   32           613
-## 10 Maliau_4                   26          1036</code></pre>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">beetle_abund</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; SAFE dataset:</span></span>
+<span><span class="co">#&gt; Concept: 1400561; Record 1400562; Worksheet: Ant-Psel</span></span>
+<span><span class="co">#&gt; First 10 rows:</span></span>
+<span><span class="co">#&gt;        Site ant.species.richness ant.abundance</span></span>
+<span><span class="co">#&gt; 1    SAFE_E                   31           561</span></span>
+<span><span class="co">#&gt; 2    SAFE_D                   31           713</span></span>
+<span><span class="co">#&gt; 3    SAFE_F                   27           392</span></span>
+<span><span class="co">#&gt; 4    SAFE_C                   29           481</span></span>
+<span><span class="co">#&gt; 5    SAFE_B                   31          1036</span></span>
+<span><span class="co">#&gt; 6    SAFE_A                   21           272</span></span>
+<span><span class="co">#&gt; 7  Maliau_1                   31          1889</span></span>
+<span><span class="co">#&gt; 8  Maliau_2                   25           409</span></span>
+<span><span class="co">#&gt; 9  Maliau_3                   32           613</span></span>
+<span><span class="co">#&gt; 10 Maliau_4                   26          1036</span></span></code></pre>
 <p>The display of <code>safedata</code> objects is kept deliberately simple to avoid cluttering the screen with metadata. You can always view additional metadata for a loaded worksheet by using the <code>show</code> functions directly on the loaded <code>safedata</code> object:</p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/show_concepts.html">show_concepts</a></span><span class="op">(</span><span class="va">beetle_abund</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Concept ID: 1400561</span></span>
+<span><span class="co">#&gt; Title: Myrmecophilous Pselaphine beetles in tropical forests</span></span>
+<span><span class="co">#&gt; Versions: 1 available, 0 embargoed or restricted</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  record_id  published embargo available</span></span>
+<span><span class="co">#&gt;    1400562 2018-08-20      --         *</span></span></code></pre>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/show_concepts.html">show_concepts</a></span><span class="op">(</span><span class="va">beetle_abund</span><span class="op">)</span></code></pre></div>
-<pre><code>## 
-## Concept ID: 1400561
-## Title: Myrmecophilous Pselaphine beetles in tropical forests
-## Versions: 1 available, 0 embargoed or restricted
-## 
-##  record_id  published embargo available
-##    1400562 2018-08-20      --         *</code></pre>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/show_concepts.html">show_record</a></span><span class="op">(</span><span class="va">beetle_abund</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Record summary</span></span>
+<span><span class="co">#&gt; Title: Myrmecophilous Pselaphine beetles in tropical forests</span></span>
+<span><span class="co">#&gt; Authors: Psomas</span></span>
+<span><span class="co">#&gt; Publication date: 2018-08-20</span></span>
+<span><span class="co">#&gt; Record ID: 1400562</span></span>
+<span><span class="co">#&gt; Concept ID: 1400561</span></span>
+<span><span class="co">#&gt; Status: open</span></span>
+<span><span class="co">#&gt; Taxa: 67 taxa reported</span></span>
+<span><span class="co">#&gt; Locations: 20 locations reported</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Data worksheets:</span></span>
+<span><span class="co">#&gt;             name ncol nrow description</span></span>
+<span><span class="co">#&gt; EnvironVariables    5   20 Environmental variables</span></span>
+<span><span class="co">#&gt;         Ant-Psel    4   20 Ant-Pselaphine data</span></span>
+<span><span class="co">#&gt;   MorphAbundance   44   20 Morphospeices abundance</span></span>
+<span><span class="co">#&gt; MorphFunctTraits   18   42 Morphospecies_Functional Traits</span></span></code></pre>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/show_concepts.html">show_record</a></span><span class="op">(</span><span class="va">beetle_abund</span><span class="op">)</span></code></pre></div>
-<pre><code>## 
-## Record summary
-## Title: Myrmecophilous Pselaphine beetles in tropical forests
-## Status: open
-## Taxa: 67 taxa reported
-## Locations: 20 locations reported
-## 
-## Data worksheets:
-##             name ncol nrow description
-## EnvironVariables    5   20 Environmental variables
-##         Ant-Psel    4   20 Ant-Pselaphine data
-##   MorphAbundance   44   20 Morphospeices abundance
-## MorphFunctTraits   18   42 Morphospecies_Functional Traits</code></pre>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/show_concepts.html">show_worksheet</a></span><span class="op">(</span><span class="va">beetle_abund</span><span class="op">)</span></code></pre></div>
-<pre><code>## Record ID: 1400562
-## Worksheet name: Ant-Psel
-## Number of data rows: 20
-## Number of data fields: 3
-## Description:
-## Ant-Pselaphine data
-## Status: open
-## 
-## Fields:
-##   field_name           field_type description                    
-## 1 Site                 Location   Site where sample was collected
-## 2 ant species richness Numeric    Number of ant species in sample
-## 3 ant abundance        Abundance  Total number of ants in sample</code></pre>
-<div id="dataset-taxa" class="section level2">
-<h2 class="hasAnchor">
-<a href="#dataset-taxa" class="anchor"></a>Dataset taxa</h2>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/show_concepts.html">show_worksheet</a></span><span class="op">(</span><span class="va">beetle_abund</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; Record ID: 1400562</span></span>
+<span><span class="co">#&gt; Worksheet name: Ant-Psel</span></span>
+<span><span class="co">#&gt; Number of data rows: 20</span></span>
+<span><span class="co">#&gt; Number of data fields: 3</span></span>
+<span><span class="co">#&gt; Description:</span></span>
+<span><span class="co">#&gt; Ant-Pselaphine data</span></span>
+<span><span class="co">#&gt; Status: open</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Fields:</span></span>
+<span><span class="co">#&gt;   field_name           field_type description                    </span></span>
+<span><span class="co">#&gt; 1 Site                 Location   Site where sample was collected</span></span>
+<span><span class="co">#&gt; 2 ant species richness Numeric    Number of ant species in sample</span></span>
+<span><span class="co">#&gt; 3 ant abundance        Abundance  Total number of ants in sample</span></span></code></pre>
+<div class="section level3">
+<h3 id="dataset-taxa">Dataset taxa<a class="anchor" aria-label="anchor" href="#dataset-taxa"></a>
+</h3>
 <p>There are a number of functions that can be used to work with the taxa in a dataset. Some generate simple tables of taxa:</p>
 <ol style="list-style-type: decimal">
 <li>
 <p><code><a href="../reference/get_taxa.html">get_taxa()</a></code>: This function loads a dataframe containing all of the taxa used within a dataset, with fields including the core GBIF taxonomic levels, the taxonomic label used within the dataset and the taxonomic status of the each taxon. You can load a taxonomic dataframe from a <code>safe_record_set</code> row or using an existing loaded <code>safedata</code> object.</p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">beetle_taxa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_taxa.html">get_taxa</a></span><span class="op">(</span><span class="va">beetle_abund</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">beetle_taxa</span><span class="op">)</span></code></pre></div>
-<pre><code>## Classes 'safe_taxa' and 'data.frame':    43 obs. of  13 variables:
-##  $ kingdom    : chr  "Animalia" "Animalia" "Animalia" "Animalia" ...
-##  $ phylum     : chr  "Arthropoda" "Arthropoda" "Arthropoda" "Arthropoda" ...
-##  $ class      : chr  "Insecta" "Insecta" "Insecta" "Insecta" ...
-##  $ order      : chr  "Coleoptera" "Coleoptera" "Coleoptera" "Coleoptera" ...
-##  $ family     : chr  "Pselaphidae" "Pselaphidae" "Staphylinidae" "Staphylinidae" ...
-##  $ genus      : chr  NA NA "Mnia" "Aphilia" ...
-##  $ species    : chr  NA NA NA NA ...
-##  $ subspecies : chr  NA NA NA NA ...
-##  $ variety    : chr  NA NA NA NA ...
-##  $ form       : chr  NA NA NA NA ...
-##  $ taxon_name : chr  "Psel1" "Psel10" "Psel11" "Psel12" ...
-##  $ taxon_level: chr  "morphospecies" "morphospecies" "morphospecies" "morphospecies" ...
-##  $ gbif_status: chr  "user" "user" "user" "user" ...</code></pre>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">beetle_taxa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_taxa.html">get_taxa</a></span><span class="op">(</span><span class="va">beetle_abund</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">beetle_taxa</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; Classes 'safe_taxa' and 'data.frame':    43 obs. of  13 variables:</span></span>
+<span><span class="co">#&gt;  $ kingdom    : chr  "Animalia" "Animalia" "Animalia" "Animalia" ...</span></span>
+<span><span class="co">#&gt;  $ phylum     : chr  "Arthropoda" "Arthropoda" "Arthropoda" "Arthropoda" ...</span></span>
+<span><span class="co">#&gt;  $ class      : chr  "Insecta" "Insecta" "Insecta" "Insecta" ...</span></span>
+<span><span class="co">#&gt;  $ order      : chr  "Coleoptera" "Coleoptera" "Coleoptera" "Coleoptera" ...</span></span>
+<span><span class="co">#&gt;  $ family     : chr  "Pselaphidae" "Pselaphidae" "Staphylinidae" "Staphylinidae" ...</span></span>
+<span><span class="co">#&gt;  $ genus      : chr  NA NA "Mnia" "Aphilia" ...</span></span>
+<span><span class="co">#&gt;  $ species    : chr  NA NA NA NA ...</span></span>
+<span><span class="co">#&gt;  $ subspecies : chr  NA NA NA NA ...</span></span>
+<span><span class="co">#&gt;  $ variety    : chr  NA NA NA NA ...</span></span>
+<span><span class="co">#&gt;  $ form       : chr  NA NA NA NA ...</span></span>
+<span><span class="co">#&gt;  $ taxon_name : chr  "Psel1" "Psel10" "Psel11" "Psel12" ...</span></span>
+<span><span class="co">#&gt;  $ taxon_level: chr  "morphospecies" "morphospecies" "morphospecies" "morphospecies" ...</span></span>
+<span><span class="co">#&gt;  $ gbif_status: chr  "user" "user" "user" "user" ...</span></span></code></pre>
 </li>
 <li>
 <p><code><a href="../reference/add_taxa.html">add_taxa()</a></code>: This function adds taxonomic details to an already loaded data worksheet.</p>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">beetle_morph</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_safe_data.html">load_safe_data</a></span><span class="op">(</span><span class="fl">1400562</span>, <span class="st">'MorphFunctTraits'</span><span class="op">)</span>
-<span class="va">beetle_morph</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/add_taxa.html">add_taxa</a></span><span class="op">(</span><span class="va">beetle_morph</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">beetle_morph</span><span class="op">)</span></code></pre></div>
-<pre><code>## SAFE dataset
-## Concept: 1400561; Record 1400562; Worksheet: MorphFunctTraits
-## 'data.frame':    42 obs. of  30 variables:
-##  $ Morphospecies: chr  "Psel1" "Psel2" "Psel3" "Psel4" ...
-##  $ AL           : num  0.663 0.702 0.702 1.599 1.131 ...
-##  $ TAL          : num  0.117 0.039 0.39 0.234 0.234 0.273 0.078 0.351 0.117 0.156 ...
-##  $ TAW          : num  0.117 0.039 0.195 0.117 0.234 0.234 0.078 0.234 0.078 0.078 ...
-##  $ AN           : num  11 11 7 11 11 7 11 7 11 11 ...
-##  $ HCA          : Factor w/ 2 levels "absent","present": 2 2 2 2 1 1 2 1 2 2 ...
-##  $ HCP          : Factor w/ 2 levels "absent","present": 1 1 1 1 2 2 1 2 1 1 ...
-##  $ TA           : Factor w/ 2 levels "absent","present": 2 2 2 2 1 1 2 2 2 2 ...
-##  $ TP           : Factor w/ 2 levels "absent","present": 1 1 1 1 2 2 1 1 1 1 ...
-##  $ FP           : Factor w/ 2 levels "absent","present": 1 2 2 2 2 2 2 2 2 2 ...
-##  $ FA           : Factor w/ 2 levels "absent","present": 2 1 1 1 1 1 1 1 1 1 ...
-##  $ Bef2         : Factor w/ 2 levels "absent","present": 2 1 1 1 2 1 2 1 2 2 ...
-##  $ Bef3         : Factor w/ 2 levels "absent","present": 1 2 1 1 1 1 1 1 1 1 ...
-##  $ Bef1         : Factor w/ 2 levels "absent","present": 1 1 2 2 1 2 1 2 1 1 ...
-##  $ Bef0         : Factor w/ 2 levels "absent","present": 1 1 1 1 1 1 1 1 1 1 ...
-##  $ Bef4         : Factor w/ 2 levels "absent","present": 1 1 1 1 1 1 1 1 1 1 ...
-##  $ Myrmycophile : Factor w/ 4 levels "Facultative",..: NA 2 1 1 4 1 2 1 NA NA ...
-##  $ kingdom      : chr  "Animalia" "Animalia" "Animalia" "Animalia" ...
-##  $ phylum       : chr  "Arthropoda" "Arthropoda" "Arthropoda" "Arthropoda" ...
-##  $ class        : chr  "Insecta" "Insecta" "Insecta" "Insecta" ...
-##  $ order        : chr  "Coleoptera" "Coleoptera" "Coleoptera" "Coleoptera" ...
-##  $ family       : chr  "Pselaphidae" "Staphylinidae" "Staphylinidae" "Staphylinidae" ...
-##  $ genus        : chr  NA "Bibloporus" "Plagiophorus" "Harmophorus" ...
-##  $ species      : chr  NA NA NA NA ...
-##  $ subspecies   : chr  NA NA NA NA ...
-##  $ variety      : chr  NA NA NA NA ...
-##  $ form         : chr  NA NA NA NA ...
-##  $ taxon_name   : chr  "Psel1" "Psel2" "Psel3" "Psel4" ...
-##  $ taxon_level  : chr  "morphospecies" "morphospecies" "morphospecies" "morphospecies" ...
-##  $ gbif_status  : chr  "user" "user" "user" "user" ...</code></pre>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">beetle_morph</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_safe_data.html">load_safe_data</a></span><span class="op">(</span><span class="fl">1400562</span>, <span class="st">'MorphFunctTraits'</span><span class="op">)</span></span>
+<span><span class="va">beetle_morph</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/add_taxa.html">add_taxa</a></span><span class="op">(</span><span class="va">beetle_morph</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">beetle_morph</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; SAFE dataset</span></span>
+<span><span class="co">#&gt; Concept: 1400561; Record 1400562; Worksheet: MorphFunctTraits</span></span>
+<span><span class="co">#&gt; 'data.frame':    42 obs. of  30 variables:</span></span>
+<span><span class="co">#&gt;  $ Morphospecies: chr  "Psel1" "Psel2" "Psel3" "Psel4" ...</span></span>
+<span><span class="co">#&gt;  $ AL           : num  0.663 0.702 0.702 1.599 1.131 ...</span></span>
+<span><span class="co">#&gt;  $ TAL          : num  0.117 0.039 0.39 0.234 0.234 0.273 0.078 0.351 0.117 0.156 ...</span></span>
+<span><span class="co">#&gt;  $ TAW          : num  0.117 0.039 0.195 0.117 0.234 0.234 0.078 0.234 0.078 0.078 ...</span></span>
+<span><span class="co">#&gt;  $ AN           : num  11 11 7 11 11 7 11 7 11 11 ...</span></span>
+<span><span class="co">#&gt;  $ HCA          : Factor w/ 2 levels "absent","present": 2 2 2 2 1 1 2 1 2 2 ...</span></span>
+<span><span class="co">#&gt;  $ HCP          : Factor w/ 2 levels "absent","present": 1 1 1 1 2 2 1 2 1 1 ...</span></span>
+<span><span class="co">#&gt;  $ TA           : Factor w/ 2 levels "absent","present": 2 2 2 2 1 1 2 2 2 2 ...</span></span>
+<span><span class="co">#&gt;  $ TP           : Factor w/ 2 levels "absent","present": 1 1 1 1 2 2 1 1 1 1 ...</span></span>
+<span><span class="co">#&gt;  $ FP           : Factor w/ 2 levels "absent","present": 1 2 2 2 2 2 2 2 2 2 ...</span></span>
+<span><span class="co">#&gt;  $ FA           : Factor w/ 2 levels "absent","present": 2 1 1 1 1 1 1 1 1 1 ...</span></span>
+<span><span class="co">#&gt;  $ Bef2         : Factor w/ 2 levels "absent","present": 2 1 1 1 2 1 2 1 2 2 ...</span></span>
+<span><span class="co">#&gt;  $ Bef3         : Factor w/ 2 levels "absent","present": 1 2 1 1 1 1 1 1 1 1 ...</span></span>
+<span><span class="co">#&gt;  $ Bef1         : Factor w/ 2 levels "absent","present": 1 1 2 2 1 2 1 2 1 1 ...</span></span>
+<span><span class="co">#&gt;  $ Bef0         : Factor w/ 2 levels "absent","present": 1 1 1 1 1 1 1 1 1 1 ...</span></span>
+<span><span class="co">#&gt;  $ Bef4         : Factor w/ 2 levels "absent","present": 1 1 1 1 1 1 1 1 1 1 ...</span></span>
+<span><span class="co">#&gt;  $ Myrmycophile : Factor w/ 4 levels "Facultative",..: NA 2 1 1 4 1 2 1 NA NA ...</span></span>
+<span><span class="co">#&gt;  $ kingdom      : chr  "Animalia" "Animalia" "Animalia" "Animalia" ...</span></span>
+<span><span class="co">#&gt;  $ phylum       : chr  "Arthropoda" "Arthropoda" "Arthropoda" "Arthropoda" ...</span></span>
+<span><span class="co">#&gt;  $ class        : chr  "Insecta" "Insecta" "Insecta" "Insecta" ...</span></span>
+<span><span class="co">#&gt;  $ order        : chr  "Coleoptera" "Coleoptera" "Coleoptera" "Coleoptera" ...</span></span>
+<span><span class="co">#&gt;  $ family       : chr  "Pselaphidae" "Staphylinidae" "Staphylinidae" "Staphylinidae" ...</span></span>
+<span><span class="co">#&gt;  $ genus        : chr  NA "Bibloporus" "Plagiophorus" "Harmophorus" ...</span></span>
+<span><span class="co">#&gt;  $ species      : chr  NA NA NA NA ...</span></span>
+<span><span class="co">#&gt;  $ subspecies   : chr  NA NA NA NA ...</span></span>
+<span><span class="co">#&gt;  $ variety      : chr  NA NA NA NA ...</span></span>
+<span><span class="co">#&gt;  $ form         : chr  NA NA NA NA ...</span></span>
+<span><span class="co">#&gt;  $ taxon_name   : chr  "Psel1" "Psel2" "Psel3" "Psel4" ...</span></span>
+<span><span class="co">#&gt;  $ taxon_level  : chr  "morphospecies" "morphospecies" "morphospecies" "morphospecies" ...</span></span>
+<span><span class="co">#&gt;  $ gbif_status  : chr  "user" "user" "user" "user" ...</span></span></code></pre>
 </li>
 <li>
 <p>The <code>get_taxon_coverage</code> function can be used to get a taxon table of all taxa currently referenced in <em>all</em> datasets.</p>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">all_taxa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_taxon_coverage.html">get_taxon_coverage</a></span><span class="op">(</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">all_taxa</span><span class="op">)</span></code></pre></div>
-<pre><code>## Classes 'safe_taxa' and 'data.frame':   6697 obs. of  13 variables:
-##  $ kingdom    : chr  "Plantae" "Plantae" "Animalia" "Animalia" ...
-##  $ phylum     : chr  "Tracheophyta" "Tracheophyta" "Chordata" "Chordata" ...
-##  $ class      : chr  "Magnoliopsida" "Magnoliopsida" "Aves" "Aves" ...
-##  $ order      : chr  "Ericales" "Lamiales" "Columbiformes" "Passeriformes" ...
-##  $ family     : chr  "Pentaphylacaceae" "Lamiaceae" "Columbidae" "Nectariniidae" ...
-##  $ genus      : chr  NA "Congea" "Chalcophaps" "Kurochkinegramma" ...
-##  $ species    : chr  NA NA NA "Kurochkinegramma hypogrammicum" ...
-##  $ subspecies : chr  NA NA NA NA ...
-##  $ variety    : chr  NA NA NA NA ...
-##  $ form       : chr  NA NA NA NA ...
-##  $ taxon_name : chr  "Pentaphylacaceae" "Congea" "Chalcophaps" "Kurochkinegramma hypogrammicum" ...
-##  $ taxon_level: chr  "family" "genus" "genus" "species" ...
-##  $ gbif_status: chr  "accepted" "accepted" "accepted" "accepted" ...</code></pre>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">all_taxa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_taxon_coverage.html">get_taxon_coverage</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">all_taxa</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; Classes 'safe_taxa' and 'data.frame':   7058 obs. of  13 variables:</span></span>
+<span><span class="co">#&gt;  $ kingdom    : chr  "Plantae" "Plantae" "Animalia" "Animalia" ...</span></span>
+<span><span class="co">#&gt;  $ phylum     : chr  "Tracheophyta" "Tracheophyta" "Chordata" "Chordata" ...</span></span>
+<span><span class="co">#&gt;  $ class      : chr  "Magnoliopsida" "Magnoliopsida" "Aves" "Aves" ...</span></span>
+<span><span class="co">#&gt;  $ order      : chr  "Ericales" "Lamiales" "Columbiformes" "Passeriformes" ...</span></span>
+<span><span class="co">#&gt;  $ family     : chr  "Pentaphylacaceae" "Lamiaceae" "Columbidae" "Nectariniidae" ...</span></span>
+<span><span class="co">#&gt;  $ genus      : chr  NA "Congea" "Chalcophaps" "Kurochkinegramma" ...</span></span>
+<span><span class="co">#&gt;  $ species    : chr  NA NA NA "Kurochkinegramma hypogrammicum" ...</span></span>
+<span><span class="co">#&gt;  $ subspecies : chr  NA NA NA NA ...</span></span>
+<span><span class="co">#&gt;  $ variety    : chr  NA NA NA NA ...</span></span>
+<span><span class="co">#&gt;  $ form       : chr  NA NA NA NA ...</span></span>
+<span><span class="co">#&gt;  $ taxon_name : chr  "Pentaphylacaceae" "Congea" "Chalcophaps" "Kurochkinegramma hypogrammicum" ...</span></span>
+<span><span class="co">#&gt;  $ taxon_level: chr  "family" "genus" "genus" "species" ...</span></span>
+<span><span class="co">#&gt;  $ gbif_status: chr  "accepted" "accepted" "accepted" "accepted" ...</span></span></code></pre>
 </li>
 </ol>
 <p>The other functions convert taxon tables into graphs (vertices and edges) and phylogenetic trees using the GBIF taxonomic backbone to represent phylogeny. The data validation should ensure that the taxa in a dataset can be connected as a phylogenetic tree, but this isn’t always the case. For this reason, these functions use a more general graph conversion and then checks whether the result can be converted to a phlyogenetic tree. Technically, that is checking that the graph is a connected, simple, directed acyclic graph.</p>
@@ -643,185 +637,184 @@
 <li><p>The <code>igraph_to_phylo</code> function tests whether a taxon graph can be converted to a phylogeny and returns a <code>phylo</code> object (package <code>ape</code>). The tips and internal nodes are labelled with taxon names but the <code>phylo</code> structure does not store other node information.</p></li>
 <li>
 <p><code><a href="../reference/igraph_to_phylo.html">get_phylogeny()</a></code>: This is simply a wrapper that runs both functions above in turn to go straight to a phylogeny.</p>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ape-package.ird.fr/">ape</a></span><span class="op">)</span>
-<span class="va">beetle_phylo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/igraph_to_phylo.html">get_phylogeny</a></span><span class="op">(</span><span class="fl">1400562</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">beetle_phylo</span>, show.node.label<span class="op">=</span><span class="cn">TRUE</span>, font<span class="op">=</span><span class="fl">1</span>, no.margin<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://ape-package.ird.fr/" class="external-link">ape</a></span><span class="op">)</span></span>
+<span><span class="va">beetle_phylo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/igraph_to_phylo.html">get_phylogeny</a></span><span class="op">(</span><span class="fl">1400562</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">beetle_phylo</span>, show.node.label<span class="op">=</span><span class="cn">TRUE</span>, font<span class="op">=</span><span class="fl">1</span>, no.margin<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="using_safe_data_files/figure-html/get_phylo-1.png" width="700"></p>
 </li>
 </ol>
 </div>
-<div id="dataset-locations" class="section level2">
-<h2 class="hasAnchor">
-<a href="#dataset-locations" class="anchor"></a>Dataset locations</h2>
+<div class="section level3">
+<h3 id="dataset-locations">Dataset locations<a class="anchor" aria-label="anchor" href="#dataset-locations"></a>
+</h3>
 <p>Nearly all SAFE datasets will include observations at spatial locations, and these datasets must include a Locations worksheet used as an spatial index for research activities. There are three functions that can be used to work with locations in a dataset. All of these functions use the <code>sf</code> package to represent the GIS geometry of locations and which provides an extensive toolset for further spatial analysis.</p>
 <ol style="list-style-type: decimal">
 <li>
 <p><code><a href="../reference/load_gazetteer.html">load_gazetteer()</a></code>: The gazetteer is one of the three key index files saved in the SAFE data directory and updated when <code><a href="../reference/set_safe_dir.html">set_safe_dir()</a></code> is run. It includes sampling locations drawn from across a wide range of projects running at SAFE and is intended to hold all locations that are likely to see repeated sampling. Locations included the gazetteer can be used directly as <strong>known locations</strong> in datasets, although data providers can also include <strong>new locations</strong>.</p>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">gazetteer</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_gazetteer.html">load_gazetteer</a></span><span class="op">(</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">gazetteer</span><span class="op">)</span></code></pre></div>
-<pre><code>## Simple feature collection with 5171 features and 15 fields
-## geometry type:  GEOMETRY
-## dimension:      XY
-## bbox:           xmin: 116.9471 ymin: 4.41215 xmax: 117.9959 ymax: 4.961828
-## CRS:            4326
-## First 10 features:
-##      location                type plot_size display_order parent region
-## 1   SAFE_camp       SAFE basecamp      &lt;NA&gt;             3   &lt;NA&gt;   SAFE
-## 2  Flux_tower          Flux tower      &lt;NA&gt;             7   &lt;NA&gt;   SAFE
-## 3         A_1 SAFE Sampling point 25m x 25m             7   &lt;NA&gt;   SAFE
-## 4         A_2 SAFE Sampling point 25m x 25m             7   &lt;NA&gt;   SAFE
-## 5         A_3 SAFE Sampling point 25m x 25m             7   &lt;NA&gt;   SAFE
-## 6         A_4 SAFE Sampling point 25m x 25m             7   &lt;NA&gt;   SAFE
-## 7         A_5 SAFE Sampling point 25m x 25m             7   &lt;NA&gt;   SAFE
-## 8         A_6 SAFE Sampling point 25m x 25m             7   &lt;NA&gt;   SAFE
-## 9         A_7 SAFE Sampling point 25m x 25m             7   &lt;NA&gt;   SAFE
-## 10        A_8 SAFE Sampling point 25m x 25m             7   &lt;NA&gt;   SAFE
-##    fractal_order transect_order centroid_x centroid_y
-## 1             NA             NA   117.6009   4.723797
-## 2             NA             NA   117.6032   4.717283
-## 3              1              1   117.6515   4.708505
-## 4              1              1   117.6511   4.708578
-## 5              1              1   117.6514   4.708950
-## 6              1              2   117.6524   4.709513
-## 7              1              2   117.6520   4.709589
-## 8              1              2   117.6523   4.709968
-## 9              1              3   117.6538   4.711672
-## 10             1              3   117.6542   4.711600
-##                                   source bbox_xmin bbox_ymin bbox_xmax
-## 1                    Safe_camp_multi.shp  117.6001  4.723253  117.6016
-## 2                               GPS data  117.6032  4.717283  117.6032
-## 3  SAFE_core_sampling_stations_WGS84.shp  117.6515  4.708505  117.6515
-## 4  SAFE_core_sampling_stations_WGS84.shp  117.6511  4.708578  117.6511
-## 5  SAFE_core_sampling_stations_WGS84.shp  117.6514  4.708950  117.6514
-## 6  SAFE_core_sampling_stations_WGS84.shp  117.6524  4.709513  117.6524
-## 7  SAFE_core_sampling_stations_WGS84.shp  117.6520  4.709589  117.6520
-## 8  SAFE_core_sampling_stations_WGS84.shp  117.6523  4.709968  117.6523
-## 9  SAFE_core_sampling_stations_WGS84.shp  117.6538  4.711672  117.6538
-## 10 SAFE_core_sampling_stations_WGS84.shp  117.6542  4.711600  117.6542
-##    bbox_ymax                       geometry
-## 1   4.724475 MULTIPOLYGON (((117.6007 4....
-## 2   4.717283      POINT (117.6032 4.717283)
-## 3   4.708505      POINT (117.6515 4.708505)
-## 4   4.708578      POINT (117.6511 4.708578)
-## 5   4.708950       POINT (117.6514 4.70895)
-## 6   4.709513      POINT (117.6524 4.709513)
-## 7   4.709589       POINT (117.652 4.709589)
-## 8   4.709968      POINT (117.6523 4.709968)
-## 9   4.711672      POINT (117.6538 4.711672)
-## 10  4.711600        POINT (117.6542 4.7116)</code></pre>
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">gazetteer</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_gazetteer.html">load_gazetteer</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">gazetteer</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; Simple feature collection with 5171 features and 15 fields</span></span>
+<span><span class="co">#&gt; Geometry type: GEOMETRY</span></span>
+<span><span class="co">#&gt; Dimension:     XY</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: 116.9471 ymin: 4.41215 xmax: 117.9959 ymax: 4.961828</span></span>
+<span><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
+<span><span class="co">#&gt; First 10 features:</span></span>
+<span><span class="co">#&gt;      location                type plot_size display_order parent region</span></span>
+<span><span class="co">#&gt; 1   SAFE_camp       SAFE basecamp      &lt;NA&gt;             3   &lt;NA&gt;   SAFE</span></span>
+<span><span class="co">#&gt; 2  Flux_tower          Flux tower      &lt;NA&gt;             7   &lt;NA&gt;   SAFE</span></span>
+<span><span class="co">#&gt; 3         A_1 SAFE Sampling point 25m x 25m             7   &lt;NA&gt;   SAFE</span></span>
+<span><span class="co">#&gt; 4         A_2 SAFE Sampling point 25m x 25m             7   &lt;NA&gt;   SAFE</span></span>
+<span><span class="co">#&gt; 5         A_3 SAFE Sampling point 25m x 25m             7   &lt;NA&gt;   SAFE</span></span>
+<span><span class="co">#&gt; 6         A_4 SAFE Sampling point 25m x 25m             7   &lt;NA&gt;   SAFE</span></span>
+<span><span class="co">#&gt; 7         A_5 SAFE Sampling point 25m x 25m             7   &lt;NA&gt;   SAFE</span></span>
+<span><span class="co">#&gt; 8         A_6 SAFE Sampling point 25m x 25m             7   &lt;NA&gt;   SAFE</span></span>
+<span><span class="co">#&gt; 9         A_7 SAFE Sampling point 25m x 25m             7   &lt;NA&gt;   SAFE</span></span>
+<span><span class="co">#&gt; 10        A_8 SAFE Sampling point 25m x 25m             7   &lt;NA&gt;   SAFE</span></span>
+<span><span class="co">#&gt;    fractal_order transect_order centroid_x centroid_y</span></span>
+<span><span class="co">#&gt; 1             NA             NA   117.6009   4.723797</span></span>
+<span><span class="co">#&gt; 2             NA             NA   117.6032   4.717283</span></span>
+<span><span class="co">#&gt; 3              1              1   117.6515   4.708505</span></span>
+<span><span class="co">#&gt; 4              1              1   117.6511   4.708578</span></span>
+<span><span class="co">#&gt; 5              1              1   117.6514   4.708950</span></span>
+<span><span class="co">#&gt; 6              1              2   117.6524   4.709513</span></span>
+<span><span class="co">#&gt; 7              1              2   117.6520   4.709589</span></span>
+<span><span class="co">#&gt; 8              1              2   117.6523   4.709968</span></span>
+<span><span class="co">#&gt; 9              1              3   117.6538   4.711672</span></span>
+<span><span class="co">#&gt; 10             1              3   117.6542   4.711600</span></span>
+<span><span class="co">#&gt;                                   source bbox_xmin bbox_ymin bbox_xmax</span></span>
+<span><span class="co">#&gt; 1                    Safe_camp_multi.shp  117.6001  4.723253  117.6016</span></span>
+<span><span class="co">#&gt; 2                               GPS data  117.6032  4.717283  117.6032</span></span>
+<span><span class="co">#&gt; 3  SAFE_core_sampling_stations_WGS84.shp  117.6515  4.708505  117.6515</span></span>
+<span><span class="co">#&gt; 4  SAFE_core_sampling_stations_WGS84.shp  117.6511  4.708578  117.6511</span></span>
+<span><span class="co">#&gt; 5  SAFE_core_sampling_stations_WGS84.shp  117.6514  4.708950  117.6514</span></span>
+<span><span class="co">#&gt; 6  SAFE_core_sampling_stations_WGS84.shp  117.6524  4.709513  117.6524</span></span>
+<span><span class="co">#&gt; 7  SAFE_core_sampling_stations_WGS84.shp  117.6520  4.709589  117.6520</span></span>
+<span><span class="co">#&gt; 8  SAFE_core_sampling_stations_WGS84.shp  117.6523  4.709968  117.6523</span></span>
+<span><span class="co">#&gt; 9  SAFE_core_sampling_stations_WGS84.shp  117.6538  4.711672  117.6538</span></span>
+<span><span class="co">#&gt; 10 SAFE_core_sampling_stations_WGS84.shp  117.6542  4.711600  117.6542</span></span>
+<span><span class="co">#&gt;    bbox_ymax                       geometry</span></span>
+<span><span class="co">#&gt; 1   4.724475 MULTIPOLYGON (((117.6007 4....</span></span>
+<span><span class="co">#&gt; 2   4.717283      POINT (117.6032 4.717283)</span></span>
+<span><span class="co">#&gt; 3   4.708505      POINT (117.6515 4.708505)</span></span>
+<span><span class="co">#&gt; 4   4.708578      POINT (117.6511 4.708578)</span></span>
+<span><span class="co">#&gt; 5   4.708950       POINT (117.6514 4.70895)</span></span>
+<span><span class="co">#&gt; 6   4.709513      POINT (117.6524 4.709513)</span></span>
+<span><span class="co">#&gt; 7   4.709589       POINT (117.652 4.709589)</span></span>
+<span><span class="co">#&gt; 8   4.709968      POINT (117.6523 4.709968)</span></span>
+<span><span class="co">#&gt; 9   4.711672      POINT (117.6538 4.711672)</span></span>
+<span><span class="co">#&gt; 10  4.711600        POINT (117.6542 4.7116)</span></span></code></pre>
 </li>
 <li>
 <p><code><a href="../reference/get_locations.html">get_locations()</a></code>: This function returns an <code>sf</code> object containing the locations used within a dataset. For known locations, the GIS data for the location are taken directly from the gazetteer. If the locations are new sampling sites, then GIS data provided in the dataset is used. Note that it is possible for dataset providers to create a new locations without including GIS data - these will be represented using empty GIS geometries.</p>
 <p>By default, the returned <code>sf</code> object will only include the location name used in the dataset, the gazetteer name for known sampling sites and an indication of whether the location is new or known, but <code>gazetteer_info=TRUE</code> can be used to include the gazetteer attributes for known locations.</p>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span></code></pre></div>
-<pre><code>## Linking to GEOS 3.7.1, GDAL 2.4.2, PROJ 5.2.0</code></pre>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">beetle_locs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_locations.html">get_locations</a></span><span class="op">(</span><span class="fl">1400562</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">beetle_locs</span><span class="op">)</span></code></pre></div>
-<pre><code>## Simple feature collection with 20 features and 3 fields
-## geometry type:  POINT
-## dimension:      XY
-## bbox:           xmin: 116.967 ymin: 4.69223 xmax: 117.7981 ymax: 4.97022
-## CRS:            4326
-## First 10 features:
-##          gazetteer_name new_location dataset_name                 geometry
-## Maliau_1             NA         TRUE     Maliau_1 POINT (116.9707 4.74462)
-## Maliau_2             NA         TRUE     Maliau_2 POINT (116.9748 4.74548)
-## Maliau_3             NA         TRUE     Maliau_3 POINT (116.9675 4.74757)
-## Maliau_4             NA         TRUE     Maliau_4 POINT (116.9714 4.74565)
-## Maliau_5             NA         TRUE     Maliau_5 POINT (116.9781 4.74501)
-## Maliau_6             NA         TRUE     Maliau_6 POINT (116.9669 4.75054)
-## Maliau_7             NA         TRUE     Maliau_7 POINT (116.9731 4.74864)
-## Maliau_8             NA         TRUE     Maliau_8 POINT (116.9701 4.74607)
-## Danum_1              NA         TRUE      Danum_1  POINT (117.796 4.96444)
-## Danum_2              NA         TRUE      Danum_2 POINT (117.7932 4.96486)</code></pre>
-<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fragments</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">gazetteer</span>, <span class="va">type</span><span class="op">==</span><span class="st">'SAFE forest fragment'</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">3</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">fragments</span><span class="op">)</span>, col<span class="op">=</span><span class="st">'khaki'</span>, graticule<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">beetle_locs</span><span class="op">)</span>, add<span class="op">=</span><span class="cn">TRUE</span>, col<span class="op">=</span><span class="st">'red'</span>, pch<span class="op">=</span><span class="fl">4</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1; sf_use_s2() is TRUE</span></span></code></pre>
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">beetle_locs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_locations.html">get_locations</a></span><span class="op">(</span><span class="fl">1400562</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">beetle_locs</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; Simple feature collection with 20 features and 3 fields</span></span>
+<span><span class="co">#&gt; Geometry type: POINT</span></span>
+<span><span class="co">#&gt; Dimension:     XY</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: 116.967 ymin: 4.69223 xmax: 117.7981 ymax: 4.97022</span></span>
+<span><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
+<span><span class="co">#&gt; First 10 features:</span></span>
+<span><span class="co">#&gt;          gazetteer_name dataset_name new_location                 geometry</span></span>
+<span><span class="co">#&gt; Maliau_1             NA     Maliau_1         TRUE POINT (116.9707 4.74462)</span></span>
+<span><span class="co">#&gt; Maliau_2             NA     Maliau_2         TRUE POINT (116.9748 4.74548)</span></span>
+<span><span class="co">#&gt; Maliau_3             NA     Maliau_3         TRUE POINT (116.9675 4.74757)</span></span>
+<span><span class="co">#&gt; Maliau_4             NA     Maliau_4         TRUE POINT (116.9714 4.74565)</span></span>
+<span><span class="co">#&gt; Maliau_5             NA     Maliau_5         TRUE POINT (116.9781 4.74501)</span></span>
+<span><span class="co">#&gt; Maliau_6             NA     Maliau_6         TRUE POINT (116.9669 4.75054)</span></span>
+<span><span class="co">#&gt; Maliau_7             NA     Maliau_7         TRUE POINT (116.9731 4.74864)</span></span>
+<span><span class="co">#&gt; Maliau_8             NA     Maliau_8         TRUE POINT (116.9701 4.74607)</span></span>
+<span><span class="co">#&gt; Danum_1              NA      Danum_1         TRUE  POINT (117.796 4.96444)</span></span>
+<span><span class="co">#&gt; Danum_2              NA      Danum_2         TRUE POINT (117.7932 4.96486)</span></span></code></pre>
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fragments</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">gazetteer</span>, <span class="va">type</span><span class="op">==</span><span class="st">'SAFE forest fragment'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">3</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">fragments</span><span class="op">)</span>, col<span class="op">=</span><span class="st">'khaki'</span>, graticule<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">beetle_locs</span><span class="op">)</span>, add<span class="op">=</span><span class="cn">TRUE</span>, col<span class="op">=</span><span class="st">'red'</span>, pch<span class="op">=</span><span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <p><img src="using_safe_data_files/figure-html/get_locations-1.png" width="700"></p>
 </li>
 <li>
 <p><code><a href="../reference/add_locations.html">add_locations()</a></code>: This functions adds location data to an already loaded worksheet. The result is a <code>safedata</code> object that is also an <code>sf</code> object.</p>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">beetle_env</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_safe_data.html">load_safe_data</a></span><span class="op">(</span><span class="fl">1400562</span>, <span class="st">'EnvironVariables'</span><span class="op">)</span>
-<span class="va">beetle_env</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/add_locations.html">add_locations</a></span><span class="op">(</span><span class="va">beetle_env</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">beetle_env</span><span class="op">)</span></code></pre></div>
-<pre><code>## SAFE dataset:
-## Concept: 1400561; Record 1400562; Worksheet: EnvironVariables
-## Simple feature collection with 20 features and 7 fields
-## geometry type:  POINT
-## dimension:      XY
-## bbox:           xmin: 116.967 ymin: 4.69223 xmax: 117.7981 ymax: 4.97022
-## CRS:            4326
-## First 10 features:
-##              Site     Temp Moisture Cover gazetteer_name new_location
-## SAFE_E     SAFE_E 23.26667 40.73333    16             NA         TRUE
-## SAFE_D     SAFE_D 23.76667 36.24000    32             NA         TRUE
-## SAFE_F     SAFE_F 23.93333 26.71333    30             NA         TRUE
-## SAFE_C     SAFE_C 22.80000 35.90667    15             NA         TRUE
-## SAFE_B     SAFE_B 23.93333 20.96000    47             NA         TRUE
-## SAFE_A     SAFE_A 23.73333 20.43333    23             NA         TRUE
-## Maliau_1 Maliau_1 24.10000 18.08000   100             NA         TRUE
-## Maliau_2 Maliau_2 24.00000 27.59000   100             NA         TRUE
-## Maliau_3 Maliau_3 24.43333 14.46000   100             NA         TRUE
-## Maliau_4 Maliau_4 25.00000 15.68667   100             NA         TRUE
-##          dataset_name                 geometry
-## SAFE_E         SAFE_E POINT (117.5785 4.69223)
-## SAFE_D         SAFE_D POINT (117.5839 4.70618)
-## SAFE_F         SAFE_F POINT (117.5355 4.69872)
-## SAFE_C         SAFE_C POINT (117.6227 4.70994)
-## SAFE_B         SAFE_B POINT (117.6145 4.72757)
-## SAFE_A         SAFE_A  POINT (117.6472 4.7043)
-## Maliau_1     Maliau_1 POINT (116.9707 4.74462)
-## Maliau_2     Maliau_2 POINT (116.9748 4.74548)
-## Maliau_3     Maliau_3 POINT (116.9675 4.74757)
-## Maliau_4     Maliau_4 POINT (116.9714 4.74565)</code></pre>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://r-spatial.github.io/sf/reference/plot.html">plot</a></span><span class="op">(</span><span class="va">beetle_env</span><span class="op">[</span><span class="st">'Cover'</span><span class="op">]</span>, key.pos<span class="op">=</span><span class="fl">4</span>, breaks<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">100</span>, by<span class="op">=</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">beetle_env</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_safe_data.html">load_safe_data</a></span><span class="op">(</span><span class="fl">1400562</span>, <span class="st">'EnvironVariables'</span><span class="op">)</span></span>
+<span><span class="va">beetle_env</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/add_locations.html">add_locations</a></span><span class="op">(</span><span class="va">beetle_env</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">beetle_env</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; SAFE dataset:</span></span>
+<span><span class="co">#&gt; Concept: 1400561; Record 1400562; Worksheet: EnvironVariables</span></span>
+<span><span class="co">#&gt; Simple feature collection with 20 features and 7 fields</span></span>
+<span><span class="co">#&gt; Geometry type: POINT</span></span>
+<span><span class="co">#&gt; Dimension:     XY</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: 116.967 ymin: 4.69223 xmax: 117.7981 ymax: 4.97022</span></span>
+<span><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
+<span><span class="co">#&gt; First 10 features:</span></span>
+<span><span class="co">#&gt;              Site     Temp Moisture Cover gazetteer_name dataset_name</span></span>
+<span><span class="co">#&gt; SAFE_E     SAFE_E 23.26667 40.73333    16             NA       SAFE_E</span></span>
+<span><span class="co">#&gt; SAFE_D     SAFE_D 23.76667 36.24000    32             NA       SAFE_D</span></span>
+<span><span class="co">#&gt; SAFE_F     SAFE_F 23.93333 26.71333    30             NA       SAFE_F</span></span>
+<span><span class="co">#&gt; SAFE_C     SAFE_C 22.80000 35.90667    15             NA       SAFE_C</span></span>
+<span><span class="co">#&gt; SAFE_B     SAFE_B 23.93333 20.96000    47             NA       SAFE_B</span></span>
+<span><span class="co">#&gt; SAFE_A     SAFE_A 23.73333 20.43333    23             NA       SAFE_A</span></span>
+<span><span class="co">#&gt; Maliau_1 Maliau_1 24.10000 18.08000   100             NA     Maliau_1</span></span>
+<span><span class="co">#&gt; Maliau_2 Maliau_2 24.00000 27.59000   100             NA     Maliau_2</span></span>
+<span><span class="co">#&gt; Maliau_3 Maliau_3 24.43333 14.46000   100             NA     Maliau_3</span></span>
+<span><span class="co">#&gt; Maliau_4 Maliau_4 25.00000 15.68667   100             NA     Maliau_4</span></span>
+<span><span class="co">#&gt;          new_location                 geometry</span></span>
+<span><span class="co">#&gt; SAFE_E           TRUE POINT (117.5785 4.69223)</span></span>
+<span><span class="co">#&gt; SAFE_D           TRUE POINT (117.5839 4.70618)</span></span>
+<span><span class="co">#&gt; SAFE_F           TRUE POINT (117.5355 4.69872)</span></span>
+<span><span class="co">#&gt; SAFE_C           TRUE POINT (117.6227 4.70994)</span></span>
+<span><span class="co">#&gt; SAFE_B           TRUE POINT (117.6145 4.72757)</span></span>
+<span><span class="co">#&gt; SAFE_A           TRUE  POINT (117.6472 4.7043)</span></span>
+<span><span class="co">#&gt; Maliau_1         TRUE POINT (116.9707 4.74462)</span></span>
+<span><span class="co">#&gt; Maliau_2         TRUE POINT (116.9748 4.74548)</span></span>
+<span><span class="co">#&gt; Maliau_3         TRUE POINT (116.9675 4.74757)</span></span>
+<span><span class="co">#&gt; Maliau_4         TRUE POINT (116.9714 4.74565)</span></span></code></pre>
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">beetle_env</span><span class="op">[</span><span class="st">'Cover'</span><span class="op">]</span>, key.pos<span class="op">=</span><span class="fl">4</span>, breaks<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">100</span>, by<span class="op">=</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="using_safe_data_files/figure-html/add_locations-1.png" width="700"></p>
 </li>
 </ol>
 </div>
 </div>
-<div id="inserting-datasets" class="section level1">
-<h1 class="hasAnchor">
-<a href="#inserting-datasets" class="anchor"></a>Inserting datasets</h1>
+<div class="section level2">
+<h2 id="inserting-datasets">Inserting datasets<a class="anchor" aria-label="anchor" href="#inserting-datasets"></a>
+</h2>
 <p>If you want access to a dataset that is currently embargoed or restricted, then you can approach the authors listed on the Zenodo record to ask for permission to use the data. If you are then provided with the files for the dataset, then they need to be inserted into your local SAFE data directory so that they can be accessed by the <code>safedata</code> functions.</p>
 <p>The <code>insert_dataset</code> function does this: it will check to see if a set of files are part of specified Zenodo record and then copy them into the correct places in the current SAFE data directory.</p>
-<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">'safedata_example_dir'</span>, <span class="st">'template_ClareWfunctiondata.xlsx'</span>, 
-                     package<span class="op">=</span><span class="st">'safedata'</span><span class="op">)</span>
-<span class="fu"><a href="../reference/insert_dataset.html">insert_dataset</a></span><span class="op">(</span><span class="fl">1237719</span>, <span class="va">files</span><span class="op">)</span></code></pre></div>
-<pre><code>## Inserting files: template_ClareWfunctiondata.xlsx</code></pre>
-<pre><code>## NULL</code></pre>
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_safe_data.html">load_safe_data</a></span><span class="op">(</span><span class="fl">1237719</span>, <span class="st">'Data'</span><span class="op">)</span></code></pre></div>
-<pre><code>## Downloading 1 record metadata files</code></pre>
-<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></code></pre></div>
-<pre><code>## SAFE dataset
-## Concept: 1198840; Record 1237719; Worksheet: Data
-## 'data.frame':    34 obs. of  11 variables:
-##  $ taxon_name              : chr  "Anguilla.borneensis" "Anguilla.marmorata" "Barbodes.sealei" "Barbonymus.balleroides" ...
-##  $ Body_size               : num  24.14 30.56 8.51 11.36 7.59 ...
-##  $ body_shape              : Factor w/ 3 levels "Compressed","Cylindrical",..: 2 2 1 1 1 2 1 2 1 2 ...
-##  $ trophic_position        : Factor w/ 4 levels "Herbivore","Higher carnivore",..: 2 2 4 3 3 2 2 1 3 1 ...
-##  $ mouth_position          : Factor w/ 3 levels "Inferior","Superior",..: 3 3 3 3 3 3 3 1 3 1 ...
-##  $ presence_teeth          : Factor w/ 2 levels "no","yes": 2 2 1 1 2 2 1 1 1 1 ...
-##  $ gregariousness          : Factor w/ 2 levels "no","yes": 1 1 2 2 1 1 1 2 2 2 ...
-##  $ presence_barbels        : Factor w/ 2 levels "no","yes": 2 2 2 2 1 2 2 2 1 2 ...
-##  $ vertical_position_water : Factor w/ 4 levels "Benthic","Benthopelagic",..: 2 2 3 3 2 2 2 2 3 1 ...
-##  $ air.breathing_capability: chr  "yes" "yes" "no" "no" ...
-##  $ air-breathing_capability: Factor w/ 0 levels: NA NA NA NA NA NA NA NA NA NA ...</code></pre>
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">'safedata_example_dir'</span>, <span class="st">'template_ClareWfunctiondata.xlsx'</span>, </span>
+<span>                     package<span class="op">=</span><span class="st">'safedata'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/insert_dataset.html">insert_dataset</a></span><span class="op">(</span><span class="fl">1237719</span>, <span class="va">files</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; Inserting files: template_ClareWfunctiondata.xlsx</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; Warning in dir.create(dirname(local_files$current_safe_dir_path[1]), recursive =</span></span>
+<span><span class="co">#&gt; TRUE): '/tmp/RtmpRUPacp/safedata_example_dir/1198840/1237719' already exists</span></span></code></pre>
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_safe_data.html">load_safe_data</a></span><span class="op">(</span><span class="fl">1237719</span>, <span class="st">'Data'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; SAFE dataset</span></span>
+<span><span class="co">#&gt; Concept: 1198840; Record 1237719; Worksheet: Data</span></span>
+<span><span class="co">#&gt; 'data.frame':    34 obs. of  11 variables:</span></span>
+<span><span class="co">#&gt;  $ taxon_name              : chr  "Anguilla.borneensis" "Anguilla.marmorata" "Barbodes.sealei" "Barbonymus.balleroides" ...</span></span>
+<span><span class="co">#&gt;  $ Body_size               : num  24.14 30.56 8.51 11.36 7.59 ...</span></span>
+<span><span class="co">#&gt;  $ body_shape              : Factor w/ 3 levels "Compressed","Cylindrical",..: 2 2 1 1 1 2 1 2 1 2 ...</span></span>
+<span><span class="co">#&gt;  $ trophic_position        : Factor w/ 4 levels "Herbivore","Higher carnivore",..: 2 2 4 3 3 2 2 1 3 1 ...</span></span>
+<span><span class="co">#&gt;  $ mouth_position          : Factor w/ 3 levels "Inferior","Superior",..: 3 3 3 3 3 3 3 1 3 1 ...</span></span>
+<span><span class="co">#&gt;  $ presence_teeth          : Factor w/ 2 levels "no","yes": 2 2 1 1 2 2 1 1 1 1 ...</span></span>
+<span><span class="co">#&gt;  $ gregariousness          : Factor w/ 2 levels "no","yes": 1 1 2 2 1 1 1 2 2 2 ...</span></span>
+<span><span class="co">#&gt;  $ presence_barbels        : Factor w/ 2 levels "no","yes": 2 2 2 2 1 2 2 2 1 2 ...</span></span>
+<span><span class="co">#&gt;  $ vertical_position_water : Factor w/ 4 levels "Benthic","Benthopelagic",..: 2 2 3 3 2 2 2 2 3 1 ...</span></span>
+<span><span class="co">#&gt;  $ air.breathing_capability: chr  "yes" "yes" "no" "no" ...</span></span>
+<span><span class="co">#&gt;  $ air-breathing_capability: Factor w/ 0 levels: NA NA NA NA NA NA NA NA NA NA ...</span></span></code></pre>
 </div>
-<div id="file-details-and-accessing-files" class="section level1">
-<h1 class="hasAnchor">
-<a href="#file-details-and-accessing-files" class="anchor"></a>File details and accessing files</h1>
+<div class="section level2">
+<h2 id="file-details-and-accessing-files">File details and accessing files<a class="anchor" aria-label="anchor" href="#file-details-and-accessing-files"></a>
+</h2>
 <p>At the moment, the <code>safedata</code> package only handles loading data from the core Excel files. We do intend to add functions and recipes to access other files stored within a dataset in the future. At the moment, if you have downloaded all the files associated with a dataset then the <code>get_file_details</code> function allows you to quickly see a list of the files in a datset, whether you have downloaded a local copy and the absolute file path of those files.</p>
 </div>
   </div>
@@ -837,11 +830,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Andy Aldersley, David Orme.</p>
+  <p></p>
+<p>Developed by Andy Aldersley, David Orme.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -849,6 +844,8 @@
 
   
 
+
+  
 
   </body>
 </html>
