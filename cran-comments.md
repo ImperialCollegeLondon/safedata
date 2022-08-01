@@ -5,26 +5,15 @@
 ### release
 
 * using log directory 'd:/RCompile/CRANguest/R-release/safedata.Rcheck'
-* using R version 4.2.0 (2022-04-22 ucrt)
+* using R version 4.2.1 (2022-06-23 ucrt)
 * using platform: x86_64-w64-mingw32 (64-bit)
 * using session charset: UTF-8
 * checking for file 'safedata/DESCRIPTION' ... OK
 * checking extension type ... Package
-* this is package 'safedata' version '1.1.1'
+* this is package 'safedata' version '1.1.2'
 * package encoding: UTF-8
-* checking CRAN incoming feasibility ... NOTE
+* checking CRAN incoming feasibility ... Note_to_CRAN_maintainers
 Maintainer: 'David Orme <d.orme@imperial.ac.uk>'
-
-New submission
-
-Package was archived on CRAN
-
-Possibly misspelled words in DESCRIPTION:
-  Zenodo (14:14)
-
-CRAN repository db overrides:
-  X-CRAN-Comment: Archived on 2022-04-08 as check issues were not
-    corrected in time.
 * checking package namespace information ... OK
 * checking package dependencies ... OK
 * checking if this is a source package ... OK
@@ -55,7 +44,7 @@ CRAN repository db overrides:
 * checking S3 generic/method consistency ... OK
 * checking replacement functions ... OK
 * checking foreign function calls ... OK
-* checking R code for possible problems ... [10s] OK
+* checking R code for possible problems ... [11s] OK
 * checking Rd files ... [1s] OK
 * checking Rd metadata ... OK
 * checking Rd line widths ... OK
@@ -68,111 +57,97 @@ CRAN repository db overrides:
 * checking R/sysdata.rda ... OK
 * checking installed files from 'inst/doc' ... OK
 * checking files in 'vignettes' ... OK
-* checking examples ... [15s] OK
-* checking for unstated dependencies in 'tests' ... OK
-* checking tests ... [18s] OK
-  Running 'testthat.R' [17s]
-* checking for unstated dependencies in vignettes ... OK
-* checking package vignettes in 'inst/doc' ... OK
-* checking re-building of vignette outputs ... [18s] OK
-* checking PDF version of manual ... OK
-* checking for detritus in the temp directory ... OK
-* DONE
-Status: 1 NOTE
-
-### devel
-
-* using log directory 'd:/RCompile/CRANguest/R-devel/safedata.Rcheck'
-* using R Under development (unstable) (2022-04-24 r82246 ucrt)
-* using platform: x86_64-w64-mingw32 (64-bit)
-* using session charset: UTF-8
-* checking for file 'safedata/DESCRIPTION' ... OK
-* checking extension type ... Package
-* this is package 'safedata' version '1.1.1'
-* package encoding: UTF-8
-* checking CRAN incoming feasibility ... NOTE
-Maintainer: 'David Orme <d.orme@imperial.ac.uk>'
-
-New submission
-
-Package was archived on CRAN
-
-Possibly misspelled words in DESCRIPTION:
-  Zenodo (14:14)
-
-CRAN repository db overrides:
-  X-CRAN-Comment: Archived on 2022-04-08 as check issues were not
-    corrected in time.
-
-* checking package namespace information ... OK
-* checking package dependencies ... OK
-* checking if this is a source package ... OK
-* checking if there is a namespace ... OK
-* checking for hidden files and directories ... OK
-* checking for portable file names ... OK
-* checking serialization versions ... OK
-* checking whether package 'safedata' can be installed ... OK
-* checking installed package size ... OK
-* checking package directory ... OK
-* checking for future file timestamps ... OK
-* checking 'build' directory ... OK
-* checking DESCRIPTION meta-information ... OK
-* checking top-level files ... OK
-* checking for left-over files ... OK
-* checking index information ... OK
-* checking package subdirectories ... OK
-* checking R files for non-ASCII characters ... OK
-* checking R files for syntax errors ... OK
-* checking whether the package can be loaded ... OK
-* checking whether the package can be loaded with stated dependencies ... OK
-* checking whether the package can be unloaded cleanly ... OK
-* checking whether the namespace can be loaded with stated dependencies ... OK
-* checking whether the namespace can be unloaded cleanly ... OK
-* checking loading without being on the library search path ... OK
-* checking use of S3 registration ... OK
-* checking dependencies in R code ... OK
-* checking S3 generic/method consistency ... OK
-* checking replacement functions ... OK
-* checking foreign function calls ... OK
-* checking R code for possible problems ... [10s] OK
-* checking Rd files ... [1s] OK
-* checking Rd metadata ... OK
-* checking Rd line widths ... OK
-* checking Rd cross-references ... OK
-* checking for missing documentation entries ... OK
-* checking for code/documentation mismatches ... OK
-* checking Rd \usage sections ... OK
-* checking Rd contents ... OK
-* checking for unstated dependencies in examples ... OK
-* checking R/sysdata.rda ... OK
-* checking installed files from 'inst/doc' ... OK
-* checking files in 'vignettes' ... OK
-* checking examples ... [13s] OK
+* checking examples ... [14s] OK
 * checking for unstated dependencies in 'tests' ... OK
 * checking tests ... [16s] OK
   Running 'testthat.R' [16s]
 * checking for unstated dependencies in vignettes ... OK
 * checking package vignettes in 'inst/doc' ... OK
-* checking re-building of vignette outputs ... [16s] OK
+* checking re-building of vignette outputs ... [17s] OK
 * checking PDF version of manual ... OK
 * checking for detritus in the temp directory ... OK
 * DONE
-Status: 1 NOTE
+Status: OK
 
+### devel
+
+* using log directory 'd:/RCompile/CRANguest/R-devel/safedata.Rcheck'
+* using R Under development (unstable) (2022-07-31 r82648 ucrt)
+* using platform: x86_64-w64-mingw32 (64-bit)
+* using session charset: UTF-8
+* checking for file 'safedata/DESCRIPTION' ... OK
+* checking extension type ... Package
+* this is package 'safedata' version '1.1.2'
+* package encoding: UTF-8
+* checking CRAN incoming feasibility ... Note_to_CRAN_maintainers
+Maintainer: 'David Orme <d.orme@imperial.ac.uk>'
+* checking package namespace information ... OK
+* checking package dependencies ... OK
+* checking if this is a source package ... OK
+* checking if there is a namespace ... OK
+* checking for hidden files and directories ... OK
+* checking for portable file names ... OK
+* checking serialization versions ... OK
+* checking whether package 'safedata' can be installed ... OK
+* checking installed package size ... OK
+* checking package directory ... OK
+* checking for future file timestamps ... OK
+* checking 'build' directory ... OK
+* checking DESCRIPTION meta-information ... OK
+* checking top-level files ... OK
+* checking for left-over files ... OK
+* checking index information ... OK
+* checking package subdirectories ... OK
+* checking R files for non-ASCII characters ... OK
+* checking R files for syntax errors ... OK
+* checking whether the package can be loaded ... OK
+* checking whether the package can be loaded with stated dependencies ... OK
+* checking whether the package can be unloaded cleanly ... OK
+* checking whether the namespace can be loaded with stated dependencies ... OK
+* checking whether the namespace can be unloaded cleanly ... OK
+* checking loading without being on the library search path ... OK
+* checking use of S3 registration ... OK
+* checking dependencies in R code ... OK
+* checking S3 generic/method consistency ... OK
+* checking replacement functions ... OK
+* checking foreign function calls ... OK
+* checking R code for possible problems ... [10s] OK
+* checking Rd files ... [1s] OK
+* checking Rd metadata ... OK
+* checking Rd line widths ... OK
+* checking Rd cross-references ... OK
+* checking for missing documentation entries ... OK
+* checking for code/documentation mismatches ... OK
+* checking Rd \usage sections ... OK
+* checking Rd contents ... OK
+* checking for unstated dependencies in examples ... OK
+* checking R/sysdata.rda ... OK
+* checking installed files from 'inst/doc' ... OK
+* checking files in 'vignettes' ... OK
+* checking examples ... [14s] OK
+* checking for unstated dependencies in 'tests' ... OK
+* checking tests ... [16s] OK
+  Running 'testthat.R' [16s]
+* checking for unstated dependencies in vignettes ... OK
+* checking package vignettes in 'inst/doc' ... OK
+* checking re-building of vignette outputs ... [14s] OK
+* checking PDF version of manual ... OK
+* checking for detritus in the temp directory ... OK
+* DONE
+Status: OK
 
 ## Ubuntu (Git Actions/ Ubuntu 20.04.4 LTS)
 
 ### release
 
-── R CMD check ─────────────────────────────────────────────────────────────────
 * using log directory ‘/home/runner/work/safedata/safedata/check/safedata.Rcheck’
-* using R version 4.2.0 (2022-04-22)
+* using R version 4.2.1 (2022-06-23)
 * using platform: x86_64-pc-linux-gnu (64-bit)
 * using session charset: UTF-8
 * using options ‘--no-manual --as-cran’
 * checking for file ‘safedata/DESCRIPTION’ ... OK
 * checking extension type ... Package
-* this is package ‘safedata’ version ‘1.1.1’
+* this is package ‘safedata’ version ‘1.1.2’
 * package encoding: UTF-8
 * checking package namespace information ... OK
 * checking package dependencies ... OK
@@ -222,7 +197,7 @@ Status: 1 NOTE
 * checking examples with --run-donttest ... OK
 * checking for unstated dependencies in ‘tests’ ... OK
 * checking tests ...
-  Running ‘testthat.R’ [3s/20s]
+  Running ‘testthat.R’ [3s/23s]
  OK
 * checking for unstated dependencies in vignettes ... OK
 * checking package vignettes in ‘inst/doc’ ... OK
@@ -232,20 +207,18 @@ Status: 1 NOTE
 * DONE
 
 Status: OK
-── R CMD check results ───────────────────────────────────── safedata 1.1.1 ────
-Duration: 1m 36.1s
 
 ### devel
 
-─ R CMD check ─────────────────────────────────────────────────────────────────
+── R CMD check ─────────────────────────────────────────────────────────────────
 * using log directory ‘/home/runner/work/safedata/safedata/check/safedata.Rcheck’
-* using R Under development (unstable) (2022-04-23 r82240)
+* using R Under development (unstable) (2022-07-26 r82626)
 * using platform: x86_64-pc-linux-gnu (64-bit)
 * using session charset: UTF-8
 * using options ‘--no-manual --as-cran’
 * checking for file ‘safedata/DESCRIPTION’ ... OK
 * checking extension type ... Package
-* this is package ‘safedata’ version ‘1.1.1’
+* this is package ‘safedata’ version ‘1.1.2’
 * package encoding: UTF-8
 * checking package namespace information ... OK
 * checking package dependencies ... OK
@@ -295,7 +268,7 @@ Duration: 1m 36.1s
 * checking examples with --run-donttest ... OK
 * checking for unstated dependencies in ‘tests’ ... OK
 * checking tests ...
-  Running ‘testthat.R’ [5s/21s]
+  Running ‘testthat.R’ [3s/23s]
  OK
 * checking for unstated dependencies in vignettes ... OK
 * checking package vignettes in ‘inst/doc’ ... OK
@@ -304,24 +277,19 @@ Duration: 1m 36.1s
 * checking for detritus in the temp directory ... OK
 * DONE
 
-Status: OK
-
-── R CMD check results ───────────────────────────────────── safedata 1.1.1 ────
-Duration: 2m 2.2s
-
-
-## Mac OS (Git Actions / Mac OS 11.6.4)
+## Mac OS (Git Actions / macOS 11.6.8)
 
 ### release
- R CMD check ─────────────────────────────────────────────────────────────────
+
+── R CMD check ─────────────────────────────────────────────────────────────────
 * using log directory ‘/Users/runner/work/safedata/safedata/check/safedata.Rcheck’
-* using R version 4.2.0 (2022-04-22)
+* using R version 4.2.1 (2022-06-23)
 * using platform: x86_64-apple-darwin17.0 (64-bit)
 * using session charset: UTF-8
 * using options ‘--no-manual --as-cran’
 * checking for file ‘safedata/DESCRIPTION’ ... OK
 * checking extension type ... Package
-* this is package ‘safedata’ version ‘1.1.1’
+* this is package ‘safedata’ version ‘1.1.2’
 * package encoding: UTF-8
 * checking package namespace information ... OK
 * checking package dependencies ... OK
@@ -371,7 +339,7 @@ Duration: 2m 2.2s
 * checking examples with --run-donttest ... OK
 * checking for unstated dependencies in ‘tests’ ... OK
 * checking tests ...
-  Running ‘testthat.R’ [5s/21s]
+  Running ‘testthat.R’ [5s/23s]
  OK
 * checking for unstated dependencies in vignettes ... OK
 * checking package vignettes in ‘inst/doc’ ... OK
@@ -382,18 +350,17 @@ Duration: 2m 2.2s
 
 Status: OK
 
-
-### Windows (Github Actions)
+## Windows (Github Actions, Microsoft Windows Server 2022, 10.0.20348)
 
 ── R CMD check ─────────────────────────────────────────────────────────────────
 * using log directory 'D:/a/safedata/safedata/check/safedata.Rcheck'
-* using R version 4.2.0 (2022-04-22 ucrt)
+* using R version 4.2.1 (2022-06-23 ucrt)
 * using platform: x86_64-w64-mingw32 (64-bit)
 * using session charset: UTF-8
 * using options '--no-manual --as-cran'
 * checking for file 'safedata/DESCRIPTION' ... OK
 * checking extension type ... Package
-* this is package 'safedata' version '1.1.1'
+* this is package 'safedata' version '1.1.2'
 * package encoding: UTF-8
 * checking package namespace information ... OK
 * checking package dependencies ... OK
@@ -443,7 +410,7 @@ Initiating curl with CURL_SSL_BACKEND: openssl
 * checking examples with --run-donttest ... OK
 * checking for unstated dependencies in 'tests' ... OK
 * checking tests ...
-  Running 'testthat.R' [27s]
+  Running 'testthat.R' [26s]
  OK
 * checking for unstated dependencies in vignettes ... OK
 * checking package vignettes in 'inst/doc' ... OK
@@ -454,12 +421,8 @@ Initiating curl with CURL_SSL_BACKEND: openssl
 
 Status: 1 NOTE
 See
-  'D:/a/safedata/safedata/check/safedata.Rcheck/00check.log'
-for details.
-── R CMD check results ───────────────────────────────────── safedata 1.1.1 ────
-Duration: 2m 2.9s
-
+  'D:/a/safedata/safedata/check/safedata.Rcheck/00check.log' for details.
 
 # R CMD CHECK results
 
-Status OK on all test platforms. 
+Status OK on all test platforms.
