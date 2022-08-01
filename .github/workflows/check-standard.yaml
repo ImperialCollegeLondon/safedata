@@ -9,20 +9,6 @@ on:
 name: R-CMD-check
 
 jobs:
-  test-macOS:
-    runs-on: macos-latest
-    steps:   
-        - uses: actions/checkout@v2
-          with:
-            submodules: recursive
-        - name: Install GDAL
-          run: brew install gdal
-        - name: Set up GDAL
-          run: |
-            GDAL_VER=$(find /usr/local/Cellar/gdal/  -name "lib" | awk -F"/" '{print $7}')
-            GDAL_LDPATH=/usr/local/Cellar/gdal/$GDAL_VER/lib/
-            export LIBRARY_PATH=$GDAL_LDPATH
-            echo $LIBRARY_PATH
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
 
@@ -46,6 +32,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Install system dependencies on macOS
+        if: runner.os == 'macOS'
+        run: |
+          brew install gdal
+      
       - uses: r-lib/actions/setup-pandoc@v1
 
       - uses: r-lib/actions/setup-r@v1
