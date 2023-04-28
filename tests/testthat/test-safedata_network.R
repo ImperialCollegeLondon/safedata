@@ -17,11 +17,10 @@ test_that("no internet fails gracefully", {
 # check function to skip if there is a network outage.
 
 internet_unavailable <- function() {
-    return(! curl::has_internet())
+    return(!curl::has_internet())
 }
 
 test_that("bad host fails gracefully", {
-
     if (internet_unavailable()) {
         skip("No internet - skipping test")
     }
@@ -30,24 +29,21 @@ test_that("bad host fails gracefully", {
 
     expect_false(success)
     expect_match(attr(success, "fail_msg"), regexp = "URL not found")
-
 })
 
 test_that("timeout fails gracefully", {
-
     if (internet_unavailable()) {
         skip("No internet - skipping test")
     }
 
-     success <- safedata:::try_to_download("https://httpbin.org/delay/2",
-                                          timeout = 1)
+    success <- safedata:::try_to_download("https://httpbin.org/delay/2",
+        timeout = 1
+    )
     expect_false(success)
     expect_match(attr(success, "fail_msg"), regexp = "URL timed out")
-
 })
 
 test_that("URL errors fails gracefully", {
-
     if (internet_unavailable()) {
         skip("No internet - skipping test")
     }
@@ -55,16 +51,14 @@ test_that("URL errors fails gracefully", {
     success <- safedata:::try_to_download("https://httpbin.org/status/404")
     expect_false(success)
     expect_match(attr(success, "fail_msg"), regexp = "URL error")
-
 })
 
 test_that("Good URL works and returns object to memory", {
-
     if (internet_unavailable()) {
         skip("No internet - skipping test")
     }
 
-    success <-  safedata:::try_to_download("https://httpbin.org/base64/c2FmZWRhdGE=")
+    success <- safedata:::try_to_download("https://httpbin.org/base64/c2FmZWRhdGE=")
 
     # Screen for failure of the download (get FALSE, not a response object)
     expect_false(is.logical(success) && success == TRUE)
@@ -72,10 +66,23 @@ test_that("Good URL works and returns object to memory", {
     expect_equal(rawToChar(success$content), "safedata")
 })
 
-test_that("no internet and safedata dir creation fails gracefully", {
+test_that("Bad path fails gracefully", {
+    if (internet_unavailable()) {
+        skip("No internet - skipping test")
+    }
 
+    success <- safedata:::try_to_download(
+        "https://httpbin.org/base64/c2FmZWRhdGE=",
+        local_path = "/does/not/exist"
+    )
+
+    expect_false(success)
+    expect_match(attr(success, "fail_msg"), regexp = "Failed to open file")
+})
+
+test_that("no internet and safedata dir creation fails gracefully", {
     Sys.setenv(NETWORK_DOWN = TRUE)
-    temp_safe_dir <- file.path(tempdir(), 'test_safe_data')
+    temp_safe_dir <- file.path(tempdir(), "test_safe_data")
 
     success <- expect_message(
         safedata::set_safe_dir(temp_safe_dir, create = TRUE),
@@ -89,9 +96,8 @@ test_that("no internet and safedata dir creation fails gracefully", {
 })
 
 test_that("API down and safedata dir creation fails gracefully", {
-
     Sys.setenv(URL_DOWN = TRUE)
-    temp_safe_dir <- file.path(tempdir(), 'test_safe_data')
+    temp_safe_dir <- file.path(tempdir(), "test_safe_data")
 
     success <- expect_message(
         safedata::set_safe_dir(temp_safe_dir, create = TRUE),
