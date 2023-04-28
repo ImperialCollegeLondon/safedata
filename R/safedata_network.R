@@ -71,9 +71,9 @@ NULL
 
 #' Attempt to download a URL resource, failing gracefully.
 #'
-#' This function tries to fetch the HEAD for the resource and handles failure to
-#' resolve (such as a bad safedata API url), timeouts and then actual HTTP error
-#' codes. If none of those occur, the resource is downloaded.
+#' This function tries to fetch a resource from a URL and handles failure to
+#' resolve the resource (bad URLs), timeouts and then actual HTTP error
+#' codes.
 #'
 #' If the download fails, the function returns FALSE and the return value
 #' attribute 'fail_msg' is used to provide details. Otherwise, an
@@ -84,8 +84,7 @@ NULL
 #' @section Note:
 #'
 #' This function contains code to simulate network failures of varying kinds (no
-#' network, no API, specific resource unavailable) for use in unit testing that
-#' the safedata package handles theses errors gracefully.
+#' network, no API, specific resource unavailable) for use in unit testing.
 #'
 #' @param url The URL to download.
 #' @param local_path A path to a file in which to save the URL content.
@@ -142,7 +141,9 @@ try_to_download <- function(url, local_path = NULL, timeout = 10) {
             attr(fail, "fail_msg") <- response
             return(fail)
         } else {
-            attr(fail, "fail_msg") <- paste0("Unknown curl response: ", response)
+            attr(fail, "fail_msg") <- paste0(
+                "Unknown curl response: ", response
+            )
             return(fail)
         }
     }

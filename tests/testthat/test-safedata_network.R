@@ -36,9 +36,12 @@ test_that("timeout fails gracefully", {
         skip("No internet - skipping test")
     }
 
-    success <- safedata:::try_to_download("https://httpbin.org/delay/2",
+    success <- safedata:::try_to_download(
+        "https://httpbin.org/delay/2",
         timeout = 1
     )
+
+    # If httpbin genuinely times out, the end result is the same.
     expect_false(success)
     expect_match(attr(success, "fail_msg"), regexp = "URL timed out")
 })
@@ -50,7 +53,13 @@ test_that("URL errors fails gracefully", {
 
     success <- safedata:::try_to_download("https://httpbin.org/status/404")
     expect_false(success)
-    expect_match(attr(success, "fail_msg"), regexp = "URL error")
+
+    # If httpbin issues a Gateway timeout 504, then "URL error" is still
+    # reported, but if it _properly_ times out then we get "URL timed out"
+    # and that will cause a test failure unless trapped.
+    if (!grepl("URL timed out", attr(success, "fail_msg"))) {
+        expect_match(attr(success, "fail_msg"), regexp = "URL error")
+    }
 })
 
 test_that("Good URL works and returns object to memory", {
@@ -60,8 +69,13 @@ test_that("Good URL works and returns object to memory", {
 
     success <- safedata:::try_to_download("https://httpbin.org/base64/c2FmZWRhdGE=")
 
-    # Screen for failure of the download (get FALSE, not a response object)
-    expect_false(is.logical(success) && success == TRUE)
+    # Screen for failure of the download
+    if (is.logical(success) && isFALSE(success)) {
+        skip("Download failed")
+    }
+
+    # Check we get content not logical
+    expect_false(is.logical(success) && isTRUE(success))
     # Check the content is as expected
     expect_equal(rawToChar(success$content), "safedata")
 })
