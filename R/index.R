@@ -11,7 +11,8 @@
 safedata_env <- new.env(parent = emptyenv())
 
 set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
-                         url = "https://www.safeproject.net") {
+                         url = "https://www.safeproject.net",
+                         use_zenodo_sandbox = FALSE) {
     #' Set the local SAFE data directory
     #'
     #' This function sets the local directory used to store SAFE dataset
@@ -57,6 +58,12 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
     #' present have been modified. Although this can be turned off, it is
     #' not recommended to modify or add files within a SAFE data directory.
     #'
+    #' The default behaviour is to download actual data files from the main
+    #' Zenodo site, but a sandbox site is also provided for testing. The
+    #' sandbox site may be useful in setting up a new safedata archive, so
+    #' \code{use_zenodo_sandbox = TRUE} can be used to create a safedata
+    #' directory that will download data from the sandbox site.
+    #'
     #' @param safedir A path to the directory to set as the SAFE data
     #'    directory (str).
     #' @param update Should the local dataset index be updated (logical)?
@@ -64,6 +71,8 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
     #'    path (logical)?
     #' @param url A URL providing the SAFE Data API, defaulting to the SAFE
     #'    Project's own URL.
+    #' @param use_zenodo_sandbox A boolean indicating whether the datafiles
+    #'    are stored in the main Zenodo site or the sandbox Zenodo site.
     #' @return Invisibly, a boolean showing whether a SAFE data directory was
     #'    set successfully.
     #' @export
@@ -89,10 +98,15 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
 
         # create the directory and set the safe data directory and url
         dir.create(safedir)
-        options(safedata.dir = safedir, safedata.url = url)
+        options(
+            safedata.dir = safedir,
+            safedata.url = url,
+            safedata.use_zenodo_sandbox = use_zenodo_sandbox
+        )
 
-        # Save the URL
-        jsonlite::write_json(list(url = url), url_path)
+        # Save the URL and other settings
+        settings <- list(url = url, use_zenodo_sandbox = use_zenodo_sandbox)
+        jsonlite::write_json(settings, url_path)
 
         # download the index file, then cache it
         got_index <- download_index()
@@ -149,8 +163,12 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
     }
 
     # Set the data directory and URL in options.
-    url <- jsonlite::read_json(url_path)$url
-    options(safedata.dir = safedir, safedata.url = url)
+    settings <- jsonlite::read_json(url_path)
+    options(
+        safedata.dir = safedir,
+        safedata.url = settings$url,
+        safedata.use_zenodo_sandbox = settings$use_zenodo_sandbox
+    )
 
     # Look for updates
     if (update) {
