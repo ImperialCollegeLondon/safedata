@@ -25,7 +25,7 @@
 #   mode
 #
 # load_safe.R
-# - download actual data files - offline mode, not worrying too much about 
+# - download actual data files - offline mode, not worrying too much about
 #   partial metadata downloads, these don't cause problems
 #
 # taxa.R
@@ -71,9 +71,9 @@ NULL
 
 #' Attempt to download a URL resource, failing gracefully.
 #'
-#' This function tries to fetch the HEAD for the resource and handles failure to
-#' resolve (such as a bad safedata API url), timeouts and then actual HTTP error
-#' codes. If none of those occur, the resource is downloaded.
+#' This function tries to fetch a resource from a URL and handles failure to
+#' resolve the resource (bad URLs), timeouts and then actual HTTP error
+#' codes.
 #'
 #' If the download fails, the function returns FALSE and the return value
 #' attribute 'fail_msg' is used to provide details. Otherwise, an
@@ -84,8 +84,7 @@ NULL
 #' @section Note:
 #'
 #' This function contains code to simulate network failures of varying kinds (no
-#' network, no API, specific resource unavailable) for use in unit testing that
-#' the safedata package handles theses errors gracefully.
+#' network, no API, specific resource unavailable) for use in unit testing.
 #'
 #' @param url The URL to download.
 #' @param local_path A path to a file in which to save the URL content.
@@ -95,26 +94,36 @@ NULL
 #'    download attempt was successful.
 #' @keywords internal
 
-try_to_download <- function(url, local_path=NULL, timeout=10) {
-
+try_to_download <- function(url, local_path = NULL, timeout = 10) {
     # Dummy variables used to implement unit testing of network failures
     network_down <- as.logical(Sys.getenv("NETWORK_DOWN", unset = FALSE))
     url_down <- as.logical(Sys.getenv("URL_DOWN", unset = FALSE))
-    resource_down <- Sys.getenv("RESOURCE_DOWN", unset=FALSE)
+    resource_down <- Sys.getenv("RESOURCE_DOWN", unset = NA)
 
-    # Create a failure object to add failure messages to.
+    # Create a failure object, which will have attr for failure messages.
     fail <- FALSE
 
-    # Is there a network connection _at all_
-    if (! curl::has_internet() || network_down) {
+    # Is there a network connection _at all_?
+    if (!curl::has_internet() || network_down) {
         attr(fail, "fail_msg") <- "No internet connection."
         return(fail)
     }
 
-    # Check if URL is available - use HEAD not GET from httr to minimise
-    # network traffic during checking
+    # Otherwise, is a resource _specifically_ being blocked for testing purposes
+    if ((!is.na(resource_down) && grepl(resource_down, url)) || url_down) {
+        attr(fail, "fail_msg") <- sprintf("URL error: 404")
+        return(fail)
+    }
+
+    # If a local path is provided, convert to an httr::write_disk request
+    # object, otherwise it stays as NULL and the request is not modified
+    if (!is.null(local_path)) {
+        local_path <- httr::write_disk(local_path)
+    }
+
+    # Try and download the URL
     response <- tryCatch(
-        httr::HEAD(url = url, httr::timeout(timeout)),
+        httr::GET(url = url, local_path, httr::timeout(timeout)),
         error = function(e) conditionMessage(e),
         warning = function(w) conditionMessage(w)
     )
@@ -133,31 +142,29 @@ try_to_download <- function(url, local_path=NULL, timeout=10) {
             # Letsencrypt + old Mac OS?
             attr(fail, "fail_msg") <- "SSL issue: see ?safedata_network"
             return(fail)
+        } else if (grepl("Failed to open file", response)) {
+            # local_path file failure
+            attr(fail, "fail_msg") <- response
+            return(fail)
         } else {
-            attr(fail, "fail_msg") <- paste0("Unknown URL response: ", response)
+            attr(fail, "fail_msg") <- paste0(
+                "Unknown curl response: ", response
+            )
             return(fail)
         }
     }
 
-    # Otherwise, should have response objects but check now if this
-    # resource is _specifically_ being blocked for testing purposes
-    if (! isFALSE(resource_down)) {
-        resource_down <- grepl(resource_down, url)
-    }
-
-    if (httr::http_error(response) || url_down || resource_down) {
-        # An error? Deliberately letting this message report the
-        # true status code for faked failures
+    # Check for failures
+    if (httr::http_error(response)) {
         attr(fail, "fail_msg") <- sprintf("URL error: %s", response$status_code)
         return(fail)
     }
 
-    # Now (unless something happened in the last few milliseconds)
-    # all is good to download the actual resource
+    # Now all is good so return the response or TRUE if the response was
+    # saved to disk
     if (is.null(local_path)) {
-        return(httr::GET(url = url))
+        return(response)
     } else {
-        httr::GET(url = url, httr::write_disk(local_path))
         return(TRUE)
     }
 }

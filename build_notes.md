@@ -26,7 +26,7 @@ of three places:
 
 1. Markup inside the `R` source files - there are blocks of comments starting
    with `#'` that contain all of the documentation that goes into the normal R
-   documentaion (`.Rd`) files.
+   documentation (`.Rd`) files.
 2. Vignettes, formatted as `Rmarkdown` files in the `vignettes` directory.
 
 When the documentation has been changed then the `.Rd` files in `man` and any
@@ -185,7 +185,7 @@ only checks that network failures are handled gracefully. Those have to be passi
 before the package can be built so:
 
 ```sh
-Rscript -e "devtools::test()
+Rscript -e "devtools::test()"
 ```
 
 If the tests pass, then the second step is to build and install the package with
@@ -286,7 +286,7 @@ version number (`-9000` is used to indicate code in development between versions
 Version: 1.0.5-9000
 ```
 
-to 
+to
 
 ```txt
 Version: 1.0.6
