@@ -12,7 +12,6 @@ safedata_env <- new.env(parent = emptyenv())
 
 set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
                          url = "https://www.safeproject.net") {
-
     #' Set the local SAFE data directory
     #'
     #' This function sets the local directory used to store SAFE dataset
@@ -79,11 +78,10 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
     index_path <- file.path(safedir, "index.json")
     gazetteer_path <- file.path(safedir, "gazetteer.geojson")
     location_aliases_path <- file.path(safedir, "location_aliases.csv")
-    url_path <-  file.path(safedir, "url.json")
+    url_path <- file.path(safedir, "url.json")
 
     # Handle create first
     if (create) {
-
         # We don't want a existing directory that might have stuff in it
         if (dir.exists(safedir)) {
             stop("Directory already exists")
@@ -103,11 +101,13 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
 
         # If any of these fail then remove the directory since we already
         # checked it didn't exist, and then tidy up options
-        if (! (got_index && got_gazetteer && got_loc_aliases)) {
+        if (!(got_index && got_gazetteer && got_loc_aliases)) {
             unlink(safedir, recursive = TRUE)
             options(safedata.dir = NULL, safedata.url = NULL)
-            message("Could not download required files: ",
-                    "SAFE data directory not created")
+            message(
+                "Could not download required files: ",
+                "SAFE data directory not created"
+            )
             return(invisible(FALSE))
         }
 
@@ -119,32 +119,32 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
     # Now validate an existing directory
     all_good <- TRUE
 
-    if (! dir.exists(safedir)) {
+    if (!dir.exists(safedir)) {
         message("Directory not found.")
         all_good <- FALSE
     }
 
-    if (! file.exists(url_path)) {
+    if (!file.exists(url_path)) {
         message("API URL not found.")
         all_good <- FALSE
     }
 
-    if (! file.exists(index_path)) {
+    if (!file.exists(index_path)) {
         message("Dataset index not found.")
         all_good <- FALSE
     }
 
-    if (! file.exists(gazetteer_path)) {
+    if (!file.exists(gazetteer_path)) {
         message("Gazetteer not found.")
         all_good <- FALSE
     }
 
-    if (! file.exists(location_aliases_path)) {
+    if (!file.exists(location_aliases_path)) {
         message("Location aliases not found.")
         all_good <- FALSE
     }
 
-    if (! all_good){
+    if (!all_good) {
         return(invisible(FALSE))
     }
 
@@ -154,7 +154,6 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
 
     # Look for updates
     if (update) {
-
         verbose_message("Checking for updates")
 
         # Try to get the current index hashes from the SAFE Data API and
@@ -177,21 +176,28 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
 
         # Check the files - do exactly the same thing for three files, three
         # hashes, three download wrapper functions and three reporting names
-        update_details <- list(list("Index",
-                                    index_path,
-                                    index_hashes$index,
-                                    download_index),
-                               list("Gazetteer",
-                                    gazetteer_path,
-                                    index_hashes$gazetteer,
-                                    download_gazetteer),
-                               list("Location aliases",
-                                    location_aliases_path,
-                                    index_hashes$location_aliases,
-                                    download_location_aliases))
+        update_details <- list(
+            list(
+                "Index",
+                index_path,
+                index_hashes$index,
+                download_index
+            ),
+            list(
+                "Gazetteer",
+                gazetteer_path,
+                index_hashes$gazetteer,
+                download_gazetteer
+            ),
+            list(
+                "Location aliases",
+                location_aliases_path,
+                index_hashes$location_aliases,
+                download_location_aliases
+            )
+        )
 
         for (details in update_details) {
-
             fname <- details[[1]]
             local_path <- details[[2]]
             current_hash <- details[[3]]
@@ -204,7 +210,7 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
                 backed_up <- c(backed_up, local_path)
                 # Try and get the new version
                 got_update <- download_func()
-                if (! got_update) {
+                if (!got_update) {
                     update_successful <- FALSE
                 }
             } else {
@@ -212,7 +218,7 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
             }
         }
 
-        if (! update_successful) {
+        if (!update_successful) {
             # Delete successful downloads and restore backups
             for (local_path in backed_up) {
                 if (file.exists(local_path)) {
@@ -238,7 +244,6 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
 
 
 download_index <- function() {
-
     #' Downloads the current dataset index
     #'
     #' This function downloads the dataset index from the SAFE data
@@ -251,11 +256,11 @@ download_index <- function() {
     safedir <- get_data_dir()
     path <- file.path(safedir, "index.json")
     url <- getOption("safedata.url")
-    api <- paste0(url, "/api/index")
+    api <- paste0(url, "/api/metadata_index.json")
 
     success <- try_to_download(api, path)
 
-    if (! success) {
+    if (!success) {
         message("Failed to download index:")
         message(attr(success, "fail_msg"))
     }
@@ -265,7 +270,6 @@ download_index <- function() {
 
 
 download_gazetteer <- function() {
-
     #' Downloads the current SAFE gazetteer
     #'
     #' This function downloads the gazetteer from the SAFE data
@@ -278,12 +282,12 @@ download_gazetteer <- function() {
     safedir <- get_data_dir()
     path <- file.path(safedir, "gazetteer.geojson")
     url <- getOption("safedata.url")
-    api <- paste0(url, "/api/gazetteer")
+    api <- paste0(url, "/api/gazetteer.json")
 
     success <- try_to_download(api, path)
 
-    if (! success) {
-        message("Failed to download index:")
+    if (!success) {
+        message("Failed to download gazetteer:")
         message(attr(success, "fail_msg"))
     }
 
@@ -292,7 +296,6 @@ download_gazetteer <- function() {
 
 
 download_location_aliases <- function() {
-
     #' Downloads the current SAFE location aliases
     #'
     #' This function downloads the location aliases from the SAFE data
@@ -306,10 +309,10 @@ download_location_aliases <- function() {
     safedir <- get_data_dir()
     path <- file.path(safedir, "location_aliases.csv")
     url <- getOption("safedata.url")
-    api <- paste0(url, "/api/location_aliases")
+    api <- paste0(url, "/api/location_aliases.json")
     success <- try_to_download(api, path)
 
-    if (! success) {
+    if (!success) {
         message("Failed to download location aliases:")
         message(attr(success, "fail_msg"))
     }
@@ -319,7 +322,6 @@ download_location_aliases <- function() {
 
 
 load_index <- function() {
-
     #' Load and cache the dataset index
     #'
     #' This function loads the dataset record index from the JSON file in
@@ -348,34 +350,43 @@ load_index <- function() {
     index_path <- file.path(safedir, "index.json")
     gazetteer_path <- file.path(safedir, "gazetteer.geojson")
     location_aliases_path <- file.path(safedir, "location_aliases.csv")
-    url_path <-  file.path(safedir, "url.json")
+    url_path <- file.path(safedir, "url.json")
 
     index_path <- file.path(safedir, "index.json")
 
     index <- jsonlite::fromJSON(index_path)
-    index <- index$entries
 
     # format the datetime classes
     index$publication_date <- as.POSIXct(index$publication_date)
     index$dataset_embargo <- as.POSIXct(index$dataset_embargo)
 
     # Add the path relative to the data directory
-    index$path <- with(index, file.path(zenodo_concept_id,
-                                        zenodo_record_id, filename))
+    index$path <- with(index, file.path(
+        zenodo_concept_id,
+        zenodo_record_id, filename
+    ))
 
     # Identify availability and most recent available records
-    index$available <- with(index,
-                            ifelse(dataset_access == "embargo" &
-                                    dataset_embargo >= Sys.time(), FALSE,
-                                    ifelse(dataset_access == "restricted",
-                                            FALSE, TRUE)))
+    index$available <- with(
+        index,
+        ifelse(dataset_access == "embargo" &
+            dataset_embargo >= Sys.time(), FALSE,
+        ifelse(dataset_access == "restricted",
+            FALSE, TRUE
+        )
+        )
+    )
 
     # Get the index rows by concept, reduce to the unique set of records
     # (dropping the multiple files), drop unavailable records, sort by
     # publication date and return the first zenodo_record_id.
-    concepts <- split(subset(index, select = c(available, zenodo_record_id,
-                                                publication_date)),
-                        f = index$zenodo_concept_id)
+    concepts <- split(
+        subset(index, select = c(
+            available, zenodo_record_id,
+            publication_date
+        )),
+        f = index$zenodo_concept_id
+    )
 
     mr_avail <- sapply(concepts, function(recs) {
         recs <- unique(recs)
@@ -389,9 +400,12 @@ load_index <- function() {
         }
     })
 
-    mra <- with(index,
-                ifelse(zenodo_record_id %in% unlist(mr_avail),
-                        TRUE, FALSE))
+    mra <- with(
+        index,
+        ifelse(zenodo_record_id %in% unlist(mr_avail),
+            TRUE, FALSE
+        )
+    )
     index$most_recent_available <- mra
 
     # Validate the directory contents
@@ -401,8 +415,10 @@ load_index <- function() {
     local_files <- dir(safedir, recursive = TRUE)
 
     # Exclude the three index files and local metadata json files
-    index_files <- c(basename(index_path), basename(gazetteer_path),
-                        basename(location_aliases_path), basename(url_path))
+    index_files <- c(
+        basename(index_path), basename(gazetteer_path),
+        basename(location_aliases_path), basename(url_path)
+    )
     json_files <- grepl("[0-9]+/[0-9]+/[0-9]+.json$", local_files)
     metadata_json <- local_files[json_files]
     local_files <- setdiff(local_files, c(index_files, metadata_json))
@@ -410,8 +426,10 @@ load_index <- function() {
     # Check for additional files in directory structure
     local_unexpected <- setdiff(local_files, index$path)
     if (length(local_unexpected)) {
-        warning("SAFE data directory contains unexpected files: ",
-                paste(local_unexpected, collapse = ", "))
+        warning(
+            "SAFE data directory contains unexpected files: ",
+            paste(local_unexpected, collapse = ", ")
+        )
     }
 
     # Run a check on file modification
@@ -420,15 +438,18 @@ load_index <- function() {
     local_expected$altered <- with(local_expected, md5 != checksum)
 
     if (sum(local_expected$altered)) {
-        warning("Local copies of dataset files have been modified",
-                paste(local_expected$filename[local_expected$altered],
-                        collapse = ", "))
+        warning(
+            "Local copies of dataset files have been modified",
+            paste(local_expected$filename[local_expected$altered],
+                collapse = ", "
+            )
+        )
     }
 
     # Update index to note which files have unaltered local copies (this
     # could include embargoed and restricted datasets, so this is used as a
     # flag to note which can be loaded from private local copies).
-    local_unaltered <- local_expected$checksum[! local_expected$altered]
+    local_unaltered <- local_expected$checksum[!local_expected$altered]
     index$local_copy <- index$checksum %in% local_unaltered
 
     # save the index into the cache
@@ -439,7 +460,6 @@ load_index <- function() {
 
 
 get_index <- function() {
-
     #' Get the cached dataset index
     #'
     #' This function just safely retrieves the safedata index from the
@@ -460,7 +480,6 @@ get_index <- function() {
 
 
 load_gazetteer <- function() {
-
     #' Load and cache the SAFE gazetteer
     #'
     #' This function loads the SAFE gazetteer, stored as a geojson file in the
@@ -507,7 +526,8 @@ load_gazetteer <- function() {
     } else {
         safedir <- get_data_dir()
         gazetteer <- sf::st_read(file.path(safedir, "gazetteer.geojson"),
-                                 quiet = TRUE, stringsAsFactors = FALSE)
+            quiet = TRUE, stringsAsFactors = FALSE
+        )
         assign("gazetteer", gazetteer, safedata_env)
     }
 
@@ -516,7 +536,6 @@ load_gazetteer <- function() {
 
 
 load_location_aliases <- function() {
-
     #' Load and cache the SAFE location aliases
     #'
     #' This function loads the SAFE locations alias, stored as a csv file in
@@ -535,9 +554,10 @@ load_location_aliases <- function() {
         safedir <- get_data_dir()
         alias_path <- file.path(safedir, "location_aliases.csv")
         location_aliases <- utils::read.csv(alias_path,
-                                            na.strings = "null",
-                                            stringsAsFactors = FALSE,
-                                            colClasses = "character")
+            na.strings = "null",
+            stringsAsFactors = FALSE,
+            colClasses = "character"
+        )
         assign("location_aliases", location_aliases, safedata_env)
     }
 
@@ -546,7 +566,6 @@ load_location_aliases <- function() {
 
 
 get_data_dir <- function() {
-
     #' Checks the data directory is set and returns it
     #'
     #' @keywords internal
@@ -562,7 +581,6 @@ get_data_dir <- function() {
 
 
 verbose_message <- function(str, ...) {
-
     #' Message function that can be globally muted
     #'
     #' Prints a message if  \code{option("safedata.verbose")}  is set
@@ -578,7 +596,6 @@ verbose_message <- function(str, ...) {
 
 
 set_example_safe_dir <- function() {
-
     #' Functions to use an example data directory for package examples
     #'
     #' The documentation of \code{safedata} includes code examples using a data
@@ -599,7 +616,7 @@ set_example_safe_dir <- function() {
     # record the user data directory if one has been set
     udir <- try(get_data_dir(), silent = TRUE)
 
-    if (! inherits(udir, "try-error")) {
+    if (!inherits(udir, "try-error")) {
         options(safedata.user.dir = udir)
     }
 
@@ -607,10 +624,11 @@ set_example_safe_dir <- function() {
     tdir <- tempdir()
     demo_dir <- file.path(tdir, "safedata_example_dir")
 
-    if (! dir.exists(demo_dir)) {
+    if (!dir.exists(demo_dir)) {
         example_zip <- system.file("safedata_example_dir",
-                                   "safedata_example_dir.zip",
-                                   package = "safedata")
+            "safedata_example_dir.zip",
+            package = "safedata"
+        )
         utils::unzip(example_zip, exdir = tdir)
     }
 
@@ -619,14 +637,13 @@ set_example_safe_dir <- function() {
 }
 
 unset_example_safe_dir <- function() {
-
     #' @describeIn set_example_safe_dir Restores a user data directory after
     #'    running an code example.
     #' @export
 
     # retrieve the user directory and if it isn't null restore it
     udir <- getOption("safedata.user.dir")
-    if (! is.null(udir)) {
+    if (!is.null(udir)) {
         set_safe_dir(udir, update = FALSE)
     }
 }
