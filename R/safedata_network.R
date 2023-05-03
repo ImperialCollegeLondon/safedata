@@ -98,14 +98,20 @@ try_to_download <- function(url, local_path = NULL, timeout = 10) {
     # Dummy variables used to implement unit testing of network failures
     network_down <- as.logical(Sys.getenv("NETWORK_DOWN", unset = FALSE))
     url_down <- as.logical(Sys.getenv("URL_DOWN", unset = FALSE))
-    resource_down <- Sys.getenv("RESOURCE_DOWN", unset = FALSE)
+    resource_down <- Sys.getenv("RESOURCE_DOWN", unset = NA)
 
     # Create a failure object, which will have attr for failure messages.
     fail <- FALSE
 
-    # Is there a network connection _at all_
+    # Is there a network connection _at all_?
     if (!curl::has_internet() || network_down) {
         attr(fail, "fail_msg") <- "No internet connection."
+        return(fail)
+    }
+
+    # Otherwise, is a resource _specifically_ being blocked for testing purposes
+    if ((!is.na(resource_down) && grepl(resource_down, url)) || url_down) {
+        attr(fail, "fail_msg") <- sprintf("URL error: 404")
         return(fail)
     }
 
@@ -148,16 +154,8 @@ try_to_download <- function(url, local_path = NULL, timeout = 10) {
         }
     }
 
-    # Otherwise, should have response objects but check now if this
-    # resource is _specifically_ being blocked for testing purposes
-    if (!isFALSE(resource_down)) {
-        resource_down <- grepl(resource_down, url)
-    }
-
-    if (httr::http_error(response) || url_down || resource_down) {
-        # Check for faked URL_DOWN and RESOURCE_DOWN failures and also genuine
-        # error status in real responses. Deliberately letting this message
-        # report the true status code for faked failures
+    # Check for failures
+    if (httr::http_error(response)) {
         attr(fail, "fail_msg") <- sprintf("URL error: %s", response$status_code)
         return(fail)
     }

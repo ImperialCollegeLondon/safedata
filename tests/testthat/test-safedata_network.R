@@ -69,7 +69,7 @@ test_that("Good URL works and returns object to memory", {
 
     success <- safedata:::try_to_download("https://httpbin.org/base64/c2FmZWRhdGE=")
 
-    # Screen for failure of the download
+    # Screen for failure of the download due to timeout
     if (is.logical(success) && isFALSE(success)) {
         skip("Download failed")
     }
