@@ -374,7 +374,7 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
     if (!length(records_to_get)) {
         verbose_message("No valid record ids provided")
         return(invisible(FALSE))
-    } else if (!is.null(token) & length(records_to_get) > 1) {
+    } else if (!is.null(token) && length(records_to_get) > 1) {
         verbose_message(
             "When using an access token, please download ",
             "the single record"
@@ -474,7 +474,7 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
         these_files <- subset(these_files, (!local_copy) | refresh)
 
         if (nrow(these_files)) {
-            sandbox <- getOption("safedata.use_zenodo_sandbox")
+            sandbox <- getOption("safedata.use_zenodo_sandbox")[[1]]
             if (sandbox) {
                 zenodo_url <- "https://sandbox.zenodo.org"
             } else {
