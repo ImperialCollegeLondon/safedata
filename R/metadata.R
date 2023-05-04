@@ -539,19 +539,20 @@ show_record <- function(obj) {
         )))
     }
 
-    # Taxa reporting
+    # Taxa reporting - gbif_taxa and ncbi_taxa are both lists in the metadata,
+    # but the JSON parsing converts non-empty metadata into data frames
     gbif_taxa <- metadata$gbif_taxa
     ncbi_taxa <- metadata$ncbi_taxa
-    n_gbif <- length(gbif_taxa)
-    n_ncbi <- length(ncbi_taxa)
-    if ((n_gbif > 0) || (n_ncbi > 0)) {
+    gbif_present <- inherits(gbif_taxa, "data.frame")
+    ncbi_present <- inherits(ncbi_taxa, "data.frame")
+    if (gbif_present || ncbi_present) {
         cat("Taxa: \n")
     }
-    if (n_gbif > 0) {
-        cat(sprintf(" - %i GBIF taxa reported\n", n_gbif))
+    if (gbif_present) {
+        cat(sprintf(" - %i GBIF taxa reported\n", nrow(gbif_taxa)))
     }
-    if (n_ncbi > 0) {
-        cat(sprintf(" - %i NCBI taxa reported\n", n_ncbi))
+    if (ncbi_present > 0) {
+        cat(sprintf(" - %i NCBI taxa reported\n", nrow(ncbi_taxa)))
     }
 
     # Locations reporting
