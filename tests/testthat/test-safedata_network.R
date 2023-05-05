@@ -28,7 +28,10 @@ test_that("bad host fails gracefully", {
     success <- safedata:::try_to_download("https://httpbinzzzzz.org")
 
     expect_false(success)
-    expect_match(attr(success, "fail_msg"), regexp = "URL not found")
+    expect_match(
+        attr(success, "fail_msg"),
+        regexp = "URL not found|URL timed out"
+    )
 })
 
 test_that("timeout fails gracefully", {
