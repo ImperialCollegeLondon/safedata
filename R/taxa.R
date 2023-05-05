@@ -104,7 +104,7 @@ get_taxon_coverage <- function() {
 }
 
 
-taxon_index_to_taxon_table <- function(taxa, which = c("gbif", "ncbi")) {
+taxon_index_to_taxon_table_old <- function(taxa, which = c("gbif", "ncbi")) {
     #' Add taxon hierarchy to taxon metadata
     #'
     #' Taxon data is stored as a set of taxa with taxon ids and parent taxon
@@ -118,6 +118,8 @@ taxon_index_to_taxon_table <- function(taxa, which = c("gbif", "ncbi")) {
     #' @return A data frame adding higher taxon level information for each taxon
     #' @seealso \code{\link{get_taxa}}
     #' @keywords internal
+
+    # TODO : delete before next release
 
     if (length(taxa) == 0) {
         return(NULL)
@@ -139,8 +141,7 @@ taxon_index_to_taxon_table <- function(taxa, which = c("gbif", "ncbi")) {
     n_fields <- length(table_fields)
 
     # create a taxon table to fill in
-    worksheet_taxa <- unique(taxa$worksheet_name)
-    worksheet_taxa <- na.omit(worksheet_taxa)
+    worksheet_taxa <- na.omit(unique(taxa$worksheet_name))
     taxon_table <- matrix(NA,
         ncol = n_fields, nrow = length(worksheet_taxa),
         dimnames = list(worksheet_taxa, table_fields)
@@ -248,6 +249,97 @@ taxon_index_to_taxon_table <- function(taxa, which = c("gbif", "ncbi")) {
     }
 
     taxon_table <- as.data.frame(taxon_table, stringsAsFactors = FALSE)
+    class(taxon_table) <- c("safe_taxa", "data.frame")
+
+    return(taxon_table)
+}
+
+
+taxon_index_to_taxon_table <- function(taxon_index, which = c("gbif", "ncbi")) {
+    #' Create a table showing taxon hierarchies from taxon metadata
+    #'
+    #' Taxon data is stored as a set of taxa with taxon ids and parent taxon
+    #' ids. For any given dataset, the metadata includes an index containing
+    #' this information for all taxa used in data worksheets and all parent
+    #' taxa required. This internal function takes the taxon index metadata
+    #' and builds a table including the taxonomic hierarchy for each worksheet
+    #' taxon. It is used by \code{\link{get_taxa}} and
+    #' \code{\link{get_taxon_coverage}}.
+    #'
+    #' The function can provide this table for either of the GBIF or NCBI
+    #' taxon indices included in the metadata. Note that the taxon ranks
+    #' included in the taxon index metadata for NCBI taxa have had multiple
+    #' uncommon ranks removed to match the GBIF backbone ranks.
+    #'
+    #' @section Synonyms:
+    #' The taxon table will include extra rows for worksheet taxa that are
+    #' GBIF synonyms or are merged in the NCBI taxonomy. There will be a row
+    #' giving the taxonomic hierarchy for the original taxon name and
+    #' a very similar row providing the canonical taxon name. The worksheet
+    #' name for these rows will be identical.
+    #'
+    #' @param taxon_index A taxon index list from the dataset metadata,
+    #' @param which Which taxon table to build (GBIF or NCBI).
+    #' @return A data frame adding higher taxon level information for each taxon
+    #' @seealso \code{\link{get_taxa}}
+    #' @keywords internal
+
+    if (length(taxon_index) == 0) {
+        return(NULL)
+    }
+
+    # Get the backbone ranks
+    which <- match.arg(which)
+    table_fields <- switch(which,
+        "gbif" = c(
+            "kingdom", "phylum", "class", "order",
+            "family", "genus", "species", "subspecies",
+            "variety", "form"
+        ),
+        "ncbi" = c(
+            "superkingdom", "kingdom", "phylum", "class", "order",
+            "family", "genus", "species"
+        )
+    )
+    n_fields <- length(table_fields)
+
+    # Extract the worksheet taxa - all taxa that have a defined worksheet name
+    worksheet_taxa <- taxon_index[!is.na(taxon_index$worksheet_name), ]
+
+    # Build a dictionary of taxa, keyed by their taxon id, which has to be
+    # as character here, because integers are assumed to be indices.
+    taxa_lookup <- list()
+    for (idx in seq_len(nrow(taxon_index))) {
+        taxon <- as.list(taxon_index[idx, ])
+        taxa_lookup[[as.character(taxon$taxon_id)]] <- taxon
+    }
+
+    # create a taxon table to fill in with columns keyed by taxon rank
+    taxon_table <- matrix(NA,
+        ncol = n_fields, nrow = nrow(worksheet_taxa),
+        dimnames = list(NULL, table_fields)
+    )
+
+    # Loop over the rows of worksheet taxa, following the chain of parent
+    # taxon ids down the lookup dictionary
+    for (rw in seq_len(nrow(worksheet_taxa))) {
+        ptx <- worksheet_taxa[rw, "parent_id"]
+
+        while (!is.na(ptx)) {
+            parent <- taxa_lookup[[as.character(ptx)]]
+            taxon_table[rw, parent$taxon_rank] <- parent$taxon_name
+            ptx <- parent$parent_id
+        }
+    }
+
+    # Append information about the worksheet taxa to the table
+    taxon_table <- cbind(
+        taxon_table,
+        subset(
+            worksheet_taxa,
+            select = c(worksheet_name, taxon_name, taxon_rank, taxon_status)
+        )
+    )
     class(taxon_table) <- c("safe_taxa", "data.frame")
 
     return(taxon_table)
