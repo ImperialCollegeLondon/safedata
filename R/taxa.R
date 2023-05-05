@@ -76,7 +76,7 @@ get_taxa <- function(obj, which = c("gbif", "ncbi")) {
     return(taxon_table)
 }
 
-get_taxon_coverage <- function() {
+get_taxon_coverage <- function(which = c("gbif", "ncbi")) {
     #' Retrieve the current taxon index
     #'
     #' This function downloads the current taxon index across published
@@ -87,6 +87,7 @@ get_taxon_coverage <- function() {
     #' entries. There is nothing to stop a user defining "Gallus gallus" as a
     #' "user" taxon with Animalia as a parent taxon.
     #'
+    #' @param which Which taxonomy to build (GBIF or NCBI).
     #' @return A data frame containing higher taxon level information for
     #'   each taxon in the database taxon index. If the API is unavailable,
     #'   the function returns NULL.
@@ -96,6 +97,8 @@ get_taxon_coverage <- function() {
     #'     all_taxa <- get_taxon_coverage()
     #'     }
     #' @export
+
+    which <- match.arg(which)
 
     url <- getOption("safedata.url")
     api <- paste0(url, "/api/taxa")
@@ -113,12 +116,14 @@ get_taxon_coverage <- function() {
         )
     }
 
+    taxon_index <- subset(taxa, taxon_auth == toupper(which))
+
     # This API does not bring in worksheet names (they will clash across
     # datasets) so replace them with the canonical taxon name
-    taxa$worksheet_name <- taxa$taxon_name
-    taxa <- taxon_index_to_taxon_table(taxa)
+    taxon_index$worksheet_name <- taxon_index$taxon_name
+    taxon_table <- taxon_index_to_taxon_table(taxon_index, which = which)
 
-    return(taxa)
+    return(taxon_table)
 }
 
 
@@ -339,12 +344,14 @@ taxon_index_to_taxon_table <- function(taxon_index, which = c("gbif", "ncbi")) {
     }
 
     # Append information about the worksheet taxa to the table
+    tax_fields <- c("worksheet_name", "taxon_name", "taxon_rank", "taxon_status")
+    if ("n_datasets" %in% names(worksheet_taxa)) {
+        tax_fields <- c(tax_fields, "n_datasets")
+    }
+
     taxon_table <- cbind(
         taxon_table,
-        subset(
-            worksheet_taxa,
-            select = c(worksheet_name, taxon_name, taxon_rank, taxon_status)
-        )
+        subset(worksheet_taxa, select = tax_fields)
     )
     class(taxon_table) <- c("safe_taxa", "data.frame")
 
