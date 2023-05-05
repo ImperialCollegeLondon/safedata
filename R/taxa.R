@@ -1,42 +1,54 @@
 
-get_taxa <- function(obj) {
+get_taxa <- function(obj, which = c("gbif", "ncbi")) {
     #' Obtaining taxonomy for a SAFE dataset.
     #'
     #' This function generates a taxonomy table for a specified SAFE dataset
     #' record. Each row represent a taxon used in the data worksheets in the
-    #' dataset and the table fields show the taxonomic hierarchy, taken from
-    #' GBIF, for those taxa.
+    #' dataset and the table fields show the taxonomic hierarchy for those taxa.
     #'
     #' All SAFE datasets containing taxa must include a Taxa worksheet, which
     #' must contain all of the taxa referred to in taxon fields in data
-    #' worksheets. All entries in this worksheet are  validated against the
-    #' GBIF database before publication and are used to populate the taxonomic
-    #' index for the SAFE datasets. The validated taxonomic hierarchy for the
-    #' data is also available in the metadata for a record and this function
-    #' converts the metadata into a taxonomy table. If the Taxa worksheet for
-    #' a SAFE project dataset is empty, because the data does not contain
-    #' observations on taxa, \code{get_taxa} will return NULL.
+    #' worksheets. All entries in this worksheet are  validated against the GBIF
+    #' database before publication and are used to populate the taxonomic index
+    #' for the SAFE datasets. The validated taxonomic index for the data is
+    #' also available in the metadata for a record and this function converts
+    #' that metadata into a taxonomy table.
     #'
-    #' The taxonomy table includes the eight "backbone" taxonomic ranks used
-    #' in the GBIF database: Kingdom, Phylum, Class, Order, Family, Genus,
-    #' Species and Subspecies. It also includes three further fields:
+    #' Datasets can contain taxa validated against either of the GBIF or NCBI
+    #' taxonomy databases and one of these options should be selected using the
+    #' \code{which} argument. If the dataset does not contain any taxa validated
+    #' against that database \code{get_taxa} will return NULL.
+    #'
+    #' The returned table includes the fields \code{worksheet_name},
     #' \code{taxon_name}, \code{taxon_rank} and \code{gbif_status}. These
-    #' record the original taxa provided in the Taxa worksheet and show
-    #' where the taxonomic name used in a dataset differs from the canonical
-    #' name used in GBIF. The row names of the taxon table are the labels
-    #' used in data worksheets and are used to match a taxonomy table to a
-    #' loaded data worksheet (see \code{\link{add_taxa}}).
+    #' provide the original taxon data included with the data.
     #'
+    #' @section Synonyms:
+    #' The taxon table will include extra rows for worksheet taxa that are
+    #' GBIF synonyms or are merged in the NCBI taxonomy. There will be a row
+    #' giving the taxonomic hierarchy for the original taxon name provided
+    #' with the dataset and an additional row providing the canonical taxon
+    #' name. The worksheet name for these rows will be identical.
+    #'
+    #' @section Taxonomic ranks
+    #' The taxonomy table includes "backbone" taxonomic ranks used in taxonomy
+    #' databases. These ranks differ slightly between NCBI and GBIF but include
+    #' Superkingdom, Kingdom, Phylum, Class, Order, Family, Genus, Species
+    #' and Subspecies. Note that for NCBI taxa, multiple uncommon ranks have
+    #' been removed to reduce the table to these major ranks.
+    #'
+    #' @details
     #' For more details on the structure of the Taxa worksheet see:
     #' \url{https://safedata-validator.readthedocs.io/en/latest/data_format/taxa.html}
     #'
     #' @param obj A single record id, or an existing safedata dataframe.
+    #' @param which Which taxon table to build (GBIF or NCBI).
     #' @return A taxonomy table of classes "safe_taxa" and "data.frame".
     #' @seealso \code{\link{add_taxa}}
     #' @examples
-    #'    set_example_safe_dir()
-    #'    taxa <- get_taxa(1400562)
-    #'    unset_example_safe_dir()
+    #'     set_example_safe_dir()
+    #'     taxa <- get_taxa(1400562)
+    #'     unset_example_safe_dir()
     #' @export
 
     if (inherits(obj, "safedata")) {
@@ -51,9 +63,15 @@ get_taxa <- function(obj) {
         stop("Concept ID provided, please indicate a specific version")
     }
 
+    which <- match.arg(which)
+
     # Get the record metadata containing the taxon index
-    taxa <- load_record_metadata(record_set)$taxa
-    taxon_table <- taxon_index_to_taxon_table(taxa)
+    metadata <- load_record_metadata(record_set)
+    taxon_index <- switch(which,
+        "gbif" = metadata$gbif_taxa,
+        "ncbi" = metadata$ncbi_taxa
+    )
+    taxon_table <- taxon_index_to_taxon_table(taxon_index, which = which)
 
     return(taxon_table)
 }
@@ -265,18 +283,6 @@ taxon_index_to_taxon_table <- function(taxon_index, which = c("gbif", "ncbi")) {
     #' and builds a table including the taxonomic hierarchy for each worksheet
     #' taxon. It is used by \code{\link{get_taxa}} and
     #' \code{\link{get_taxon_coverage}}.
-    #'
-    #' The function can provide this table for either of the GBIF or NCBI
-    #' taxon indices included in the metadata. Note that the taxon ranks
-    #' included in the taxon index metadata for NCBI taxa have had multiple
-    #' uncommon ranks removed to match the GBIF backbone ranks.
-    #'
-    #' @section Synonyms:
-    #' The taxon table will include extra rows for worksheet taxa that are
-    #' GBIF synonyms or are merged in the NCBI taxonomy. There will be a row
-    #' giving the taxonomic hierarchy for the original taxon name and
-    #' a very similar row providing the canonical taxon name. The worksheet
-    #' name for these rows will be identical.
     #'
     #' @param taxon_index A taxon index list from the dataset metadata,
     #' @param which Which taxon table to build (GBIF or NCBI).
