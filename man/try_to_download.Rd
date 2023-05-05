@@ -19,9 +19,9 @@ An \code{response} object or a boolean showing if the
    download attempt was successful.
 }
 \description{
-This function tries to fetch the HEAD for the resource and handles failure to
-resolve (such as a bad safedata API url), timeouts and then actual HTTP error
-codes. If none of those occur, the resource is downloaded.
+This function tries to fetch a resource from a URL and handles failure to
+resolve the resource (bad URLs), timeouts and then actual HTTP error
+codes.
 }
 \details{
 If the download fails, the function returns FALSE and the return value
@@ -34,8 +34,7 @@ function returns TRUE to indicate success.
 
 
 This function contains code to simulate network failures of varying kinds (no
-network, no API, specific resource unavailable) for use in unit testing that
-the safedata package handles theses errors gracefully.
+network, no API, specific resource unavailable) for use in unit testing.
 }
 
 \keyword{internal}
