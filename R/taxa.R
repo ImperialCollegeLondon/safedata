@@ -229,23 +229,24 @@ taxon_index_to_taxon_table <- function(taxon_index) {
 
 
 add_taxa <- function(obj, taxon_field = NULL, taxon_table = NULL,
-                     prefix = NULL, which = NULL) {
+                     prefix = NULL) {
     #' Add a taxonomic hierarchy to a SAFE data worksheet.
     #'
-    #' All datasets containing taxon observations provide taxonomic data (see
-    #' \code{\link{get_taxa}}) that can be linked to rows in data worksheets
-    #' that contain "taxa" fields. This function matches the taxonomic hierarchy
-    #' for a dataset for a given taxon field in a data worksheet and inserts
-    #' fields to show that hierarchy.
+    #' Data tables in a safedata dataset can contain "taxa" fields, which tie
+    #' an observation to a particular taxon used in the dataset. All datasets
+    #' containing taxon observations provide taxonomic data about those taxa,
+    #' validated against either NCBI or GBIF. The taxon table for an entire
+    #' dataset can be accessed using \code{\link{get_taxa}}, but this function
+    #' allows the taxonomic hierachy to be added for the specific taxa used in
+    #' in a taxa field in a data worksheet.
     #'
-    #' An existing taxon table can be provided to the function, but the table
-    #' will be automatically loaded if no table is provided. If a data worksheet
-    #' only contains a single taxon field, then that field will be used
-    #' automatically, otherwise users have to specify which taxon field to use.
-    #' A prefix can be added to taxon fields in order to discrimate between
-    #' fields from multuple taxon fields. By default, the function adds all of
-    #' the fields included in the output of \code{\link{get_taxa}}, but
-    #' \code{which} allows a subset of field names to be used.
+    #' An existing taxon table from \code{\link{get_taxa}} can be provided to
+    #' this function, but the table will be automatically loaded if no table
+    #' is provided. If a data worksheet only contains a single taxon field,
+    #' then that field will be used automatically, otherwise users have to
+    #' specify which taxon field to use. A prefix can be added to taxon fields
+    #' in order to discrimate between taxon hierarchy fields added from
+    #' different taxon fields.
     #'
     #' @param obj An existing object of class \code{safedata}
     #' @param taxon_field The name of a taxon field in a \code{safedata} for
@@ -254,8 +255,6 @@ add_taxa <- function(obj, taxon_field = NULL, taxon_table = NULL,
     #'    \code{\link{get_taxa}}.
     #' @param prefix A string to be appended to taxon field names, primarily to
     #'    discriminate between fields of multiple taxonomies are to be added.
-    #' @param which A vector specifying a subset of taxonomy table field
-    #'    names to add.
     #' @return A modified \code{safedata} object with added taxonomic columns.
     #' @seealso \code{\link{get_taxa}}
     #' @examples
@@ -283,10 +282,16 @@ add_taxa <- function(obj, taxon_field = NULL, taxon_table = NULL,
         stop(sprintf("%s is not a taxon field in the data frame", taxon_field))
     }
 
-    # Load the taxonomy
+    # Load the taxonomy, making sure that an existing taxon table is the right
+    # one for the worksheet
     if (is.null(taxon_table)) {
         taxon_table <- get_taxa(obj_attr$safe_record_set)
-    } else if (!inherits(taxon_table, "safe_taxa")) {
+    } else if (inherits(taxon_table, "safe_taxa")) {
+        taxa_record_set <- attr(taxon_table, "metadata")$safe_record_set
+        if (!all.equal(taxa_record_set, obj_attr$safe_record_set)) {
+            stop("Provided 'taxon_table' is for a different dataset.")
+        }
+    } else {
         stop("'taxon_table' not a 'safe_taxa' object created by 'get_taxa'")
     }
 
@@ -296,8 +301,9 @@ add_taxa <- function(obj, taxon_field = NULL, taxon_table = NULL,
         return(obj)
     }
 
-    # Match taxon names to the taxon and generate matching table
-    idx <- match(obj[, taxon_field], rownames(taxon_table))
+    # Match taxon names in the taxon field to the worksheet names in the taxon
+    # table and generate matching table
+    idx <- match(obj[, taxon_field], taxon_table$worksheet_name)
 
     if (any(is.na(idx))) {
         stop(
@@ -306,18 +312,10 @@ add_taxa <- function(obj, taxon_field = NULL, taxon_table = NULL,
         )
     }
 
+    # Get the ordered taxon table and drop the worksheet name field, which
+    # will duplicate the taxon field
     taxon_table <- taxon_table[idx, ]
-
-    # Select fields if which is provided
-    if (!is.null(which)) {
-        which_idx <- match(which, names(taxon_table))
-
-        if (any(is.na(which_idx))) {
-            stop("Unknown taxon table fields in 'which'")
-        }
-
-        taxon_table <- subset(taxon_table, select = which_idx)
-    }
+    taxon_table$worksheet_name <- NULL
 
     # Add prefix to fields if requested
     if (!is.null(prefix)) {
@@ -325,8 +323,9 @@ add_taxa <- function(obj, taxon_field = NULL, taxon_table = NULL,
     }
 
     # combine and copy across attributes (could create a method for cbind,
-    # but seems excessive!)
+    # but seems excessive!), dropping the worksheet name used for matching
     ret <- cbind(obj, taxon_table)
+    rownames(ret) <- rownames(obj)
     attr(ret, "metadata") <- attr(obj, "metadata")
     class(ret) <- c("safedata", "data.frame")
 
