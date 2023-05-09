@@ -28,7 +28,7 @@ get_taxa <- function(obj) {
     #' with the dataset and an additional row providing the canonical taxon
     #' name. The worksheet name for these rows will be identical.
     #'
-    #' @section Taxonomic ranks
+    #' @section Taxonomic ranks:
     #' NCBI and GBIF differ in their use of taxonomic ranks: GBIF uses a
     #' reduced set of core 'backbone' ranks, where NCBI supports a wider
     #' range of ranks. The taxon hierarchy used for safedata reduces NCBI to
@@ -100,19 +100,21 @@ get_taxa <- function(obj) {
     return(taxon_table)
 }
 
-get_taxon_coverage <- function(which = c("gbif", "ncbi")) {
+get_taxon_coverage <- function() {
     #' Retrieve the current taxon index
     #'
     #' This function downloads the current taxon index across published
     #' datasets and returns a formatted taxon table showing the taxonomic
-    #' hierarchy of each taxon. It requires an internet connection.
+    #' hierarchy of each taxon, along with the taxonomic authority used
+    #' for validation (GBIF or NCBI). The returned data frame includes a
+    #' count of the number of datasets that include each taxon. The
+    #' function requires an internet connection.
     #'
     #' Note that the use of "user" defined taxa can lead to some unusual
     #' entries. There is nothing to stop a user defining "Gallus gallus" as a
     #' "user" taxon with Animalia as a parent taxon.
     #'
-    #' @param which Which taxonomy to build (GBIF or NCBI).
-    #' @return A data frame containing higher taxon level information for
+    #' @return A data frame containing taxonomic hierarchy data for
     #'   each taxon in the database taxon index. If the API is unavailable,
     #'   the function returns NULL.
     #' @seealso \code{\link{get_taxa}}
@@ -135,17 +137,15 @@ get_taxon_coverage <- function(which = c("gbif", "ncbi")) {
     } else {
         # Use jsonlite::fromJSON (and simplification routines),
         # not the httr::content conversion
-        taxa <- jsonlite::fromJSON(
+        taxon_index <- jsonlite::fromJSON(
             httr::content(response, as = "text", encoding = "UTF-8")
         )
     }
 
-    taxon_index <- subset(taxa, taxon_auth == toupper(which))
-
     # This API does not bring in worksheet names (they will clash across
     # datasets) so replace them with the canonical taxon name
     taxon_index$worksheet_name <- taxon_index$taxon_name
-    taxon_table <- taxon_index_to_taxon_table(taxon_index, which = which)
+    taxon_table <- taxon_index_to_taxon_table(taxon_index)
 
     return(taxon_table)
 }
@@ -212,10 +212,13 @@ taxon_index_to_taxon_table <- function(taxon_index) {
         }
     }
 
-    # Append information about the worksheet taxa to the table
-    tax_fields <- c("worksheet_name", "taxon_name", "taxon_rank", "taxon_status")
+    # Append information about the worksheet taxa to the table, handling extra
+    # fields in the data for get_taxon_coverage
+    tax_fields <- c(
+        "worksheet_name", "taxon_name", "taxon_rank", "taxon_status"
+    )
     if ("n_datasets" %in% names(worksheet_taxa)) {
-        tax_fields <- c(tax_fields, "n_datasets")
+        tax_fields <- c(tax_fields, "taxon_auth", "n_datasets")
     }
 
     taxon_table <- cbind(
