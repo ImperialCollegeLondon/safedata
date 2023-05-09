@@ -229,7 +229,7 @@ taxon_index_to_taxon_table <- function(taxon_index) {
 
 
 add_taxa <- function(obj, taxon_field = NULL, taxon_table = NULL,
-                     prefix = NULL) {
+                     prefix = NULL, use_canon = FALSE) {
     #' Add a taxonomic hierarchy to a SAFE data worksheet.
     #'
     #' Data tables in a safedata dataset can contain "taxa" fields, which tie
@@ -248,6 +248,13 @@ add_taxa <- function(obj, taxon_field = NULL, taxon_table = NULL,
     #' in order to discrimate between taxon hierarchy fields added from
     #' different taxon fields.
     #'
+    #' By default, the taxonomy data added to the table will use the original
+    #' taxon name used in the dataset, even if that usage is considered a
+    #' synonym or is merged in GBIF or NCBI (see \link{\code{get_taxa}}).
+    #' The \code{use_canon} option can be set to TRUE to instead show the
+    #' canonical taxon name used in the taxonomy database for synonomous or
+    #' merged taxa.
+    #'
     #' @param obj An existing object of class \code{safedata}
     #' @param taxon_field The name of a taxon field in a \code{safedata} for
     #'    which to add taxonomic data.
@@ -255,6 +262,8 @@ add_taxa <- function(obj, taxon_field = NULL, taxon_table = NULL,
     #'    \code{\link{get_taxa}}.
     #' @param prefix A string to be appended to taxon field names, primarily to
     #'    discriminate between fields of multiple taxonomies are to be added.
+    #' @param use_canon Add the canonical taxon name from the taxonomy database
+    #'    rather than the name used in the dataset.
     #' @return A modified \code{safedata} object with added taxonomic columns.
     #' @seealso \code{\link{get_taxa}}
     #' @examples
@@ -299,6 +308,18 @@ add_taxa <- function(obj, taxon_field = NULL, taxon_table = NULL,
     if (is.null(taxon_table)) {
         verbose_message("Dataset contains no taxonomic information.")
         return(obj)
+    }
+
+    # Drop canon/non_canon before matching
+    non_canon_usage <- taxon_table$worksheet_name[
+        duplicated(taxon_table$worksheet_name)
+    ]
+    canon_only <- !taxon_table$worksheet_name %in% non_canon_usage
+    accepted_usage <- taxon_table$taxon_status == "accepted"
+    if (use_canon) {
+        taxon_table <- taxon_table[canon_only | accepted_usage, ]
+    } else {
+        taxon_table <- taxon_table[canon_only | !accepted_usage, ]
     }
 
     # Match taxon names in the taxon field to the worksheet names in the taxon
