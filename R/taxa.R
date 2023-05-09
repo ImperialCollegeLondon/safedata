@@ -127,8 +127,7 @@ get_taxon_coverage <- function(which = c("gbif", "ncbi")) {
 }
 
 
-
-taxon_index_to_taxon_table <- function(taxon_index, which = c("gbif", "ncbi")) {
+taxon_index_to_taxon_table <- function(taxon_index) {
     #' Create a table showing taxon hierarchies from taxon metadata
     #'
     #' Taxon data is stored as a set of taxa with taxon ids and parent taxon
@@ -139,8 +138,12 @@ taxon_index_to_taxon_table <- function(taxon_index, which = c("gbif", "ncbi")) {
     #' taxon. It is used by \code{\link{get_taxa}} and
     #' \code{\link{get_taxon_coverage}}.
     #'
+    #' Note that this function does not discriminate between NCBI and GBIF
+    #' taxon indices: they are both mapped onto the same table structure.
+    #' Public calling functions should handle any merging and tidying
+    #' required for a neat public API.
+    #'
     #' @param taxon_index A taxon index list from the dataset metadata,
-    #' @param which Which taxon table to build (GBIF or NCBI).
     #' @return A data frame adding higher taxon level information for each taxon
     #' @seealso \code{\link{get_taxa}}
     #' @keywords internal
@@ -150,17 +153,9 @@ taxon_index_to_taxon_table <- function(taxon_index, which = c("gbif", "ncbi")) {
     }
 
     # Get the backbone ranks
-    which <- match.arg(which)
-    table_fields <- switch(which,
-        "gbif" = c(
-            "kingdom", "phylum", "class", "order",
-            "family", "genus", "species", "subspecies",
-            "variety", "form"
-        ),
-        "ncbi" = c(
-            "superkingdom", "kingdom", "phylum", "class", "order",
-            "family", "genus", "species"
-        )
+    table_fields <- c(
+        "superkingdom", "kingdom", "phylum", "class", "order", "family",
+        "genus", "species", "subspecies", "variety", "form"
     )
     n_fields <- length(table_fields)
 
