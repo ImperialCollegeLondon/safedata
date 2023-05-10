@@ -2,7 +2,7 @@
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
-    branches: [develop, release/*, master]
+    branches: [develop, release/*, master, feature/*, bugfix/*]
   pull_request:
     branches: [develop, release/*, master]
 
@@ -30,7 +30,7 @@ jobs:
       CURL_SSL_BACKEND: openssl  # Windows CURL fails otherwise.
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Install system dependencies on macOS
         if: runner.os == 'macOS'
