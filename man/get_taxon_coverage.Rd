@@ -7,14 +7,17 @@
 get_taxon_coverage()
 }
 \value{
-A data frame containing higher taxon level information for
+A data frame containing taxonomic hierarchy data for
   each taxon in the database taxon index. If the API is unavailable,
   the function returns NULL.
 }
 \description{
 This function downloads the current taxon index across published
 datasets and returns a formatted taxon table showing the taxonomic
-hierarchy of each taxon. It requires an internet connection.
+hierarchy of each taxon, along with the taxonomic authority used
+for validation (GBIF or NCBI). The returned data frame includes a
+count of the number of datasets that include each taxon. The
+function requires an internet connection.
 }
 \details{
 Note that the use of "user" defined taxa can lead to some unusual

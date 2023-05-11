@@ -5,12 +5,15 @@
 \alias{get_phylogeny}
 \title{Getting a phylogeny for a dataset}
 \usage{
-igraph_to_phylo(g)
+igraph_to_phylo(g, labels = "taxon_name")
 
-get_phylogeny(record)
+get_phylogeny(record, labels = "taxon_name")
 }
 \arguments{
 \item{g}{A taxon graph returned by \code{\link{get_taxon_graph}}}
+
+\item{labels}{The name of a vertex attribute from
+\code{\link{get_taxon_graph}} to use as node labels.}
 
 \item{record}{A single dataset record id}
 }

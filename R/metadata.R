@@ -220,7 +220,7 @@ print.safe_record_set <- function(x, ...) {
     in_both <- subset(x, x$record %in% in_both)
 
     if (nrow(in_both)) {
-        rownames(in_both) <- seq(nrow(in_both))
+        rownames(in_both) <- seq_len(nrow(in_both))
     }
 
     return(in_both)
@@ -235,7 +235,7 @@ print.safe_record_set <- function(x, ...) {
     only_in_y <- setdiff(y$record, x$record)
     only_in_y <- subset(y, y$record %in% only_in_y)
     all <- rbind(x, only_in_y)
-    rownames(all) <- seq(nrow(all))
+    rownames(all) <- seq_len(nrow(all))
     return(all)
 }
 

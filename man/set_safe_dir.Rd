@@ -8,7 +8,8 @@ set_safe_dir(
   safedir,
   update = TRUE,
   create = FALSE,
-  url = "https://www.safeproject.net"
+  url = "https://www.safeproject.net",
+  use_zenodo_sandbox = FALSE
 )
 }
 \arguments{
@@ -22,6 +23,9 @@ path (logical)?}
 
 \item{url}{A URL providing the SAFE Data API, defaulting to the SAFE
 Project's own URL.}
+
+\item{use_zenodo_sandbox}{A boolean indicating whether the datafiles
+are stored in the main Zenodo site or the sandbox Zenodo site.}
 }
 \value{
 Invisibly, a boolean showing whether a SAFE data directory was
@@ -71,4 +75,10 @@ function will warn when files other than those found in datasets are
 present within the data structure and when any dataset files that are
 present have been modified. Although this can be turned off, it is
 not recommended to modify or add files within a SAFE data directory.
+
+The default behaviour is to download actual data files from the main
+Zenodo site, but a sandbox site is also provided for testing. The
+sandbox site may be useful in setting up a new safedata archive, so
+\code{use_zenodo_sandbox = TRUE} can be used to create a safedata
+directory that will download data from the sandbox site.
 }
