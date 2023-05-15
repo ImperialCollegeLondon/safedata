@@ -588,12 +588,11 @@ load_location_aliases <- function() {
     if (exists("location_aliases", safedata_env)) {
         location_aliases <- get("location_aliases", safedata_env)
     } else {
-        alias_path <- getOption("safedata.loc_aliases")
-        location_aliases <- utils::read.csv(alias_path,
-            na.strings = "null",
-            stringsAsFactors = FALSE,
-            colClasses = "character"
+        location_aliases <- jsonlite::fromJSON(
+            getOption("safedata.loc_aliases")
         )
+        location_aliases <- as.data.frame(location_aliases)
+        names(location_aliases) <- c("zenodo_record_id", "location", "alias")
         assign("location_aliases", location_aliases, safedata_env)
     }
 
@@ -678,6 +677,7 @@ set_example_safedata_dir <- function(on = TRUE) {
     # Check for existing session example dir and create if missing.
     if (!dir.exists(demo_dir)) {
         create_safedata_dir(demo_dir, url = "http://example.safedata.server")
+        # Add files for examples that assume files are present
     }
 
     return(invisible(demo_dir))
