@@ -14,11 +14,12 @@ safedata_env <- new.env(parent = emptyenv())
 set_safedata_dir <- function(safedir, update = TRUE) {
     #' Set or create a safedata directory
     #'
-    #' These functions set the local directory used to store safedata datasets,
-    #' along with record and index metadata, or create a new safedata
-    #' directory.
+    #' These functions set or create a local local safedata directory. This
+    #' is a strongly structured directory used to store safedata datasets,
+    #' along with record and index metadata. It is not intended to be
+    #' modified by users.
     #'
-    #' @section The safedata directory structure
+    #' @section The safedata directory structure:
     #'
     #' The safedata package uses a data directory to store local copies of
     #' dataset files along with index files. Files for a dataset record are
@@ -43,7 +44,13 @@ set_safedata_dir <- function(safedir, update = TRUE) {
     #'         metadata server}
     #' }
     #'
-    #' @section Creating a new safadata directory
+    #' @section Creating a new safadata directory:
+    #'
+    #' The \code{create_safedata_dir} function will try to create the named
+    #' directory and requires an internet connection. The \code{url} argument
+    #' must provide URL to a website that provides the safedata metadata server
+    #' API. This URL will then be used to download the core index files
+    #' described above.
     #'
     #' The default behaviour is to download actual data files from the main
     #' Zenodo site, but a sandbox site is also provided for testing. The
@@ -51,29 +58,18 @@ set_safedata_dir <- function(safedir, update = TRUE) {
     #' \code{use_zenodo_sandbox = TRUE} can be used to create a safedata
     #' directory that will download data from the sandbox site.
     #'
-    #'  If \code{create = TRUE}, the function will try to create the named
-    #' directory and populate it with the three index files. This requires
-    #' an internet connection.
-    #' The function can also
-    #' initialise a new data directory, downloading the required index
-    #' files. By default, it will update indices if needed and will
-    #' validate the directory contents. Once set, the location of the
-    #' directory is stored in options("safedata.dir"). The \code{url}
-    #' argument specifies a URL to a website that exposes the SAFE data
-    #' API.
+    #' @section Metadata updates and validation:
     #'
-    #' @section Directory update and validation
+    #' By default, the function will update the core index files to include
+    #' data on newly published datasets in the fata index. This requires
+    #' an internet connection to check for updates and a warning will be
+    #' issued if no connection is available - the \code{update = FALSE}
+    #' option can be use to surpress this message for offline use.
     #'
-    #' By default, the function needs an internet connection to check
-    #' for updates to the three index files. Updating can be turned off for
-    #' offline use.
-    #'
-    #' The default behaviour is also to validate the directory structure. The
-    #' function will warn when files other than those found in datasets are
-    #' present within the data structure and when any dataset files that are
-    #' present have been modified. Although this can be turned off, it is
-    #' not recommended to modify or add files within a SAFE data directory.
-
+    #' Setting a safedata directory will also trigger validation of the
+    #' directory structure. This will issue warnings when files other than
+    #' those found in datasets are present within the data structure or
+    #' when any dataset files that are present have been modified.
     #'
     #' @param safedir A path to the directory to use as the safedata
     #'    directory (str).
@@ -373,6 +369,8 @@ load_index <- function() {
     #' This function loads the dataset record index from the JSON file in
     #' the SAFE data directory and sets which datasets are currently available
     #' and which records are the most recent available under a given concept.
+    #' The function also checks to see if there are any user modifications to
+    #' the directory structure.
     #'
     #' When any of the three index files (\code{index.json},
     #' \code{gazetteer.geojson} and \code{location_aliases.csv}) are loaded,
