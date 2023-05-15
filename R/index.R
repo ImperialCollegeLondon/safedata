@@ -370,8 +370,6 @@ load_index <- function() {
     location_aliases_path <- file.path(safedir, "location_aliases.csv")
     url_path <- file.path(safedir, "url.json")
 
-    index_path <- file.path(safedir, "index.json")
-
     index <- jsonlite::fromJSON(index_path)
 
     # format the datetime classes
