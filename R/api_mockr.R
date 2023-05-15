@@ -38,9 +38,9 @@ mock_handler <- function(req) {
     #' @keywords internal
 
     # Match the request URL against the configured mocked URLS
-    mocked_response <- micro_mockr_urls[[req$url]]
+    mocked_response <- mock_api_urls[[req$url]]
     if (is.null(mocked_response)) {
-        stop("Unknown URL passed to micro_mockr: ", req$url)
+        stop("Unknown URL passed to mock_handler: ", req$url)
     }
 
     # Handle the content to be used

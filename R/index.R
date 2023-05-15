@@ -631,23 +631,35 @@ verbose_message <- function(str, ...) {
 }
 
 
-set_example_safe_dir <- function() {
+set_example_safedata_dir <- function(on = TRUE) {
     #' Functions to use an example data directory for package examples
     #'
-    #' The documentation of \code{safedata} includes code examples using a data
-    #' directory. A zipped example directory is included in the package files
-    #' (data/safedata_example_dir.zip) but package code must not write within
-    #' the package structure. The \code{set_example_safe_dir} function is used
-    #' in code examples to unpack this example directory into a temporary
-    #' folder and set it for use in  the example code. The function
-    #' \code{unset_example_safe_dir} is then used to restore any existing data
-    #' directory set by the user. The example directory should only be created
+    #' The documentation of \code{safedata} includes code examples that require
+    #' a real data directory but package code must not write within the package
+    #' structure. The \code{set_example_safe_dir} function is used in code
+    #' examples to create a safedata directory using local resources in a
+    #' temporary directory. This example directory should only be created
     #' once per session.
     #'
-    #' @seealso \code{\link{set_safe_dir}}
-    #' @return The set_example_safe_dir function returns the path of the example
-    #'    directory invisibly.
+    #' The argument \code{on=FALSE} can be used to restore any existing data
+    #' directory set by the user.
+    #'
+    #' @seealso \code{\link{set_safedata_dir}}
+    #' @return The set_example_safedata_dir function returns the path of the
+    #'    example directory invisibly (on = TRUE) or the path of any restored
+    #'    user data directory (on =FALSE).
     #' @export
+
+    if (!on) {
+        # Turn off mocking
+        safedata:::mock_api(on = FALSE)
+        # retrieve the user directory and if it isn't null restore it
+        udir <- getOption("safedata.user.dir")
+        if (!is.null(udir)) {
+            set_safedata_dir(udir, update = FALSE)
+        }
+        return(invisible(udir))
+    }
 
     # record the user data directory if one has been set
     udir <- try(get_data_dir(), silent = TRUE)
@@ -660,26 +672,13 @@ set_example_safe_dir <- function() {
     tdir <- tempdir()
     demo_dir <- file.path(tdir, "safedata_example_dir")
 
+    # Turn on URL mocking
+    safedata:::mock_api(on = TRUE)
+
+    # Check for existing session example dir and create if missing.
     if (!dir.exists(demo_dir)) {
-        example_zip <- system.file("safedata_example_dir",
-            "safedata_example_dir.zip",
-            package = "safedata"
-        )
-        utils::unzip(example_zip, exdir = tdir)
+        create_safedata_dir(demo_dir, url = "http://example.safedata.server")
     }
 
-    set_safedata_dir(demo_dir, update = FALSE)
     return(invisible(demo_dir))
-}
-
-unset_example_safe_dir <- function() {
-    #' @describeIn set_example_safe_dir Restores a user data directory after
-    #'    running an code example.
-    #' @export
-
-    # retrieve the user directory and if it isn't null restore it
-    udir <- getOption("safedata.user.dir")
-    if (!is.null(udir)) {
-        set_safedata_dir(udir, update = FALSE)
-    }
 }
