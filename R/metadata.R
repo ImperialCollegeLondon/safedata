@@ -260,11 +260,15 @@ fetch_record_metadata <- function(record_set) {
     #'    a record
     #' @examples
     #'    \donttest{
-    #'    set_example_safe_dir()
-    #'    rec <- validate_record_ids(1400562)
-    #'    safedata:::fetch_record_metadata(rec)
-    #'    metadata <- safedata:::load_record_metadata(rec)
-    #'    unset_example_safe_dir()
+    #'      \dontshow{
+    #'        set_example_safe_dir()
+    #'      }
+    #'      rec <- validate_record_ids(1400562)
+    #'      safedata:::fetch_record_metadata(rec)
+    #'      metadata <- safedata:::load_record_metadata(rec)
+    #'      \dontshow{
+    #'        unset_example_safe_dir()
+    #'      }
     #'    }
     #' @keywords internal
 
