@@ -668,7 +668,7 @@ set_example_safe_dir <- function() {
         utils::unzip(example_zip, exdir = tdir)
     }
 
-    set_safe_dir(demo_dir, update = FALSE)
+    set_safedata_dir(demo_dir, update = FALSE)
     return(invisible(demo_dir))
 }
 
@@ -680,6 +680,6 @@ unset_example_safe_dir <- function() {
     # retrieve the user directory and if it isn't null restore it
     udir <- getOption("safedata.user.dir")
     if (!is.null(udir)) {
-        set_safe_dir(udir, update = FALSE)
+        set_safedata_dir(udir, update = FALSE)
     }
 }
