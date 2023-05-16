@@ -28,6 +28,30 @@ mock_api_urls <- list(
     "http://example.safedata.server/api/record/1400562" = list(
         content = "1400561/1400562/1400562.json",
         status_code = 200L
+    ),
+    "https://www.zenodo.org/record/1400562/files/Psomas_Ant_Pselaphine_SAFE_dataset.xlsx" = list(
+        content = "1400561/1400562/Psomas_Ant_Pselaphine_SAFE_dataset.xlsx",
+        status_code = 200L
+    ),
+    "http://example.safedata.server/api/record/3247631" = list(
+        content = "3247630/3247631/3247631.json",
+        status_code = 200L
+    ),
+    "https://www.zenodo.org/record/3247631/files/Both_tree_functional_traits.xlsx" = list(
+        content = "3266826/3266827/Both_tree_functional_traits.xlsx",
+        status_code = 200L
+    ),
+    "http://example.safedata.server/api/record/3266827" = list(
+        content = "3266826/3266827/3266827.json",
+        status_code = 200L
+    ),
+    "https://www.zenodo.org/record/3266827/files/template_Symes.xlsx" = list(
+        content = "3266826/3266827/template_Symes.xlsx",
+        status_code = 200L
+    ),
+    "http://example.safedata.server/api/record/1237719" = list(
+        content = "1198840/1237719/1237719.json",
+        status_code = 200L
     )
 )
 

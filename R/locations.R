@@ -1,5 +1,4 @@
 get_locations <- function(obj, gazetteer_info = FALSE) {
-
     #' Obtaining locations for a SAFE dataset.
     #'
     #' This function returns a spatial 'simple features' (\code{\link[sf]{sf}})
@@ -35,9 +34,9 @@ get_locations <- function(obj, gazetteer_info = FALSE) {
     #' @seealso \code{\link{add_locations}}, \code{\link{load_gazetteer}},
     #'    \code{\link{load_location_aliases}}
     #' @examples
-    #'    set_example_safe_dir()
+    #'    set_example_safedata_dir()
     #'    locations <- get_locations(1400562)
-    #'    unset_example_safe_dir()
+    #'    set_example_safedata_dir(on=FALSE)
     #' @export
 
     if (inherits(obj, "safedata")) {
@@ -67,7 +66,7 @@ get_locations <- function(obj, gazetteer_info = FALSE) {
     # specific to this record
     location_aliases <- load_location_aliases()
     location_aliases <- subset(location_aliases, is.na(zenodo_record_id) |
-                               zenodo_record_id == record_set$record)
+        zenodo_record_id == record_set$record)
 
     # Now fill in the geometries from the possible sources
     # a) Known locations - look for gazetteer names and aliases
@@ -76,33 +75,40 @@ get_locations <- function(obj, gazetteer_info = FALSE) {
     alias_match <- match(locations$name, location_aliases$alias)
 
     if (any(known & is.na(gazetteer_match) & is.na(alias_match))) {
-        stop("Known locations with no gazetteer or aliases match",
-             " found, contact data@safeproject.net")
-    } else if (any(known & ! is.na(gazetteer_match) &  ! is.na(alias_match))) {
-        stop("Known locations match gazetteer _and_ aliases, ",
-             "contact data@safeproject.net")
+        stop(
+            "Known locations with no gazetteer or aliases match",
+            " found, contact data@safeproject.net"
+        )
+    } else if (any(known & !is.na(gazetteer_match) & !is.na(alias_match))) {
+        stop(
+            "Known locations match gazetteer _and_ aliases, ",
+            "contact data@safeproject.net"
+        )
     }
 
     # create a merge column for the gazetteer data
-    locations$merge_gazetteer <- ifelse(known & ! is.na(gazetteer_match),
-                                        gazetteer$location[gazetteer_match], NA)
-    locations$merge_gazetteer <- ifelse(known & ! is.na(alias_match),
-                                        location_aliases$location[alias_match],
-                                        locations$merge_gazetteer)
+    locations$merge_gazetteer <- ifelse(known & !is.na(gazetteer_match),
+        gazetteer$location[gazetteer_match], NA
+    )
+    locations$merge_gazetteer <- ifelse(known & !is.na(alias_match),
+        location_aliases$location[alias_match],
+        locations$merge_gazetteer
+    )
 
     # b) New locations that have now been aliased to a gazetteer location. These
     #    are locations that have been adopted into the gazetteer and are matched
     #    to the gazetteer by the unique combination of dataset record id and
     #    name within the dataset.
 
-    new_locations <- locations[! known, ]
+    new_locations <- locations[!known, ]
 
     new_locations <- merge(new_locations, location_aliases,
-                           by.x = c("zenodo_record_id", "name"),
-                           by.y = c("zenodo_record_id", "alias"), all.x = TRUE)
+        by.x = c("zenodo_record_id", "name"),
+        by.y = c("zenodo_record_id", "alias"), all.x = TRUE
+    )
 
     # switch in any aliased new locations
-    new_locations <- subset(new_locations, ! is.na(new_locations$location))
+    new_locations <- subset(new_locations, !is.na(new_locations$location))
 
     if (nrow(new_locations)) {
         new_matched <- match(new_locations$name, locations$name)
@@ -112,7 +118,7 @@ get_locations <- function(obj, gazetteer_info = FALSE) {
     # Now we can merge the gazetteer data onto locations. First, optionally
     # exclude the bulky gazetteer data.
 
-    if (! gazetteer_info) {
+    if (!gazetteer_info) {
         gazetteer <- subset(gazetteer, select = c(location, geometry))
     }
 
@@ -122,14 +128,16 @@ get_locations <- function(obj, gazetteer_info = FALSE) {
     # merge(data.frame, sf, all.x = TRUE) that causes it to fail with non
     #  matching lines, but merge(sf, data.frame, all.y = TRUE) works as
     # expected.
-    locations <- sf::st_sf(merge(gazetteer, locations, by.y = "merge_gazetteer",
-                                 by.x = "location", all.y = TRUE))
+    locations <- sf::st_sf(merge(gazetteer, locations,
+        by.y = "merge_gazetteer",
+        by.x = "location", all.y = TRUE
+    ))
 
     # c) Finally, we can convert any WKT information from the locations table
     # for new locations and put that into blanks in the geometry, specifically
     # avoiding locations where step b) has inserted gazetteer data.
-    wkt_data <- which((! is.na(locations$wkt_wgs84)) &
-                      (sf::st_is_empty(locations)))
+    wkt_data <- which((!is.na(locations$wkt_wgs84)) &
+        (sf::st_is_empty(locations)))
 
     if (length(wkt_data)) {
         new_geom <- locations$wkt_wgs84[wkt_data]
@@ -149,13 +157,11 @@ get_locations <- function(obj, gazetteer_info = FALSE) {
     rownames(locations) <- locations$dataset_name
     class(locations) <- c("safe_locations", class(locations))
     return(locations)
-
 }
 
 
 add_locations <- function(obj, location_field = NULL,
-                           location_table = NULL, gazetteer_info = FALSE) {
-
+                          location_table = NULL, gazetteer_info = FALSE) {
     #' Adds location data to a SAFE data worksheet.
     #'
     #' This function adds location data to the rows of a SAFE data worksheet,
@@ -176,13 +182,13 @@ add_locations <- function(obj, location_field = NULL,
     #' @seealso \code{\link{get_locations}}, \code{\link{load_gazetteer}},
     #'    \code{\link{load_location_aliases}}
     #' @examples
-    #'    set_example_safe_dir()
+    #'    set_example_safedata_dir()
     #'    beetle_abund <- load_safe_data(1400562, "Ant-Psel")
     #'    beetle_abund <- add_locations(beetle_abund)
-    #'    unset_example_safe_dir()
+    #'    set_example_safedata_dir(on=FALSE)
     #' @export
 
-    if (! inherits(obj, "safedata")) {
+    if (!inherits(obj, "safedata")) {
         stop("add_locations requires an object of class 'safedata'")
     }
 
@@ -196,19 +202,25 @@ add_locations <- function(obj, location_field = NULL,
     } else if (is.null(location_field) && length(location_fields) == 1) {
         location_field <- location_fields[1]
     } else if (is.null(location_field) && length(location_fields) > 1) {
-        stop("Data frame contains multiple location fields, ",
-             "specify location_field")
-    } else if (! location_field %in% location_fields) {
-        stop(sprintf("%s is not a location field in the data frame",
-                     location_field))
+        stop(
+            "Data frame contains multiple location fields, ",
+            "specify location_field"
+        )
+    } else if (!location_field %in% location_fields) {
+        stop(sprintf(
+            "%s is not a location field in the data frame",
+            location_field
+        ))
     }
 
     # Load the locations table
     if (is.null(location_table)) {
         location_table <- get_locations(obj_attr$safe_record_set)
-    } else if (! inherits(location_table, "safe_locations")) {
-        stop("'location_table' not a 'safe_locations' object",
-             " created by 'get_locations'")
+    } else if (!inherits(location_table, "safe_locations")) {
+        stop(
+            "'location_table' not a 'safe_locations' object",
+            " created by 'get_locations'"
+        )
     }
 
     # This should never happen - would need a taxon field with no taxa worksheet
@@ -221,8 +233,10 @@ add_locations <- function(obj, location_field = NULL,
     idx <- match(obj[, location_field], rownames(location_table))
 
     if (any(is.na(idx))) {
-        stop("Not all location names found in locations table,",
-             " contact package developers.")
+        stop(
+            "Not all location names found in locations table,",
+            " contact package developers."
+        )
     }
 
     location_table <- location_table[idx, ]

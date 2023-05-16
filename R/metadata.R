@@ -26,13 +26,13 @@ validate_record_ids <- function(record_set) {
     #' @param ... Further arguments to print methods, unused.
     #' @return An object of class \code{safe_record_set} (see Details)
     #' @examples
-    #'    set_example_safe_dir()
+    #'    set_example_safedata_dir()
     #'    validate_record_ids(c(3247631, 3266827, 3266821, -1000))
     #'    validate_record_ids(c("https://doi.org/10.5281/zenodo.3247631",
     #'                          "10.5281/zenodo.3266827",
     #'                          "https://zenodo.org/record/3266821",
     #'                          "not_this_one/3266821"))
-    #'    unset_example_safe_dir()
+    #'    set_example_safedata_dir(on=FALSE)
     #' @aliases safe_record_set
     #' @export
 
@@ -261,13 +261,13 @@ fetch_record_metadata <- function(record_set) {
     #' @examples
     #'    \donttest{
     #'      \dontshow{
-    #'        set_example_safe_dir()
+    #'        set_example_safedata_dir()
     #'      }
     #'      rec <- validate_record_ids(1400562)
     #'      safedata:::fetch_record_metadata(rec)
     #'      metadata <- safedata:::load_record_metadata(rec)
     #'      \dontshow{
-    #'        unset_example_safe_dir()
+    #'        set_example_safedata_dir(on=FALSE)
     #'      }
     #'    }
     #' @keywords internal
@@ -329,9 +329,12 @@ fetch_record_metadata <- function(record_set) {
                 if (!dir.exists(dirname(to_get$local_path))) {
                     dir.create(dirname(to_get$local_path), recursive = TRUE)
                 }
-                # Write the binary content to avoid issues with conversion of the
-                # JSON payload to and from R objects.
-                writeBin(httr::content(response, as = "raw"), con = to_get$local_path)
+                # Write the binary content to avoid issues with conversion
+                # of the JSON payload to and from R objects.
+                writeBin(
+                    httr::content(response, as = "raw"),
+                    con = to_get$local_path
+                )
             }
         }
     }
@@ -409,7 +412,7 @@ show_concepts <- function(obj) {
     #' @describeIn show_concepts Show the records associated with a
     #'     dataset concept.
     #' @examples
-    #'    set_example_safe_dir()
+    #'    set_example_safedata_dir()
     #'    recs <- validate_record_ids(c(1400562, 3266827, 3266821))
     #'    show_concepts(recs)
     #'    show_record(recs[1,])
@@ -417,7 +420,7 @@ show_concepts <- function(obj) {
     #'    show_worksheet(1400562, "EnvironVariables")
     #'    beetle_abund <- load_safe_data(1400562, "Ant-Psel")
     #'    show_worksheet(beetle_abund, extended_fields = TRUE)
-    #'    unset_example_safe_dir()
+    #'    set_example_safedata_dir(on=FALSE)
     #' @export
 
     if (inherits(obj, "safedata")) {

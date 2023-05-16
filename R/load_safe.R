@@ -26,12 +26,12 @@ load_safe_data <- function(record_id, worksheet) {
     #' @return A data frame with the additional \code{safedata} class and
     #'    additional attribute data containing metadata for the data.
     #' @examples
-    #'    set_example_safe_dir()
+    #'    set_example_safedata_dir()
     #'    beetle_abund <- load_safe_data(1400562, "Ant-Psel")
     #'    str(beetle_abund)
     #'    # See also the show_worksheet function for further worksheet metadata
     #'    show_worksheet(beetle_abund)
-    #'    unset_example_safe_dir()
+    #'    set_example_safedata_dir(on=FALSE)
     #' @export
 
     # validate the record id
@@ -354,10 +354,12 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
     #'    the function returns FALSE.
     #' @examples
     #'    \donttest{
-    #'        set_example_safe_dir()
+    #'        set_example_safedata_dir()
+    #'        # Validate records to download
     #'        recs <- validate_record_ids(c(3247631, 3266827, 3266821))
+    #'        print(recs)
     #'        download_safe_files(recs, confirm = FALSE)
-    #'        unset_example_safe_dir()
+    #'        set_example_safedata_dir(on = FALSE)
     #'    }
     #'    \dontrun{
     #'        # This example requires a private token
@@ -569,14 +571,13 @@ insert_dataset <- function(record_id, files) {
     #' @param files A vector of files to insert into the data directory
     #' @return NULL
     #' @examples
-    #'    set_example_safe_dir()
-    #'    files <- system.file("safedata_example_dir",
-    #'                         "template_ClareWfunctiondata.xlsx",
+    #'    set_example_safedata_dir()
+    #'    files <- system.file("template_ClareWfunctiondata.xlsx",
     #'                         package = "safedata")
     #'    insert_dataset(1237719, files)
     #'    dat <- load_safe_data(1237719, "Data")
     #'    str(dat)
-    #'    unset_example_safe_dir()
+    #'    set_example_safedata_dir(on=FALSE)
     #' @export
 
     record_set <- validate_record_ids(record_id)
@@ -629,6 +630,9 @@ insert_dataset <- function(record_id, files) {
     }
 
     # Now we can insert them - skipping files already present
+    # - fetch the record metadata to guarantee the local file path
+    fetch_record_metadata(record_set)
+
     local_files$current_safe_dir_path <- file.path(
         getOption("safedata.dir"),
         local_files$path
@@ -651,9 +655,6 @@ insert_dataset <- function(record_id, files) {
             paste0(local_files$filename, collapse = ",")
         )
         copy_success <- try({
-            dir.create(dirname(local_files$current_safe_dir_path[1]),
-                recursive = TRUE
-            )
             with(local_files, file.copy(local_path, current_safe_dir_path))
         })
         if (inherits(copy_success, "try-error")) {
