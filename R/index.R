@@ -675,10 +675,18 @@ set_example_safedata_dir <- function(on = TRUE) {
     # Turn on URL mocking
     mock_api(on = TRUE)
 
-    # Check for existing session example dir and create if missing.
+    # Check for existing session example dir and create if missing. This could
+    # simply copy the required files, but this works neatly as a mini test of
+    # the mocked API
     if (!dir.exists(demo_dir)) {
-        create_safedata_dir(demo_dir, url = "http://example.safedata.server")
-        # Add files for examples that assume files are present
+        suppressMessages({
+            create_safedata_dir(
+                demo_dir,
+                url = "http://example.safedata.server"
+            )
+            # Add files for examples that assume files are present
+            download_safe_files(1400562, confirm = FALSE)
+        })
     }
 
     return(invisible(demo_dir))
