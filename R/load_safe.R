@@ -23,7 +23,7 @@ load_safe_data <- function(record_id, worksheet, ...) {
     #' @param x,object A \code{safedata} object.
     #' @param n The number of rows to show in the \code{print} method.
     #' @param \dots For \code{load_safe_data}, these are additional arguments
-    #'    passed on to \link{\code{download_safe_files}} if the data file needs
+    #'    passed on to \code{\link{download_safe_files}} if the data file needs
     #'    to be downloaded. Otherwise, these are further arguments to the
     #'    \code{str} and \code{print} methods.
     #' @return A data frame with the additional \code{safedata} class and
@@ -575,7 +575,7 @@ insert_dataset <- function(record_id, files) {
     #' @return NULL
     #' @examples
     #'    set_example_safedata_dir()
-    #'    files <- system.file("template_ClareWfunctiondata.xlsx",
+    #'    files <- system.file("api_data", "template_ClareWfunctiondata.xlsx",
     #'                         package = "safedata")
     #'    insert_dataset(1237719, files)
     #'    dat <- load_safe_data(1237719, "Data")

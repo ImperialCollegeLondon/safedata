@@ -6,7 +6,7 @@
 \alias{print.safedata}
 \title{Loads data from a SAFE dataset.}
 \usage{
-load_safe_data(record_id, worksheet)
+load_safe_data(record_id, worksheet, ...)
 
 \method{str}{safedata}(object, ...)
 
@@ -17,7 +17,10 @@ load_safe_data(record_id, worksheet)
 
 \item{worksheet}{The name of the worksheet to load}
 
-\item{\dots}{Further arguments to \code{str} and \code{print} methods.}
+\item{\dots}{For \code{load_safe_data}, these are additional arguments
+passed on to \code{\link{download_safe_files}} if the data file needs
+to be downloaded. Otherwise, these are further arguments to the
+\code{str} and \code{print} methods.}
 
 \item{x, object}{A \code{safedata} object.}
 

@@ -9,6 +9,7 @@
 #' @keywords internal
 
 mock_api_urls <- list(
+    # Main index files
     "http://example.safedata.server/api/metadata_index.json" = list(
         content = "index.json",
         status_code = 200L
@@ -25,34 +26,36 @@ mock_api_urls <- list(
         content = "index_hashes.json",
         status_code = 200L
     ),
+    # Example datasets used and metadata JSON
     "http://example.safedata.server/api/record/1400562" = list(
-        content = "1400561/1400562/1400562.json",
+        content = "1400562.json",
         status_code = 200L
     ),
     "https://www.zenodo.org/record/1400562/files/Psomas_Ant_Pselaphine_SAFE_dataset.xlsx" = list(
-        content = "1400561/1400562/Psomas_Ant_Pselaphine_SAFE_dataset.xlsx",
+        content = "Psomas_Ant_Pselaphine_SAFE_dataset.xlsx",
         status_code = 200L
     ),
     "http://example.safedata.server/api/record/3247631" = list(
-        content = "3247630/3247631/3247631.json",
+        content = "3247631.json",
         status_code = 200L
     ),
     "https://www.zenodo.org/record/3247631/files/Both_tree_functional_traits.xlsx" = list(
-        content = "3266826/3266827/Both_tree_functional_traits.xlsx",
+        content = "Both_tree_functional_traits.xlsx",
         status_code = 200L
     ),
     "http://example.safedata.server/api/record/3266827" = list(
-        content = "3266826/3266827/3266827.json",
+        content = "3266827.json",
         status_code = 200L
     ),
     "https://www.zenodo.org/record/3266827/files/template_Symes.xlsx" = list(
-        content = "3266826/3266827/template_Symes.xlsx",
+        content = "template_Symes.xlsx",
         status_code = 200L
     ),
     "http://example.safedata.server/api/record/1237719" = list(
-        content = "1198840/1237719/1237719.json",
+        content = "1237719.json",
         status_code = 200L
     ),
+    # Search API examples
     "http://example.safedata.server/api/search/text?text=soil" = list(
         content = "text_text_soil.json",
         status_code = 200L
@@ -83,6 +86,10 @@ mock_api_urls <- list(
     ),
     "http://example.safedata.server/api/search/authors?name=Ewers" = list(
         content = "authors_name_Ewers.json",
+        status_code = 200L
+    ),
+    "http://example.safedata.server/api/search/authors?name=Ewers&ids=1237719&ids=4072959&ids=3982665&ids=1478526&ids=3926374&ids=3974971&ids=6368114&ids=5820902&ids=5710509&ids=6477764" = list(
+        content = "authors_ewers_within_ids.json",
         status_code = 200L
     )
 )

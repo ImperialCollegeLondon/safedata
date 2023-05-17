@@ -19,7 +19,7 @@ then work seamlessly alongside openly available data.
 }
 \examples{
    set_example_safedata_dir()
-   files <- system.file("template_ClareWfunctiondata.xlsx",
+   files <- system.file("api_data", "template_ClareWfunctiondata.xlsx",
                         package = "safedata")
    insert_dataset(1237719, files)
    dat <- load_safe_data(1237719, "Data")

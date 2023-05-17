@@ -4,7 +4,7 @@
 \name{mock_api_urls}
 \alias{mock_api_urls}
 \title{URLs handled by mock_api}
-\format{An object of class \code{list} of length 11.}
+\format{An object of class \code{list} of length 20.}
 \usage{
 mock_api_urls
 }

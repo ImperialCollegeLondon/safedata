@@ -14,42 +14,34 @@ library(knitr)
 # Knit hook to truncate output.
 hook_output <- knit_hooks$get("output")
 knit_hooks$set(output = function(x, options) {
-lines <- options$output.lines
-if (is.null(lines)) {
-    return(hook_output(x, options))  # pass to default hook
-}
-x <- unlist(strsplit(x, "\n"))
-more <- "..."
-if (length(lines)==1) {        # first n lines
-	if (length(x) > lines) {
-		# truncate the output, but add ....
-		x <- c(head(x, lines), more)
-	}
-	} else {
-		x <- c(more, x[lines], more)
-	}
-	# paste these lines together
-	x <- paste(c(x, ""), collapse = "\n")
-	hook_output(x, options)
+  lines <- options$output.lines
+  if (is.null(lines)) {
+    return(hook_output(x, options)) # pass to default hook
+  }
+  x <- unlist(strsplit(x, "\n"))
+  more <- "..."
+  if (length(lines) == 1) { # first n lines
+    if (length(x) > lines) {
+      # truncate the output, but add ....
+      x <- c(head(x, lines), more)
+    }
+  } else {
+    x <- c(more, x[lines], more)
+  }
+  # paste these lines together
+  x <- paste(c(x, ""), collapse = "\n")
+  hook_output(x, options)
 })
 # Comments as #> not ##
 knitr::opts_chunk$set(
-  comment = '#>'
+  comment = "#>"
 )
 ```
 
 ```{r load_remote_data, echo=FALSE}
-# All the remote data used in building this vignette is downloaded
-# and cached in R/sysdata.rda, so that vignette code checking and 
-# building does not rely on remote resources. The vignette_objects.R
-# script _does_ need to be run before fresh releases to update the file.
-
-use_remote <- as.logical(Sys.getenv('BUILD_VIGNETTE_USING_REMOTE', FALSE))
-if (! use_remote){
-  soil_datasets <- safedata:::vignette_soil_search
-  ants <- safedata:::vignette_ants_search
-  all_taxa <- safedata:::vignette_taxon_coverage
-}
+# All the API and download calls for remote data used in building this
+# vignette is mocked and served up locally from the inst/api_data directory.
+safedata:::mock_api(on = TRUE)
 ```
 
 The `safedata` package makes it easy to search for and use datasets collected at
@@ -72,7 +64,7 @@ install.packages("safedata")
 The development version can also be installed from GitHub:
 
 ```{r install_git, eval=FALSE}
-devtools::install_github("ImperialCollegeLondon/safedata")
+devtools::install_github("ImperialCollegeLondon/safedata@develop")
 ```
 
 
@@ -103,54 +95,44 @@ library(safedata)
 
 If this is the first time you are loading `safedata` -- or if you simply want to
 have two separate SAFE data directories -- then you need to create a new, empty
-directory.
+safedata directory. You will need the URL of the server that holds the dataset 
+metadata for your data community.
 
-```{r create_new_dir, eval=FALSE}
-set_safe_dir('my_safe_directory', create=TRUE)
-## Safe data directory created
+```{r create_new_dir}
+create_safedata_dir(
+  "my_safe_directory",
+  url = "http://example.safedata.server"
+)
 ```
 
 This will create the directory and download the current index files. You cannot
 use an existing directory: the package wants to start with a fresh, empty
 directory. Note that the directory path is stored in `options()`:
 
-```{r show_safe_dir, eval=FALSE}
-getOption('safedata.dir')
-## [1] "my_safe_directory"
+```{r show_safe_dir}
+getOption("safedata.dir")
 ```
 
 ## Using an existing SAFE data directory
 
-Once you have a SAFE data directory, the same function is used to tell the
+Once you have a SAFE data directory, the `set_safedata_dir` function is used to tell the
 `safedata` package where to look for index and data files:
 
-```{r set_safe_dir, eval=FALSE}
-set_safe_dir('my_safe_directory')
-## Checking for updates
-##  - Index up to date
-##  - Gazetteer up to date
-##  - Location aliases up to date
-## Validating directory
+```{r set_safe_dir}
+set_safedata_dir("my_safe_directory")
 ```
 
-You will see that this function checks with the SAFE Project website for updates
+You will see that this function checks with the metadata server for updates
 to the key index files. This can be turned off for offline use
-(`set_safe_dir('~/my_safe_directory', update=FALSE)`). The function also
+(`set_safedata_dir('~/my_safe_directory', update=FALSE)`). The function also
 validates local data files: it checks the MD5 hash of local data file copies
 against the MD5 of the published file.
 
-The rest of this vignette uses an example SAFE data directory that is included
-within the package. This is set up for use using the following command but note
-that this is a temporary data folder and is only used for demonstration
-purposes.
-
-```{r load_example_dir}
-set_example_safe_dir()
-```
-
 # Finding data
 
-You can browse datasets published by the SAFE Project at either:
+You can browse datasets published using the `safedata` system either at the 
+project Zenodo site or from its metadata server. For example, for the SAFE Project 
+these links are:
 
 * our [SAFE Zenodo community](https://zenodo.org/communities/safe) or
 * the  [SAFE Project website](https://www.safeproject.net/datasets/view_datasets). 
@@ -184,8 +166,9 @@ frame containing validated record ids and access information and so you can use
 the normal data frame indices (e.g. `recs[1,]`) to select particular records. 
 
 
-```{r search_text, eval=use_remote}
-soil_datasets <- search_text('soil')
+```{r search_text}
+soil_datasets <- search_text("soil")
+```
 ```{r search_text_out, collapse=TRUE}
 print(soil_datasets)
 ```
@@ -202,19 +185,20 @@ hierarchy leading up to that those taxa, are added to a taxonomic database on
 the SAFE Project website. The `search_taxa()` function searches that index to
 identify all the datasets that contain a particular taxon.
 
-```{r search_taxa, eval=use_remote}
-ants <- search_taxa('Formicidae')
+```{r search_taxa}
+ants <- search_taxa("Formicidae")
+```
 ```{r search_taxa_out, collapse=TRUE}
 print(ants)
 ```
 
 The taxonomic index is built around the GBIF backbone taxonomic database and
 include the following core taxonomic levels: kingdom, phylum, class, order,
-family, genus, species and subspecies. It is also possible to search by [GBIF
-ID](https://www.gbif.org/species/4342).
+family, genus, species and subspecies. It is also possible to search by taxon ID:
+for example the [GBIF ID](https://www.gbif.org/species/4342) for Formicidae.
 
-```{r search_taxa_id, eval=use_remote}
-ants <- search_taxa(gbif_id=4342)
+```{r search_taxa_id}
+ants <- search_taxa(gbif_id = 4342)
 ```
 
 ### Spatial search details
@@ -231,15 +215,15 @@ datasets but users can also provide their own search geometries using the Well
 Known Text format. The search includes simple GIS capabilities to look for
 sampling within a  given distance of the query location.
 
-```{r search_spatial, eval=use_remote}
-# Datasets that include sampling within experimental block A
-within_a <- search_spatial(location='BL_A')
+```{r search_spatial}
+# Datasets that include sampling within the location of experimental block A
+within_a <- search_spatial(location = "BL_A")
 # Datasets that sampled within 2 km of the Maliau Basin Field Study Centre
-near_maliau <- search_spatial(wkt='POINT(116.97394 4.73481)', distance=2000)
+near_maliau <- search_spatial(wkt = "POINT(116.97394 4.73481)", distance = 2000)
 ```
 
 Note that WKT coordinates should be supplied as WGS84 longitude and latitude -
-typically the output of GPS receivers - but the database uses the local UTM 50N
+typically the output of GPS receivers - but the database uses the local
 projected coordinate system for all distance calculations and GIS operations.
 
 ### Combining searches
@@ -247,7 +231,7 @@ projected coordinate system for all distance calculations and GIS operations.
 It is possible to combine searches using logical operators (`&` and `|`), which
 simply find the intersection and unions of sets of SAFE records.
 
-```{r combining_searches, collapse=TRUE, eval=use_remote}
+```{r combining_searches, collapse=TRUE}
 # Three searches
 fish <- search_taxa("Actinopterygii")
 odonates <- search_taxa("Odonata")
@@ -265,9 +249,9 @@ has to be retrieved from the server, so might be faster on poor networks.
 However, this obviously only works for repeated narrowing of a search, so has
 less functionality.
 
-```{r restricting_searches, collapse=TRUE, eval=use_remote}
+```{r restricting_searches, collapse=TRUE}
 fish <- search_taxa("Actinopterygii")
-ewers <- search_authors("Ewers", ids=fish)
+ewers <- search_authors("Ewers", ids = fish)
 ```
 
 
@@ -303,9 +287,11 @@ Like the `search` functions, the output is `safe_record_set` object. Note that
 you can validate multiple references at once.
 
 ```{r validate_recs, echo=TRUE}
-recs <- validate_record_ids(c('https://doi.org/10.5281/zenodo.3247631',
-                              '10.5281/zenodo.3266827',
-                              'https://zenodo.org/record/3266821'))
+recs <- validate_record_ids(c(
+  "https://doi.org/10.5281/zenodo.3247631",
+  "10.5281/zenodo.3266827",
+  "https://zenodo.org/record/3266821"
+))
 print(recs)
 ```
 
@@ -363,82 +349,103 @@ The default is to show a compact table of field names, field types and truncated
 descriptions: 
 
 ```{r show_worksheet}
-show_worksheet(1400562, 'EnvironVariables')
+show_worksheet(1400562, "EnvironVariables")
 ```
 
 There is also an extended display (`extended_fields=TRUE`) that will print out a
 list of all the available metadata for each field.
 
 ```{r show_worksheet_long, output.lines=15}
-show_worksheet(1400562, 'EnvironVariables', extended_fields=TRUE)
+show_worksheet(1400562, "EnvironVariables", extended_fields = TRUE)
 ```
 
 
 # Downloading data
 
 Once you have found records for which you want to explore the actual data, then
-you first need to download the data files for the dataset from Zenodo. This uses
-the `download_safe_files()` function and you can either give that a URL or
-number for a dataset or pass it an existing `safe_record_set`. The function will
-check which datasets are currently available and download them to the SAFE data
-directory. The default behaviour is to present a brief report on the number and
-size of available files to be downloaded before actually doing anything:
+you need to download the data files for the dataset from Zenodo to work with it.
+There are two ways to do this
+
+## Bulk loading data
+
+The `download_safe_files()` function can be used to download the data files for the
+data records in a `safe_record_set`, such as those created using
+a search. Alternatively, you can use the URL of a safedata record or simply use the
+record id for the dataset.
+
+The function will check which datasets are currently available and download them to
+the `safedata` directory. The default behaviour is to present a brief report on the 
+number and size of available files to be downloaded and ask for confirmation before
+actually doing anything. The `confirm=FALSE` argument can be used to download
+without confirmation, which can be useful in non-interactive use. The function will 
+also download the JSON metadata for the specified datasets.
 
 ```{r download_safe, eval=FALSE}
 download_safe_files(within_a)
 ## 26 files requested from 26 records
 ##  - 0 local (0 bytes)
 ##  - 4 embargoed or restricted (2.2 Mb)
-##  - 22 to download (43.6 Mb) 
-## 
+##  - 22 to download (43.6 Mb)
+##
 ## 1: Yes
 ## 2: No
-## 
+##
 ## Selection:
 ```
 
 By default, the `download_safe_files()` function downloads all of the files
-associated with the record. This will include *external* data files which may
-contain primary data that is not suited to the Excel format or additional
-information. Although many external files are likely to be readable in R,
-the`safedata` does not currently provide a mechanism to load them automatically.
-The function will also download the JSON metadata for the specified datasets.
+associated with the record. In addition to the core Excel file, this will also 
+download any *additional* data files which may contain primary data that is 
+either not suited to the Excel format or which provides additional
+information, such as PDFs. Although some additional file formats are likely to 
+be readable in R, the`safedata` package does not currently provide a mechanism 
+to load them automatically. 
 
 ```{r download_safe_external, eval=FALSE}
-download_safe_files(3697804, xlsx_only=FALSE)
+download_safe_files(3697804, xlsx_only = FALSE)
 # 2 files requested from 1 records
 #  - 1 local (11.3 Kb)
 #  - 0 embargoed or restricted (0 bytes)
-#  - 1 to download (74.1 Kb) 
-# 
+#  - 1 to download (74.1 Kb)
+#
 # 1: Yes
 # 2: No
-# 
+#
 # Selection: 1
 # 2 files for record 3697804: 1 to download
-#  - Downloaded: Sampling_area_borders.xlsx, 
-# - Downloaded: Sampling_area_borders_UTM50N_WGS84.zip
+#  - Downloaded: Sampling_area_borders.xlsx
 ```
 
 The function will warn you if the local copies of data files have been altered
 and the `refresh=TRUE` argument can be used to restore data files to the version
 of record. Note that this will **delete local changes**.
 
-# Loading data
+## Loading individual datasets
 
-The `load_safe_data()` function is used to load a named data worksheet from a
-dataset into a `safedata` object. This is just a data frame with some additional
-attribute data and it will in general behave just like any other data frame -
-the additional attributes are used for further data processing and adding brief
-metadata to the `str` and `print` methods.
+The `load_safe_data` function is used to load a named data worksheet into R.
+If the datafile containing the worksheet is not currently downloaded, then
+`load_safe_data` will automatically download the file if available. In this
+example, `confirm=FALSE` is passed onto `download_safe_files` to remove the 
+interactive confirmation before downloading.
+
+```{r load_safe_data}
+beetle_abund <- load_safe_data(1400562, "Ant-Psel", confirm = FALSE)
+```
+
+# The `safedata` object
+
+Once a worksheet is loaded, it is stored as an object of class `safedata`.
+This is just a data frame with some additional attribute data and it will in
+general behave just like any other data frame - the additional attributes are
+used for further data processing and adding brief metadata to the `str` and
+`print` methods.
 
 Some data formatting takes place based on [field
 types](https://safedata-validator.readthedocs.io/en/latest/data_format/data.html#field-types):
 categorical variables are converted to factors; dates and datetimes are
 converted to `POSIXct` and times are converted to `chron::time` objects. 
 
-```{r load_safe_data}
-beetle_abund <- load_safe_data(1400562, 'Ant-Psel')
+```{r show_safe_data}
 str(beetle_abund)
 print(beetle_abund)
 ```
@@ -466,31 +473,29 @@ dataset. Some generate simple tables of taxa:
    or using an existing loaded `safedata` object.
 
     ```{r get_taxa}
-    beetle_taxa <- get_taxa(beetle_abund)
-    str(beetle_taxa)
+beetle_taxa <- get_taxa(beetle_abund)
+str(beetle_taxa)
     ```
 
 2. `add_taxa()`: This function adds taxonomic details to an already loaded data worksheet. 
 
     ```{r add_taxa}
-    beetle_morph <- load_safe_data(1400562, 'MorphFunctTraits')
-    beetle_morph <- add_taxa(beetle_morph)
-    str(beetle_morph)
+beetle_morph <- load_safe_data(1400562, "MorphFunctTraits")
+beetle_morph <- add_taxa(beetle_morph)
+str(beetle_morph)
     ```
 
 3. The `get_taxon_coverage` function can be used to get a taxon table of all
    taxa currently referenced in _all_ datasets.
 
-     ```{r get_taxon_coverage, eval=use_remote}
-     all_taxa <- get_taxon_coverage()
-     ```{r get_taxon_coverage_out}
-     str(all_taxa)
-     ```
- 
+    ```{r get_taxon_coverage, eval=FALSE}
+all_taxa <- get_taxon_coverage()
+    ```
+
 The other functions convert taxon tables into graphs (vertices and edges) and
 phylogenetic trees using the GBIF taxonomic backbone to represent phylogeny.
 The data validation should ensure that the taxa in a dataset can be connected
-as a phylogenetic tree, but this isn't always the case. For this reason, these
+as a phylogenetic tree, but this is not always the case. For this reason, these
 functions use a more general graph conversion and then checks whether the
 result can be converted to a phlyogenetic tree. Technically, that is checking
 that the graph is a connected, simple, directed acyclic graph.
@@ -510,9 +515,9 @@ that the graph is a connected, simple, directed acyclic graph.
    in turn to go straight to a phylogeny.
 
     ```{r get_phylo}
-    library(ape)
-    beetle_phylo <- get_phylogeny(1400562)
-    plot(beetle_phylo, show.node.label=TRUE, font=1, no.margin=TRUE)
+library(ape)
+beetle_phylo <- get_phylogeny(1400562)
+plot(beetle_phylo, show.node.label = TRUE, font = 1, no.margin = TRUE)
     ```
 
 ## Dataset locations
@@ -534,8 +539,8 @@ further spatial analysis.
    **new locations**.
 
     ```{r load_gazetteer}
-    gazetteer <- load_gazetteer()
-    print(gazetteer)
+gazetteer <- load_gazetteer()
+print(gazetteer)
     ```
 
 2. `get_locations()`: This function returns an `sf` object containing the
@@ -552,23 +557,23 @@ further spatial analysis.
     known locations.
 
     ```{r get_locations}
-    library(sf)
-    beetle_locs <- get_locations(1400562)
-    print(beetle_locs)
-    fragments <- subset(gazetteer, type=='SAFE forest fragment')
-    par(mar=c(3,3,1,1))
-    plot(st_geometry(fragments), col='khaki', graticule=TRUE)
-    plot(st_geometry(beetle_locs), add=TRUE, col='red', pch=4)
+library(sf)
+beetle_locs <- get_locations(1400562)
+print(beetle_locs)
+fragments <- subset(gazetteer, type == "SAFE forest fragment")
+par(mar = c(3, 3, 1, 1))
+plot(st_geometry(fragments), col = "khaki", graticule = TRUE)
+plot(st_geometry(beetle_locs), add = TRUE, col = "red", pch = 4)
     ```
 	
 3. `add_locations()`: This functions adds location data to an already loaded
    worksheet. The result is a `safedata` object that is also an `sf` object.
 
     ```{r add_locations}
-    beetle_env <- load_safe_data(1400562, 'EnvironVariables')
-    beetle_env <- add_locations(beetle_env)
-    print(beetle_env)
-    plot(beetle_env['Cover'], key.pos=4, breaks=seq(0,100, by=5))
+beetle_env <- load_safe_data(1400562, "EnvironVariables")
+beetle_env <- add_locations(beetle_env)
+print(beetle_env)
+plot(beetle_env["Cover"], key.pos = 4, breaks = seq(0, 100, by = 5))
     ```
 
 # Inserting datasets
@@ -585,15 +590,12 @@ in the current SAFE data directory.
 
 
 ```{r insert_dataset}
-files <- system.file('safedata_example_dir', 'template_ClareWfunctiondata.xlsx', 
-                     package='safedata')
+files <- system.file("api_data", "template_ClareWfunctiondata.xlsx",
+  package = "safedata"
+)
 insert_dataset(1237719, files)
-dat <- load_safe_data(1237719, 'Data')
+dat <- load_safe_data(1237719, "Data")
 str(dat)
-```
-
-```{r unset, echo=FALSE}
-unset_example_safe_dir()
 ```
 
 # File details and accessing files
@@ -602,5 +604,14 @@ At the moment, the `safedata` package only handles loading data from the core
 Excel files. We do intend to add functions and recipes to access other files
 stored within a dataset in the future. At the moment, if you have downloaded all
 the files associated with a dataset then the `get_file_details` function allows
-you to quickly see a list of the files in a datset, whether you have downloaded
+you to quickly see a list of the files in a dataset, whether you have downloaded
 a local copy and the absolute file path of those files.
+
+```{r get_file_details, echo=FALSE}
+get_file_details(1237719)
+```
+
+```{r unset, echo=FALSE}
+# Turn off URL mocking
+safedata:::mock_api(on = TRUE)
+```
