@@ -2,9 +2,16 @@
 % Please edit documentation in R/index.R
 \name{set_safedata_dir}
 \alias{set_safedata_dir}
+\alias{create_safedata_dir}
 \title{Set or create a safedata directory}
 \usage{
 set_safedata_dir(safedir, update = TRUE)
+
+create_safedata_dir(
+  safedir,
+  url = "https://www.safeproject.net",
+  use_zenodo_sandbox = FALSE
+)
 }
 \arguments{
 \item{safedir}{A path to the directory to use as the safedata
@@ -27,6 +34,11 @@ is a strongly structured directory used to store safedata datasets,
 along with record and index metadata. It is not intended to be
 modified by users.
 }
+\section{Functions}{
+\itemize{
+\item \code{create_safedata_dir}: Create a new safedata directory
+}}
+
 \section{The safedata directory structure}{
 
 

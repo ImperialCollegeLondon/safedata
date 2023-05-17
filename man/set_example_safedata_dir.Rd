@@ -6,6 +6,9 @@
 \usage{
 set_example_safedata_dir(on = TRUE)
 }
+\arguments{
+\item{on}{Turn the use of the example data directory on or off.}
+}
 \value{
 The set_example_safedata_dir function returns the path of the
    example directory invisibly (on = TRUE) or the path of any restored
