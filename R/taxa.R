@@ -47,9 +47,9 @@ get_taxa <- function(obj) {
     #' @return A taxonomy table of classes "safe_taxa" and "data.frame".
     #' @seealso \code{\link{add_taxa}}
     #' @examples
-    #'     set_example_safe_dir()
+    #'     set_example_safedata_dir()
     #'     taxa <- get_taxa(1400562)
-    #'     unset_example_safe_dir()
+    #'     set_example_safedata_dir(on=FALSE)
     #' @export
 
     if (inherits(obj, "safedata")) {
@@ -268,10 +268,10 @@ add_taxa <- function(obj, taxon_field = NULL, taxon_table = NULL,
     #' @return A modified \code{safedata} object with added taxonomic columns.
     #' @seealso \code{\link{get_taxa}}
     #' @examples
-    #'    set_example_safe_dir()
+    #'    set_example_safedata_dir()
     #'    beetle_morph <- load_safe_data(1400562, "MorphFunctTraits")
     #'    beetle_morph <- add_taxa(beetle_morph)
-    #'    unset_example_safe_dir()
+    #'    set_example_safedata_dir(on=FALSE)
     #' @export
 
     if (!inherits(obj, "safedata")) {
@@ -369,7 +369,7 @@ get_taxon_graph <- function(record, which = c("gbif", "ncbi")) {
     #' status (see \code{names(vertex_attr(obj))}).
     #'
     #' @examples
-    #'    set_example_safe_dir()
+    #'    set_example_safedata_dir()
     #'    beetle_graph <- get_taxon_graph(1400562)
     #'    plot(beetle_graph, vertex.label.cex = 0.6, vertex.size = 15,
     #'         vertex.size2 = 3, vertex.shape = "rectangle")
@@ -382,7 +382,7 @@ get_taxon_graph <- function(record, which = c("gbif", "ncbi")) {
     #'    plot(beetle_graph, vertex.label.cex = 0.6, vertex.size = 15,
     #'         vertex.size2 = 3, vertex.shape = "rectangle",
     #'         vertex.label = labels, vertex.color= vert_col)
-    #'    unset_example_safe_dir()
+    #'    set_example_safedata_dir(on=FALSE)
     #' @param which Return the GBIF or NCBI taxon graph
     #' @param record A single dataset record id
     #' @return An \code{\link[igraph:make_graph]{graph}} object.
@@ -524,14 +524,14 @@ igraph_to_phylo <- function(g, labels = "taxon_name") {
     #'    \code{\link{get_taxon_graph}} to use as node labels.
     #' @seealso \code{\link{get_taxon_graph}}
     #' @examples
-    #'    set_example_safe_dir()
+    #'    set_example_safedata_dir()
     #'    beetle_graph <- get_taxon_graph(1400562)
     #'    beetle_phylo <- igraph_to_phylo(beetle_graph)
     #'    ape::plot.phylo(beetle_phylo, show.node.label = TRUE)
     #'    # Or wrapped into a single function
     #'    beetle_phylo <- get_phylogeny(1400562)
     #'    ape::plot.phylo(beetle_phylo, show.node.label = TRUE)
-    #'    unset_example_safe_dir()
+    #'    set_example_safedata_dir(on=FALSE)
     #' @param g A taxon graph returned by \code{\link{get_taxon_graph}}
     #' @param record A single dataset record id
     #' @return An \code{\link[ape:read.tree]{phylo}} object.
