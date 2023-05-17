@@ -52,6 +52,38 @@ mock_api_urls <- list(
     "http://example.safedata.server/api/record/1237719" = list(
         content = "1198840/1237719/1237719.json",
         status_code = 200L
+    ),
+    "http://example.safedata.server/api/search/text?text=soil" = list(
+        content = "text_text_soil.json",
+        status_code = 200L
+    ),
+    "http://example.safedata.server/api/search/taxa?name=Formicidae" = list(
+        content = "taxa_name_Formicidae.json",
+        status_code = 200L
+    ),
+    "http://example.safedata.server/api/search/taxa?gbif_id=4342" = list(
+        content = "taxa_gbif_id_4342.json",
+        status_code = 200L
+    ),
+    "http://example.safedata.server/api/search/spatial?location=BL_A" = list(
+        content = "spatial_location_BL_A.json",
+        status_code = 200L
+    ),
+    "http://example.safedata.server/api/search/spatial?wkt=POINT(116.97394%204.73481)&distance=2000" = list(
+        content = "spatial_wkt_point_distance_2000.json",
+        status_code = 200L
+    ),
+    "http://example.safedata.server/api/search/taxa?name=Actinopterygii" = list(
+        content = "taxa_name_Actinopterygii.json",
+        status_code = 200L
+    ),
+    "http://example.safedata.server/api/search/taxa?name=Odonata" = list(
+        content = "taxa_name_Odonata.json",
+        status_code = 200L
+    ),
+    "http://example.safedata.server/api/search/authors?name=Ewers" = list(
+        content = "authors_name_Ewers.json",
+        status_code = 200L
     )
 )
 
