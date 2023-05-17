@@ -1,4 +1,4 @@
-load_safe_data <- function(record_id, worksheet) {
+load_safe_data <- function(record_id, worksheet, ...) {
     #' Loads data from a SAFE dataset.
     #'
     #' This function returns a data frame containing the data from a data
@@ -22,7 +22,10 @@ load_safe_data <- function(record_id, worksheet) {
     #' @param worksheet The name of the worksheet to load
     #' @param x,object A \code{safedata} object.
     #' @param n The number of rows to show in the \code{print} method.
-    #' @param \dots Further arguments to \code{str} and \code{print} methods.
+    #' @param \dots For \code{load_safe_data}, these are additional arguments
+    #'    passed on to \link{\code{download_safe_files}} if the data file needs
+    #'    to be downloaded. Otherwise, these are further arguments to the
+    #'    \code{str} and \code{print} methods.
     #' @return A data frame with the additional \code{safedata} class and
     #'    additional attribute data containing metadata for the data.
     #' @examples
@@ -102,7 +105,7 @@ load_safe_data <- function(record_id, worksheet) {
     # Download the data if needed
     if (!index_row$local_copy) {
         verbose_message("Downloading datafile: ", index_row$filename)
-        downloaded <- download_safe_files(index_row$zenodo_record_id)
+        downloaded <- download_safe_files(index_row$zenodo_record_id, ...)
         if (!length(downloaded)) {
             stop("Data file unavailable")
         }
