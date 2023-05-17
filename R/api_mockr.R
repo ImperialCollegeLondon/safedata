@@ -126,7 +126,7 @@ mock_api <- function(on = TRUE) {
     #'
     #' The \code{api_mock} function turns the HTTR mocking on and off, by
     #' adding the \code{mock_handler} callback handler via
-    #' \code{\link{httr:set_callback}}.
+    #' \code{\link{[httr:set_callback]{set_callback}}}.
     #' This handler is very basic and it would be more robust to use something
     #' like the \pkg{webmockr} package, but at present that does not support
     #' creating local files from responses, which is needed for mocking

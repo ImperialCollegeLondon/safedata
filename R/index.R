@@ -222,7 +222,7 @@ set_safedata_dir <- function(safedir, update = TRUE) {
 create_safedata_dir <- function(safedir,
                                 url = "https://www.safeproject.net",
                                 use_zenodo_sandbox = FALSE) {
-    #' @describeIn set_safe_dir Create a new safedata directory
+    #' @describeIn set_safedata_dir Create a new safedata directory
     #' @export
 
     # Clear any cached data in the safedata environment
@@ -643,6 +643,7 @@ set_example_safedata_dir <- function(on = TRUE) {
     #' The argument \code{on=FALSE} can be used to restore any existing data
     #' directory set by the user.
     #'
+    #' @param on Turn the use of the example data directory on or off.
     #' @seealso \code{\link{set_safedata_dir}}
     #' @return The set_example_safedata_dir function returns the path of the
     #'    example directory invisibly (on = TRUE) or the path of any restored
