@@ -50,7 +50,7 @@ different taxon fields.
 
 By default, the taxonomy data added to the table will use the original
 taxon name used in the dataset, even if that usage is considered a
-synonym or is merged in GBIF or NCBI (see \link{\code{get_taxa}}).
+synonym or is merged in GBIF or NCBI (see \code{\link{get_taxa}}).
 The \code{use_canon} option can be set to TRUE to instead show the
 canonical taxon name used in the taxonomy database for synonomous or
 merged taxa.
