@@ -635,7 +635,7 @@ set_example_safedata_dir <- function(on = TRUE) {
     #'
     #' The documentation of \code{safedata} includes code examples that require
     #' a real data directory but package code must not write within the package
-    #' structure. The \code{set_example_safe_dir} function is used in code
+    #' structure. The \code{set_example_safedata_dir} function is used in code
     #' examples to create a safedata directory using local resources in a
     #' temporary directory. This example directory should only be created
     #' once per session.
@@ -651,7 +651,7 @@ set_example_safedata_dir <- function(on = TRUE) {
 
     if (!on) {
         # Turn off mocking
-        safedata:::mock_api(on = FALSE)
+        mock_api(on = FALSE)
         # retrieve the user directory and if it isn't null restore it
         udir <- getOption("safedata.user.dir")
         if (!is.null(udir)) {
@@ -672,7 +672,7 @@ set_example_safedata_dir <- function(on = TRUE) {
     demo_dir <- file.path(tdir, "safedata_example_dir")
 
     # Turn on URL mocking
-    safedata:::mock_api(on = TRUE)
+    mock_api(on = TRUE)
 
     # Check for existing session example dir and create if missing.
     if (!dir.exists(demo_dir)) {
