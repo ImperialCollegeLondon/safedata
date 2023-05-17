@@ -91,9 +91,21 @@ mock_api_urls <- list(
     "http://example.safedata.server/api/search/authors?name=Ewers&ids=1237719&ids=4072959&ids=3982665&ids=1478526&ids=3926374&ids=3974971&ids=6368114&ids=5820902&ids=5710509&ids=6477764" = list(
         content = "authors_ewers_within_ids.json",
         status_code = 200L
+    ),
+    # Testing URLs
+    "http://example.safedata.server/api/record/1198475" = list(
+        content = "1400562.json",
+        status_code = 200L
+    ),
+    "http://example.safedata.server/api/record/1237733" = list(
+        content = "1237733.json",
+        status_code = 200L
+    ),
+    "http://example.safedata.server/api/record/1237731" = list(
+        content = "1237731.json",
+        status_code = 200L
     )
 )
-
 
 
 mock_handler <- function(req) {

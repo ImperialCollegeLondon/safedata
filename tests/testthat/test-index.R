@@ -1,5 +1,4 @@
 context("Test that set_safe_dir fail gracefully")
-library(safedata)
 
 test_that("no internet fails gracefully on create", {
     Sys.setenv(NETWORK_DOWN = TRUE)
