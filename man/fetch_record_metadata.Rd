@@ -39,13 +39,13 @@ a record
 \examples{
    \donttest{
      \dontshow{
-       set_example_safe_dir()
+       set_example_safedata_dir()
      }
      rec <- validate_record_ids(1400562)
      safedata:::fetch_record_metadata(rec)
      metadata <- safedata:::load_record_metadata(rec)
      \dontshow{
-       unset_example_safe_dir()
+       set_example_safedata_dir(on=FALSE)
      }
    }
 }

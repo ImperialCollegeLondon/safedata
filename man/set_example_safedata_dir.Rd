@@ -14,7 +14,7 @@ The set_example_safedata_dir function returns the path of the
 \description{
 The documentation of \code{safedata} includes code examples that require
 a real data directory but package code must not write within the package
-structure. The \code{set_example_safe_dir} function is used in code
+structure. The \code{set_example_safedata_dir} function is used in code
 examples to create a safedata directory using local resources in a
 temporary directory. This example directory should only be created
 once per session.

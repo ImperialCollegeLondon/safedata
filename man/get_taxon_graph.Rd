@@ -27,7 +27,7 @@ contain the worksheet name, validated taxon name, taxon rank and taxon
 status (see \code{names(vertex_attr(obj))}).
 }
 \examples{
-   set_example_safe_dir()
+   set_example_safedata_dir()
    beetle_graph <- get_taxon_graph(1400562)
    plot(beetle_graph, vertex.label.cex = 0.6, vertex.size = 15,
         vertex.size2 = 3, vertex.shape = "rectangle")
@@ -40,5 +40,5 @@ status (see \code{names(vertex_attr(obj))}).
    plot(beetle_graph, vertex.label.cex = 0.6, vertex.size = 15,
         vertex.size2 = 3, vertex.shape = "rectangle",
         vertex.label = labels, vertex.color= vert_col)
-   unset_example_safe_dir()
+   set_example_safedata_dir(on=FALSE)
 }

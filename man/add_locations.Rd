@@ -35,10 +35,10 @@ field, it will be used automatically; otherwise, the specific field must
 be provided.
 }
 \examples{
-   set_example_safe_dir()
+   set_example_safedata_dir()
    beetle_abund <- load_safe_data(1400562, "Ant-Psel")
    beetle_abund <- add_locations(beetle_abund)
-   unset_example_safe_dir()
+   set_example_safedata_dir(on=FALSE)
 }
 \seealso{
 \code{\link{get_locations}}, \code{\link{load_gazetteer}},
