@@ -11,9 +11,10 @@
 # Summary of when connection is required and appropriate action:
 #
 # index.R
-# - set_safe_dir(create = TRUE): cannot create new dir without network
-# - set_safe_dir(update = TRUE): cannot update indices - 'offline' mode but done
-#   atomically so that the index files are always left in new or old config.
+# - create_safedata_dir(): cannot create new dir without network
+# - set_safedata_dir(update = TRUE): cannot update indices - 'offline' mode
+#   but done atomically so that the index files are always left in new or
+#   old config.
 #
 #   These are accessing the index, gazetter, location aliases and file hashes
 #   APIs, and we cannot assume that a single check within set_safe_dir is

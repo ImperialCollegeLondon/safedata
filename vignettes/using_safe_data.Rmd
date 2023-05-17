@@ -118,7 +118,7 @@ getOption("safedata.dir")
 Once you have a SAFE data directory, the `set_safedata_dir` function is used to tell the
 `safedata` package where to look for index and data files:
 
-```{r set_safe_dir}
+```{r set_safedata_dir}
 set_safedata_dir("my_safe_directory")
 ```
 
@@ -531,7 +531,7 @@ further spatial analysis.
 
 
 1. `load_gazetteer()`: The gazetteer is one of the three key index files saved
-   in the SAFE data directory and updated when `set_safe_dir()` is run. It
+   in the SAFE data directory and updated when `set_safedata_dir()` is run. It
    includes sampling locations drawn from across a wide range of projects
    running at SAFE and is intended to hold all locations that are likely to see
    repeated sampling. Locations included the gazetteer can be used directly as
