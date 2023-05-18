@@ -104,6 +104,10 @@ mock_api_urls <- list(
     "http://example.safedata.server/api/record/1237731" = list(
         content = "1237731.json",
         status_code = 200L
+    ),
+    "http://example.safedata.server/api/taxa" = list(
+        content = "taxa.json",
+        status_code = 200L
     )
 )
 
