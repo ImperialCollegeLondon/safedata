@@ -24,8 +24,8 @@ adding the \code{mock_handler} callback handler via
 \code{\link[httr:set_callback]{set_callback}}.
 This handler is very basic and it would be more robust to use something
 like the \pkg{webmockr} package, but at present that does not support
-creating local files from responses, which is needed for mocking
-responses while building an example safedata directory.
+binary mocked files and also (less importantly) loads the content of
+responses into its registry rather than on request.
 }
 \section{Functions}{
 \itemize{
