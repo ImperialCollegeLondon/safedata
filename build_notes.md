@@ -137,6 +137,21 @@ CMD CHECK` during Github Actions but can also be run locally using:
 Rscript -e "devtools::test()"
 ```
 
+## Web mocking
+
+The `safedata` package uses the internet extensively for downloading package data and
+metadata. This includes code used in function examples, vignettes and in the test suite.
+The private function `safedata:::mock_api()` is used in all of these situations to turn
+off connections to the actual internet and instead serve up content from the
+`inst/api_data` folder. This ensures that testing and documentation building is not
+reliant on internet connections. If you add new code to the project that requests
+content from the internet, you will need to extend the set of mocked URLS in the
+`mock_api_urls` list in `R/api_mockr.R` and include links to the expected content from
+those links.
+
+At some point, this needs to be made optional, to allow package build to also be tested
+against live content.
+
 ## Linting
 
 The linting process inspects the R code files in the package to check they have a
