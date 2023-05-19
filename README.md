@@ -23,5 +23,5 @@ In particular, the following links provide:
 The package repository structure and build processes are described [here](https://imperialcollegelondon.github.io/safedata/build_notes.html)
 
 <!-- badges: start -->
-[![Travis build status](https://travis-ci.org/ImperialCollegeLondon/safedata.svg?branch=master)](https://travis-ci.org/ImperialCollegeLondon/safedata)
+[![R-CMD-check](https://github.com/ImperialCollegeLondon/safedata/actions/workflows/check-standard.yaml/badge.svg?branch=develop)](https://github.com/ImperialCollegeLondon/safedata/actions/workflows/check-standard.yaml)
 <!-- badges: end -->

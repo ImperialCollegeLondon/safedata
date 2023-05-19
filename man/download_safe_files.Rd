@@ -59,10 +59,12 @@ files} and replace them with the versions of record from Zenodo.
 
 \examples{
    \donttest{
-       set_example_safe_dir()
+       set_example_safedata_dir()
+       # Validate records to download
        recs <- validate_record_ids(c(3247631, 3266827, 3266821))
+       print(recs)
        download_safe_files(recs, confirm = FALSE)
-       unset_example_safe_dir()
+       set_example_safedata_dir(on = FALSE)
    }
    \dontrun{
        # This example requires a private token

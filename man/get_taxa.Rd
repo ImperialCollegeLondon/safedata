@@ -60,9 +60,9 @@ it may well have substantially different ranks.
 }
 
 \examples{
-    set_example_safe_dir()
+    set_example_safedata_dir()
     taxa <- get_taxa(1400562)
-    unset_example_safe_dir()
+    set_example_safedata_dir(on=FALSE)
 }
 \seealso{
 \code{\link{add_taxa}}

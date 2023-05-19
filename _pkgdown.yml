@@ -8,10 +8,10 @@ reference:
     used to generate the local index, validate record ids against the index and to download data.
   contents:
   - safedata
-  - set_safe_dir
+  - set_safedata_dir
   - validate_record_ids
   - download_safe_files
-  - set_example_safe_dir
+  - set_example_safedata_dir
 - title: Data discovery
   desc: These functions provide an interface to the dataset metadata search API provided by the SAFE Project website
   contents:
@@ -60,5 +60,7 @@ reference:
   - taxon_index_to_taxon_table
   - try_to_download
   - safedata_network
+  - mock_api
+  - mock_api_urls
 
 

@@ -47,14 +47,14 @@ The function \code{get_phylogeny} is simply a wrapper that calls
 }}
 
 \examples{
-   set_example_safe_dir()
+   set_example_safedata_dir()
    beetle_graph <- get_taxon_graph(1400562)
    beetle_phylo <- igraph_to_phylo(beetle_graph)
    ape::plot.phylo(beetle_phylo, show.node.label = TRUE)
    # Or wrapped into a single function
    beetle_phylo <- get_phylogeny(1400562)
    ape::plot.phylo(beetle_phylo, show.node.label = TRUE)
-   unset_example_safe_dir()
+   set_example_safedata_dir(on=FALSE)
 }
 \seealso{
 \code{\link{get_taxon_graph}}
