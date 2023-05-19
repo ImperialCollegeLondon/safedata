@@ -50,3 +50,7 @@ jobs:
           extra-packages: rcmdcheck
 
       - uses: r-lib/actions/check-r-package@v2
+
+      - name: Build docs
+        run: |
+          Rscript -e 'pkgdown::build_site()'

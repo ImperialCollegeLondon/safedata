@@ -99,8 +99,11 @@ safedata directory. You will need the URL of the server that holds the dataset
 metadata for your data community.
 
 ```{r create_new_dir}
+# Create a temporary location for use in the vignette
+safe_dir_path <- file.path(tempdir(), "my_safe_directory")
+# Create a new safedata directory
 create_safedata_dir(
-  "my_safe_directory",
+  safe_dir_path,
   url = "http://example.safedata.server"
 )
 ```
@@ -119,7 +122,7 @@ Once you have a SAFE data directory, the `set_safedata_dir` function is used to 
 `safedata` package where to look for index and data files:
 
 ```{r set_safedata_dir}
-set_safedata_dir("my_safe_directory")
+set_safedata_dir(safe_dir_path)
 ```
 
 You will see that this function checks with the metadata server for updates
@@ -473,23 +476,23 @@ dataset. Some generate simple tables of taxa:
    or using an existing loaded `safedata` object.
 
     ```{r get_taxa}
-beetle_taxa <- get_taxa(beetle_abund)
-str(beetle_taxa)
+    beetle_taxa <- get_taxa(beetle_abund)
+    str(beetle_taxa)
     ```
 
 2. `add_taxa()`: This function adds taxonomic details to an already loaded data worksheet. 
 
     ```{r add_taxa}
-beetle_morph <- load_safe_data(1400562, "MorphFunctTraits")
-beetle_morph <- add_taxa(beetle_morph)
-str(beetle_morph)
+    beetle_morph <- load_safe_data(1400562, "MorphFunctTraits")
+    beetle_morph <- add_taxa(beetle_morph)
+    str(beetle_morph)
     ```
 
 3. The `get_taxon_coverage` function can be used to get a taxon table of all
    taxa currently referenced in _all_ datasets.
 
     ```{r get_taxon_coverage, eval=FALSE}
-all_taxa <- get_taxon_coverage()
+    all_taxa <- get_taxon_coverage()
     ```
 
 The other functions convert taxon tables into graphs (vertices and edges) and
@@ -515,9 +518,9 @@ that the graph is a connected, simple, directed acyclic graph.
    in turn to go straight to a phylogeny.
 
     ```{r get_phylo}
-library(ape)
-beetle_phylo <- get_phylogeny(1400562)
-plot(beetle_phylo, show.node.label = TRUE, font = 1, no.margin = TRUE)
+    library(ape)
+    beetle_phylo <- get_phylogeny(1400562)
+    plot(beetle_phylo, show.node.label = TRUE, font = 1, no.margin = TRUE)
     ```
 
 ## Dataset locations
@@ -539,8 +542,8 @@ further spatial analysis.
    **new locations**.
 
     ```{r load_gazetteer}
-gazetteer <- load_gazetteer()
-print(gazetteer)
+    gazetteer <- load_gazetteer()
+    print(gazetteer)
     ```
 
 2. `get_locations()`: This function returns an `sf` object containing the
@@ -557,23 +560,23 @@ print(gazetteer)
     known locations.
 
     ```{r get_locations}
-library(sf)
-beetle_locs <- get_locations(1400562)
-print(beetle_locs)
-fragments <- subset(gazetteer, type == "SAFE forest fragment")
-par(mar = c(3, 3, 1, 1))
-plot(st_geometry(fragments), col = "khaki", graticule = TRUE)
-plot(st_geometry(beetle_locs), add = TRUE, col = "red", pch = 4)
+    library(sf)
+    beetle_locs <- get_locations(1400562)
+    print(beetle_locs)
+    fragments <- subset(gazetteer, type == "SAFE forest fragment")
+    par(mar = c(3, 3, 1, 1))
+    plot(st_geometry(fragments), col = "khaki", graticule = TRUE)
+    plot(st_geometry(beetle_locs), add = TRUE, col = "red", pch = 4)
     ```
 	
 3. `add_locations()`: This functions adds location data to an already loaded
    worksheet. The result is a `safedata` object that is also an `sf` object.
 
     ```{r add_locations}
-beetle_env <- load_safe_data(1400562, "EnvironVariables")
-beetle_env <- add_locations(beetle_env)
-print(beetle_env)
-plot(beetle_env["Cover"], key.pos = 4, breaks = seq(0, 100, by = 5))
+    beetle_env <- load_safe_data(1400562, "EnvironVariables")
+    beetle_env <- add_locations(beetle_env)
+    print(beetle_env)
+    plot(beetle_env["Cover"], key.pos = 4, breaks = seq(0, 100, by = 5))
     ```
 
 # Inserting datasets
@@ -612,6 +615,7 @@ get_file_details(1237719)
 ```
 
 ```{r unset, echo=FALSE}
-# Turn off URL mocking
+# Turn off URL mocking and tidy up
 safedata:::mock_api(on = TRUE)
+unlink(safe_dir_path, recursive = TRUE)
 ```

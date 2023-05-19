@@ -8,3 +8,4 @@ build_notes.md
 lint.txt
 .lintr
 ^\.github$
+^doc$
