@@ -11,7 +11,7 @@
 mock_api_urls <- list(
     # Main index files
     "http://example.safedata.server/api/metadata_index.json" = list(
-        content = "index.json",
+        content = "index_new.json",
         status_code = 200L
     ),
     "http://example.safedata.server/api/gazetteer.json" = list(
@@ -108,6 +108,14 @@ mock_api_urls <- list(
     "http://example.safedata.server/api/taxa" = list(
         content = "taxa.json",
         status_code = 200L
+    ),
+    "https://httpbin.org/status/404" = list(
+        content = NULL,
+        status_code = 404L
+    ),
+    "https://httpbin.org/json" = list(
+        content = "httpbin_json.json",
+        status_code = 200L
     )
 )
 
@@ -135,6 +143,10 @@ mock_handler <- function(req) {
         #   output$path element, so copy to the path
         # - Otherwise replace the null content in the response body.
         if (!is.null(req$output$path)) {
+            if (!dir.exists(dirname(req$output$path))) {
+                # Mimic R_curl_fetch_disk.c failure
+                stop("Failed to open file ", req$output$path)
+            }
             file.copy(response_file, req$output$path)
             content <- httr:::path(response_file)
         } else {
@@ -184,8 +196,8 @@ mock_api <- function(on = TRUE) {
     #' \code{\link[httr:set_callback]{set_callback}}.
     #' This handler is very basic and it would be more robust to use something
     #' like the \pkg{webmockr} package, but at present that does not support
-    #' creating local files from responses, which is needed for mocking
-    #' responses while building an example safedata directory.
+    #' binary mocked files and also (less importantly) loads the content of
+    #' responses into its registry rather than on request.
     #'
     #' @keywords internal
 

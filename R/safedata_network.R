@@ -121,12 +121,14 @@ try_to_download <- function(url, local_path = NULL, timeout = 10) {
     # If a local path is provided, convert to an httr::write_disk request
     # object, otherwise it stays as NULL and the request is not modified
     if (!is.null(local_path)) {
-        local_path <- httr::write_disk(local_path)
+        output_as <- httr::write_disk(path = local_path)
+    } else {
+        output_as <- httr::write_memory()
     }
 
     # Try and download the URL
     response <- tryCatch(
-        httr::GET(url = url, local_path, httr::timeout(timeout)),
+        httr::GET(url = url, output_as, httr::timeout(timeout)),
         error = function(e) conditionMessage(e),
         warning = function(w) conditionMessage(w)
     )
