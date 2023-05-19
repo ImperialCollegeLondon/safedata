@@ -23,5 +23,9 @@ In particular, the following links provide:
 The package repository structure and build processes are described [here](https://imperialcollegelondon.github.io/safedata/build_notes.html)
 
 <!-- badges: start -->
+<<<<<<< HEAD
 [![R-CMD-check](https://github.com/ImperialCollegeLondon/safedata/actions/workflows/check-standard.yaml/badge.svg?branch=master)](https://github.com/ImperialCollegeLondon/safedata/actions/workflows/check-standard.yaml)
+=======
+[![R-CMD-check](https://github.com/ImperialCollegeLondon/safedata/actions/workflows/check-standard.yaml/badge.svg?branch=develop)](https://github.com/ImperialCollegeLondon/safedata/actions/workflows/check-standard.yaml)
+>>>>>>> 6bcd6446f02adb304c2bfc28e7c40b92b139d4ad
 <!-- badges: end -->

@@ -5,12 +5,15 @@
 \alias{get_phylogeny}
 \title{Getting a phylogeny for a dataset}
 \usage{
-igraph_to_phylo(g)
+igraph_to_phylo(g, labels = "taxon_name")
 
-get_phylogeny(record)
+get_phylogeny(record, labels = "taxon_name")
 }
 \arguments{
 \item{g}{A taxon graph returned by \code{\link{get_taxon_graph}}}
+
+\item{labels}{The name of a vertex attribute from
+\code{\link{get_taxon_graph}} to use as node labels.}
 
 \item{record}{A single dataset record id}
 }
@@ -44,14 +47,14 @@ The function \code{get_phylogeny} is simply a wrapper that calls
 }}
 
 \examples{
-   set_example_safe_dir()
+   set_example_safedata_dir()
    beetle_graph <- get_taxon_graph(1400562)
    beetle_phylo <- igraph_to_phylo(beetle_graph)
    ape::plot.phylo(beetle_phylo, show.node.label = TRUE)
    # Or wrapped into a single function
    beetle_phylo <- get_phylogeny(1400562)
    ape::plot.phylo(beetle_phylo, show.node.label = TRUE)
-   unset_example_safe_dir()
+   set_example_safedata_dir(on=FALSE)
 }
 \seealso{
 \code{\link{get_taxon_graph}}

@@ -66,7 +66,7 @@ dataset concept.
 }}
 
 \examples{
-   set_example_safe_dir()
+   set_example_safedata_dir()
    recs <- validate_record_ids(c(1400562, 3266827, 3266821))
    show_concepts(recs)
    show_record(recs[1,])
@@ -74,5 +74,5 @@ dataset concept.
    show_worksheet(1400562, "EnvironVariables")
    beetle_abund <- load_safe_data(1400562, "Ant-Psel")
    show_worksheet(beetle_abund, extended_fields = TRUE)
-   unset_example_safe_dir()
+   set_example_safedata_dir(on=FALSE)
 }

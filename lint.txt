@@ -1,36 +1,93 @@
-R/load_safe.R:1:1: style: functions should have cyclomatic complexity of less than 15, this has 22.
-load_safe_data <- function(record_id, worksheet) {
+[1mR/api_mockr.R:34:1: [22m[34mstyle: [39m[1mLines should not be more than 80 characters.[22m
+    "https://www.zenodo.org/record/1400562/files/Psomas_Ant_Pselaphine_SAFE_dataset.xlsx" = list(
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[1mR/api_mockr.R:42:1: [22m[34mstyle: [39m[1mLines should not be more than 80 characters.[22m
+    "https://www.zenodo.org/record/3247631/files/Both_tree_functional_traits.xlsx" = list(
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[1mR/api_mockr.R:75:1: [22m[34mstyle: [39m[1mLines should not be more than 80 characters.[22m
+    "http://example.safedata.server/api/search/spatial?wkt=POINT(116.97394%204.73481)&distance=2000" = list(
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[1mR/api_mockr.R:91:1: [22m[34mstyle: [39m[1mLines should not be more than 80 characters.[22m
+    "http://example.safedata.server/api/search/authors?name=Ewers&ids=1237719&ids=4072959&ids=3982665&ids=1478526&ids=3926374&ids=3974971&ids=6368114&ids=5820902&ids=5710509&ids=6477764" = list(
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[1mR/index.R:14:1: [22m[34mstyle: [39m[1mfunctions should have cyclomatic complexity of less than 15, this has 24.[22m
+set_safedata_dir <- function(safedir, update = TRUE) {
 ^
-R/load_safe.R:155:1: style: Lines should not be more than 80 characters.
-    if (! identical(make.names(fields$field_name, unique = TRUE), names(data))) {
-^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-R/load_safe.R:256:1: style: Lines should not be more than 80 characters.
+[1mR/load_safe.R:1:1: [22m[34mstyle: [39m[1mfunctions should have cyclomatic complexity of less than 15, this has 22.[22m
+load_safe_data <- function(record_id, worksheet, ...) {
+^
+[1mR/load_safe.R:281:1: [22m[34mstyle: [39m[1mLines should not be more than 80 characters.[22m
 # https://zenodo.org/api/files/2edc1bf2-e84e-40be-882d-08ce476c3bcb/SAFE_Gazetteer_metadata_v3.xlsx
 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-R/load_safe.R:297:1: style: functions should have cyclomatic complexity of less than 15, this has 30.
+[1mR/load_safe.R:322:1: [22m[34mstyle: [39m[1mfunctions should have cyclomatic complexity of less than 15, this has 38.[22m
 download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
 ^
-R/load_safe.R:426:1: style: Lines should not be more than 80 characters.
-        if (! is.null(token) & all(these_files$dataset_access == "restricted")) {
+[1mR/load_safe.R:446:1: [22m[34mstyle: [39m[1mLines should not be more than 80 characters.[22m
+    # download metadata if requested - bail if metadata requested and unavailable
 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-R/load_safe.R:443:1: style: Lines should not be more than 80 characters.
-            these_files$public_url <- sprintf("https://www.zenodo.org/record/%s/files/%s",
-^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-R/load_safe.R:449:1: style: Lines should not be more than 80 characters.
-                these_files$public_url <- paste0(these_files$public_url, "?token=", token)
-^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-R/load_safe.R:584:41: warning: no visible binding for global variable ‘local_path’
-            with(local_files, file.copy(local_path, current_safe_dir_path))
-                                        ^~~~~~~~~~
-R/metadata.R:197:1: style: Variable and function name style should be snake_case.
+[1mR/load_safe.R:464:1: [22m[34mstyle: [39m[1mLines should not be more than 80 characters.[22m
+        if (!is.null(token) && all(these_files$dataset_access == "restricted")) {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[1mR/load_safe.R:516:1: [22m[34mstyle: [39m[1mLines should not be more than 80 characters.[22m
+                # Download the target file to the directory - report failures but
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[1mR/metadata.R:214:1: [22m[34mstyle: [39m[1mVariable and function name style should be snake_case.[22m
 "&.safe_record_set" <- function(x, y) {
 ^~~~~~~~~~~~~~~~~~~
-R/search_safe.R:260:5: warning: local variable ‘safedir’ assigned but may not be used
+[1mR/safedata_network.R:7:1: [22m[34mstyle: [39m[1mLines should not be more than 80 characters.[22m
+# https://community.rstudio.com/t/internet-resources-should-fail-gracefully/49199/4
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[1mR/safedata_network.R:73:1: [22m[34mstyle: [39m[1mfunctions should have cyclomatic complexity of less than 15, this has 26.[22m
+try_to_download <- function(url, local_path = NULL, timeout = 10) {
+^
+[1mR/search_safe.R:260:5: [22m[35mwarning: [39m[1mlocal variable ‘safedir’ assigned but may not be used[22m
     safedir <- get_data_dir()
     ^~~~~~~
-R/taxa.R:99:1: style: functions should have cyclomatic complexity of less than 15, this has 17.
-taxon_index_to_taxon_table <- function(taxa) {
-^
-R/taxa.R:237:1: style: functions should have cyclomatic complexity of less than 15, this has 18.
+[1mR/search_safe.R:306:44: [22m[34mstyle: [39m[1mOnly use double-quotes.[22m
+        recids <-  sapply(content$entries, '[[', 'zenodo_record_id')
+                                           ^~~~
+[1mR/search_safe.R:306:50: [22m[34mstyle: [39m[1mOnly use double-quotes.[22m
+        recids <-  sapply(content$entries, '[[', 'zenodo_record_id')
+                                                 ^~~~~~~~~~~~~~~~~~
+[1mR/taxa.R:44:1: [22m[34mstyle: [39m[1mLines should not be more than 80 characters.[22m
+    #' \url{https://safedata-validator.readthedocs.io/en/latest/data_format/taxa.html}
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[1mR/taxa.R:232:1: [22m[34mstyle: [39m[1mfunctions should have cyclomatic complexity of less than 15, this has 18.[22m
 add_taxa <- function(obj, taxon_field = NULL, taxon_table = NULL,
 ^
+[1mtests/testthat/setup.R:35:9: [22m[35mwarning: [39m[1mno visible global function definition for ‘skip’[22m
+        skip("No internet - skipping test")
+        ^~~~
+[1mtests/testthat/test-index.R:81:1: [22m[34mstyle: [39m[1mLines should not be more than 80 characters.[22m
+test_that("Specific resource unavailable fails gracefully on update - atomic update.", {
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[1mtests/testthat/test-safedata_network.R:18:7: [22m[34mstyle: [39m[1mCommented code should be removed.[22m
+#     local_sdd <- local_create_sdd()
+      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[1mtests/testthat/test-safedata_network.R:19:7: [22m[34mstyle: [39m[1mCommented code should be removed.[22m
+#     skip_if_no_internet()
+      ^~~~~~~~~~~~~~~~~~~~~
+[1mtests/testthat/test-safedata_network.R:21:7: [22m[34mstyle: [39m[1mCommented code should be removed.[22m
+#     success <- safedata:::try_to_download("https://url.invalid")
+      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[1mtests/testthat/test-safedata_network.R:23:7: [22m[34mstyle: [39m[1mCommented code should be removed.[22m
+#     expect_false(success)
+      ^~~~~~~~~~~~~~~~~~~~~
+[1mtests/testthat/test-safedata_network.R:24:7: [22m[34mstyle: [39m[1mCommented code should be removed.[22m
+#     expect_match(attr(success, "fail_msg"), regexp = "URL not found")
+      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[1mtests/testthat/test-safedata_network.R:29:7: [22m[34mstyle: [39m[1mCommented code should be removed.[22m
+#     local_sdd <- local_create_sdd()
+      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[1mtests/testthat/test-safedata_network.R:30:7: [22m[34mstyle: [39m[1mCommented code should be removed.[22m
+#     skip_if_no_internet()
+      ^~~~~~~~~~~~~~~~~~~~~
+[1mtests/testthat/test-safedata_network.R:34:11: [22m[34mstyle: [39m[1mCommented code should be removed.[22m
+#         timeout = 1
+          ^~~~~~~~~~~
+[1mtests/testthat/test-safedata_network.R:38:7: [22m[34mstyle: [39m[1mCommented code should be removed.[22m
+#     expect_false(success)
+      ^~~~~~~~~~~~~~~~~~~~~
+[1mtests/testthat/test-safedata_network.R:39:7: [22m[34mstyle: [39m[1mCommented code should be removed.[22m
+#     expect_match(attr(success, "fail_msg"), regexp = "URL timed out")
+      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

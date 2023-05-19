@@ -2,22 +2,30 @@
 % Please edit documentation in R/taxa.R
 \name{taxon_index_to_taxon_table}
 \alias{taxon_index_to_taxon_table}
-\title{Add taxon hierarchy to taxon metadata}
+\title{Create a table showing taxon hierarchies from taxon metadata}
 \usage{
-taxon_index_to_taxon_table(taxa)
+taxon_index_to_taxon_table(taxon_index)
 }
 \arguments{
-\item{taxa}{An existing object of class \code{safedata}}
+\item{taxon_index}{A taxon index list from the dataset metadata,}
 }
 \value{
 A data frame adding higher taxon level information for each taxon
 }
 \description{
 Taxon data is stored as a set of taxa with taxon ids and parent taxon
-ids. For any given dataset, the set should include all parent taxa
-required. This internal function takes such list of taxon data and
-adds columns showing the taxonomic hierarchy for each row. It is used by
-\code{\link{get_taxa}} and \code{\link{get_taxon_coverage}}.
+ids. For any given dataset, the metadata includes an index containing
+this information for all taxa used in data worksheets and all parent
+taxa required. This internal function takes the taxon index metadata
+and builds a table including the taxonomic hierarchy for each worksheet
+taxon. It is used by \code{\link{get_taxa}} and
+\code{\link{get_taxon_coverage}}.
+}
+\details{
+Note that this function does not discriminate between NCBI and GBIF
+taxon indices: they are both mapped onto the same table structure.
+Public calling functions should handle any merging and tidying
+required for a neat public API.
 }
 \seealso{
 \code{\link{get_taxa}}

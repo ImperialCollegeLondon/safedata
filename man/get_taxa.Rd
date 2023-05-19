@@ -15,37 +15,54 @@ A taxonomy table of classes "safe_taxa" and "data.frame".
 \description{
 This function generates a taxonomy table for a specified SAFE dataset
 record. Each row represent a taxon used in the data worksheets in the
-dataset and the table fields show the taxonomic hierarchy, taken from
-GBIF, for those taxa.
+dataset and the table fields show the taxonomic hierarchy for those taxa.
 }
 \details{
-All SAFE datasets containing taxa must include a Taxa worksheet, which
-must contain all of the taxa referred to in taxon fields in data
-worksheets. All entries in this worksheet are  validated against the
-GBIF database before publication and are used to populate the taxonomic
-index for the SAFE datasets. The validated taxonomic hierarchy for the
-data is also available in the metadata for a record and this function
-converts the metadata into a taxonomy table. If the Taxa worksheet for
-a SAFE project dataset is empty, because the data does not contain
-observations on taxa, \code{get_taxa} will return NULL.
+All SAFE datasets containing taxa must include worksheets providing
+taxonomy details, used to validate the taxa in the dataset against
+either or both of the GBIF or NCBI taxonomy database. All entries in
+these worksheet are  validated against the databases before
+publication and are used to populate a taxonomic index for safedata
+datasets. The validated taxonomic index for a specific dataset is
+also available in the metadata for a record and this function converts
+that metadata into a taxonomy table for the dataset.
 
-The taxonomy table includes the eight "backbone" taxonomic ranks used
-in the GBIF database: Kingdom, Phylum, Class, Order, Family, Genus,
-Species and Subspecies. It also includes three further fields:
-\code{taxon_name}, \code{taxon_rank} and \code{gbif_status}. These
-record the original taxa provided in the Taxa worksheet and show
-where the taxonomic name used in a dataset differs from the canonical
-name used in GBIF. The row names of the taxon table are the labels
-used in data worksheets and are used to match a taxonomy table to a
-loaded data worksheet (see \code{\link{add_taxa}}).
+The returned table includes the fields \code{worksheet_name},
+\code{taxon_name}, \code{taxon_rank} and \code{taxon_status}, along
+with the taxonomy database used to validate the taxon
+(\code{taxon_auth}). These fields provide the original taxonomy
+worksheet data included.
 
-For more details on the structure of the Taxa worksheet see:
+
+For more details on the structure of the taxon worksheets see:
 \url{https://safedata-validator.readthedocs.io/en/latest/data_format/taxa.html}
 }
+\section{Synonyms}{
+
+The taxon table will include extra rows for worksheet taxa that are
+GBIF synonyms or are merged in the NCBI taxonomy. There will be a row
+giving the taxonomic hierarchy for the original taxon name provided
+with the dataset and an additional row providing the canonical taxon
+name. The worksheet name for these rows will be identical.
+}
+
+\section{Taxonomic ranks}{
+
+NCBI and GBIF differ in their use of taxonomic ranks: GBIF uses a
+reduced set of core 'backbone' ranks, where NCBI supports a wider
+range of ranks. The taxon hierarchy used for safedata reduces NCBI to
+the core GBIF backbone ranks but adds Superkingdom, which is used for
+bacterial and viral groups.
+
+Especially note that the taxonomy used by GBIF and NCBI are
+**not congruent**: if the same taxon is included using both systems,
+it may well have substantially different ranks.
+}
+
 \examples{
-   set_example_safe_dir()
-   taxa <- get_taxa(1400562)
-   unset_example_safe_dir()
+    set_example_safedata_dir()
+    taxa <- get_taxa(1400562)
+    set_example_safedata_dir(on=FALSE)
 }
 \seealso{
 \code{\link{add_taxa}}

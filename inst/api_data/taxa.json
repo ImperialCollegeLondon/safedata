@@ -1,0 +1,57 @@
+[
+    {
+        "taxon_auth": "GBIF",
+        "n_datasets": 1,
+        "id": 24635,
+        "dataset_id": 74,
+        "taxon_id": 5307,
+        "parent_id": 732,
+        "taxon_name": "Mustelidae",
+        "taxon_rank": "family",
+        "taxon_status": "accepted"
+    },
+    {
+        "taxon_auth": "GBIF",
+        "n_datasets": 1,
+        "id": 24636,
+        "dataset_id": 74,
+        "taxon_id": 1,
+        "parent_id": null,
+        "taxon_name": "Animalia",
+        "taxon_rank": "kingdom",
+        "taxon_status": "accepted"
+    },
+    {
+        "taxon_auth": "GBIF",
+        "n_datasets": 1,
+        "id": 24637,
+        "dataset_id": 74,
+        "taxon_id": 44,
+        "parent_id": 1,
+        "taxon_name": "Chordata",
+        "taxon_rank": "phylum",
+        "taxon_status": "accepted"
+    },
+    {
+        "taxon_auth": "GBIF",
+        "n_datasets": 1,
+        "id": 24638,
+        "dataset_id": 74,
+        "taxon_id": 732,
+        "parent_id": 359,
+        "taxon_name": "Carnivora",
+        "taxon_rank": "order",
+        "taxon_status": "accepted"
+    },
+    {
+        "taxon_auth": "GBIF",
+        "n_datasets": 1,
+        "id": 24639,
+        "dataset_id": 74,
+        "taxon_id": 359,
+        "parent_id": 44,
+        "taxon_name": "Mammalia",
+        "taxon_rank": "class",
+        "taxon_status": "accepted"
+    }
+]
