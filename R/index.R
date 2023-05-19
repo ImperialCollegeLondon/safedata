@@ -10,19 +10,16 @@
 
 safedata_env <- new.env(parent = emptyenv())
 
-set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
-                         url = "https://www.safeproject.net") {
 
-    #' Set the local SAFE data directory
+set_safedata_dir <- function(safedir, update = TRUE) {
+    #' Set or create a safedata directory
     #'
-    #' This function sets the local directory used to store SAFE dataset
-    #' files along with record and index metadata. The function can also
-    #' initialise a new data directory, downloading the required index
-    #' files. By default, it will update indices if needed and will
-    #' validate the directory contents. Once set, the location of the
-    #' directory is stored in options("safedata.dir"). The \code{url}
-    #' argument specifies a URL to a website that exposes the SAFE data
-    #' API.
+    #' These functions set or create a local local safedata directory. This
+    #' is a strongly structured directory used to store safedata datasets,
+    #' along with record and index metadata. It is not intended to be
+    #' modified by users.
+    #'
+    #' @section The safedata directory structure:
     #'
     #' The safedata package uses a data directory to store local copies of
     #' dataset files along with index files. Files for a dataset record are
@@ -33,40 +30,55 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
     #' is a structured version of the summary information shown on the
     #' Zenodo page.
     #'
-    #' The root of the data directory also holds three index files:
+    #' The root of the data directory also holds three index files and a
+    #' settings file for the safedata diretory:
     #' \describe{
     #'   \item{\code{index.json}}{, containing a full list of the
     #'         files and dataset records available in the SAFE data
     #'         repository;}
     #'   \item{\code{gazetteer.geojson}}{, containing the official list of
     #'         known sampling locations and GIS data; and}
-    #'   \item{\code{location_aliases.csv}}{, a list of alternative names
+    #'   \item{\code{location_aliases.json}}{, a list of alternative names
     #'         permitted for some locations.}
+    #'   \item{\code{url.json}}{, the URL settings for the safedata
+    #'         metadata server}
     #' }
     #'
-    #' If \code{create = TRUE}, the function will try to create the named
-    #' directory and populate it with the three index files. This requires
-    #' an internet connection.
+    #' @section Creating a new safadata directory:
     #'
-    #' By default, the function also needs an internet connection to check
-    #' for updates to the three index files. Updating can be turned off for
-    #' offline use.
+    #' The \code{create_safedata_dir} function will try to create the named
+    #' directory and requires an internet connection. The \code{url} argument
+    #' must provide URL to a website that provides the safedata metadata server
+    #' API. This URL will then be used to download the core index files
+    #' described above.
     #'
-    #' The default behaviour is also to validate the directory structure. The
-    #' function will warn when files other than those found in datasets are
-    #' present within the data structure and when any dataset files that are
-    #' present have been modified. Although this can be turned off, it is
-    #' not recommended to modify or add files within a SAFE data directory.
+    #' The default behaviour is to download actual data files from the main
+    #' Zenodo site, but a sandbox site is also provided for testing. The
+    #' sandbox site may be useful in setting up a new safedata archive, so
+    #' \code{use_zenodo_sandbox = TRUE} can be used to create a safedata
+    #' directory that will download data from the sandbox site.
     #'
-    #' @param safedir A path to the directory to set as the SAFE data
+    #' @section Metadata updates and validation:
+    #'
+    #' By default, the function will update the core index files to include
+    #' data on newly published datasets in the fata index. This requires
+    #' an internet connection to check for updates and a warning will be
+    #' issued if no connection is available - the \code{update = FALSE}
+    #' option can be use to surpress this message for offline use.
+    #'
+    #' Setting a safedata directory will also trigger validation of the
+    #' directory structure. This will issue warnings when files other than
+    #' those found in datasets are present within the data structure or
+    #' when any dataset files that are present have been modified.
+    #'
+    #' @param safedir A path to the directory to use as the safedata
     #'    directory (str).
     #' @param update Should the local dataset index be updated (logical)?
-    #' @param create Should a new data directory be created at the provided
-    #'    path (logical)?
-    #' @param url A URL providing the SAFE Data API, defaulting to the SAFE
-    #'    Project's own URL.
+    #' @param url A URL for a safedata metadata server.
+    #' @param use_zenodo_sandbox A boolean indicating whether the datafiles
+    #'    are stored in the main Zenodo site or the sandbox Zenodo site.
     #' @return Invisibly, a boolean showing whether a SAFE data directory was
-    #'    set successfully.
+    #'    created or set successfully.
     #' @export
 
     # Clear any cached data in the safedata environment
@@ -75,91 +87,54 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
         do.call(rm, list(list = cached, envir = safedata_env))
     }
 
-    # Get the expected index and data file paths
-    index_path <- file.path(safedir, "index.json")
-    gazetteer_path <- file.path(safedir, "gazetteer.geojson")
-    location_aliases_path <- file.path(safedir, "location_aliases.csv")
-    url_path <-  file.path(safedir, "url.json")
-
-    # Handle create first
-    if (create) {
-
-        # We don't want a existing directory that might have stuff in it
-        if (dir.exists(safedir)) {
-            stop("Directory already exists")
-        }
-
-        # create the directory and set the safe data directory and url
-        dir.create(safedir)
-        options(safedata.dir = safedir, safedata.url = url)
-
-        # Save the URL
-        jsonlite::write_json(list(url = url), url_path)
-
-        # download the index file, then cache it
-        got_index <- download_index()
-        got_gazetteer <- download_gazetteer()
-        got_loc_aliases <- download_location_aliases()
-
-        # If any of these fail then remove the directory since we already
-        # checked it didn't exist, and then tidy up options
-        if (! (got_index && got_gazetteer && got_loc_aliases)) {
-            unlink(safedir, recursive = TRUE)
-            options(safedata.dir = NULL, safedata.url = NULL)
-            message("Could not download required files: ",
-                    "SAFE data directory not created")
-            return(invisible(FALSE))
-        }
-
-        verbose_message("Safe data directory created")
-        load_index()
-        return(invisible(TRUE))
-    }
-
-    # Now validate an existing directory
+    # Validate the directory
     all_good <- TRUE
+    set_safedata_paths(safedir)
 
-    if (! dir.exists(safedir)) {
+    if (!dir.exists(getOption("safedata.dir"))) {
         message("Directory not found.")
         all_good <- FALSE
     }
 
-    if (! file.exists(url_path)) {
-        message("API URL not found.")
+    if (!file.exists(getOption("safedata.url_settings"))) {
+        message("URL settings file not found.")
         all_good <- FALSE
     }
 
-    if (! file.exists(index_path)) {
+    if (!file.exists(getOption("safedata.index"))) {
         message("Dataset index not found.")
         all_good <- FALSE
     }
 
-    if (! file.exists(gazetteer_path)) {
+    if (!file.exists(getOption("safedata.gazetteer"))) {
         message("Gazetteer not found.")
         all_good <- FALSE
     }
 
-    if (! file.exists(location_aliases_path)) {
+    if (!file.exists(getOption("safedata.loc_aliases"))) {
         message("Location aliases not found.")
         all_good <- FALSE
     }
 
-    if (! all_good){
+    if (!all_good) {
         return(invisible(FALSE))
     }
 
     # Set the data directory and URL in options.
-    url <- jsonlite::read_json(url_path)$url
-    options(safedata.dir = safedir, safedata.url = url)
+    settings <- jsonlite::read_json(getOption("safedata.url_settings"))
+    options(
+        safedata.url = settings$url,
+        safedata.use_zenodo_sandbox = settings$use_zenodo_sandbox
+    )
 
     # Look for updates
     if (update) {
-
         verbose_message("Checking for updates")
 
         # Try to get the current index hashes from the SAFE Data API and
         # then check each of the three index files
-        index_hashes <- try_to_download(paste0(url, "/api/index_hashes"))
+        api <- paste0(getOption("safedata.url"), "/api/index_hashes.json")
+        index_hashes <- try_to_download(api)
 
         if (isFALSE(index_hashes)) {
             message("Unable to download updates, using existing index files: ")
@@ -177,21 +152,28 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
 
         # Check the files - do exactly the same thing for three files, three
         # hashes, three download wrapper functions and three reporting names
-        update_details <- list(list("Index",
-                                    index_path,
-                                    index_hashes$index,
-                                    download_index),
-                               list("Gazetteer",
-                                    gazetteer_path,
-                                    index_hashes$gazetteer,
-                                    download_gazetteer),
-                               list("Location aliases",
-                                    location_aliases_path,
-                                    index_hashes$location_aliases,
-                                    download_location_aliases))
+        update_details <- list(
+            list(
+                "Index",
+                getOption("safedata.index"),
+                index_hashes$index,
+                download_index
+            ),
+            list(
+                "Gazetteer",
+                getOption("safedata.gazetteer"),
+                index_hashes$gazetteer,
+                download_gazetteer
+            ),
+            list(
+                "Location aliases",
+                getOption("safedata.loc_aliases"),
+                index_hashes$location_aliases,
+                download_location_aliases
+            )
+        )
 
         for (details in update_details) {
-
             fname <- details[[1]]
             local_path <- details[[2]]
             current_hash <- details[[3]]
@@ -204,7 +186,7 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
                 backed_up <- c(backed_up, local_path)
                 # Try and get the new version
                 got_update <- download_func()
-                if (! got_update) {
+                if (!got_update) {
                     update_successful <- FALSE
                 }
             } else {
@@ -212,7 +194,7 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
             }
         }
 
-        if (! update_successful) {
+        if (!update_successful) {
             # Delete successful downloads and restore backups
             for (local_path in backed_up) {
                 if (file.exists(local_path)) {
@@ -237,8 +219,76 @@ set_safe_dir <- function(safedir, update = TRUE, create = FALSE,
 }
 
 
-download_index <- function() {
+create_safedata_dir <- function(safedir,
+                                url = "https://www.safeproject.net",
+                                use_zenodo_sandbox = FALSE) {
+    #' @describeIn set_safedata_dir Create a new safedata directory
+    #' @export
 
+    # Clear any cached data in the safedata environment
+    cached <- ls(envir = safedata_env)
+    if (length(cached) > 0) {
+        do.call(rm, list(list = cached, envir = safedata_env))
+    }
+
+    set_safedata_paths(safedir)
+
+    # Create the directory as long as it doesn't already exist
+    if (dir.exists(getOption("safedata.dir"))) {
+        stop("Directory already exists")
+    }
+    dir.create(safedir)
+
+    # Save the URL and other settings to options and to file
+    options(
+        safedata.url = url,
+        safedata.use_zenodo_sandbox = use_zenodo_sandbox
+    )
+    settings <- list(url = url, use_zenodo_sandbox = use_zenodo_sandbox)
+    jsonlite::write_json(settings, getOption("safedata.url_settings"))
+
+    # download the index file, then cache it
+    got_index <- download_index()
+    got_gazetteer <- download_gazetteer()
+    got_loc_aliases <- download_location_aliases()
+
+    # If any of these fail then remove the directory since we already
+    # checked it didn't exist, and then tidy up options
+    if (!(got_index && got_gazetteer && got_loc_aliases)) {
+        unlink(safedir, recursive = TRUE)
+        options(safedata.dir = NULL, safedata.url = NULL)
+        message(
+            "Could not download required files: ",
+            "SAFE data directory not created"
+        )
+        return(invisible(FALSE))
+    }
+
+    verbose_message("Safe data directory created")
+    load_index()
+    return(invisible(TRUE))
+}
+
+
+set_safedata_paths <- function(safedir) {
+    #' Sets the paths to the core index paths in a safedata directory.
+    #' @return NULL
+    #' @keywords internal
+
+    # Expand the path to avoid issues with disk tools and relative paths
+    safedir <- path.expand(safedir)
+
+    # Get the expected index and data file paths
+    options(
+        safedata.dir = safedir,
+        safedata.index = file.path(safedir, "index.json"),
+        safedata.gazetteer = file.path(safedir, "gazetteer.geojson"),
+        safedata.loc_aliases = file.path(safedir, "location_aliases.csv"),
+        safedata.url_settings = file.path(safedir, "url.json")
+    )
+}
+
+download_index <- function() {
     #' Downloads the current dataset index
     #'
     #' This function downloads the dataset index from the SAFE data
@@ -248,14 +298,13 @@ download_index <- function() {
     #' @return NULL
     #' @keywords internal
 
-    safedir <- get_data_dir()
-    path <- file.path(safedir, "index.json")
+    path <- getOption("safedata.index")
     url <- getOption("safedata.url")
-    api <- paste0(url, "/api/index")
+    api <- paste0(url, "/api/metadata_index.json")
 
     success <- try_to_download(api, path)
 
-    if (! success) {
+    if (!success) {
         message("Failed to download index:")
         message(attr(success, "fail_msg"))
     }
@@ -265,7 +314,6 @@ download_index <- function() {
 
 
 download_gazetteer <- function() {
-
     #' Downloads the current SAFE gazetteer
     #'
     #' This function downloads the gazetteer from the SAFE data
@@ -275,15 +323,14 @@ download_gazetteer <- function() {
     #' @return NULL
     #' @keywords internal
 
-    safedir <- get_data_dir()
-    path <- file.path(safedir, "gazetteer.geojson")
+    path <- getOption("safedata.gazetteer")
     url <- getOption("safedata.url")
-    api <- paste0(url, "/api/gazetteer")
+    api <- paste0(url, "/api/gazetteer.json")
 
     success <- try_to_download(api, path)
 
-    if (! success) {
-        message("Failed to download index:")
+    if (!success) {
+        message("Failed to download gazetteer:")
         message(attr(success, "fail_msg"))
     }
 
@@ -292,7 +339,6 @@ download_gazetteer <- function() {
 
 
 download_location_aliases <- function() {
-
     #' Downloads the current SAFE location aliases
     #'
     #' This function downloads the location aliases from the SAFE data
@@ -303,13 +349,12 @@ download_location_aliases <- function() {
     #' @return NULL
     #' @keywords internal
 
-    safedir <- get_data_dir()
-    path <- file.path(safedir, "location_aliases.csv")
+    path <- getOption("safedata.loc_aliases")
     url <- getOption("safedata.url")
-    api <- paste0(url, "/api/location_aliases")
+    api <- paste0(url, "/api/location_aliases.json")
     success <- try_to_download(api, path)
 
-    if (! success) {
+    if (!success) {
         message("Failed to download location aliases:")
         message(attr(success, "fail_msg"))
     }
@@ -319,12 +364,13 @@ download_location_aliases <- function() {
 
 
 load_index <- function() {
-
     #' Load and cache the dataset index
     #'
     #' This function loads the dataset record index from the JSON file in
     #' the SAFE data directory and sets which datasets are currently available
     #' and which records are the most recent available under a given concept.
+    #' The function also checks to see if there are any user modifications to
+    #' the directory structure.
     #'
     #' When any of the three index files (\code{index.json},
     #' \code{gazetteer.geojson} and \code{location_aliases.csv}) are loaded,
@@ -338,44 +384,44 @@ load_index <- function() {
     #'    \code{\link{load_gazetteer}}
     #' @keywords internal
 
-    verbose_message("Loading and caching index")
-    # Load from file and convert into data frame
+    # Check the safedata paths have been set
     safedir <- get_data_dir()
 
-    # path expand to make paths work in md5sum, which fails with ~/.
-    safedir <- path.expand(safedir)
+    verbose_message("Loading and caching index")
 
-    index_path <- file.path(safedir, "index.json")
-    gazetteer_path <- file.path(safedir, "gazetteer.geojson")
-    location_aliases_path <- file.path(safedir, "location_aliases.csv")
-    url_path <-  file.path(safedir, "url.json")
-
-    index_path <- file.path(safedir, "index.json")
-
-    index <- jsonlite::fromJSON(index_path)
-    index <- index$entries
+    index <- jsonlite::fromJSON(getOption("safedata.index"))
 
     # format the datetime classes
     index$publication_date <- as.POSIXct(index$publication_date)
     index$dataset_embargo <- as.POSIXct(index$dataset_embargo)
 
     # Add the path relative to the data directory
-    index$path <- with(index, file.path(zenodo_concept_id,
-                                        zenodo_record_id, filename))
+    index$path <- with(index, file.path(
+        zenodo_concept_id,
+        zenodo_record_id, filename
+    ))
 
     # Identify availability and most recent available records
-    index$available <- with(index,
-                            ifelse(dataset_access == "embargo" &
-                                    dataset_embargo >= Sys.time(), FALSE,
-                                    ifelse(dataset_access == "restricted",
-                                            FALSE, TRUE)))
+    index$available <- with(
+        index,
+        ifelse(dataset_access == "embargo" &
+            dataset_embargo >= Sys.time(), FALSE,
+        ifelse(dataset_access == "restricted",
+            FALSE, TRUE
+        )
+        )
+    )
 
     # Get the index rows by concept, reduce to the unique set of records
     # (dropping the multiple files), drop unavailable records, sort by
     # publication date and return the first zenodo_record_id.
-    concepts <- split(subset(index, select = c(available, zenodo_record_id,
-                                                publication_date)),
-                        f = index$zenodo_concept_id)
+    concepts <- split(
+        subset(index, select = c(
+            available, zenodo_record_id,
+            publication_date
+        )),
+        f = index$zenodo_concept_id
+    )
 
     mr_avail <- sapply(concepts, function(recs) {
         recs <- unique(recs)
@@ -389,9 +435,12 @@ load_index <- function() {
         }
     })
 
-    mra <- with(index,
-                ifelse(zenodo_record_id %in% unlist(mr_avail),
-                        TRUE, FALSE))
+    mra <- with(
+        index,
+        ifelse(zenodo_record_id %in% unlist(mr_avail),
+            TRUE, FALSE
+        )
+    )
     index$most_recent_available <- mra
 
     # Validate the directory contents
@@ -401,8 +450,12 @@ load_index <- function() {
     local_files <- dir(safedir, recursive = TRUE)
 
     # Exclude the three index files and local metadata json files
-    index_files <- c(basename(index_path), basename(gazetteer_path),
-                        basename(location_aliases_path), basename(url_path))
+    index_files <- c(
+        basename(getOption("safedata.index")),
+        basename(getOption("safedata.gazetteer")),
+        basename(getOption("safedata.loc_aliases")),
+        basename(getOption("safedata.url_settings"))
+    )
     json_files <- grepl("[0-9]+/[0-9]+/[0-9]+.json$", local_files)
     metadata_json <- local_files[json_files]
     local_files <- setdiff(local_files, c(index_files, metadata_json))
@@ -410,8 +463,10 @@ load_index <- function() {
     # Check for additional files in directory structure
     local_unexpected <- setdiff(local_files, index$path)
     if (length(local_unexpected)) {
-        warning("SAFE data directory contains unexpected files: ",
-                paste(local_unexpected, collapse = ", "))
+        warning(
+            "SAFE data directory contains unexpected files: ",
+            paste(local_unexpected, collapse = ", ")
+        )
     }
 
     # Run a check on file modification
@@ -420,15 +475,18 @@ load_index <- function() {
     local_expected$altered <- with(local_expected, md5 != checksum)
 
     if (sum(local_expected$altered)) {
-        warning("Local copies of dataset files have been modified",
-                paste(local_expected$filename[local_expected$altered],
-                        collapse = ", "))
+        warning(
+            "Local copies of dataset files have been modified",
+            paste(local_expected$filename[local_expected$altered],
+                collapse = ", "
+            )
+        )
     }
 
     # Update index to note which files have unaltered local copies (this
     # could include embargoed and restricted datasets, so this is used as a
     # flag to note which can be loaded from private local copies).
-    local_unaltered <- local_expected$checksum[! local_expected$altered]
+    local_unaltered <- local_expected$checksum[!local_expected$altered]
     index$local_copy <- index$checksum %in% local_unaltered
 
     # save the index into the cache
@@ -439,7 +497,6 @@ load_index <- function() {
 
 
 get_index <- function() {
-
     #' Get the cached dataset index
     #'
     #' This function just safely retrieves the safedata index from the
@@ -460,7 +517,6 @@ get_index <- function() {
 
 
 load_gazetteer <- function() {
-
     #' Load and cache the SAFE gazetteer
     #'
     #' This function loads the SAFE gazetteer, stored as a geojson file in the
@@ -505,9 +561,10 @@ load_gazetteer <- function() {
     if (exists("gazetteer", safedata_env)) {
         gazetteer <- get("gazetteer", safedata_env)
     } else {
-        safedir <- get_data_dir()
-        gazetteer <- sf::st_read(file.path(safedir, "gazetteer.geojson"),
-                                 quiet = TRUE, stringsAsFactors = FALSE)
+        gazetteer <- sf::st_read(
+            getOption("safedata.gazetteer"),
+            quiet = TRUE, stringsAsFactors = FALSE
+        )
         assign("gazetteer", gazetteer, safedata_env)
     }
 
@@ -516,7 +573,6 @@ load_gazetteer <- function() {
 
 
 load_location_aliases <- function() {
-
     #' Load and cache the SAFE location aliases
     #'
     #' This function loads the SAFE locations alias, stored as a csv file in
@@ -532,12 +588,11 @@ load_location_aliases <- function() {
     if (exists("location_aliases", safedata_env)) {
         location_aliases <- get("location_aliases", safedata_env)
     } else {
-        safedir <- get_data_dir()
-        alias_path <- file.path(safedir, "location_aliases.csv")
-        location_aliases <- utils::read.csv(alias_path,
-                                            na.strings = "null",
-                                            stringsAsFactors = FALSE,
-                                            colClasses = "character")
+        location_aliases <- jsonlite::fromJSON(
+            getOption("safedata.loc_aliases")
+        )
+        location_aliases <- as.data.frame(location_aliases)
+        names(location_aliases) <- c("zenodo_record_id", "location", "alias")
         assign("location_aliases", location_aliases, safedata_env)
     }
 
@@ -546,7 +601,6 @@ load_location_aliases <- function() {
 
 
 get_data_dir <- function() {
-
     #' Checks the data directory is set and returns it
     #'
     #' @keywords internal
@@ -562,7 +616,6 @@ get_data_dir <- function() {
 
 
 verbose_message <- function(str, ...) {
-
     #' Message function that can be globally muted
     #'
     #' Prints a message if  \code{option("safedata.verbose")}  is set
@@ -577,29 +630,41 @@ verbose_message <- function(str, ...) {
 }
 
 
-set_example_safe_dir <- function() {
-
+set_example_safedata_dir <- function(on = TRUE) {
     #' Functions to use an example data directory for package examples
     #'
-    #' The documentation of \code{safedata} includes code examples using a data
-    #' directory. A zipped example directory is included in the package files
-    #' (data/safedata_example_dir.zip) but package code must not write within
-    #' the package structure. The \code{set_example_safe_dir} function is used
-    #' in code examples to unpack this example directory into a temporary
-    #' folder and set it for use in  the example code. The function
-    #' \code{unset_example_safe_dir} is then used to restore any existing data
-    #' directory set by the user. The example directory should only be created
+    #' The documentation of \code{safedata} includes code examples that require
+    #' a real data directory but package code must not write within the package
+    #' structure. The \code{set_example_safedata_dir} function is used in code
+    #' examples to create a safedata directory using local resources in a
+    #' temporary directory. This example directory should only be created
     #' once per session.
     #'
-    #' @seealso \code{\link{set_safe_dir}}
-    #' @return The set_example_safe_dir function returns the path of the example
-    #'    directory invisibly.
+    #' The argument \code{on=FALSE} can be used to restore any existing data
+    #' directory set by the user.
+    #'
+    #' @param on Turn the use of the example data directory on or off.
+    #' @seealso \code{\link{set_safedata_dir}}
+    #' @return The set_example_safedata_dir function returns the path of the
+    #'    example directory invisibly (on = TRUE) or the path of any restored
+    #'    user data directory (on =FALSE).
     #' @export
+
+    if (!on) {
+        # Turn off mocking
+        mock_api(on = FALSE)
+        # retrieve the user directory and if it isn't null restore it
+        udir <- getOption("safedata.user.dir")
+        if (!is.null(udir)) {
+            set_safedata_dir(udir, update = FALSE)
+        }
+        return(invisible(udir))
+    }
 
     # record the user data directory if one has been set
     udir <- try(get_data_dir(), silent = TRUE)
 
-    if (! inherits(udir, "try-error")) {
+    if (!inherits(udir, "try-error")) {
         options(safedata.user.dir = udir)
     }
 
@@ -607,26 +672,22 @@ set_example_safe_dir <- function() {
     tdir <- tempdir()
     demo_dir <- file.path(tdir, "safedata_example_dir")
 
-    if (! dir.exists(demo_dir)) {
-        example_zip <- system.file("safedata_example_dir",
-                                   "safedata_example_dir.zip",
-                                   package = "safedata")
-        utils::unzip(example_zip, exdir = tdir)
+    # Turn on URL mocking
+    mock_api(on = TRUE)
+
+    # Check for existing session example dir and create if missing. This could
+    # simply copy the required files, but this works neatly as a mini test of
+    # the mocked API
+    if (!dir.exists(demo_dir)) {
+        suppressMessages({
+            create_safedata_dir(
+                demo_dir,
+                url = "http://example.safedata.server"
+            )
+            # Add files for examples that assume files are present
+            download_safe_files(1400562, confirm = FALSE)
+        })
     }
 
-    set_safe_dir(demo_dir, update = FALSE)
     return(invisible(demo_dir))
-}
-
-unset_example_safe_dir <- function() {
-
-    #' @describeIn set_example_safe_dir Restores a user data directory after
-    #'    running an code example.
-    #' @export
-
-    # retrieve the user directory and if it isn't null restore it
-    udir <- getOption("safedata.user.dir")
-    if (! is.null(udir)) {
-        set_safe_dir(udir, update = FALSE)
-    }
 }

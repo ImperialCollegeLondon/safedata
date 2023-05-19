@@ -1,43 +1,55 @@
 
 get_taxa <- function(obj) {
-
     #' Obtaining taxonomy for a SAFE dataset.
     #'
     #' This function generates a taxonomy table for a specified SAFE dataset
     #' record. Each row represent a taxon used in the data worksheets in the
-    #' dataset and the table fields show the taxonomic hierarchy, taken from
-    #' GBIF, for those taxa.
+    #' dataset and the table fields show the taxonomic hierarchy for those taxa.
     #'
-    #' All SAFE datasets containing taxa must include a Taxa worksheet, which
-    #' must contain all of the taxa referred to in taxon fields in data
-    #' worksheets. All entries in this worksheet are  validated against the
-    #' GBIF database before publication and are used to populate the taxonomic
-    #' index for the SAFE datasets. The validated taxonomic hierarchy for the
-    #' data is also available in the metadata for a record and this function
-    #' converts the metadata into a taxonomy table. If the Taxa worksheet for
-    #' a SAFE project dataset is empty, because the data does not contain
-    #' observations on taxa, \code{get_taxa} will return NULL.
+    #' All SAFE datasets containing taxa must include worksheets providing
+    #' taxonomy details, used to validate the taxa in the dataset against
+    #' either or both of the GBIF or NCBI taxonomy database. All entries in
+    #' these worksheet are  validated against the databases before
+    #' publication and are used to populate a taxonomic index for safedata
+    #' datasets. The validated taxonomic index for a specific dataset is
+    #' also available in the metadata for a record and this function converts
+    #' that metadata into a taxonomy table for the dataset.
     #'
-    #' The taxonomy table includes the eight "backbone" taxonomic ranks used
-    #' in the GBIF database: Kingdom, Phylum, Class, Order, Family, Genus,
-    #' Species and Subspecies. It also includes three further fields:
-    #' \code{taxon_name}, \code{taxon_rank} and \code{gbif_status}. These
-    #' record the original taxa provided in the Taxa worksheet and show
-    #' where the taxonomic name used in a dataset differs from the canonical
-    #' name used in GBIF. The row names of the taxon table are the labels
-    #' used in data worksheets and are used to match a taxonomy table to a
-    #' loaded data worksheet (see \code{\link{add_taxa}}).
+    #' The returned table includes the fields \code{worksheet_name},
+    #' \code{taxon_name}, \code{taxon_rank} and \code{taxon_status}, along
+    #' with the taxonomy database used to validate the taxon
+    #' (\code{taxon_auth}). These fields provide the original taxonomy
+    #' worksheet data included.
     #'
-    #' For more details on the structure of the Taxa worksheet see:
+    #' @section Synonyms:
+    #' The taxon table will include extra rows for worksheet taxa that are
+    #' GBIF synonyms or are merged in the NCBI taxonomy. There will be a row
+    #' giving the taxonomic hierarchy for the original taxon name provided
+    #' with the dataset and an additional row providing the canonical taxon
+    #' name. The worksheet name for these rows will be identical.
+    #'
+    #' @section Taxonomic ranks:
+    #' NCBI and GBIF differ in their use of taxonomic ranks: GBIF uses a
+    #' reduced set of core 'backbone' ranks, where NCBI supports a wider
+    #' range of ranks. The taxon hierarchy used for safedata reduces NCBI to
+    #' the core GBIF backbone ranks but adds Superkingdom, which is used for
+    #' bacterial and viral groups.
+    #'
+    #' Especially note that the taxonomy used by GBIF and NCBI are
+    #' **not congruent**: if the same taxon is included using both systems,
+    #' it may well have substantially different ranks.
+    #'
+    #' @details
+    #' For more details on the structure of the taxon worksheets see:
     #' \url{https://safedata-validator.readthedocs.io/en/latest/data_format/taxa.html}
     #'
     #' @param obj A single record id, or an existing safedata dataframe.
     #' @return A taxonomy table of classes "safe_taxa" and "data.frame".
     #' @seealso \code{\link{add_taxa}}
     #' @examples
-    #'    set_example_safe_dir()
-    #'    taxa <- get_taxa(1400562)
-    #'    unset_example_safe_dir()
+    #'     set_example_safedata_dir()
+    #'     taxa <- get_taxa(1400562)
+    #'     set_example_safedata_dir(on=FALSE)
     #' @export
 
     if (inherits(obj, "safedata")) {
@@ -53,25 +65,56 @@ get_taxa <- function(obj) {
     }
 
     # Get the record metadata containing the taxon index
-    taxa <- load_record_metadata(record_set)$taxa
-    taxon_table <- taxon_index_to_taxon_table(taxa)
+    metadata <- load_record_metadata(record_set)
+
+    # Turn the taxon indices to tables
+    gbif_taxa <- taxon_index_to_taxon_table(metadata$gbif_taxa)
+    ncbi_taxa <- taxon_index_to_taxon_table(metadata$ncbi_taxa)
+
+    gbif_present <- ncbi_present <- FALSE
+
+    # Add taxon auth and merge if needed
+    if (!is.null(gbif_taxa)) {
+        gbif_taxa$taxon_auth <- "GBIF"
+        gbif_present <- TRUE
+    }
+
+    if (!is.null(ncbi_taxa)) {
+        ncbi_taxa$taxon_auth <- "NCBI"
+        ncbi_present <- TRUE
+    }
+
+    if (gbif_present && ncbi_present) {
+        taxon_table <- rbind(gbif_taxa, ncbi_taxa)
+    } else if (gbif_present) {
+        taxon_table <- gbif_taxa
+    } else if (ncbi_present) {
+        taxon_table <- ncbi_taxa
+    } else {
+        return(NULL)
+    }
+
+    # Add record set metadata to table
+    attr(taxon_table, "metadata") <- list(safe_record_set = record_set)
 
     return(taxon_table)
 }
 
 get_taxon_coverage <- function() {
-
     #' Retrieve the current taxon index
     #'
     #' This function downloads the current taxon index across published
     #' datasets and returns a formatted taxon table showing the taxonomic
-    #' hierarchy of each taxon. It requires an internet connection.
+    #' hierarchy of each taxon, along with the taxonomic authority used
+    #' for validation (GBIF or NCBI). The returned data frame includes a
+    #' count of the number of datasets that include each taxon. The
+    #' function requires an internet connection.
     #'
     #' Note that the use of "user" defined taxa can lead to some unusual
     #' entries. There is nothing to stop a user defining "Gallus gallus" as a
     #' "user" taxon with Animalia as a parent taxon.
     #'
-    #' @return A data frame containing higher taxon level information for
+    #' @return A data frame containing taxonomic hierarchy data for
     #'   each taxon in the database taxon index. If the API is unavailable,
     #'   the function returns NULL.
     #' @seealso \code{\link{get_taxa}}
@@ -92,177 +135,126 @@ get_taxon_coverage <- function() {
     } else {
         # Use jsonlite::fromJSON (and simplification routines),
         # not the httr::content conversion
-        taxa <- jsonlite::fromJSON(
-                    httr::content(response, as = "text", encoding = "UTF-8")
-                    )
+        taxon_index <- jsonlite::fromJSON(
+            httr::content(response, as = "text", encoding = "UTF-8")
+        )
     }
 
     # This API does not bring in worksheet names (they will clash across
     # datasets) so replace them with the canonical taxon name
-    taxa$worksheet_name <- taxa$taxon_name
-    taxa <- taxon_index_to_taxon_table(taxa)
+    taxon_index$worksheet_name <- taxon_index$taxon_name
+    taxon_table <- taxon_index_to_taxon_table(taxon_index)
 
-    return(taxa)
+    return(taxon_table)
 }
 
 
-taxon_index_to_taxon_table <- function(taxa) {
-
-    #' Add taxon hierarchy to taxon metadata
+taxon_index_to_taxon_table <- function(taxon_index) {
+    #' Create a table showing taxon hierarchies from taxon metadata
     #'
     #' Taxon data is stored as a set of taxa with taxon ids and parent taxon
-    #' ids. For any given dataset, the set should include all parent taxa
-    #' required. This internal function takes such list of taxon data and
-    #' adds columns showing the taxonomic hierarchy for each row. It is used by
-    #' \code{\link{get_taxa}} and \code{\link{get_taxon_coverage}}.
+    #' ids. For any given dataset, the metadata includes an index containing
+    #' this information for all taxa used in data worksheets and all parent
+    #' taxa required. This internal function takes the taxon index metadata
+    #' and builds a table including the taxonomic hierarchy for each worksheet
+    #' taxon. It is used by \code{\link{get_taxa}} and
+    #' \code{\link{get_taxon_coverage}}.
     #'
-    #' @param taxa An existing object of class \code{safedata}
+    #' Note that this function does not discriminate between NCBI and GBIF
+    #' taxon indices: they are both mapped onto the same table structure.
+    #' Public calling functions should handle any merging and tidying
+    #' required for a neat public API.
+    #'
+    #' @param taxon_index A taxon index list from the dataset metadata,
     #' @return A data frame adding higher taxon level information for each taxon
     #' @seealso \code{\link{get_taxa}}
     #' @keywords internal
 
-    if (length(taxa) == 0) {
+    if (length(taxon_index) == 0) {
         return(NULL)
     }
 
-    # create a taxon table to fill in
-    worksheet_taxa <- unique(taxa$worksheet_name)
-    worksheet_taxa <- worksheet_taxa[! is.na(worksheet_taxa)]
-    taxon_table <- matrix(NA, ncol = 13, nrow = length(worksheet_taxa),
-                          dimnames = list(
-                              worksheet_taxa,
-                              c("kingdom", "phylum", "class", "order",
-                                "family", "genus", "species", "subspecies",
-                                "variety", "form",  "taxon_name", "taxon_level",
-                                "gbif_status")))
+    # Get the backbone ranks
+    table_fields <- c(
+        "superkingdom", "kingdom", "phylum", "class", "order", "family",
+        "genus", "species", "subspecies", "variety", "form"
+    )
+    n_fields <- length(table_fields)
 
-    # Identify the root - this is the set of taxa that have NA as parent id,
-    # which should all be kingdoms or incertae_sedis
-    is_root <- is.na(taxa$gbif_parent_id)
-    root <- taxa[is_root, ]
-    taxa <- taxa[! is_root, ]
+    # Extract the worksheet taxa - all taxa that have a defined worksheet name
+    worksheet_taxa <- taxon_index[!is.na(taxon_index$worksheet_name), ]
 
-    # Divide the remaining data frame up into a list giving the descendants
-    # from each parent id
-    taxa <- split(as.data.frame(taxa), f = taxa$gbif_parent_id)
+    # Build a dictionary of taxa, keyed by their taxon id, which has to be
+    # as character here, because integers are assumed to be indices.
+    taxa_lookup <- list()
+    for (idx in seq_len(nrow(taxon_index))) {
+        taxon <- as.list(taxon_index[idx, ])
+        taxa_lookup[[as.character(taxon$taxon_id)]] <- taxon
+    }
 
-    # Now, starting with the root, work through the list of descendents.
-    # The codes uses a stack with each layer representing a taxonomic level.
-    # These sets are stored in a stack with more specific taxa getting pushed
-    # onto the top at index 1. The current name at each level is used as the
-    # stack list name, so that names(stack) gives the current hierarchy.
+    # create a taxon table to fill in with columns keyed by taxon rank
+    taxon_table <- matrix(NA,
+        ncol = n_fields, nrow = nrow(worksheet_taxa),
+        dimnames = list(NULL, table_fields)
+    )
 
-    # If the top of the stack was a named row in the taxonomy worksheet, the
-    # taxon table is updated. Then we look for descendants of the top of stack
-    # or work through the other taxa at this or lower levels, looking for
-    # remaining descendants.
+    # Loop over the rows of worksheet taxa, following the chain of parent
+    # taxon ids down the lookup dictionary
+    for (rw in seq_len(nrow(worksheet_taxa))) {
+        ptx <- worksheet_taxa[rw, "parent_id"]
 
-    # start the stack off
-    stack <- list(list(top = root[1, ], up_next = root[-1, ]))
-    names(stack) <- stack[[1]]$top$taxon_name
-
-    while (length(stack)) {
-
-        current <- stack[[1]]$top
-        current_wn <- current$worksheet_name
-
-        # If the top of the stack has a worksheet name, add that to the taxon
-        # table
-        if (! is.na(current_wn)) {
-
-            # set the taxon name, rank and status to put in the table
-            txn <- current$taxon_name
-            rnk <- current$taxon_rank
-            sts <- current$gbif_status
-
-            # Look for other taxa in up_next with the same worksheet name
-            # - these are taxa which have a different GBIF canonical name to
-            #   the one the dataset provider used. Figure out which is which
-            #   and update, otherwise just use the singleton.
-            pair_idx <- match(current_wn, stack[[1]]$up_next$worksheet_name)
-
-            if (! is.na(pair_idx)) {
-                # remove the row from up next
-                paired_taxon <- stack[[1]]$up_next[pair_idx, ]
-                stack[[1]]$up_next <- stack[[1]]$up_next[- pair_idx, ]
-
-                # If the current taxon is the GBIF accepted record, replace the
-                # taxon details with those provided in the dataset, else rename
-                # the top of the stack with the accepted details
-                if (current$gbif_status == "accepted") {
-                    txn <- paired_taxon$taxon_name
-                    rnk <- paired_taxon$taxon_rank
-                    sts <- paired_taxon$gbif_status
-                } else {
-                    names(stack)[1] <- paired_taxon$taxon_name
-                }
-            }
-
-            # insert the names but drop user names for intermediate
-            # taxonomic ranks
-            hierarchy <- c(rev(names(stack)), rep(NA, 10 - length(stack)))
-            if (sts == "user") hierarchy[length(stack)] <- NA
-            taxon_table[current_wn, ] <- c(hierarchy, txn, rnk, sts)
-        }
-
-
-        # Does this taxon have descendents? If so, they move on to the top of
-        # the stack otherwise, work back down the stack to find the next level
-        # with something left in the up_next slot.
-        descendants <- taxa[[as.character(current$gbif_id)]]
-
-        if (! is.null(descendants)) {
-            descendants <- list(list(top = descendants[1, ],
-                                     up_next = descendants[-1, ]))
-            names(descendants) <- descendants[[1]]$top$taxon_name
-            stack <- c(descendants, stack)
-
-        } else {
-            while (length(stack)) {
-                up_next <- stack[[1]]$up_next
-                if (nrow(up_next)) {
-                    # If there is anything left in up_next, bring one up and
-                    # replace the stack top
-                    up_next <- list(list(top = up_next[1, ],
-                                         up_next = up_next[-1, ]))
-                    names(up_next) <- up_next[[1]]$top$taxon_name
-                    stack <- c(up_next, stack[-1])
-                    break
-                } else {
-                    # Otherwise pop off the top of the stack
-                    stack <- stack[-1]
-                }
-            }
+        while (!is.na(ptx)) {
+            parent <- taxa_lookup[[as.character(ptx)]]
+            taxon_table[rw, parent$taxon_rank] <- parent$taxon_name
+            ptx <- parent$parent_id
         }
     }
 
-    taxon_table <- as.data.frame(taxon_table, stringsAsFactors = FALSE)
+    # Append information about the worksheet taxa to the table, handling extra
+    # fields in the data for get_taxon_coverage
+    tax_fields <- c(
+        "worksheet_name", "taxon_name", "taxon_rank", "taxon_status"
+    )
+    if ("n_datasets" %in% names(worksheet_taxa)) {
+        tax_fields <- c(tax_fields, "taxon_auth", "n_datasets")
+    }
+
+    taxon_table <- cbind(
+        taxon_table,
+        subset(worksheet_taxa, select = tax_fields)
+    )
     class(taxon_table) <- c("safe_taxa", "data.frame")
 
     return(taxon_table)
-
 }
 
 
 add_taxa <- function(obj, taxon_field = NULL, taxon_table = NULL,
-                      prefix = NULL, which = NULL) {
-
+                     prefix = NULL, use_canon = FALSE) {
     #' Add a taxonomic hierarchy to a SAFE data worksheet.
     #'
-    #' All datasets containing taxon observations provide taxonomic data (see
-    #' \code{\link{get_taxa}}) that can be linked to rows in data worksheets
-    #' that contain "taxa" fields. This function matches the taxonomic hierarchy
-    #' for a dataset for a given taxon field in a data worksheet and inserts
-    #' fields to show that hierarchy.
+    #' Data tables in a safedata dataset can contain "taxa" fields, which tie
+    #' an observation to a particular taxon used in the dataset. All datasets
+    #' containing taxon observations provide taxonomic data about those taxa,
+    #' validated against either NCBI or GBIF. The taxon table for an entire
+    #' dataset can be accessed using \code{\link{get_taxa}}, but this function
+    #' allows the taxonomic hierachy to be added for the specific taxa used in
+    #' in a taxa field in a data worksheet.
     #'
-    #' An existing taxon table can be provided to the function, but the table
-    #' will be automatically loaded if no table is provided. If a data worksheet
-    #' only contains a single taxon field, then that field will be used
-    #' automatically, otherwise users have to specify which taxon field to use.
-    #' A prefix can be added to taxon fields in order to discrimate between
-    #' fields from multuple taxon fields. By default, the function adds all of
-    #' the fields included in the output of \code{\link{get_taxa}}, but
-    #' \code{which} allows a subset of field names to be used.
+    #' An existing taxon table from \code{\link{get_taxa}} can be provided to
+    #' this function, but the table will be automatically loaded if no table
+    #' is provided. If a data worksheet only contains a single taxon field,
+    #' then that field will be used automatically, otherwise users have to
+    #' specify which taxon field to use. A prefix can be added to taxon fields
+    #' in order to discrimate between taxon hierarchy fields added from
+    #' different taxon fields.
+    #'
+    #' By default, the taxonomy data added to the table will use the original
+    #' taxon name used in the dataset, even if that usage is considered a
+    #' synonym or is merged in GBIF or NCBI (see \code{\link{get_taxa}}).
+    #' The \code{use_canon} option can be set to TRUE to instead show the
+    #' canonical taxon name used in the taxonomy database for synonomous or
+    #' merged taxa.
     #'
     #' @param obj An existing object of class \code{safedata}
     #' @param taxon_field The name of a taxon field in a \code{safedata} for
@@ -271,18 +263,18 @@ add_taxa <- function(obj, taxon_field = NULL, taxon_table = NULL,
     #'    \code{\link{get_taxa}}.
     #' @param prefix A string to be appended to taxon field names, primarily to
     #'    discriminate between fields of multiple taxonomies are to be added.
-    #' @param which A vector specifying a subset of taxonomy table field
-    #'    names to add.
+    #' @param use_canon Add the canonical taxon name from the taxonomy database
+    #'    rather than the name used in the dataset.
     #' @return A modified \code{safedata} object with added taxonomic columns.
     #' @seealso \code{\link{get_taxa}}
     #' @examples
-    #'    set_example_safe_dir()
+    #'    set_example_safedata_dir()
     #'    beetle_morph <- load_safe_data(1400562, "MorphFunctTraits")
     #'    beetle_morph <- add_taxa(beetle_morph)
-    #'    unset_example_safe_dir()
+    #'    set_example_safedata_dir(on=FALSE)
     #' @export
 
-    if (! inherits(obj, "safedata")) {
+    if (!inherits(obj, "safedata")) {
         stop("add_taxa requires an object of class 'safedata'")
     }
 
@@ -296,14 +288,20 @@ add_taxa <- function(obj, taxon_field = NULL, taxon_table = NULL,
         taxon_field <- taxa_fields[1]
     } else if (is.null(taxon_field) && length(taxa_fields) > 1) {
         stop("Data frame contains multiple taxon fields, specify taxon_field")
-    } else if (! taxon_field %in% taxa_fields) {
+    } else if (!taxon_field %in% taxa_fields) {
         stop(sprintf("%s is not a taxon field in the data frame", taxon_field))
     }
 
-    # Load the taxonomy
+    # Load the taxonomy, making sure that an existing taxon table is the right
+    # one for the worksheet
     if (is.null(taxon_table)) {
         taxon_table <- get_taxa(obj_attr$safe_record_set)
-    } else if (! inherits(taxon_table, "safe_taxa")) {
+    } else if (inherits(taxon_table, "safe_taxa")) {
+        taxa_record_set <- attr(taxon_table, "metadata")$safe_record_set
+        if (!all.equal(taxa_record_set, obj_attr$safe_record_set)) {
+            stop("Provided 'taxon_table' is for a different dataset.")
+        }
+    } else {
         stop("'taxon_table' not a 'safe_taxa' object created by 'get_taxa'")
     }
 
@@ -313,35 +311,43 @@ add_taxa <- function(obj, taxon_field = NULL, taxon_table = NULL,
         return(obj)
     }
 
-    # Match taxon names to the taxon and generate matching table
-    idx <- match(obj[, taxon_field], rownames(taxon_table))
+    # Drop canon/non_canon before matching
+    non_canon_usage <- taxon_table$worksheet_name[
+        duplicated(taxon_table$worksheet_name)
+    ]
+    canon_only <- !taxon_table$worksheet_name %in% non_canon_usage
+    accepted_usage <- taxon_table$taxon_status == "accepted"
+    if (use_canon) {
+        taxon_table <- taxon_table[canon_only | accepted_usage, ]
+    } else {
+        taxon_table <- taxon_table[canon_only | !accepted_usage, ]
+    }
+
+    # Match taxon names in the taxon field to the worksheet names in the taxon
+    # table and generate matching table
+    idx <- match(obj[, taxon_field], taxon_table$worksheet_name)
 
     if (any(is.na(idx))) {
-        stop("Not all taxa names found in taxon index,",
-             " contact package developers.")
+        stop(
+            "Not all taxa names found in taxon index,",
+            " contact package developers."
+        )
     }
 
+    # Get the ordered taxon table and drop the worksheet name field, which
+    # will duplicate the taxon field
     taxon_table <- taxon_table[idx, ]
-
-    # Select fields if which is provided
-    if (! is.null(which)) {
-        which_idx <- match(which, names(taxon_table))
-
-        if (any(is.na(which_idx))) {
-            stop("Unknown taxon table fields in 'which'")
-        }
-
-        taxon_table <- subset(taxon_table, select = which_idx)
-    }
+    taxon_table$worksheet_name <- NULL
 
     # Add prefix to fields if requested
-    if (! is.null(prefix)) {
+    if (!is.null(prefix)) {
         names(taxon_table) <- paste0(prefix, names(taxon_table))
     }
 
     # combine and copy across attributes (could create a method for cbind,
-    # but seems excessive!)
+    # but seems excessive!), dropping the worksheet name used for matching
     ret <- cbind(obj, taxon_table)
+    rownames(ret) <- rownames(obj)
     attr(ret, "metadata") <- attr(obj, "metadata")
     class(ret) <- c("safedata", "data.frame")
 
@@ -349,48 +355,35 @@ add_taxa <- function(obj, taxon_field = NULL, taxon_table = NULL,
 }
 
 
-get_taxon_graph <- function(record) {
-
+get_taxon_graph <- function(record, which = c("gbif", "ncbi")) {
     #' Get a graph of the taxa in a dataset
     #'
-    #' This function loads the taxon index for a dataset (see
-    #' \code{\link{get_taxa}}) and creates a taxonomic graph for the dataset.
-    #' The graph vertex attributes contain further details of each taxon,
-    #' including GBIF id and taxonomic status.
+    #' This function loads the  taxon index for either of the NCBI or GBIF
+    #' taxa present in a dataset (see \code{\link{get_taxa}}) and creates a
+    #' taxonomic graph for the dataset using the \pkg{igraph} package.
     #'
-    #' This function may modify the taxon index data to represent it as a
-    #' graph, primarily to avoid duplicating taxon names, which are used as
-    #' the primary vertex id. Possible issues are:
-    #' \enumerate{
-    #'   \item A user maps two worksheet names onto the _same_ taxon name: for
-    #'     example, "moth" and "butterfly" both using Lepidoptera as a taxon
-    #'     name. This is resolved by recreating the two worksheet names as
-    #'     children ofthe shared taxon name.
-    #'   \item The taxon index may contain two GBIF taxonomic concepts with the
-    #'     same name (e.g. an accepted and doubtful usage). In this case, the
-    #'     function appends the GBIF ID to make taxon names unique.
-    #'   \item Simple duplication of identical taxa - this should not happen
-    #'     but has been observed and the function removes all but one entry.
-    #'   \item Missing parent taxa - again this should not happen but sometimes
-    #'     the GBIF backbone chain stops above the Kingdom level. The function
-    #'     adds a unique name for unknown parents.
-    #' }
+    #' The graph vertices are the different taxa used in the dataset along
+    #' with nodes for all parent taxa of those taxa. The graph vertex
+    #' names are arbitrary strings (tx1, ...) but the vertex attributes
+    #' contain the worksheet name, validated taxon name, taxon rank and taxon
+    #' status (see \code{names(vertex_attr(obj))}).
     #'
     #' @examples
-    #'    set_example_safe_dir()
+    #'    set_example_safedata_dir()
     #'    beetle_graph <- get_taxon_graph(1400562)
     #'    plot(beetle_graph, vertex.label.cex = 0.6, vertex.size = 15,
     #'         vertex.size2 = 3, vertex.shape = "rectangle")
     #'    # show worksheet names for tips
     #'    wsn <- igraph::vertex_attr(beetle_graph, "worksheet_name")
-    #'    txn <- igraph::vertex_attr(beetle_graph, "name")
+    #'    txn <- igraph::vertex_attr(beetle_graph, "taxon_name")
     #'    labels <- ifelse(is.na(wsn), txn, wsn)
     #'    is_leaf <- igraph::vertex_attr(beetle_graph, "leaf")
     #'    vert_col <- ifelse(is_leaf, "cornflowerblue", "grey")
     #'    plot(beetle_graph, vertex.label.cex = 0.6, vertex.size = 15,
     #'         vertex.size2 = 3, vertex.shape = "rectangle",
     #'         vertex.label = labels, vertex.color= vert_col)
-    #'    unset_example_safe_dir()
+    #'    set_example_safedata_dir(on=FALSE)
+    #' @param which Return the GBIF or NCBI taxon graph
     #' @param record A single dataset record id
     #' @return An \code{\link[igraph:make_graph]{graph}} object.
     #' @export
@@ -405,113 +398,99 @@ get_taxon_graph <- function(record) {
 
     # Get the record metadata containing the taxon index and if possible the
     # taxon worksheet, which provides the matching of taxon names to datasets
-    taxa <- load_record_metadata(record_set)$taxa
+    which <- match.arg(which)
+    md <- load_record_metadata(record_set)
 
-    if (length(taxa) == 0) {
+    if (which == "gbif") {
+        taxon_index <- md$gbif_taxa
+    } else {
+        taxon_index <- md$ncbi_taxa
+    }
+
+    if (length(taxon_index) == 0) {
         return(NULL)
     }
 
-    # drop the id field and any duplicates
-    taxa <- taxa[, -match("id", names(taxa))]
-    taxa <- unique(taxa)
+    # Remove duplicates:
+    # 1) Exact duplicated entries in the taxon index are accidental user
+    #    repeated taxa which is a legacy issue from older validation.
+    taxon_index <- taxon_index[!duplicated(taxon_index), ]
 
-    # Some datasets point more than one different "worksheet name" to the same
-    # taxon. This is not ideal but was not expressly an error in early versions
-    # of safedata_validator. Each duplicated row is a (hopefully) different
-    # child of the shared taxon, so promoting the taxon to a parent retains
-    # the expected tips.
-    is_tip <- ! is.na(taxa$worksheet_name)
-    dupe_tn <- duplicated(taxa$taxon_name[is_tip])
+    # 2) Rows can be duplicated _except_ for worksheet name. This occurs where
+    #    a taxon is used as a worksheet taxa, but also occurs in the taxon
+    #    hierarchy below other worksheet taxa. These represent the _same_
+    #    vertex, and only the one with the worksheet name should be preserved.
 
-    if (any(dupe_tn)) {
+    # Force NA worksheet names to the bottom of the index and then remove
+    # rows that are duplicates of rows _with_ worksheet names but do not
+    # have a worksheet name themselves.
+    taxon_index <- taxon_index[order(taxon_index$worksheet_name), ]
+    tidx_no_ws <- taxon_index[!names(taxon_index) == "worksheet_name"]
+    taxon_index <- taxon_index[
+        !duplicated(tidx_no_ws) |
+            !is.na(taxon_index$worksheet_name),
+    ]
 
-        # split the tree into tips (taxa used in the dataset and which have
-        # worksheet names) and the rest of the tree that connects those tips
-        tips <- taxa[is_tip, ]
-        tree <- taxa[! is_tip, ]
+    # Create a unique set of vertex names as a simple sequence. Worksheet
+    # names are duplicated for canon/non-canon use and taxon_name can also
+    # be duplicated from different usages.
+    taxon_index$vertex_name <- paste0("tx", seq_len(nrow(taxon_index)))
 
-        # remove duplications from the tips data frame
-        dupes <- tips$taxon_name[which(dupe_tn)]
-        dupes <- tips$taxon_name %in% dupes
-        dupe_rows <- tips[dupes, ]
-        tips <- tips[! dupes, ]
+    # Create an empty graph - directed by default, edges link from root to tip
+    g <- igraph::make_empty_graph()
 
-        # split the duplicates up into sets by the duplicated name and
-        # then repackage the row into new tips and new tree rows
-        dupe_rows <- split(dupe_rows, dupe_rows$taxon_name)
+    # Populate with vertex data and add a root taxon
+    g <- g + igraph::vertices(
+        taxon_index$vertex_name,
+        worksheet_name = taxon_index$worksheet_name,
+        taxon_id = taxon_index$taxon_id,
+        taxon_name = taxon_index$taxon_name,
+        taxon_rank = taxon_index$taxon_rank,
+        taxon_status = taxon_index$taxon_status
+    )
+    g <- g + igraph::vertex(
+        "root",
+        taxon_name = "root", worksheet_name = "root", taxon_rank = "root"
+    )
 
-        warning("Fixing duplicated names in worksheet taxa:\n",
-                paste0(names(dupe_rows),  collapse = ","))
+    # Make a lookup table for vertex names from taxon id to use to add edges
+    # from taxa to parent. Note that this will collapse user taxa with taxon_id
+    # of -1, but those are always tips. Need to use character here to support
+    # using taxon id as list names and to include root as parent
+    taxon_index$taxon_id <- as.character(taxon_index$taxon_id)
+    taxon_index$parent_id <- ifelse(
+        is.na(taxon_index$parent_id), "root", taxon_index$parent_id
+    )
 
-         for (this_dupe in dupe_rows) {
-            new_tips <- data.frame(worksheet_name = this_dupe$worksheet_name,
-                                   gbif_id = -1,
-                                   taxon_rank = "user",
-                                   taxon_name = this_dupe$worksheet_name,
-                                   gbif_status = "user",
-                                   dataset_id = this_dupe$dataset_id,
-                                   gbif_parent_id = this_dupe$gbif_id,
-                                   stringsAsFactors = FALSE)
-            tips <- rbind(tips, new_tips)
-
-            new_parent <- this_dupe[1, ]
-            new_parent$worksheet_name <- NA
-            tree <- rbind(tree, new_parent)
-        }
-
-        taxa <- rbind(tips, tree)
+    parent_lookup <- list("root" = "root")
+    for (tx in seq_len(nrow(taxon_index))) {
+        parent_lookup[taxon_index$taxon_id[tx]] <- taxon_index$vertex_name[tx]
     }
 
-    dupes <- duplicated(taxa$taxon_name)
-
-    if (any(dupes)) {
-        dupe_names <- taxa$taxon_name[dupes]
-        taxa$taxon_name <- ifelse(taxa$taxon_name %in% dupe_names,
-                                  paste0(taxa$taxon_name, "_", taxa$gbif_id),
-                                  taxa$taxon_name)
-        warning("Fixing duplicated taxon names by appending GBIF ID:\n",
-                paste0(dupe_names,  collapse = ","))
+    # Add edges
+    edges <- character()
+    for (tx in seq_len(nrow(taxon_index))) {
+        edges <- c(
+            edges,
+            parent_lookup[[taxon_index$parent_id[tx]]],
+            taxon_index$vertex_name[tx]
+        )
     }
 
-    # Add the parent name to the taxa to make edges, catching the root
-    # edge and unknown parents above the kingdom level
-    taxa$parent_name <- taxa$taxon_name[match(taxa$gbif_parent_id,
-                                              taxa$gbif_id)]
-    taxa$parent_name[is.na(taxa$parent_name) &
-                     taxa$taxon_rank == "kingdom"] <- "root"
+    g <- igraph::add_edges(g, edges)
 
-    still_missing <- is.na(taxa$parent_name)
-    if (any(still_missing)) {
-        missing_parents <- paste0("missing_parent_", seq(sum(still_missing)))
-        n_miss <- length(missing_parents)
-        taxa$parent_name[still_missing] <- missing_parents
-        terminal_vertices <- list(c("root", missing_parents),
-                                  c("root", rep(NA, n_miss)),
-                                  c("root", missing_parents),
-                                  rep(NA, n_miss + 1),
-                                  c("accepted", rep(NA, n_miss)))
-    } else {
-        terminal_vertices <- list("root", "root", "root", NA, "accepted")
-    }
+    # Add leaf node attributes
+    igraph::vertex_attr(g, "leaf") <- igraph::degree(g, mode = "out") == 0
 
-    edges <- taxa[, c("parent_name", "taxon_name")]
-    vertices <- subset(taxa, select = c(taxon_name, taxon_rank, worksheet_name,
-                                   gbif_id, gbif_status))
-    vertices <- rbind(vertices, terminal_vertices)
-
-    g <- igraph::graph_from_data_frame(edges, vertices = vertices)
-    g <- igraph::set_vertex_attr(g, "leaf",
-                                 value = igraph::degree(g, mode = "out") == 0)
-
-    if (! igraph::is_dag(g)) {
+    if (!igraph::is_dag(g)) {
         warning("Taxon graph is not a directed acyclic graph")
     }
 
-    if (! igraph::is_connected(g)) {
+    if (!igraph::is_connected(g)) {
         warning("Taxon graph is not connected")
     }
 
-    if (! igraph::is_simple(g)) {
+    if (!igraph::is_simple(g)) {
         warning("Taxon graph is not simple")
     }
 
@@ -519,8 +498,7 @@ get_taxon_graph <- function(record) {
 }
 
 
-igraph_to_phylo <- function(g) {
-
+igraph_to_phylo <- function(g, labels = "taxon_name") {
     #' Getting a phylogeny for a dataset
     #'
     #' The function \code{igraph_to_phylo} takes a taxon graph (see
@@ -541,25 +519,27 @@ igraph_to_phylo <- function(g) {
     #'
     #' The function \code{get_phylogeny} is simply a wrapper that calls
     #' \code{\link{get_taxon_graph}} and then \code{igraph_to_phylo}.
-    #\
+    # \
+    #' @param labels The name of a vertex attribute from
+    #'    \code{\link{get_taxon_graph}} to use as node labels.
     #' @seealso \code{\link{get_taxon_graph}}
     #' @examples
-    #'    set_example_safe_dir()
+    #'    set_example_safedata_dir()
     #'    beetle_graph <- get_taxon_graph(1400562)
     #'    beetle_phylo <- igraph_to_phylo(beetle_graph)
     #'    ape::plot.phylo(beetle_phylo, show.node.label = TRUE)
     #'    # Or wrapped into a single function
     #'    beetle_phylo <- get_phylogeny(1400562)
     #'    ape::plot.phylo(beetle_phylo, show.node.label = TRUE)
-    #'    unset_example_safe_dir()
+    #'    set_example_safedata_dir(on=FALSE)
     #' @param g A taxon graph returned by \code{\link{get_taxon_graph}}
     #' @param record A single dataset record id
     #' @return An \code{\link[ape:read.tree]{phylo}} object.
     #' @export
 
-    if (! igraph::is_simple(g) |
-       ! igraph::is_connected(g) |
-       ! igraph::is_dag(g)) {
+    if (!igraph::is_simple(g) |
+        !igraph::is_connected(g) |
+        !igraph::is_dag(g)) {
         stop("Taxon graph is not a simple, connected, directed acylic graph")
     }
 
@@ -573,15 +553,17 @@ igraph_to_phylo <- function(g) {
     # phylo node numbering.
     is_leaf <- igraph::vertex_attr(g, "leaf", traverse$order)
     n_leaf <- sum(is_leaf)
-    n_node <- sum(! is_leaf)
+    n_node <- sum(!is_leaf)
     node_id <- ifelse(is_leaf, cumsum(is_leaf), cumsum(!is_leaf) + n_leaf)
 
     # Store the node ids on the graph
-    g <- igraph::set_vertex_attr(g, "node_id", index = traverse$order,
-                                 value = node_id)
+    g <- igraph::set_vertex_attr(g, "node_id",
+        index = traverse$order,
+        value = node_id
+    )
 
     # Extract the edge and vertex data
-    vertex_data <-  igraph::as_data_frame(g, "vertices")
+    vertex_data <- igraph::as_data_frame(g, "vertices")
     edge_data <- igraph::as_data_frame(g, "edges")
 
     # Substitute the node id numbers into the edge list
@@ -590,29 +572,33 @@ igraph_to_phylo <- function(g) {
     edge_data <- matrix(edge_data, ncol = 2)
 
     # lookup the tip and node labels
+    labels <- vertex_data[, labels]
     tip_labels <- 1:n_leaf
-    tip_labels <- vertex_data$name[match(tip_labels, vertex_data$node_id)]
+    tip_labels <- labels[match(tip_labels, vertex_data$node_id)]
     node_labels <- (n_leaf + 1):(n_node + n_leaf)
-    node_labels <- vertex_data$name[match(node_labels, vertex_data$node_id)]
+    node_labels <- labels[match(node_labels, vertex_data$node_id)]
 
     # Build the phylogeny
-    phy <- structure(list(edge = edge_data,
-                          edge.length = rep(1, nrow(edge_data)),
-                          tip.labels = tip_labels,
-                          node.labels = node_labels,
-                          Nnode = n_node),
-                     class = "phylo")
+    phy <- structure(
+        list(
+            edge = edge_data,
+            edge.length = rep(1, nrow(edge_data)),
+            tip.labels = tip_labels,
+            node.labels = node_labels,
+            Nnode = n_node
+        ),
+        class = "phylo"
+    )
     return(phy)
 }
 
 
-get_phylogeny <- function(record) {
-
+get_phylogeny <- function(record, labels = "taxon_name") {
     #' @describeIn igraph_to_phylo Get a phylogeny for a dataset
     #' @export
 
     graph <- get_taxon_graph(record)
-    phylo <- igraph_to_phylo(graph)
+    phylo <- igraph_to_phylo(graph, labels = labels)
 
     return(phylo)
 }

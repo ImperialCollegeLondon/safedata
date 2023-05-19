@@ -1,7 +1,7 @@
 Package: safedata
 Type: Package
 Title: Interface to Data from the SAFE Project 
-Version: 1.1.2-9000
+Version: 1.1.3-9000
 Date: 2022-08-01
 Authors@R: c(
     person('Andy', 'Aldersley', email='a.aldersley@imperial.ac.uk', role=c('aut')),
@@ -26,7 +26,8 @@ Suggests:
     knitr,
     rmarkdown,
     ape,
-    testthat (>= 2.1.0)
+    testthat (>= 2.1.0),
+    withr
 Encoding: UTF-8
 URL: https://imperialcollegelondon.github.io/safedata/index.html
 BugReports: https://github.com/ImperialCollegeLondon/safedata/issues

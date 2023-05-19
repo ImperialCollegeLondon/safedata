@@ -19,23 +19,23 @@ An \code{response} object or a boolean showing if the
    download attempt was successful.
 }
 \description{
-This function tries to fetch the HEAD for the resource and handles failure to
-resolve (such as a bad safedata API url), timeouts and then actual HTTP error
-codes. If none of those occur, the resource is downloaded.
+This function tries to fetch a resource from a URL and handles failure to
+resolve the resource (bad URLs), timeouts and then actual HTTP error
+codes.
 }
 \details{
 If the download fails, the function returns FALSE and the return value
 attribute 'fail_msg' is used to provide details. Otherwise, an
-\code{\link[httr]{response}} object is returned containing the resource. If a
-local path is provided, the resource is downloaded to that path and the
-function returns TRUE to indicate success.
+\code{\link[httr]{response}} object is returned containing the resource
+ If a local path is provided, the resource is downloaded to that path
+and the function returns TRUE to indicate success.
 }
 \section{Note}{
 
 
-This function contains code to simulate network failures of varying kinds (no
-network, no API, specific resource unavailable) for use in unit testing that
-the safedata package handles theses errors gracefully.
+This function contains code to simulate network failures of varying
+kinds (no network, no API, specific resource unavailable) for use in
+unit testing.
 }
 
 \keyword{internal}

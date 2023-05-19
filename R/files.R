@@ -1,8 +1,7 @@
 get_file_details <- function(record_id) {
-
     #' Get file details for a record
     #'
-    #' This function returns a list of the files associated with a record.
+    #' This function returns a data frame of the files associated with a record.
     #' The access status of the record is reported, along with the local
     #' absolute file path and whether a local copy is present. If there
     #' is no local copy and the dataset is open access, you can use
@@ -14,9 +13,9 @@ get_file_details <- function(record_id) {
     #'    and local.
     #' @examples
     #'    \donttest{
-    #'    set_example_safe_dir()
+    #'    set_example_safedata_dir()
     #'    files <- get_file_details(1400562)
-    #'    unset_example_safe_dir()
+    #'    set_example_safedata_dir(on=FALSE)
     #'    }
     #' @export
 
@@ -25,12 +24,13 @@ get_file_details <- function(record_id) {
     index <- get_index()
 
     # Check for a single _record_ id
-    if (nrow(record_set) != 1 | is.na(record_set$record)) {
+    if (nrow(record_set) != 1 || is.na(record_set$record)) {
         stop("Requires a single valid record id - not a concept id")
     }
 
     files <- subset(index, zenodo_record_id == record_set$record,
-                    select = c(filename, dataset_access, path))
+        select = c(filename, dataset_access, path)
+    )
     files$path <- file.path(getOption("safedata.dir"), files$path)
     files$local <- file.exists(files$path)
 

@@ -5,9 +5,7 @@
 \alias{safedata_env}
 \alias{index}
 \title{Index file memory cache}
-\format{
-An object of class \code{environment} of length 0.
-}
+\format{An object of class \code{environment} of length 0.}
 \usage{
 safedata_env
 }
