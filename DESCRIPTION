@@ -26,7 +26,8 @@ Suggests:
     knitr,
     rmarkdown,
     ape,
-    testthat (>= 2.1.0)
+    testthat (>= 2.1.0),
+    withr
 Encoding: UTF-8
 URL: https://imperialcollegelondon.github.io/safedata/index.html
 BugReports: https://github.com/ImperialCollegeLondon/safedata/issues

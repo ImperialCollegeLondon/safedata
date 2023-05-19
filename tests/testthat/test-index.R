@@ -46,7 +46,7 @@ test_that("Create succeeds otherwise", {
     expect_true(success)
 
     # Tidy up
-    fs::dir_delete(testsd)
+    unlink(testsd, recursive = TRUE)
 })
 
 

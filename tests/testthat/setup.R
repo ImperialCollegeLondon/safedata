@@ -17,7 +17,7 @@ local_create_sdd <- function(dir = tempfile(), env = parent.frame()) {
     #' Create a safedata directory, using the mocked server URL
     #' and then delete it again when a test completes.
     create_safedata_dir(dir, url = "http://example.safedata.server")
-    withr::defer(fs::dir_delete(dir), envir = env)
+    withr::defer(unlink(dir, recursive = TRUE), envir = env)
 
     return(dir)
 }

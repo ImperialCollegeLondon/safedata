@@ -148,7 +148,9 @@ mock_handler <- function(req) {
                 stop("Failed to open file ", req$output$path)
             }
             file.copy(response_file, req$output$path)
-            content <- httr:::path(response_file)
+            # set as an httr path object (as in httr:::path(response_file))
+            class(response_file) <- "path"
+            content <- response_file
         } else {
             content <- readBin(
                 response_file,
@@ -160,8 +162,8 @@ mock_handler <- function(req) {
         content <- raw(0)
     }
 
-    # Build a very basic mocked response object
-    response <- httr:::response(
+    # Build a very basic mocked response object (as in httr:::response(url...))
+    response <- structure(list(
         url = req$url,
         status_code = mocked_response$status_code,
         headers = list(
@@ -175,7 +177,7 @@ mock_handler <- function(req) {
         times = numeric(0),
         request = req,
         handle = NULL
-    )
+    ), class = "response")
 
     return(response)
 }
