@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-1.1.3
-    - Bugfix in test suite: checking HEAD rather than GET saved bandwidth but allowed
-      GET to fail gracelessly. Complete revamp of try_to_download.
-=======
 2.0.0
     - Update to handle new API and NCBI taxa from safedata_server and 
       safedata_validator 3.0.0
@@ -12,7 +7,7 @@
 1.1.3
     - Bugfix in try_to_download: need to properly test GET requests, not just try HEAD,
       otherwise web failures (like httpbin timeouts) are not handled gracefully.
->>>>>>> 6bcd6446f02adb304c2bfc28e7c40b92b139d4ad
+      Complete revamp of try_to_download.
 
 1.1.2
     - Bugfix in test suite: test "Download dataset fails gracefully on Zenodo down"
