@@ -157,17 +157,24 @@ search_authors <- function(author, ids = NULL, most_recent = FALSE) {
 }
 
 
-search_taxa <- function(taxon_name = NULL, taxon_rank = NULL, gbif_id = NULL,
+search_taxa <- function(taxon_name = NULL, taxon_rank = NULL,
+                        taxon_id = NULL, taxon_auth = c("GBIF", "NCBI"),
                         ids = NULL, most_recent = FALSE) {
-    #' @describeIn search_safe Search by taxon name, rank or GBIF ID.
+    #' @describeIn search_safe Search by taxon name, rank or taxon ID.
     #' @export
+
+    taxon_auth <- match.arg(taxon_auth)
 
     # check inputs
     validate_query_param("taxon_name", taxon_name)
     validate_query_param("taxon_rank", taxon_rank)
-    validate_query_param("gbif_id", gbif_id, class = "numeric")
+    validate_query_param("taxon_id", gbif_id, class = "numeric")
+    validate_query_param("taxon_auth", taxon_auth)
 
-    params <- c(name = taxon_name, rank = taxon_rank, gbif_id = gbif_id)
+    params <- c(
+        name = taxon_name, rank = taxon_rank,
+        taxon_id = taxon_id, auth = taxon_auth
+    )
     return(safe_api_search("taxa", params, ids, most_recent))
 }
 
