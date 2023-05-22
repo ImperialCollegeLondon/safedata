@@ -168,7 +168,7 @@ search_taxa <- function(taxon_name = NULL, taxon_rank = NULL,
     # check inputs
     validate_query_param("taxon_name", taxon_name)
     validate_query_param("taxon_rank", taxon_rank)
-    validate_query_param("taxon_id", gbif_id, class = "numeric")
+    validate_query_param("taxon_id", taxon_id, class = "numeric")
     validate_query_param("taxon_auth", taxon_auth)
 
     params <- c(

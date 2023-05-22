@@ -64,7 +64,7 @@ mock_api_urls <- list(
         content = "taxa_name_Formicidae.json",
         status_code = 200L
     ),
-    "http://example.safedata.server/api/search/taxa?gbif_id=4342" = list(
+    "http://example.safedata.server/api/search/taxa?taxon_id=4342&auth=GBIF" = list(
         content = "taxa_gbif_id_4342.json",
         status_code = 200L
     ),
