@@ -55,7 +55,9 @@
 #'    full (or partial) names.
 #' @param taxon_name The scientific name of a taxon to search for.
 #' @param taxon_rank A taxonomic rank to search for.
-#' @param gbif_id A GBIF taxonomic ID number.
+#' @param taxon_id A numeric taxon ID number from GBIF or NCBI.
+#' @param taxon_auth One of GBIF or NCBI. If not specified, results will match
+#'     against taxa validated against either taxonomy database.
 #' @param text Character string to look for within a SAFE dataset, worksheet,
 #'    title, field description, and dataset keywords.
 #' @param wkt A well-known text geometry string, assumed to use latitude and

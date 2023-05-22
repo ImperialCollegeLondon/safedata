@@ -67,6 +67,11 @@ full (or partial) names.}
 
 \item{taxon_rank}{A taxonomic rank to search for.}
 
+\item{taxon_id}{A numeric taxon ID number from GBIF or NCBI.}
+
+\item{taxon_auth}{One of GBIF or NCBI. If not specified, results will match
+against taxa validated against either taxonomy database.}
+
 \item{text}{Character string to look for within a SAFE dataset, worksheet,
 title, field description, and dataset keywords.}
 
@@ -77,8 +82,6 @@ longitude in WGS84 (EPSG:4326).}
 
 \item{distance}{A buffer distance for spatial searches, giving the distance
 in metres within which to match either location or wkt searches.}
-
-\item{gbif_id}{A GBIF taxonomic ID number.}
 }
 \value{
 An object of class \code{\link{safe_record_set}} of datasets that
