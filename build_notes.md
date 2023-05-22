@@ -155,19 +155,22 @@ against live content.
 ## Linting
 
 The linting process inspects the R code files in the package to check they have a
-consistent coding and syntax style. The file `build_scripts/collect_lint.sh` runs the
-code linting and updates the file `lint.txt` in the package root.
-
-The `.lintr` file in the package root is used to configure the linting and set any
-exclusions. This is currently done on a line by line basis to note specific exceptions.
-It is also possible to exclude code from linting using `# nolint` tags in the source
-code, but I'm avoiding this to keep the code files relatively clean. It does mean that
-`.lintr` has to be updated if the line numbers of exceptions change.
+consistent coding and syntax style. Running the command below from the package root
+runs the linting and updates a file `lint.txt` in the package root.
 
 ```sh
-cd build_scripts
-./collect_lint.sh
+Rscript -e "lintr::lint_package()" > lint.txt
 ```
+
+The `.lintr` file in the package root is used to configure the linting and set any
+exclusions. Code lines can be excluded using the `# nolint` tag but this doesn't work
+well for comments and docstrings as code formatters aggresively wrap lines on save. For
+these lines `.lintr` has to be updated to exclude linting on specific line numbers.
+
+Currently, the `.lintr` configuration:
+
+* sets a very lax limit on cyclomatic complexity,
+* permits commented out code - there are a couple of temporarily retired tests.
 
 ## Release cycle
 
