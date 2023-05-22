@@ -82,7 +82,7 @@
 #' search_fields(field_text = "temperature", field_type = "numeric")
 #' search_authors("Ewers")
 #' search_taxa(taxon_name = "Formicidae")
-#' search_taxa(gbif_id = 4342)
+#' search_taxa(taxon_id = 4342, taxon_auth = "GBIF")
 #' search_taxa(taxon_rank = "family")
 #' search_text("forest")
 #' search_text("ant")

@@ -195,13 +195,18 @@ ants <- search_taxa("Formicidae")
 print(ants)
 ```
 
-The taxonomic index is built around the GBIF backbone taxonomic database and
-include the following core taxonomic levels: kingdom, phylum, class, order,
-family, genus, species and subspecies. It is also possible to search by taxon ID:
-for example the [GBIF ID](https://www.gbif.org/species/4342) for Formicidae.
+The taxonomic index is built around the GBIF and NCBI taxonomic databases. The 
+GBIF database only uses the following core taxonomic levels: kingdom, phylum, 
+class, order, family, genus, species and subspecies. Although the NCBI uses a much
+wider range of taxonomic levels, we only include these core backbone ranks for 
+NCBI taxa, although we add superkingdom, which is used for bacteria and viruses. 
+
+It is also possible to search the taxon index using the taxon index number from 
+one of GBIF or NCBI. For example, to search for the GBIF ID for 
+[Formicidae (4234)](https://www.gbif.org/species/4342) .
 
 ```{r search_taxa_id}
-ants <- search_taxa(gbif_id = 4342)
+ants <- search_taxa(taxon_id = 4342, taxon_auth = "GBIF")
 ```
 
 ### Spatial search details
