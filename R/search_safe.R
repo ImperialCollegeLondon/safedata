@@ -55,7 +55,9 @@
 #'    full (or partial) names.
 #' @param taxon_name The scientific name of a taxon to search for.
 #' @param taxon_rank A taxonomic rank to search for.
-#' @param gbif_id A GBIF taxonomic ID number.
+#' @param taxon_id A numeric taxon ID number from GBIF or NCBI.
+#' @param taxon_auth One of GBIF or NCBI. If not specified, results will match
+#'     against taxa validated against either taxonomy database.
 #' @param text Character string to look for within a SAFE dataset, worksheet,
 #'    title, field description, and dataset keywords.
 #' @param wkt A well-known text geometry string, assumed to use latitude and
@@ -82,7 +84,7 @@
 #' search_fields(field_text = "temperature", field_type = "numeric")
 #' search_authors("Ewers")
 #' search_taxa(taxon_name = "Formicidae")
-#' search_taxa(gbif_id = 4342)
+#' search_taxa(taxon_id = 4342, taxon_auth = "GBIF")
 #' search_taxa(taxon_rank = "family")
 #' search_text("forest")
 #' search_text("ant")
@@ -157,17 +159,27 @@ search_authors <- function(author, ids = NULL, most_recent = FALSE) {
 }
 
 
-search_taxa <- function(taxon_name = NULL, taxon_rank = NULL, gbif_id = NULL,
+search_taxa <- function(taxon_name = NULL, taxon_rank = NULL,
+                        taxon_id = NULL, taxon_auth = NULL,
                         ids = NULL, most_recent = FALSE) {
-    #' @describeIn search_safe Search by taxon name, rank or GBIF ID.
+    #' @describeIn search_safe Search by taxon name, rank or taxon ID.
     #' @export
+
+    # Validate taxon auth unless it is missing
+    if (!is.null(taxon_auth)) {
+        taxon_auth <- match.arg(taxon_auth, c("GBIF", "NCBI"))
+    }
 
     # check inputs
     validate_query_param("taxon_name", taxon_name)
     validate_query_param("taxon_rank", taxon_rank)
-    validate_query_param("gbif_id", gbif_id, class = "numeric")
+    validate_query_param("taxon_id", taxon_id, class = "numeric")
+    validate_query_param("taxon_auth", taxon_auth)
 
-    params <- c(name = taxon_name, rank = taxon_rank, gbif_id = gbif_id)
+    params <- c(
+        name = taxon_name, rank = taxon_rank,
+        taxon_id = taxon_id, auth = taxon_auth
+    )
     return(safe_api_search("taxa", params, ids, most_recent))
 }
 

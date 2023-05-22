@@ -33,14 +33,9 @@ and the function returns TRUE to indicate success.
 \section{Note}{
 
 
-<<<<<<< HEAD
-This function contains code to simulate network failures of varying kinds (no
-network, no API, specific resource unavailable) for use in unit testing.
-=======
 This function contains code to simulate network failures of varying
 kinds (no network, no API, specific resource unavailable) for use in
 unit testing.
->>>>>>> 6bcd6446f02adb304c2bfc28e7c40b92b139d4ad
 }
 
 \keyword{internal}
