@@ -1,1 +1,604 @@
-{"funders": null, "longitudinal_extent": [117.572972141554, 117.597482723277], "embargo_date": null, "description": "Phenotypic divergence, population change and resilience in Whitehead's Rat (Maxomys whiteheadi) across a tropical forest degradation gradien", "latitudinal_extent": [4.68365792100346, 4.71655796466401], "title": "Whitehead's rat morphometrics", "permits": null, "temporal_extent": ["2011-05-22 00:00:00", "2016-07-25 00:00:00"], "filename": "template_Morris.xlsx", "access": "open", "external_files": null, "dataworksheets": [{"taxa_fields": ["Species"], "max_row": 1395, "name": "Whiteheads_occurrences", "max_col": 19, "title": "Occurrence records of Whiteheads rats", "descriptors": ["field_type", "description", "levels", "units", "taxon_name", "taxon_field", "interaction_field", "interaction_name", "method", "field_name"], "external": null, "fields": [{"field_type": "Date", "interaction_name": null, "description": "Date trap was collected", "interaction_field": null, "method": "NA", "units": null, "range": ["2011-05-22 00:00:00", "2016-07-25 00:00:00"], "levels": null, "taxon_field": null, "taxon_name": null, "field_name": "Date", "col_idx": 1}, {"field_type": "Location", "interaction_name": null, "description": "Location of trap grid", "interaction_field": null, "method": "NA", "units": null, "levels": null, "taxon_field": null, "taxon_name": null, "field_name": "Fragment", "col_idx": 2}, {"field_type": "ID", "interaction_name": null, "description": "Point on the grid at which the trap was located", "interaction_field": null, "method": "NA", "units": null, "levels": null, "taxon_field": null, "taxon_name": null, "field_name": "Trap_station ", "col_idx": 3}, {"field_type": "Replicate", "interaction_name": null, "description": "Whether the trap was located at location A or B", "interaction_field": null, "method": "NA", "units": null, "levels": null, "taxon_field": null, "taxon_name": null, "field_name": "Trap_Letter", "col_idx": 4}, {"field_type": "ID", "interaction_name": null, "description": "Unique identification for this trapping event", "interaction_field": null, "method": "NA", "units": null, "levels": null, "taxon_field": null, "taxon_name": null, "field_name": "Unique_Trap_ID", "col_idx": 5}, {"field_type": "Taxa", "interaction_name": null, "description": "Species identity", "interaction_field": null, "method": "NA", "units": null, "levels": null, "taxon_field": null, "taxon_name": null, "field_name": "Species", "col_idx": 6}, {"field_type": "Categorical", "interaction_name": null, "description": "Whether the iNdividual trapped had beeN previously caught before", "interaction_field": null, "method": "NA", "units": null, "levels": "Y:previously captured;N:Not previously captured", "taxon_field": null, "taxon_name": null, "field_name": "Recapture ", "col_idx": 7}, {"field_type": "ID", "interaction_name": null, "description": "PIT tag number injected into that individual;NB excel auto-formatting has altered some of these numbers!!", "interaction_field": null, "method": "NA", "units": null, "levels": null, "taxon_field": null, "taxon_name": null, "field_name": "Tag_no", "col_idx": 8}, {"field_type": "Categorical", "interaction_name": null, "description": "Age class of individual", "interaction_field": null, "method": "Visual observation", "units": null, "levels": "A:adult;SA:subadult;J:juvenile", "taxon_field": null, "taxon_name": null, "field_name": "Age ", "col_idx": 9}, {"field_type": "Categorical", "interaction_name": null, "description": "Sex of individual", "interaction_field": null, "method": "Visual observation", "units": null, "levels": "F:female;M:male", "taxon_field": null, "taxon_name": null, "field_name": "Sex", "col_idx": 10}, {"field_type": "Comments", "interaction_name": null, "description": "Notes on breeding condition such as perforated or unperforated vagina or the condition of the males testes ie descended or not", "interaction_field": null, "method": "Visual observation", "units": null, "levels": null, "taxon_field": null, "taxon_name": null, "field_name": "Breeding ", "col_idx": 11}, {"field_type": "Numeric", "interaction_name": null, "description": "Length of left hindfoot", "interaction_field": null, "method": "Measured with an electronic callipers", "units": "mm", "range": [16.2, 32.4], "levels": null, "taxon_field": null, "taxon_name": null, "field_name": "Hindfoot", "col_idx": 12}, {"field_type": "Numeric", "interaction_name": null, "description": "Length of left ear", "interaction_field": null, "method": "Measured with an electronic callipers", "units": "mm", "range": [8.3, 155.5], "levels": null, "taxon_field": null, "taxon_name": null, "field_name": "Ear", "col_idx": 13}, {"field_type": "Numeric", "interaction_name": null, "description": "Estimate of ectoparasitev load on individual", "interaction_field": null, "method": " counting the number on parasites in the container in which the anaesthetised rat was placed", "units": "Count", "range": [0.0, 129.0], "levels": null, "taxon_field": null, "taxon_name": null, "field_name": "Parasites ", "col_idx": 14}, {"field_type": "Numeric", "interaction_name": null, "description": "Body mass", "interaction_field": null, "method": "Weighed using spring balance", "units": "g", "range": [14.0, 91.0], "levels": null, "taxon_field": null, "taxon_name": null, "field_name": "Weight", "col_idx": 15}, {"field_type": "Comments", "interaction_name": null, "description": "Decsription of any injuries on individual if present", "interaction_field": null, "method": "Visual observation", "units": null, "levels": null, "taxon_field": null, "taxon_name": null, "field_name": "Injuries ", "col_idx": 16}, {"field_type": "Categorical", "interaction_name": null, "description": "Noting of whether the individual died during the trapping process", "interaction_field": null, "method": "NA", "units": null, "levels": "Y:died during trapping;N:survived trapping", "taxon_field": null, "taxon_name": null, "field_name": "Dead", "col_idx": 17}, {"field_type": "Comments", "interaction_name": null, "description": "Observations made on the individual", "interaction_field": null, "method": "Visual observation", "units": null, "levels": null, "taxon_field": null, "taxon_name": null, "field_name": "Other Notes", "col_idx": 18}], "field_name_row": 10, "n_data_row": 1385, "description": "Complete records of all captures and morphometrics of Whiteheads rats"}, {"taxa_fields": [], "max_row": 70, "name": "RGB", "max_col": 6, "title": "Fur colours", "descriptors": ["field_type", "description", "levels", "units", "taxon_name", "taxon_field", "interaction_field", "interaction_name", "method", "field_name"], "external": null, "fields": [{"field_type": "ID", "interaction_name": null, "description": "PIT tag number injected into that individual", "interaction_field": null, "method": "NA", "units": null, "levels": null, "taxon_field": null, "taxon_name": null, "field_name": "Tag no.", "col_idx": 1}, {"field_type": "Numeric", "interaction_name": null, "description": "An mean pixel value for the red channel in the section analysed on each individual.", "interaction_field": null, "method": "This number was calculated using the Color Histogram tool in Image J", "units": "None", "range": [127.236, 193.54], "levels": null, "taxon_field": null, "taxon_name": null, "field_name": "Red", "col_idx": 2}, {"field_type": "Numeric", "interaction_name": null, "description": "An mean pixel value for the green channel in the section analysed on each individual.", "interaction_field": null, "method": "This number was calculated using the Color Histogram tool in Image J", "units": "None", "range": [107.319, 168.616], "levels": null, "taxon_field": null, "taxon_name": null, "field_name": "Green", "col_idx": 3}, {"field_type": "Numeric", "interaction_name": null, "description": "An mean pixel value for the blue channel in the section analysed on each individual.", "interaction_field": null, "method": "This number was calculated using the Color Histogram tool in Image J", "units": "None", "range": [70.387, 124.669], "levels": null, "taxon_field": null, "taxon_name": null, "field_name": "Blue", "col_idx": 4}, {"field_type": "Numeric", "interaction_name": null, "description": "An individual value which combines the mean values from the three colour channels", "interaction_field": null, "method": "The formual used to calculate this number was (Red*256*256) + (Green*256) + Blue =  RGB int.", "units": "None", "range": [8370256.032, 12727120.59], "levels": null, "taxon_field": null, "taxon_name": null, "field_name": "RGB_Int", "col_idx": 5}], "field_name_row": 10, "n_data_row": 60, "description": "RGB values from fur colour photographs"}], "authors": [{"orcid": null, "affiliation": "Imperial College London", "name": "Morris, Shane", "email": "s.morris14@imperial.ac.uk"}, {"orcid": null, "affiliation": "Imperial College London", "name": "Ewers, robert M.", "email": "r.ewers@imperial.ac.uk"}], "keywords": ["colouration", "morphometrics"], "project_id": 32, "publication_date": "2018-04-30 12:18:48", "zenodo_concept_id": 1198465, "zenodo_record_id": 1237733, "taxa": [{"id": 27874, "dataset_id": 116, "worksheet_name": "Maxomys whiteheadi", "gbif_id": 2438838, "gbif_parent_id": 2438289, "taxon_name": "Maxomys whiteheadi", "taxon_rank": "species", "gbif_status": "homotypic_synonym"}, {"id": 27875, "dataset_id": 116, "worksheet_name": "Maxomys whiteheadi", "gbif_id": 2438292, "gbif_parent_id": 2438289, "taxon_name": "Chrotomys whiteheadi", "taxon_rank": "species", "gbif_status": "accepted"}, {"id": 27876, "dataset_id": 116, "worksheet_name": null, "gbif_id": 5510, "gbif_parent_id": 1459, "taxon_name": "Muridae", "taxon_rank": "family", "gbif_status": "accepted"}, {"id": 27877, "dataset_id": 116, "worksheet_name": null, "gbif_id": 1, "gbif_parent_id": null, "taxon_name": "Animalia", "taxon_rank": "kingdom", "gbif_status": "accepted"}, {"id": 27878, "dataset_id": 116, "worksheet_name": null, "gbif_id": 44, "gbif_parent_id": 1, "taxon_name": "Chordata", "taxon_rank": "phylum", "gbif_status": "accepted"}, {"id": 27879, "dataset_id": 116, "worksheet_name": null, "gbif_id": 1459, "gbif_parent_id": 359, "taxon_name": "Rodentia", "taxon_rank": "order", "gbif_status": "accepted"}, {"id": 27880, "dataset_id": 116, "worksheet_name": null, "gbif_id": 359, "gbif_parent_id": 44, "taxon_name": "Mammalia", "taxon_rank": "class", "gbif_status": "accepted"}, {"id": 27881, "dataset_id": 116, "worksheet_name": null, "gbif_id": 2438289, "gbif_parent_id": 5510, "taxon_name": "Chrotomys", "taxon_rank": "genus", "gbif_status": "accepted"}], "locations": [{"name": "D-100-1", "new_location": false, "wkt_wgs84": null}, {"name": "D-10-1", "new_location": false, "wkt_wgs84": null}, {"name": "D-10-2", "new_location": false, "wkt_wgs84": null}, {"name": "D-1-1", "new_location": false, "wkt_wgs84": null}, {"name": "D-1-2", "new_location": false, "wkt_wgs84": null}, {"name": "E-100-1", "new_location": false, "wkt_wgs84": null}, {"name": "E-10-1", "new_location": false, "wkt_wgs84": null}, {"name": "E-10-2", "new_location": false, "wkt_wgs84": null}, {"name": "E-1-1", "new_location": false, "wkt_wgs84": null}, {"name": "E-1-2", "new_location": false, "wkt_wgs84": null}, {"name": "D-100-2", "new_location": true, "wkt_wgs84": null}, {"name": "E-100-2", "new_location": true, "wkt_wgs84": null}, {"name": "OG1-E", "new_location": true, "wkt_wgs84": null}, {"name": "OG1-W", "new_location": true, "wkt_wgs84": null}, {"name": "OG2-N", "new_location": true, "wkt_wgs84": null}, {"name": "OG2-W", "new_location": true, "wkt_wgs84": null}, {"name": "OP2-E", "new_location": true, "wkt_wgs84": null}, {"name": "OP2-N", "new_location": true, "wkt_wgs84": null}, {"name": "OP2-W", "new_location": true, "wkt_wgs84": null}]}
+{
+    "funders": null,
+    "longitudinal_extent": [
+        117.572972141554,
+        117.597482723277
+    ],
+    "embargo_date": null,
+    "description": "Phenotypic divergence, population change and resilience in Whitehead's Rat (Maxomys whiteheadi) across a tropical forest degradation gradien",
+    "latitudinal_extent": [
+        4.68365792100346,
+        4.71655796466401
+    ],
+    "title": "Whitehead's rat morphometrics",
+    "permits": null,
+    "temporal_extent": [
+        "2011-05-22 00:00:00",
+        "2016-07-25 00:00:00"
+    ],
+    "filename": "template_Morris.xlsx",
+    "access": "open",
+    "external_files": null,
+    "dataworksheets": [
+        {
+            "taxa_fields": [
+                "Species"
+            ],
+            "max_row": 1395,
+            "name": "Whiteheads_occurrences",
+            "max_col": 19,
+            "title": "Occurrence records of Whiteheads rats",
+            "descriptors": [
+                "field_type",
+                "description",
+                "levels",
+                "units",
+                "taxon_name",
+                "taxon_field",
+                "interaction_field",
+                "interaction_name",
+                "method",
+                "field_name"
+            ],
+            "external": null,
+            "fields": [
+                {
+                    "field_type": "Date",
+                    "interaction_name": null,
+                    "description": "Date trap was collected",
+                    "interaction_field": null,
+                    "method": "NA",
+                    "units": null,
+                    "range": [
+                        "2011-05-22 00:00:00",
+                        "2016-07-25 00:00:00"
+                    ],
+                    "levels": null,
+                    "taxon_field": null,
+                    "taxon_name": null,
+                    "field_name": "Date",
+                    "col_idx": 1
+                },
+                {
+                    "field_type": "Location",
+                    "interaction_name": null,
+                    "description": "Location of trap grid",
+                    "interaction_field": null,
+                    "method": "NA",
+                    "units": null,
+                    "levels": null,
+                    "taxon_field": null,
+                    "taxon_name": null,
+                    "field_name": "Fragment",
+                    "col_idx": 2
+                },
+                {
+                    "field_type": "ID",
+                    "interaction_name": null,
+                    "description": "Point on the grid at which the trap was located",
+                    "interaction_field": null,
+                    "method": "NA",
+                    "units": null,
+                    "levels": null,
+                    "taxon_field": null,
+                    "taxon_name": null,
+                    "field_name": "Trap_station ",
+                    "col_idx": 3
+                },
+                {
+                    "field_type": "Replicate",
+                    "interaction_name": null,
+                    "description": "Whether the trap was located at location A or B",
+                    "interaction_field": null,
+                    "method": "NA",
+                    "units": null,
+                    "levels": null,
+                    "taxon_field": null,
+                    "taxon_name": null,
+                    "field_name": "Trap_Letter",
+                    "col_idx": 4
+                },
+                {
+                    "field_type": "ID",
+                    "interaction_name": null,
+                    "description": "Unique identification for this trapping event",
+                    "interaction_field": null,
+                    "method": "NA",
+                    "units": null,
+                    "levels": null,
+                    "taxon_field": null,
+                    "taxon_name": null,
+                    "field_name": "Unique_Trap_ID",
+                    "col_idx": 5
+                },
+                {
+                    "field_type": "Taxa",
+                    "interaction_name": null,
+                    "description": "Species identity",
+                    "interaction_field": null,
+                    "method": "NA",
+                    "units": null,
+                    "levels": null,
+                    "taxon_field": null,
+                    "taxon_name": null,
+                    "field_name": "Species",
+                    "col_idx": 6
+                },
+                {
+                    "field_type": "Categorical",
+                    "interaction_name": null,
+                    "description": "Whether the iNdividual trapped had beeN previously caught before",
+                    "interaction_field": null,
+                    "method": "NA",
+                    "units": null,
+                    "levels": "Y:previously captured;N:Not previously captured",
+                    "taxon_field": null,
+                    "taxon_name": null,
+                    "field_name": "Recapture ",
+                    "col_idx": 7
+                },
+                {
+                    "field_type": "ID",
+                    "interaction_name": null,
+                    "description": "PIT tag number injected into that individual;NB excel auto-formatting has altered some of these numbers!!",
+                    "interaction_field": null,
+                    "method": "NA",
+                    "units": null,
+                    "levels": null,
+                    "taxon_field": null,
+                    "taxon_name": null,
+                    "field_name": "Tag_no",
+                    "col_idx": 8
+                },
+                {
+                    "field_type": "Categorical",
+                    "interaction_name": null,
+                    "description": "Age class of individual",
+                    "interaction_field": null,
+                    "method": "Visual observation",
+                    "units": null,
+                    "levels": "A:adult;SA:subadult;J:juvenile",
+                    "taxon_field": null,
+                    "taxon_name": null,
+                    "field_name": "Age ",
+                    "col_idx": 9
+                },
+                {
+                    "field_type": "Categorical",
+                    "interaction_name": null,
+                    "description": "Sex of individual",
+                    "interaction_field": null,
+                    "method": "Visual observation",
+                    "units": null,
+                    "levels": "F:female;M:male",
+                    "taxon_field": null,
+                    "taxon_name": null,
+                    "field_name": "Sex",
+                    "col_idx": 10
+                },
+                {
+                    "field_type": "Comments",
+                    "interaction_name": null,
+                    "description": "Notes on breeding condition such as perforated or unperforated vagina or the condition of the males testes ie descended or not",
+                    "interaction_field": null,
+                    "method": "Visual observation",
+                    "units": null,
+                    "levels": null,
+                    "taxon_field": null,
+                    "taxon_name": null,
+                    "field_name": "Breeding ",
+                    "col_idx": 11
+                },
+                {
+                    "field_type": "Numeric",
+                    "interaction_name": null,
+                    "description": "Length of left hindfoot",
+                    "interaction_field": null,
+                    "method": "Measured with an electronic callipers",
+                    "units": "mm",
+                    "range": [
+                        16.2,
+                        32.4
+                    ],
+                    "levels": null,
+                    "taxon_field": null,
+                    "taxon_name": null,
+                    "field_name": "Hindfoot",
+                    "col_idx": 12
+                },
+                {
+                    "field_type": "Numeric",
+                    "interaction_name": null,
+                    "description": "Length of left ear",
+                    "interaction_field": null,
+                    "method": "Measured with an electronic callipers",
+                    "units": "mm",
+                    "range": [
+                        8.3,
+                        155.5
+                    ],
+                    "levels": null,
+                    "taxon_field": null,
+                    "taxon_name": null,
+                    "field_name": "Ear",
+                    "col_idx": 13
+                },
+                {
+                    "field_type": "Numeric",
+                    "interaction_name": null,
+                    "description": "Estimate of ectoparasitev load on individual",
+                    "interaction_field": null,
+                    "method": " counting the number on parasites in the container in which the anaesthetised rat was placed",
+                    "units": "Count",
+                    "range": [
+                        0.0,
+                        129.0
+                    ],
+                    "levels": null,
+                    "taxon_field": null,
+                    "taxon_name": null,
+                    "field_name": "Parasites ",
+                    "col_idx": 14
+                },
+                {
+                    "field_type": "Numeric",
+                    "interaction_name": null,
+                    "description": "Body mass",
+                    "interaction_field": null,
+                    "method": "Weighed using spring balance",
+                    "units": "g",
+                    "range": [
+                        14.0,
+                        91.0
+                    ],
+                    "levels": null,
+                    "taxon_field": null,
+                    "taxon_name": null,
+                    "field_name": "Weight",
+                    "col_idx": 15
+                },
+                {
+                    "field_type": "Comments",
+                    "interaction_name": null,
+                    "description": "Decsription of any injuries on individual if present",
+                    "interaction_field": null,
+                    "method": "Visual observation",
+                    "units": null,
+                    "levels": null,
+                    "taxon_field": null,
+                    "taxon_name": null,
+                    "field_name": "Injuries ",
+                    "col_idx": 16
+                },
+                {
+                    "field_type": "Categorical",
+                    "interaction_name": null,
+                    "description": "Noting of whether the individual died during the trapping process",
+                    "interaction_field": null,
+                    "method": "NA",
+                    "units": null,
+                    "levels": "Y:died during trapping;N:survived trapping",
+                    "taxon_field": null,
+                    "taxon_name": null,
+                    "field_name": "Dead",
+                    "col_idx": 17
+                },
+                {
+                    "field_type": "Comments",
+                    "interaction_name": null,
+                    "description": "Observations made on the individual",
+                    "interaction_field": null,
+                    "method": "Visual observation",
+                    "units": null,
+                    "levels": null,
+                    "taxon_field": null,
+                    "taxon_name": null,
+                    "field_name": "Other Notes",
+                    "col_idx": 18
+                }
+            ],
+            "field_name_row": 10,
+            "n_data_row": 1385,
+            "description": "Complete records of all captures and morphometrics of Whiteheads rats"
+        },
+        {
+            "taxa_fields": [],
+            "max_row": 70,
+            "name": "RGB",
+            "max_col": 6,
+            "title": "Fur colours",
+            "descriptors": [
+                "field_type",
+                "description",
+                "levels",
+                "units",
+                "taxon_name",
+                "taxon_field",
+                "interaction_field",
+                "interaction_name",
+                "method",
+                "field_name"
+            ],
+            "external": null,
+            "fields": [
+                {
+                    "field_type": "ID",
+                    "interaction_name": null,
+                    "description": "PIT tag number injected into that individual",
+                    "interaction_field": null,
+                    "method": "NA",
+                    "units": null,
+                    "levels": null,
+                    "taxon_field": null,
+                    "taxon_name": null,
+                    "field_name": "Tag no.",
+                    "col_idx": 1
+                },
+                {
+                    "field_type": "Numeric",
+                    "interaction_name": null,
+                    "description": "An mean pixel value for the red channel in the section analysed on each individual.",
+                    "interaction_field": null,
+                    "method": "This number was calculated using the Color Histogram tool in Image J",
+                    "units": "None",
+                    "range": [
+                        127.236,
+                        193.54
+                    ],
+                    "levels": null,
+                    "taxon_field": null,
+                    "taxon_name": null,
+                    "field_name": "Red",
+                    "col_idx": 2
+                },
+                {
+                    "field_type": "Numeric",
+                    "interaction_name": null,
+                    "description": "An mean pixel value for the green channel in the section analysed on each individual.",
+                    "interaction_field": null,
+                    "method": "This number was calculated using the Color Histogram tool in Image J",
+                    "units": "None",
+                    "range": [
+                        107.319,
+                        168.616
+                    ],
+                    "levels": null,
+                    "taxon_field": null,
+                    "taxon_name": null,
+                    "field_name": "Green",
+                    "col_idx": 3
+                },
+                {
+                    "field_type": "Numeric",
+                    "interaction_name": null,
+                    "description": "An mean pixel value for the blue channel in the section analysed on each individual.",
+                    "interaction_field": null,
+                    "method": "This number was calculated using the Color Histogram tool in Image J",
+                    "units": "None",
+                    "range": [
+                        70.387,
+                        124.669
+                    ],
+                    "levels": null,
+                    "taxon_field": null,
+                    "taxon_name": null,
+                    "field_name": "Blue",
+                    "col_idx": 4
+                },
+                {
+                    "field_type": "Numeric",
+                    "interaction_name": null,
+                    "description": "An individual value which combines the mean values from the three colour channels",
+                    "interaction_field": null,
+                    "method": "The formual used to calculate this number was (Red*256*256) + (Green*256) + Blue =  RGB int.",
+                    "units": "None",
+                    "range": [
+                        8370256.032,
+                        12727120.59
+                    ],
+                    "levels": null,
+                    "taxon_field": null,
+                    "taxon_name": null,
+                    "field_name": "RGB_Int",
+                    "col_idx": 5
+                }
+            ],
+            "field_name_row": 10,
+            "n_data_row": 60,
+            "description": "RGB values from fur colour photographs"
+        }
+    ],
+    "authors": [
+        {
+            "orcid": null,
+            "affiliation": "Imperial College London",
+            "name": "Morris, Shane",
+            "email": "s.morris14@imperial.ac.uk"
+        },
+        {
+            "orcid": null,
+            "affiliation": "Imperial College London",
+            "name": "Ewers, robert M.",
+            "email": "r.ewers@imperial.ac.uk"
+        }
+    ],
+    "keywords": [
+        "colouration",
+        "morphometrics"
+    ],
+    "project_id": 32,
+    "publication_date": "2018-04-30 12:18:48",
+    "zenodo_concept_id": 1198465,
+    "zenodo_record_id": 1237733,
+    "gbif_taxa": [
+        {
+            "id": 27874,
+            "worksheet_name": "Maxomys whiteheadi",
+            "taxon_id": 2438838,
+            "parent_id": 2438289,
+            "taxon_name": "Maxomys whiteheadi",
+            "taxon_rank": "species",
+            "taxon_status": "homotypic_synonym"
+        },
+        {
+            "id": 27875,
+            "worksheet_name": "Maxomys whiteheadi",
+            "taxon_id": 2438292,
+            "parent_id": 2438289,
+            "taxon_name": "Chrotomys whiteheadi",
+            "taxon_rank": "species",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 27876,
+            "worksheet_name": null,
+            "taxon_id": 5510,
+            "parent_id": 1459,
+            "taxon_name": "Muridae",
+            "taxon_rank": "family",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 27877,
+            "worksheet_name": null,
+            "taxon_id": 1,
+            "parent_id": null,
+            "taxon_name": "Animalia",
+            "taxon_rank": "kingdom",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 27878,
+            "worksheet_name": null,
+            "taxon_id": 44,
+            "parent_id": 1,
+            "taxon_name": "Chordata",
+            "taxon_rank": "phylum",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 27879,
+            "worksheet_name": null,
+            "taxon_id": 1459,
+            "parent_id": 359,
+            "taxon_name": "Rodentia",
+            "taxon_rank": "order",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 27880,
+            "worksheet_name": null,
+            "taxon_id": 359,
+            "parent_id": 44,
+            "taxon_name": "Mammalia",
+            "taxon_rank": "class",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 27881,
+            "worksheet_name": null,
+            "taxon_id": 2438289,
+            "parent_id": 5510,
+            "taxon_name": "Chrotomys",
+            "taxon_rank": "genus",
+            "taxon_status": "accepted"
+        }
+    ],
+    "locations": [
+        {
+            "name": "D-100-1",
+            "new_location": false,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "D-10-1",
+            "new_location": false,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "D-10-2",
+            "new_location": false,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "D-1-1",
+            "new_location": false,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "D-1-2",
+            "new_location": false,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "E-100-1",
+            "new_location": false,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "E-10-1",
+            "new_location": false,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "E-10-2",
+            "new_location": false,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "E-1-1",
+            "new_location": false,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "E-1-2",
+            "new_location": false,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "D-100-2",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "E-100-2",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "OG1-E",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "OG1-W",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "OG2-N",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "OG2-W",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "OP2-E",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "OP2-N",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "OP2-W",
+            "new_location": true,
+            "wkt_wgs84": null
+        }
+    ]
+}
