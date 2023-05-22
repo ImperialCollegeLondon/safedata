@@ -1,1 +1,921 @@
-{"funders": null, "longitudinal_extent": [116.75, 117.82], "embargo_date": null, "description": "Traits matrix for all fish species caught at SAFE and Danum during electrofishing only", "latitudinal_extent": [4.5, 5.07], "title": "Fish functional diversity traits ", "permits": null, "temporal_extent": ["2013-04-12 00:00:00", "2018-01-01 00:00:00"], "filename": "template_ClareWfunctiondata.xlsx", "access": "open", "external_files": null, "dataworksheets": [{"taxa_fields": ["taxon_name"], "max_row": 44, "name": "Data", "max_col": 11, "title": "Fish functional diversity traits ", "descriptors": ["field_type", "description", "levels", "units", "taxon_name", "taxon_field", "interaction_field", "interaction_name", "method", "field_name"], "external": null, "fields": [{"field_type": "Taxa", "interaction_name": null, "description": "Identity of the species", "interaction_field": null, "method": "NA", "units": null, "levels": null, "taxon_field": null, "taxon_name": null, "field_name": "taxon_name", "col_idx": 1}, {"field_type": "Numeric Trait", "interaction_name": null, "description": "Mean body length of each species", "interaction_field": null, "method": "Measured in the field on live fish", "units": "cm", "range": [4.05, 30.557447], "levels": null, "taxon_field": "taxon_name", "taxon_name": null, "field_name": "Body_size", "col_idx": 2}, {"field_type": "Categorical Trait", "interaction_name": null, "description": "Body shape of each species", "interaction_field": null, "method": "Determined from handling the fish in the field and cross-referenced published available data", "units": null, "levels": "Cylindrical;Compressed;Depressed", "taxon_field": "taxon_name", "taxon_name": null, "field_name": "body_shape", "col_idx": 3}, {"field_type": "Categorical Trait", "interaction_name": null, "description": "Dominant trophic position of each species", "interaction_field": null, "method": "Determined from handling the fish in the field and cross-referenced published available data", "units": null, "levels": "Higher carnivore;Omnivore;Invertivore;Herbivore", "taxon_field": "taxon_name", "taxon_name": null, "field_name": "trophic_position", "col_idx": 4}, {"field_type": "Categorical Trait", "interaction_name": null, "description": "Mouth position of each species", "interaction_field": null, "method": "Determined from handling the fish in the field and cross-referenced published available data", "units": null, "levels": "Terminal;Inferior;Superior", "taxon_field": "taxon_name", "taxon_name": null, "field_name": "mouth_position", "col_idx": 5}, {"field_type": "Categorical Trait", "interaction_name": null, "description": "Presence of absence of jaw teeth (no = absent, yes=presence)", "interaction_field": null, "method": "Determined from handling the fish in the field and cross-referenced published available data", "units": null, "levels": "no:absent;yes:present", "taxon_field": "taxon_name", "taxon_name": null, "field_name": "presence_teeth", "col_idx": 6}, {"field_type": "Categorical Trait", "interaction_name": null, "description": "Gregariousness of each species - do they school or not", "interaction_field": null, "method": "Determined from handling the fish in the field and cross-referenced published available data", "units": null, "levels": "no:absent;yes:present", "taxon_field": "taxon_name", "taxon_name": null, "field_name": "gregariousness", "col_idx": 7}, {"field_type": "Categorical Trait", "interaction_name": null, "description": "Presence or absence of barbels on each species", "interaction_field": null, "method": "Determined from handling the fish in the field and cross-referenced published available data", "units": null, "levels": "no:absent;yes:present", "taxon_field": "taxon_name", "taxon_name": null, "field_name": "presence_barbels", "col_idx": 8}, {"field_type": "Categorical Trait", "interaction_name": null, "description": "Vertical postion in the water column of each species", "interaction_field": null, "method": "Determined from handling the fish in the field and cross-referenced published available data", "units": null, "levels": "Benthic;Benthopelagic;Pelagic;Surface", "taxon_field": "taxon_name", "taxon_name": null, "field_name": "vertical_position_water", "col_idx": 9}, {"field_type": "Categorical Trait", "interaction_name": null, "description": "Presence or absence of air breathing capability of each species ", "interaction_field": null, "method": "Determined from handling the fish in the field and cross-referenced published available data", "units": null, "levels": "no:absent;yes:present", "taxon_field": "taxon_name", "taxon_name": null, "field_name": "air-breathing_capability", "col_idx": 10}], "field_name_row": 10, "n_data_row": 34, "description": "Traits matrix for all fish species caught at SAFE and Danum during electrofishing only"}], "authors": [{"orcid": null, "affiliation": "Imperial College London", "name": "Wilkinson, Clare", "email": "clarewilko@hotmail.co.uk"}, {"orcid": null, "affiliation": "Imperial College London", "name": "Ewers, Robert M.", "email": "r.ewers@imperial.ac.uk"}], "keywords": ["fish", "functional traits"], "project_id": 57, "publication_date": "2018-04-30 12:16:07", "zenodo_concept_id": 1198840, "zenodo_record_id": 1237719, "taxa": [{"id": 23625, "dataset_id": 129, "worksheet_name": "Anguilla.borneensis", "gbif_id": 5213050, "gbif_parent_id": 2403092, "taxon_name": "Anguilla borneensis", "taxon_rank": "species", "gbif_status": "accepted"}, {"id": 23626, "dataset_id": 129, "worksheet_name": "Anguilla.marmorata", "gbif_id": 5213048, "gbif_parent_id": 2403092, "taxon_name": "Anguilla marmorata", "taxon_rank": "species", "gbif_status": "accepted"}, {"id": 23627, "dataset_id": 129, "worksheet_name": "Barbodes.sealei", "gbif_id": 2363960, "gbif_parent_id": 2363821, "taxon_name": "Barbodes sealei", "taxon_rank": "species", "gbif_status": "synonym"}, {"id": 23628, "dataset_id": 129, "worksheet_name": "Barbodes.sealei", "gbif_id": 2363862, "gbif_parent_id": 2363821, "taxon_name": "Puntius sealei", "taxon_rank": "species", "gbif_status": "accepted"}, {"id": 23629, "dataset_id": 129, "worksheet_name": "Barbonymus.balleroides", "gbif_id": 2365894, "gbif_parent_id": 2366090, "taxon_name": "Barbonymus balleroides", "taxon_rank": "species", "gbif_status": "accepted"}, {"id": 23630, "dataset_id": 129, "worksheet_name": "Betta.unimaculata", "gbif_id": 2393992, "gbif_parent_id": 2393980, "taxon_name": "Betta unimaculata", "taxon_rank": "species", "gbif_status": "accepted"}, {"id": 23631, "dataset_id": 129, "worksheet_name": "Channa.striata", "gbif_id": 2391463, "gbif_parent_id": 2387196, "taxon_name": "Channa striata", "taxon_rank": "species", "gbif_status": "accepted"}, {"id": 23632, "dataset_id": 129, "worksheet_name": "Clarias.anfractus", "gbif_id": 5202763, "gbif_parent_id": 5202658, "taxon_name": "Clarias anfractus", "taxon_rank": "species", "gbif_status": "accepted"}, {"id": 23633, "dataset_id": 129, "worksheet_name": "Crosseocheilus.elegans", "gbif_id": 6167037, "gbif_parent_id": 2361914, "taxon_name": "Crossocheilus elegans", "taxon_rank": "species", "gbif_status": "accepted"}, {"id": 23634, "dataset_id": 129, "worksheet_name": "Cyclocheilichthy.repasson", "gbif_id": 2364428, "gbif_parent_id": 4815048, "taxon_name": "Cyclocheilichthys repasson", "taxon_rank": "species", "gbif_status": "synonym"}, {"id": 23635, "dataset_id": 129, "worksheet_name": "Cyclocheilichthy.repasson", "gbif_id": 7564873, "gbif_parent_id": 4815048, "taxon_name": "Anematichthys repasson", "taxon_rank": "species", "gbif_status": "accepted"}, {"id": 23636, "dataset_id": 129, "worksheet_name": "Garra.borneensis", "gbif_id": 2366939, "gbif_parent_id": 2366716, "taxon_name": "Garra borneensis", "taxon_rank": "species", "gbif_status": "accepted"}, {"id": 23637, "dataset_id": 129, "worksheet_name": "Gastromyzon.ingeri", "gbif_id": 2358897, "gbif_parent_id": 2358868, "taxon_name": "Gastromyzon ingeri", "taxon_rank": "species", "gbif_status": "accepted"}, {"id": 23638, "dataset_id": 129, "worksheet_name": "Gastromyzon.lepidogaster", "gbif_id": 2358905, "gbif_parent_id": 2358868, "taxon_name": "Gastromyzon lepidogaster", "taxon_rank": "species", "gbif_status": "accepted"}, {"id": 23639, "dataset_id": 129, "worksheet_name": "Hampala.sabana", "gbif_id": 2367435, "gbif_parent_id": 2367424, "taxon_name": "Hampala sabana", "taxon_rank": "species", "gbif_status": "accepted"}, {"id": 23640, "dataset_id": 129, "worksheet_name": "Hemibagrus.baramensis", "gbif_id": 2338193, "gbif_parent_id": 2338170, "taxon_name": "Hemibagrus baramensis", "taxon_rank": "species", "gbif_status": "accepted"}, {"id": 23641, "dataset_id": 129, "worksheet_name": "Hemibagrus.fortis", "gbif_id": 2338190, "gbif_parent_id": 2338170, "taxon_name": "Hemibagrus fortis", "taxon_rank": "species", "gbif_status": "accepted"}, {"id": 23642, "dataset_id": 129, "worksheet_name": "Homalopteroides.stephensoni", "gbif_id": 9485338, "gbif_parent_id": 4825235, "taxon_name": "Homalopteroides stephensoni", "taxon_rank": "species", "gbif_status": "accepted"}, {"id": 23643, "dataset_id": 129, "worksheet_name": "Leptobarbus.melanotaenia", "gbif_id": 2365644, "gbif_parent_id": 2365640, "taxon_name": "Leptobarbus melanotaenia", "taxon_rank": "species", "gbif_status": "accepted"}, {"id": 23644, "dataset_id": 129, "worksheet_name": "Lobocheilus.erinaceus", "gbif_id": -1, "gbif_parent_id": 2361182, "taxon_name": "Lobocheilus erinaceus", "taxon_rank": "species", "gbif_status": "user"}, {"id": 23645, "dataset_id": 129, "worksheet_name": "Lobocheilus.unicornis", "gbif_id": -1, "gbif_parent_id": 2361182, "taxon_name": "Lobocheilus unicornis", "taxon_rank": "species", "gbif_status": "user"}, {"id": 23646, "dataset_id": 129, "worksheet_name": "Luciosoma.pelligrini", "gbif_id": -1, "gbif_parent_id": 2360857, "taxon_name": "Luciosoma pelligrini", "taxon_rank": "species", "gbif_status": "user"}, {"id": 23647, "dataset_id": 129, "worksheet_name": "Macrognathus.keithi", "gbif_id": 5204065, "gbif_parent_id": 2346748, "taxon_name": "Macrognathus keithi", "taxon_rank": "species", "gbif_status": "accepted"}, {"id": 23648, "dataset_id": 129, "worksheet_name": "Mastacembelus.unicolor", "gbif_id": 9413706, "gbif_parent_id": 8301715, "taxon_name": "Mastacembelus unicolor", "taxon_rank": "species", "gbif_status": "accepted"}, {"id": 23649, "dataset_id": 129, "worksheet_name": "Nemacheilus.olivaceus", "gbif_id": 5205246, "gbif_parent_id": 6759124, "taxon_name": "Nemacheilus olivaceus", "taxon_rank": "species", "gbif_status": "accepted"}, {"id": 23650, "dataset_id": 129, "worksheet_name": "Nematobramis.everetti", "gbif_id": -1, "gbif_parent_id": 7336, "taxon_name": "Nematobramis everetti", "taxon_rank": "species", "gbif_status": "user"}, {"id": 23651, "dataset_id": 129, "worksheet_name": "Oreochromis.mossambicus", "gbif_id": 2372396, "gbif_parent_id": 2372271, "taxon_name": "Oreochromis mossambicus", "taxon_rank": "species", "gbif_status": "accepted"}, {"id": 23652, "dataset_id": 129, "worksheet_name": "Osteochilus.chini", "gbif_id": 2364292, "gbif_parent_id": 2364291, "taxon_name": "Osteochilus chini", "taxon_rank": "species", "gbif_status": "accepted"}, {"id": 23653, "dataset_id": 129, "worksheet_name": "Osteochilus.ingeri", "gbif_id": 2364347, "gbif_parent_id": 2364291, "taxon_name": "Osteochilus ingeri", "taxon_rank": "species", "gbif_status": "accepted"}, {"id": 23654, "dataset_id": 129, "worksheet_name": "Protomyzon.borneensis", "gbif_id": 2358509, "gbif_parent_id": 2358503, "taxon_name": "Protomyzon borneensis", "taxon_rank": "species", "gbif_status": "accepted"}, {"id": 23655, "dataset_id": 129, "worksheet_name": "Protomyzon.griswoldi", "gbif_id": 2358507, "gbif_parent_id": 2358503, "taxon_name": "Protomyzon griswoldi", "taxon_rank": "species", "gbif_status": "accepted"}, {"id": 23656, "dataset_id": 129, "worksheet_name": "Protomyzon.microstoma", "gbif_id": -1, "gbif_parent_id": 2358503, "taxon_name": "Protomyzon microstoma", "taxon_rank": "species", "gbif_status": "user"}, {"id": 23657, "dataset_id": 129, "worksheet_name": "Rasbora.cf.sumatrana", "gbif_id": -1, "gbif_parent_id": 2359495, "taxon_name": "Rasbora cf. sumatrana", "taxon_rank": "species", "gbif_status": "user"}, {"id": 23658, "dataset_id": 129, "worksheet_name": "Rasbora.elegans", "gbif_id": 2359506, "gbif_parent_id": 2359495, "taxon_name": "Rasbora elegans", "taxon_rank": "species", "gbif_status": "accepted"}, {"id": 23659, "dataset_id": 129, "worksheet_name": "Rasbora.hubbsi", "gbif_id": 2359579, "gbif_parent_id": 2359495, "taxon_name": "Rasbora hubbsi", "taxon_rank": "species", "gbif_status": "accepted"}, {"id": 23660, "dataset_id": 129, "worksheet_name": "Tor.tambra", "gbif_id": 2364511, "gbif_parent_id": 2364491, "taxon_name": "Tor tambra", "taxon_rank": "species", "gbif_status": "accepted"}, {"id": 23661, "dataset_id": 129, "worksheet_name": null, "gbif_id": 7336, "gbif_parent_id": 1153, "taxon_name": "Cyprinidae", "taxon_rank": "family", "gbif_status": "accepted"}, {"id": 23662, "dataset_id": 129, "worksheet_name": null, "gbif_id": 2360857, "gbif_parent_id": 7336, "taxon_name": "Luciosoma", "taxon_rank": "genus", "gbif_status": "accepted"}, {"id": 23663, "dataset_id": 129, "worksheet_name": null, "gbif_id": 5202658, "gbif_parent_id": 8978, "taxon_name": "Clarias", "taxon_rank": "genus", "gbif_status": "accepted"}, {"id": 23664, "dataset_id": 129, "worksheet_name": null, "gbif_id": 2358503, "gbif_parent_id": 3383, "taxon_name": "Protomyzon", "taxon_rank": "genus", "gbif_status": "accepted"}, {"id": 23665, "dataset_id": 129, "worksheet_name": null, "gbif_id": 4825235, "gbif_parent_id": 3383, "taxon_name": "Homalopteroides", "taxon_rank": "genus", "gbif_status": "accepted"}, {"id": 23666, "dataset_id": 129, "worksheet_name": null, "gbif_id": 2359495, "gbif_parent_id": 7336, "taxon_name": "Rasbora", "taxon_rank": "genus", "gbif_status": "accepted"}, {"id": 23667, "dataset_id": 129, "worksheet_name": null, "gbif_id": 2364291, "gbif_parent_id": 7336, "taxon_name": "Osteochilus", "taxon_rank": "genus", "gbif_status": "accepted"}, {"id": 23668, "dataset_id": 129, "worksheet_name": null, "gbif_id": 2361092, "gbif_parent_id": 7336, "taxon_name": "Lobocheilus", "taxon_rank": "genus", "gbif_status": "synonym"}, {"id": 23669, "dataset_id": 129, "worksheet_name": null, "gbif_id": 2361182, "gbif_parent_id": 7336, "taxon_name": "Lobocheilos", "taxon_rank": "genus", "gbif_status": "accepted"}, {"id": 23670, "dataset_id": 129, "worksheet_name": null, "gbif_id": 1, "gbif_parent_id": null, "taxon_name": "Animalia", "taxon_rank": "kingdom", "gbif_status": "accepted"}, {"id": 23671, "dataset_id": 129, "worksheet_name": null, "gbif_id": 44, "gbif_parent_id": 1, "taxon_name": "Chordata", "taxon_rank": "phylum", "gbif_status": "accepted"}, {"id": 23672, "dataset_id": 129, "worksheet_name": null, "gbif_id": 889, "gbif_parent_id": 204, "taxon_name": "Synbranchiformes", "taxon_rank": "order", "gbif_status": "accepted"}, {"id": 23673, "dataset_id": 129, "worksheet_name": null, "gbif_id": 495, "gbif_parent_id": 204, "taxon_name": "Anguilliformes", "taxon_rank": "order", "gbif_status": "accepted"}, {"id": 23674, "dataset_id": 129, "worksheet_name": null, "gbif_id": 708, "gbif_parent_id": 204, "taxon_name": "Siluriformes", "taxon_rank": "order", "gbif_status": "accepted"}, {"id": 23675, "dataset_id": 129, "worksheet_name": null, "gbif_id": 1153, "gbif_parent_id": 204, "taxon_name": "Cypriniformes", "taxon_rank": "order", "gbif_status": "accepted"}, {"id": 23676, "dataset_id": 129, "worksheet_name": null, "gbif_id": 587, "gbif_parent_id": 204, "taxon_name": "Perciformes", "taxon_rank": "order", "gbif_status": "accepted"}, {"id": 23677, "dataset_id": 129, "worksheet_name": null, "gbif_id": 204, "gbif_parent_id": 44, "taxon_name": "Actinopterygii", "taxon_rank": "class", "gbif_status": "accepted"}, {"id": 23678, "dataset_id": 129, "worksheet_name": null, "gbif_id": 4259, "gbif_parent_id": 587, "taxon_name": "Channidae", "taxon_rank": "family", "gbif_status": "accepted"}, {"id": 23679, "dataset_id": 129, "worksheet_name": null, "gbif_id": 8974, "gbif_parent_id": 708, "taxon_name": "Bagridae", "taxon_rank": "family", "gbif_status": "accepted"}, {"id": 23680, "dataset_id": 129, "worksheet_name": null, "gbif_id": 8553, "gbif_parent_id": 587, "taxon_name": "Osphronemidae", "taxon_rank": "family", "gbif_status": "accepted"}, {"id": 23681, "dataset_id": 129, "worksheet_name": null, "gbif_id": 3383, "gbif_parent_id": 1153, "taxon_name": "Balitoridae", "taxon_rank": "family", "gbif_status": "accepted"}, {"id": 23682, "dataset_id": 129, "worksheet_name": null, "gbif_id": 6759123, "gbif_parent_id": 1153, "taxon_name": "Nemacheilidae", "taxon_rank": "family", "gbif_status": "accepted"}, {"id": 23683, "dataset_id": 129, "worksheet_name": null, "gbif_id": 8978, "gbif_parent_id": 708, "taxon_name": "Clariidae", "taxon_rank": "family", "gbif_status": "accepted"}, {"id": 23684, "dataset_id": 129, "worksheet_name": null, "gbif_id": 2224, "gbif_parent_id": 889, "taxon_name": "Mastacembelidae", "taxon_rank": "family", "gbif_status": "accepted"}, {"id": 23685, "dataset_id": 129, "worksheet_name": null, "gbif_id": 2949, "gbif_parent_id": 495, "taxon_name": "Anguillidae", "taxon_rank": "family", "gbif_status": "accepted"}, {"id": 23686, "dataset_id": 129, "worksheet_name": null, "gbif_id": 8522, "gbif_parent_id": 587, "taxon_name": "Cichlidae", "taxon_rank": "family", "gbif_status": "accepted"}, {"id": 23687, "dataset_id": 129, "worksheet_name": null, "gbif_id": 2367424, "gbif_parent_id": 7336, "taxon_name": "Hampala", "taxon_rank": "genus", "gbif_status": "accepted"}, {"id": 23688, "dataset_id": 129, "worksheet_name": null, "gbif_id": 2361914, "gbif_parent_id": 7336, "taxon_name": "Crossocheilus", "taxon_rank": "genus", "gbif_status": "accepted"}, {"id": 23689, "dataset_id": 129, "worksheet_name": null, "gbif_id": 2403092, "gbif_parent_id": 2949, "taxon_name": "Anguilla", "taxon_rank": "genus", "gbif_status": "accepted"}, {"id": 23690, "dataset_id": 129, "worksheet_name": null, "gbif_id": 2372271, "gbif_parent_id": 8522, "taxon_name": "Oreochromis", "taxon_rank": "genus", "gbif_status": "accepted"}, {"id": 23691, "dataset_id": 129, "worksheet_name": null, "gbif_id": 2365640, "gbif_parent_id": 7336, "taxon_name": "Leptobarbus", "taxon_rank": "genus", "gbif_status": "accepted"}, {"id": 23692, "dataset_id": 129, "worksheet_name": null, "gbif_id": 2366090, "gbif_parent_id": 7336, "taxon_name": "Barbonymus", "taxon_rank": "genus", "gbif_status": "accepted"}, {"id": 23693, "dataset_id": 129, "worksheet_name": null, "gbif_id": 4815048, "gbif_parent_id": 7336, "taxon_name": "Anematichthys", "taxon_rank": "genus", "gbif_status": "accepted"}, {"id": 23694, "dataset_id": 129, "worksheet_name": null, "gbif_id": 2393980, "gbif_parent_id": 8553, "taxon_name": "Betta", "taxon_rank": "genus", "gbif_status": "accepted"}, {"id": 23695, "dataset_id": 129, "worksheet_name": null, "gbif_id": 8301715, "gbif_parent_id": 2224, "taxon_name": "Mastacembelus", "taxon_rank": "genus", "gbif_status": "accepted"}, {"id": 23696, "dataset_id": 129, "worksheet_name": null, "gbif_id": 2364491, "gbif_parent_id": 7336, "taxon_name": "Tor", "taxon_rank": "genus", "gbif_status": "accepted"}, {"id": 23697, "dataset_id": 129, "worksheet_name": null, "gbif_id": 2338170, "gbif_parent_id": 8974, "taxon_name": "Hemibagrus", "taxon_rank": "genus", "gbif_status": "accepted"}, {"id": 23698, "dataset_id": 129, "worksheet_name": null, "gbif_id": 2358868, "gbif_parent_id": 3383, "taxon_name": "Gastromyzon", "taxon_rank": "genus", "gbif_status": "accepted"}, {"id": 23699, "dataset_id": 129, "worksheet_name": null, "gbif_id": 2363821, "gbif_parent_id": 7336, "taxon_name": "Puntius", "taxon_rank": "genus", "gbif_status": "accepted"}, {"id": 23700, "dataset_id": 129, "worksheet_name": null, "gbif_id": 6759124, "gbif_parent_id": 6759123, "taxon_name": "Nemacheilus", "taxon_rank": "genus", "gbif_status": "accepted"}, {"id": 23701, "dataset_id": 129, "worksheet_name": null, "gbif_id": 2366716, "gbif_parent_id": 7336, "taxon_name": "Garra", "taxon_rank": "genus", "gbif_status": "accepted"}, {"id": 23702, "dataset_id": 129, "worksheet_name": null, "gbif_id": 2387196, "gbif_parent_id": 4259, "taxon_name": "Channa", "taxon_rank": "genus", "gbif_status": "accepted"}, {"id": 23703, "dataset_id": 129, "worksheet_name": null, "gbif_id": 2346748, "gbif_parent_id": 2224, "taxon_name": "Macrognathus", "taxon_rank": "genus", "gbif_status": "accepted"}], "locations": []}
+{
+    "funders": null,
+    "longitudinal_extent": [
+        116.75,
+        117.82
+    ],
+    "embargo_date": null,
+    "description": "Traits matrix for all fish species caught at SAFE and Danum during electrofishing only",
+    "latitudinal_extent": [
+        4.5,
+        5.07
+    ],
+    "title": "Fish functional diversity traits ",
+    "permits": null,
+    "temporal_extent": [
+        "2013-04-12 00:00:00",
+        "2018-01-01 00:00:00"
+    ],
+    "filename": "template_ClareWfunctiondata.xlsx",
+    "access": "open",
+    "external_files": null,
+    "dataworksheets": [
+        {
+            "taxa_fields": [
+                "taxon_name"
+            ],
+            "max_row": 44,
+            "name": "Data",
+            "max_col": 11,
+            "title": "Fish functional diversity traits ",
+            "descriptors": [
+                "field_type",
+                "description",
+                "levels",
+                "units",
+                "taxon_name",
+                "taxon_field",
+                "interaction_field",
+                "interaction_name",
+                "method",
+                "field_name"
+            ],
+            "external": null,
+            "fields": [
+                {
+                    "field_type": "Taxa",
+                    "interaction_name": null,
+                    "description": "Identity of the species",
+                    "interaction_field": null,
+                    "method": "NA",
+                    "units": null,
+                    "levels": null,
+                    "taxon_field": null,
+                    "taxon_name": null,
+                    "field_name": "taxon_name",
+                    "col_idx": 1
+                },
+                {
+                    "field_type": "Numeric Trait",
+                    "interaction_name": null,
+                    "description": "Mean body length of each species",
+                    "interaction_field": null,
+                    "method": "Measured in the field on live fish",
+                    "units": "cm",
+                    "range": [
+                        4.05,
+                        30.557447
+                    ],
+                    "levels": null,
+                    "taxon_field": "taxon_name",
+                    "taxon_name": null,
+                    "field_name": "Body_size",
+                    "col_idx": 2
+                },
+                {
+                    "field_type": "Categorical Trait",
+                    "interaction_name": null,
+                    "description": "Body shape of each species",
+                    "interaction_field": null,
+                    "method": "Determined from handling the fish in the field and cross-referenced published available data",
+                    "units": null,
+                    "levels": "Cylindrical;Compressed;Depressed",
+                    "taxon_field": "taxon_name",
+                    "taxon_name": null,
+                    "field_name": "body_shape",
+                    "col_idx": 3
+                },
+                {
+                    "field_type": "Categorical Trait",
+                    "interaction_name": null,
+                    "description": "Dominant trophic position of each species",
+                    "interaction_field": null,
+                    "method": "Determined from handling the fish in the field and cross-referenced published available data",
+                    "units": null,
+                    "levels": "Higher carnivore;Omnivore;Invertivore;Herbivore",
+                    "taxon_field": "taxon_name",
+                    "taxon_name": null,
+                    "field_name": "trophic_position",
+                    "col_idx": 4
+                },
+                {
+                    "field_type": "Categorical Trait",
+                    "interaction_name": null,
+                    "description": "Mouth position of each species",
+                    "interaction_field": null,
+                    "method": "Determined from handling the fish in the field and cross-referenced published available data",
+                    "units": null,
+                    "levels": "Terminal;Inferior;Superior",
+                    "taxon_field": "taxon_name",
+                    "taxon_name": null,
+                    "field_name": "mouth_position",
+                    "col_idx": 5
+                },
+                {
+                    "field_type": "Categorical Trait",
+                    "interaction_name": null,
+                    "description": "Presence of absence of jaw teeth (no = absent, yes=presence)",
+                    "interaction_field": null,
+                    "method": "Determined from handling the fish in the field and cross-referenced published available data",
+                    "units": null,
+                    "levels": "no:absent;yes:present",
+                    "taxon_field": "taxon_name",
+                    "taxon_name": null,
+                    "field_name": "presence_teeth",
+                    "col_idx": 6
+                },
+                {
+                    "field_type": "Categorical Trait",
+                    "interaction_name": null,
+                    "description": "Gregariousness of each species - do they school or not",
+                    "interaction_field": null,
+                    "method": "Determined from handling the fish in the field and cross-referenced published available data",
+                    "units": null,
+                    "levels": "no:absent;yes:present",
+                    "taxon_field": "taxon_name",
+                    "taxon_name": null,
+                    "field_name": "gregariousness",
+                    "col_idx": 7
+                },
+                {
+                    "field_type": "Categorical Trait",
+                    "interaction_name": null,
+                    "description": "Presence or absence of barbels on each species",
+                    "interaction_field": null,
+                    "method": "Determined from handling the fish in the field and cross-referenced published available data",
+                    "units": null,
+                    "levels": "no:absent;yes:present",
+                    "taxon_field": "taxon_name",
+                    "taxon_name": null,
+                    "field_name": "presence_barbels",
+                    "col_idx": 8
+                },
+                {
+                    "field_type": "Categorical Trait",
+                    "interaction_name": null,
+                    "description": "Vertical postion in the water column of each species",
+                    "interaction_field": null,
+                    "method": "Determined from handling the fish in the field and cross-referenced published available data",
+                    "units": null,
+                    "levels": "Benthic;Benthopelagic;Pelagic;Surface",
+                    "taxon_field": "taxon_name",
+                    "taxon_name": null,
+                    "field_name": "vertical_position_water",
+                    "col_idx": 9
+                },
+                {
+                    "field_type": "Categorical Trait",
+                    "interaction_name": null,
+                    "description": "Presence or absence of air breathing capability of each species ",
+                    "interaction_field": null,
+                    "method": "Determined from handling the fish in the field and cross-referenced published available data",
+                    "units": null,
+                    "levels": "no:absent;yes:present",
+                    "taxon_field": "taxon_name",
+                    "taxon_name": null,
+                    "field_name": "air-breathing_capability",
+                    "col_idx": 10
+                }
+            ],
+            "field_name_row": 10,
+            "n_data_row": 34,
+            "description": "Traits matrix for all fish species caught at SAFE and Danum during electrofishing only"
+        }
+    ],
+    "authors": [
+        {
+            "orcid": null,
+            "affiliation": "Imperial College London",
+            "name": "Wilkinson, Clare",
+            "email": "clarewilko@hotmail.co.uk"
+        },
+        {
+            "orcid": null,
+            "affiliation": "Imperial College London",
+            "name": "Ewers, Robert M.",
+            "email": "r.ewers@imperial.ac.uk"
+        }
+    ],
+    "keywords": [
+        "fish",
+        "functional traits"
+    ],
+    "project_id": 57,
+    "publication_date": "2018-04-30 12:16:07",
+    "zenodo_concept_id": 1198840,
+    "zenodo_record_id": 1237719,
+    "gbif_taxa": [
+        {
+            "id": 23625,
+            "worksheet_name": "Anguilla.borneensis",
+            "taxon_id": 5213050,
+            "parent_id": 2403092,
+            "taxon_name": "Anguilla borneensis",
+            "taxon_rank": "species",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23626,
+            "worksheet_name": "Anguilla.marmorata",
+            "taxon_id": 5213048,
+            "parent_id": 2403092,
+            "taxon_name": "Anguilla marmorata",
+            "taxon_rank": "species",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23627,
+            "worksheet_name": "Barbodes.sealei",
+            "taxon_id": 2363960,
+            "parent_id": 2363821,
+            "taxon_name": "Barbodes sealei",
+            "taxon_rank": "species",
+            "taxon_status": "synonym"
+        },
+        {
+            "id": 23628,
+            "worksheet_name": "Barbodes.sealei",
+            "taxon_id": 2363862,
+            "parent_id": 2363821,
+            "taxon_name": "Puntius sealei",
+            "taxon_rank": "species",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23629,
+            "worksheet_name": "Barbonymus.balleroides",
+            "taxon_id": 2365894,
+            "parent_id": 2366090,
+            "taxon_name": "Barbonymus balleroides",
+            "taxon_rank": "species",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23630,
+            "worksheet_name": "Betta.unimaculata",
+            "taxon_id": 2393992,
+            "parent_id": 2393980,
+            "taxon_name": "Betta unimaculata",
+            "taxon_rank": "species",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23631,
+            "worksheet_name": "Channa.striata",
+            "taxon_id": 2391463,
+            "parent_id": 2387196,
+            "taxon_name": "Channa striata",
+            "taxon_rank": "species",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23632,
+            "worksheet_name": "Clarias.anfractus",
+            "taxon_id": 5202763,
+            "parent_id": 5202658,
+            "taxon_name": "Clarias anfractus",
+            "taxon_rank": "species",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23633,
+            "worksheet_name": "Crosseocheilus.elegans",
+            "taxon_id": 6167037,
+            "parent_id": 2361914,
+            "taxon_name": "Crossocheilus elegans",
+            "taxon_rank": "species",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23634,
+            "worksheet_name": "Cyclocheilichthy.repasson",
+            "taxon_id": 2364428,
+            "parent_id": 4815048,
+            "taxon_name": "Cyclocheilichthys repasson",
+            "taxon_rank": "species",
+            "taxon_status": "synonym"
+        },
+        {
+            "id": 23635,
+            "worksheet_name": "Cyclocheilichthy.repasson",
+            "taxon_id": 7564873,
+            "parent_id": 4815048,
+            "taxon_name": "Anematichthys repasson",
+            "taxon_rank": "species",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23636,
+            "worksheet_name": "Garra.borneensis",
+            "taxon_id": 2366939,
+            "parent_id": 2366716,
+            "taxon_name": "Garra borneensis",
+            "taxon_rank": "species",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23637,
+            "worksheet_name": "Gastromyzon.ingeri",
+            "taxon_id": 2358897,
+            "parent_id": 2358868,
+            "taxon_name": "Gastromyzon ingeri",
+            "taxon_rank": "species",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23638,
+            "worksheet_name": "Gastromyzon.lepidogaster",
+            "taxon_id": 2358905,
+            "parent_id": 2358868,
+            "taxon_name": "Gastromyzon lepidogaster",
+            "taxon_rank": "species",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23639,
+            "worksheet_name": "Hampala.sabana",
+            "taxon_id": 2367435,
+            "parent_id": 2367424,
+            "taxon_name": "Hampala sabana",
+            "taxon_rank": "species",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23640,
+            "worksheet_name": "Hemibagrus.baramensis",
+            "taxon_id": 2338193,
+            "parent_id": 2338170,
+            "taxon_name": "Hemibagrus baramensis",
+            "taxon_rank": "species",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23641,
+            "worksheet_name": "Hemibagrus.fortis",
+            "taxon_id": 2338190,
+            "parent_id": 2338170,
+            "taxon_name": "Hemibagrus fortis",
+            "taxon_rank": "species",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23642,
+            "worksheet_name": "Homalopteroides.stephensoni",
+            "taxon_id": 9485338,
+            "parent_id": 4825235,
+            "taxon_name": "Homalopteroides stephensoni",
+            "taxon_rank": "species",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23643,
+            "worksheet_name": "Leptobarbus.melanotaenia",
+            "taxon_id": 2365644,
+            "parent_id": 2365640,
+            "taxon_name": "Leptobarbus melanotaenia",
+            "taxon_rank": "species",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23644,
+            "worksheet_name": "Lobocheilus.erinaceus",
+            "taxon_id": -1,
+            "parent_id": 2361182,
+            "taxon_name": "Lobocheilus erinaceus",
+            "taxon_rank": "species",
+            "taxon_status": "user"
+        },
+        {
+            "id": 23645,
+            "worksheet_name": "Lobocheilus.unicornis",
+            "taxon_id": -1,
+            "parent_id": 2361182,
+            "taxon_name": "Lobocheilus unicornis",
+            "taxon_rank": "species",
+            "taxon_status": "user"
+        },
+        {
+            "id": 23646,
+            "worksheet_name": "Luciosoma.pelligrini",
+            "taxon_id": -1,
+            "parent_id": 2360857,
+            "taxon_name": "Luciosoma pelligrini",
+            "taxon_rank": "species",
+            "taxon_status": "user"
+        },
+        {
+            "id": 23647,
+            "worksheet_name": "Macrognathus.keithi",
+            "taxon_id": 5204065,
+            "parent_id": 2346748,
+            "taxon_name": "Macrognathus keithi",
+            "taxon_rank": "species",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23648,
+            "worksheet_name": "Mastacembelus.unicolor",
+            "taxon_id": 9413706,
+            "parent_id": 8301715,
+            "taxon_name": "Mastacembelus unicolor",
+            "taxon_rank": "species",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23649,
+            "worksheet_name": "Nemacheilus.olivaceus",
+            "taxon_id": 5205246,
+            "parent_id": 6759124,
+            "taxon_name": "Nemacheilus olivaceus",
+            "taxon_rank": "species",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23650,
+            "worksheet_name": "Nematobramis.everetti",
+            "taxon_id": -1,
+            "parent_id": 7336,
+            "taxon_name": "Nematobramis everetti",
+            "taxon_rank": "species",
+            "taxon_status": "user"
+        },
+        {
+            "id": 23651,
+            "worksheet_name": "Oreochromis.mossambicus",
+            "taxon_id": 2372396,
+            "parent_id": 2372271,
+            "taxon_name": "Oreochromis mossambicus",
+            "taxon_rank": "species",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23652,
+            "worksheet_name": "Osteochilus.chini",
+            "taxon_id": 2364292,
+            "parent_id": 2364291,
+            "taxon_name": "Osteochilus chini",
+            "taxon_rank": "species",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23653,
+            "worksheet_name": "Osteochilus.ingeri",
+            "taxon_id": 2364347,
+            "parent_id": 2364291,
+            "taxon_name": "Osteochilus ingeri",
+            "taxon_rank": "species",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23654,
+            "worksheet_name": "Protomyzon.borneensis",
+            "taxon_id": 2358509,
+            "parent_id": 2358503,
+            "taxon_name": "Protomyzon borneensis",
+            "taxon_rank": "species",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23655,
+            "worksheet_name": "Protomyzon.griswoldi",
+            "taxon_id": 2358507,
+            "parent_id": 2358503,
+            "taxon_name": "Protomyzon griswoldi",
+            "taxon_rank": "species",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23656,
+            "worksheet_name": "Protomyzon.microstoma",
+            "taxon_id": -1,
+            "parent_id": 2358503,
+            "taxon_name": "Protomyzon microstoma",
+            "taxon_rank": "species",
+            "taxon_status": "user"
+        },
+        {
+            "id": 23657,
+            "worksheet_name": "Rasbora.cf.sumatrana",
+            "taxon_id": -1,
+            "parent_id": 2359495,
+            "taxon_name": "Rasbora cf. sumatrana",
+            "taxon_rank": "species",
+            "taxon_status": "user"
+        },
+        {
+            "id": 23658,
+            "worksheet_name": "Rasbora.elegans",
+            "taxon_id": 2359506,
+            "parent_id": 2359495,
+            "taxon_name": "Rasbora elegans",
+            "taxon_rank": "species",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23659,
+            "worksheet_name": "Rasbora.hubbsi",
+            "taxon_id": 2359579,
+            "parent_id": 2359495,
+            "taxon_name": "Rasbora hubbsi",
+            "taxon_rank": "species",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23660,
+            "worksheet_name": "Tor.tambra",
+            "taxon_id": 2364511,
+            "parent_id": 2364491,
+            "taxon_name": "Tor tambra",
+            "taxon_rank": "species",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23661,
+            "worksheet_name": null,
+            "taxon_id": 7336,
+            "parent_id": 1153,
+            "taxon_name": "Cyprinidae",
+            "taxon_rank": "family",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23662,
+            "worksheet_name": null,
+            "taxon_id": 2360857,
+            "parent_id": 7336,
+            "taxon_name": "Luciosoma",
+            "taxon_rank": "genus",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23663,
+            "worksheet_name": null,
+            "taxon_id": 5202658,
+            "parent_id": 8978,
+            "taxon_name": "Clarias",
+            "taxon_rank": "genus",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23664,
+            "worksheet_name": null,
+            "taxon_id": 2358503,
+            "parent_id": 3383,
+            "taxon_name": "Protomyzon",
+            "taxon_rank": "genus",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23665,
+            "worksheet_name": null,
+            "taxon_id": 4825235,
+            "parent_id": 3383,
+            "taxon_name": "Homalopteroides",
+            "taxon_rank": "genus",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23666,
+            "worksheet_name": null,
+            "taxon_id": 2359495,
+            "parent_id": 7336,
+            "taxon_name": "Rasbora",
+            "taxon_rank": "genus",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23667,
+            "worksheet_name": null,
+            "taxon_id": 2364291,
+            "parent_id": 7336,
+            "taxon_name": "Osteochilus",
+            "taxon_rank": "genus",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23668,
+            "worksheet_name": null,
+            "taxon_id": 2361092,
+            "parent_id": 7336,
+            "taxon_name": "Lobocheilus",
+            "taxon_rank": "genus",
+            "taxon_status": "synonym"
+        },
+        {
+            "id": 23669,
+            "worksheet_name": null,
+            "taxon_id": 2361182,
+            "parent_id": 7336,
+            "taxon_name": "Lobocheilos",
+            "taxon_rank": "genus",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23670,
+            "worksheet_name": null,
+            "taxon_id": 1,
+            "parent_id": null,
+            "taxon_name": "Animalia",
+            "taxon_rank": "kingdom",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23671,
+            "worksheet_name": null,
+            "taxon_id": 44,
+            "parent_id": 1,
+            "taxon_name": "Chordata",
+            "taxon_rank": "phylum",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23672,
+            "worksheet_name": null,
+            "taxon_id": 889,
+            "parent_id": 204,
+            "taxon_name": "Synbranchiformes",
+            "taxon_rank": "order",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23673,
+            "worksheet_name": null,
+            "taxon_id": 495,
+            "parent_id": 204,
+            "taxon_name": "Anguilliformes",
+            "taxon_rank": "order",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23674,
+            "worksheet_name": null,
+            "taxon_id": 708,
+            "parent_id": 204,
+            "taxon_name": "Siluriformes",
+            "taxon_rank": "order",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23675,
+            "worksheet_name": null,
+            "taxon_id": 1153,
+            "parent_id": 204,
+            "taxon_name": "Cypriniformes",
+            "taxon_rank": "order",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23676,
+            "worksheet_name": null,
+            "taxon_id": 587,
+            "parent_id": 204,
+            "taxon_name": "Perciformes",
+            "taxon_rank": "order",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23677,
+            "worksheet_name": null,
+            "taxon_id": 204,
+            "parent_id": 44,
+            "taxon_name": "Actinopterygii",
+            "taxon_rank": "class",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23678,
+            "worksheet_name": null,
+            "taxon_id": 4259,
+            "parent_id": 587,
+            "taxon_name": "Channidae",
+            "taxon_rank": "family",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23679,
+            "worksheet_name": null,
+            "taxon_id": 8974,
+            "parent_id": 708,
+            "taxon_name": "Bagridae",
+            "taxon_rank": "family",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23680,
+            "worksheet_name": null,
+            "taxon_id": 8553,
+            "parent_id": 587,
+            "taxon_name": "Osphronemidae",
+            "taxon_rank": "family",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23681,
+            "worksheet_name": null,
+            "taxon_id": 3383,
+            "parent_id": 1153,
+            "taxon_name": "Balitoridae",
+            "taxon_rank": "family",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23682,
+            "worksheet_name": null,
+            "taxon_id": 6759123,
+            "parent_id": 1153,
+            "taxon_name": "Nemacheilidae",
+            "taxon_rank": "family",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23683,
+            "worksheet_name": null,
+            "taxon_id": 8978,
+            "parent_id": 708,
+            "taxon_name": "Clariidae",
+            "taxon_rank": "family",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23684,
+            "worksheet_name": null,
+            "taxon_id": 2224,
+            "parent_id": 889,
+            "taxon_name": "Mastacembelidae",
+            "taxon_rank": "family",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23685,
+            "worksheet_name": null,
+            "taxon_id": 2949,
+            "parent_id": 495,
+            "taxon_name": "Anguillidae",
+            "taxon_rank": "family",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23686,
+            "worksheet_name": null,
+            "taxon_id": 8522,
+            "parent_id": 587,
+            "taxon_name": "Cichlidae",
+            "taxon_rank": "family",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23687,
+            "worksheet_name": null,
+            "taxon_id": 2367424,
+            "parent_id": 7336,
+            "taxon_name": "Hampala",
+            "taxon_rank": "genus",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23688,
+            "worksheet_name": null,
+            "taxon_id": 2361914,
+            "parent_id": 7336,
+            "taxon_name": "Crossocheilus",
+            "taxon_rank": "genus",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23689,
+            "worksheet_name": null,
+            "taxon_id": 2403092,
+            "parent_id": 2949,
+            "taxon_name": "Anguilla",
+            "taxon_rank": "genus",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23690,
+            "worksheet_name": null,
+            "taxon_id": 2372271,
+            "parent_id": 8522,
+            "taxon_name": "Oreochromis",
+            "taxon_rank": "genus",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23691,
+            "worksheet_name": null,
+            "taxon_id": 2365640,
+            "parent_id": 7336,
+            "taxon_name": "Leptobarbus",
+            "taxon_rank": "genus",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23692,
+            "worksheet_name": null,
+            "taxon_id": 2366090,
+            "parent_id": 7336,
+            "taxon_name": "Barbonymus",
+            "taxon_rank": "genus",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23693,
+            "worksheet_name": null,
+            "taxon_id": 4815048,
+            "parent_id": 7336,
+            "taxon_name": "Anematichthys",
+            "taxon_rank": "genus",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23694,
+            "worksheet_name": null,
+            "taxon_id": 2393980,
+            "parent_id": 8553,
+            "taxon_name": "Betta",
+            "taxon_rank": "genus",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23695,
+            "worksheet_name": null,
+            "taxon_id": 8301715,
+            "parent_id": 2224,
+            "taxon_name": "Mastacembelus",
+            "taxon_rank": "genus",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23696,
+            "worksheet_name": null,
+            "taxon_id": 2364491,
+            "parent_id": 7336,
+            "taxon_name": "Tor",
+            "taxon_rank": "genus",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23697,
+            "worksheet_name": null,
+            "taxon_id": 2338170,
+            "parent_id": 8974,
+            "taxon_name": "Hemibagrus",
+            "taxon_rank": "genus",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23698,
+            "worksheet_name": null,
+            "taxon_id": 2358868,
+            "parent_id": 3383,
+            "taxon_name": "Gastromyzon",
+            "taxon_rank": "genus",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23699,
+            "worksheet_name": null,
+            "taxon_id": 2363821,
+            "parent_id": 7336,
+            "taxon_name": "Puntius",
+            "taxon_rank": "genus",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23700,
+            "worksheet_name": null,
+            "taxon_id": 6759124,
+            "parent_id": 6759123,
+            "taxon_name": "Nemacheilus",
+            "taxon_rank": "genus",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23701,
+            "worksheet_name": null,
+            "taxon_id": 2366716,
+            "parent_id": 7336,
+            "taxon_name": "Garra",
+            "taxon_rank": "genus",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23702,
+            "worksheet_name": null,
+            "taxon_id": 2387196,
+            "parent_id": 4259,
+            "taxon_name": "Channa",
+            "taxon_rank": "genus",
+            "taxon_status": "accepted"
+        },
+        {
+            "id": 23703,
+            "worksheet_name": null,
+            "taxon_id": 2346748,
+            "parent_id": 2224,
+            "taxon_name": "Macrognathus",
+            "taxon_rank": "genus",
+            "taxon_status": "accepted"
+        }
+    ],
+    "locations": []
+}

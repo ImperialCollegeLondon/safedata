@@ -201,7 +201,14 @@ taxon_index_to_taxon_table <- function(taxon_index) {
     # Loop over the rows of worksheet taxa, following the chain of parent
     # taxon ids down the lookup dictionary
     for (rw in seq_len(nrow(worksheet_taxa))) {
-        ptx <- worksheet_taxa[rw, "parent_id"]
+        # Record rank of row name if one of the core ranks
+        row <- worksheet_taxa[rw, ]
+        if (row$taxon_rank %in% table_fields) {
+            taxon_table[rw, row$taxon_rank] <- row$taxon_name
+        }
+
+        # Loop over parents
+        ptx <- row$parent_id
 
         while (!is.na(ptx)) {
             parent <- taxa_lookup[[as.character(ptx)]]

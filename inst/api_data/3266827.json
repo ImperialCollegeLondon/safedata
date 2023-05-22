@@ -1,1 +1,1135 @@
-{"funders": [{"body": "Sime Darby", "url": null, "ref": null, "type": "grant"}], "longitudinal_extent": [116.75, 117.82], "embargo_date": null, "description": "Start and end dates of salvage logging activity at the SAFE Project experimental site", "latitudinal_extent": [4.5, 5.07], "title": "Quantifying the spatial heterogeneity of forest conversion costs and how it relates to biodiversity, conservation and land use history", "permits": [{"type": "Research", "number": "na", "authority": "Sabah Biodiversity Council "}], "temporal_extent": ["2013-01-02 00:00:00", "2015-12-31 00:00:00"], "filename": "template_Symes.xlsx", "access": "open", "external_files": [{"description": "SAFE coupe data", "file": "SAFE_COUPE.zip"}], "dataworksheets": [{"taxa_fields": [], "max_row": 192, "name": "Data", "max_col": 11, "title": "Salvage logging records", "descriptors": ["field_type", "description", "units", "method", "field_name"], "external": null, "fields": [{"field_type": "Location", "description": "Coupe number", "method": null, "units": null, "field_name": "CoupeNumber", "col_idx": 1}, {"field_type": "Date", "description": "Earliest date of logging activity recorded through GPS loggers on bulldozers", "method": null, "range": ["2013-01-02 00:00:00", "2013-11-26 00:00:00"], "units": "dd/mm/yyyy", "field_name": "StartDateTrack", "col_idx": 2}, {"field_type": "Date", "description": "Last date of logging activity recorded through GPS loggers on bulldozers", "method": null, "range": ["2013-02-03 00:00:00", "2013-12-31 00:00:00"], "units": "dd/mm/yyyy", "field_name": "EndDateTrack", "col_idx": 3}, {"field_type": "Date", "description": "Earliest date of logging activity recorded through 'Location' method", "method": null, "range": ["2015-01-01 00:00:00", "2015-08-01 00:00:00"], "units": "dd/mm/yyyy", "field_name": "StartDateLocation", "col_idx": 4}, {"field_type": "Date", "description": "Last date of logging activity recorded through 'Location' method", "method": null, "range": ["2015-01-31 00:00:00", "2015-12-31 00:00:00"], "units": "dd/mm/yyyy", "field_name": "EndDateLocation", "col_idx": 5}, {"field_type": "Date", "description": "Earliest date of logging activity recorded through 'Measurement' method", "method": null, "range": ["2014-07-03 00:00:00", "2015-06-29 00:00:00"], "units": "dd/mm/yyyy", "field_name": "StartDateMeasurement", "col_idx": 6}, {"field_type": "Date", "description": "Last date of logging activity recorded through 'Measurement' method", "method": null, "range": ["2014-07-17 00:00:00", "2015-06-30 00:00:00"], "units": "dd/mm/yyyy", "field_name": "EndDateMeasurement", "col_idx": 7}, {"field_type": "ID", "description": "Name of the contractor responsible for the coupe", "method": null, "units": null, "field_name": "Contractor", "col_idx": 8}, {"field_type": "Date", "description": "Earliest date of any recorded salvage logging activity", "method": "Earliest date from 'StartDateTract', 'StartDateLocation' and 'StartDateMeasurement'", "range": ["2013-01-02 00:00:00", "2015-08-01 00:00:00"], "units": "dd/mm/yyyy", "field_name": "GlobalStart", "col_idx": 9}, {"field_type": "Date", "description": "Last date of any recorded salvage logging activity", "method": "Latest date from 'EndDateTract', 'EndDateLocation' and 'EndDateMeasurement'", "range": ["2013-02-03 00:00:00", "2015-12-31 00:00:00"], "units": "dd/mm/yyyy", "field_name": "GlobalEnd", "col_idx": 10}], "field_name_row": 5, "n_data_row": 187, "description": "Dates of earliest and latest known salvage logging activity in logging coupes"}], "authors": [{"orcid": null, "affiliation": "National University of Singapore", "name": "Symes, William", "email": null}, {"orcid": null, "affiliation": "National University of Singapore", "name": "Carrasco, Roman", "email": null}], "keywords": ["Salvage logging records", "disturbance", "fragmentation"], "project_id": 6, "publication_date": "2019-07-03 08:39:42", "zenodo_concept_id": 3266826, "zenodo_record_id": 3266827, "taxa": [], "locations": [{"name": "CN_1", "new_location": true, "wkt_wgs84": null}, {"name": "CN_2", "new_location": true, "wkt_wgs84": null}, {"name": "CN_3", "new_location": true, "wkt_wgs84": null}, {"name": "CN_4", "new_location": true, "wkt_wgs84": null}, {"name": "CN_5", "new_location": true, "wkt_wgs84": null}, {"name": "CN_6", "new_location": true, "wkt_wgs84": null}, {"name": "CN_7", "new_location": true, "wkt_wgs84": null}, {"name": "CN_8", "new_location": true, "wkt_wgs84": null}, {"name": "CN_9", "new_location": true, "wkt_wgs84": null}, {"name": "CN_10", "new_location": true, "wkt_wgs84": null}, {"name": "CN_11", "new_location": true, "wkt_wgs84": null}, {"name": "CN_12", "new_location": true, "wkt_wgs84": null}, {"name": "CN_13", "new_location": true, "wkt_wgs84": null}, {"name": "CN_14", "new_location": true, "wkt_wgs84": null}, {"name": "CN_15", "new_location": true, "wkt_wgs84": null}, {"name": "CN_15A", "new_location": true, "wkt_wgs84": null}, {"name": "CN_16", "new_location": true, "wkt_wgs84": null}, {"name": "CN_16A", "new_location": true, "wkt_wgs84": null}, {"name": "CN_16B", "new_location": true, "wkt_wgs84": null}, {"name": "CN_16C", "new_location": true, "wkt_wgs84": null}, {"name": "CN_16D", "new_location": true, "wkt_wgs84": null}, {"name": "CN_17", "new_location": true, "wkt_wgs84": null}, {"name": "CN_17A", "new_location": true, "wkt_wgs84": null}, {"name": "CN_17B", "new_location": true, "wkt_wgs84": null}, {"name": "CN_17C", "new_location": true, "wkt_wgs84": null}, {"name": "CN_18", "new_location": true, "wkt_wgs84": null}, {"name": "CN_18A", "new_location": true, "wkt_wgs84": null}, {"name": "CN_18B", "new_location": true, "wkt_wgs84": null}, {"name": "CN_18S", "new_location": true, "wkt_wgs84": null}, {"name": "CN_19", "new_location": true, "wkt_wgs84": null}, {"name": "CN_19A", "new_location": true, "wkt_wgs84": null}, {"name": "CN_20", "new_location": true, "wkt_wgs84": null}, {"name": "CN_21", "new_location": true, "wkt_wgs84": null}, {"name": "CN_22", "new_location": true, "wkt_wgs84": null}, {"name": "CN_24", "new_location": true, "wkt_wgs84": null}, {"name": "CN_25", "new_location": true, "wkt_wgs84": null}, {"name": "CN_25B", "new_location": true, "wkt_wgs84": null}, {"name": "CN_26", "new_location": true, "wkt_wgs84": null}, {"name": "CN_27", "new_location": true, "wkt_wgs84": null}, {"name": "CN_27A", "new_location": true, "wkt_wgs84": null}, {"name": "CN_28", "new_location": true, "wkt_wgs84": null}, {"name": "CN_29", "new_location": true, "wkt_wgs84": null}, {"name": "CN_29A", "new_location": true, "wkt_wgs84": null}, {"name": "CN_29B", "new_location": true, "wkt_wgs84": null}, {"name": "CN_30", "new_location": true, "wkt_wgs84": null}, {"name": "CN_31", "new_location": true, "wkt_wgs84": null}, {"name": "CN_32", "new_location": true, "wkt_wgs84": null}, {"name": "CN_32A", "new_location": true, "wkt_wgs84": null}, {"name": "CN_32B", "new_location": true, "wkt_wgs84": null}, {"name": "CN_33", "new_location": true, "wkt_wgs84": null}, {"name": "CN_34", "new_location": true, "wkt_wgs84": null}, {"name": "CN_34B", "new_location": true, "wkt_wgs84": null}, {"name": "CN_35", "new_location": true, "wkt_wgs84": null}, {"name": "CN_36", "new_location": true, "wkt_wgs84": null}, {"name": "CN_37A", "new_location": true, "wkt_wgs84": null}, {"name": "CN_37", "new_location": true, "wkt_wgs84": null}, {"name": "CN_38", "new_location": true, "wkt_wgs84": null}, {"name": "CN_39", "new_location": true, "wkt_wgs84": null}, {"name": "CN_40", "new_location": true, "wkt_wgs84": null}, {"name": "CN_41", "new_location": true, "wkt_wgs84": null}, {"name": "CN_42", "new_location": true, "wkt_wgs84": null}, {"name": "CN_43", "new_location": true, "wkt_wgs84": null}, {"name": "CN_44", "new_location": true, "wkt_wgs84": null}, {"name": "CN_45", "new_location": true, "wkt_wgs84": null}, {"name": "CN_46", "new_location": true, "wkt_wgs84": null}, {"name": "CN_47", "new_location": true, "wkt_wgs84": null}, {"name": "CN_48/49", "new_location": true, "wkt_wgs84": null}, {"name": "CN_50", "new_location": true, "wkt_wgs84": null}, {"name": "CN_51", "new_location": true, "wkt_wgs84": null}, {"name": "CN_52/58", "new_location": true, "wkt_wgs84": null}, {"name": "CN_53", "new_location": true, "wkt_wgs84": null}, {"name": "CN_54", "new_location": true, "wkt_wgs84": null}, {"name": "CN_55", "new_location": true, "wkt_wgs84": null}, {"name": "CN_56", "new_location": true, "wkt_wgs84": null}, {"name": "CN_57", "new_location": true, "wkt_wgs84": null}, {"name": "CN_59", "new_location": true, "wkt_wgs84": null}, {"name": "CN_60", "new_location": true, "wkt_wgs84": null}, {"name": "CN_61", "new_location": true, "wkt_wgs84": null}, {"name": "CN_62", "new_location": true, "wkt_wgs84": null}, {"name": "CN_63", "new_location": true, "wkt_wgs84": null}, {"name": "CN_64", "new_location": true, "wkt_wgs84": null}, {"name": "CN_65", "new_location": true, "wkt_wgs84": null}, {"name": "CN_66", "new_location": true, "wkt_wgs84": null}, {"name": "CN_66A", "new_location": true, "wkt_wgs84": null}, {"name": "CN_66B", "new_location": true, "wkt_wgs84": null}, {"name": "CN_67", "new_location": true, "wkt_wgs84": null}, {"name": "CN_68", "new_location": true, "wkt_wgs84": null}, {"name": "CN_68B", "new_location": true, "wkt_wgs84": null}, {"name": "CN_69", "new_location": true, "wkt_wgs84": null}, {"name": "CN_70", "new_location": true, "wkt_wgs84": null}, {"name": "CN_70A", "new_location": true, "wkt_wgs84": null}, {"name": "CN_71A", "new_location": true, "wkt_wgs84": null}, {"name": "CN_71", "new_location": true, "wkt_wgs84": null}, {"name": "CN_72", "new_location": true, "wkt_wgs84": null}, {"name": "CN_72A", "new_location": true, "wkt_wgs84": null}, {"name": "CN_73", "new_location": true, "wkt_wgs84": null}, {"name": "CN_74", "new_location": true, "wkt_wgs84": null}, {"name": "CN_75", "new_location": true, "wkt_wgs84": null}, {"name": "CN_75A", "new_location": true, "wkt_wgs84": null}, {"name": "CN_76", "new_location": true, "wkt_wgs84": null}, {"name": "CN_76A", "new_location": true, "wkt_wgs84": null}, {"name": "CN_76B", "new_location": true, "wkt_wgs84": null}, {"name": "CN_77", "new_location": true, "wkt_wgs84": null}, {"name": "CN_77A", "new_location": true, "wkt_wgs84": null}, {"name": "CN_77B", "new_location": true, "wkt_wgs84": null}, {"name": "CN_78", "new_location": true, "wkt_wgs84": null}, {"name": "CN_78B", "new_location": true, "wkt_wgs84": null}, {"name": "CN_79", "new_location": true, "wkt_wgs84": null}, {"name": "CN_80", "new_location": true, "wkt_wgs84": null}, {"name": "CN_81", "new_location": true, "wkt_wgs84": null}, {"name": "CN_82", "new_location": true, "wkt_wgs84": null}, {"name": "CN_83", "new_location": true, "wkt_wgs84": null}, {"name": "CN_84", "new_location": true, "wkt_wgs84": null}, {"name": "CN_85A", "new_location": true, "wkt_wgs84": null}, {"name": "CN_85B", "new_location": true, "wkt_wgs84": null}, {"name": "CN_86", "new_location": true, "wkt_wgs84": null}, {"name": "CN_86B", "new_location": true, "wkt_wgs84": null}, {"name": "CN_87", "new_location": true, "wkt_wgs84": null}, {"name": "CN_88A", "new_location": true, "wkt_wgs84": null}, {"name": "CN_88B", "new_location": true, "wkt_wgs84": null}, {"name": "CN_88", "new_location": true, "wkt_wgs84": null}, {"name": "CN_89", "new_location": true, "wkt_wgs84": null}, {"name": "CN_90", "new_location": true, "wkt_wgs84": null}, {"name": "CN_90A", "new_location": true, "wkt_wgs84": null}, {"name": "CN_90B", "new_location": true, "wkt_wgs84": null}, {"name": "CN_91", "new_location": true, "wkt_wgs84": null}, {"name": "CN_91A", "new_location": true, "wkt_wgs84": null}, {"name": "CN_91B", "new_location": true, "wkt_wgs84": null}, {"name": "CN_92", "new_location": true, "wkt_wgs84": null}, {"name": "CN_92A", "new_location": true, "wkt_wgs84": null}, {"name": "CN_92B", "new_location": true, "wkt_wgs84": null}, {"name": "CN_93B", "new_location": true, "wkt_wgs84": null}, {"name": "CN_94", "new_location": true, "wkt_wgs84": null}, {"name": "CN_94A", "new_location": true, "wkt_wgs84": null}, {"name": "CN_94B", "new_location": true, "wkt_wgs84": null}, {"name": "CN_95", "new_location": true, "wkt_wgs84": null}, {"name": "CN_96", "new_location": true, "wkt_wgs84": null}, {"name": "CN_96A", "new_location": true, "wkt_wgs84": null}, {"name": "CN_96B", "new_location": true, "wkt_wgs84": null}, {"name": "CN_97", "new_location": true, "wkt_wgs84": null}, {"name": "CN_97A", "new_location": true, "wkt_wgs84": null}, {"name": "CN_97B", "new_location": true, "wkt_wgs84": null}, {"name": "CN_98", "new_location": true, "wkt_wgs84": null}, {"name": "CN_98A", "new_location": true, "wkt_wgs84": null}, {"name": "CN_98B", "new_location": true, "wkt_wgs84": null}, {"name": "CN_99A", "new_location": true, "wkt_wgs84": null}, {"name": "CN_99B", "new_location": true, "wkt_wgs84": null}, {"name": "CN_100", "new_location": true, "wkt_wgs84": null}, {"name": "CN_101", "new_location": true, "wkt_wgs84": null}, {"name": "CN_101A", "new_location": true, "wkt_wgs84": null}, {"name": "CN_102", "new_location": true, "wkt_wgs84": null}, {"name": "CN_103", "new_location": true, "wkt_wgs84": null}, {"name": "CN_104", "new_location": true, "wkt_wgs84": null}, {"name": "CN_104A", "new_location": true, "wkt_wgs84": null}, {"name": "CN_104B", "new_location": true, "wkt_wgs84": null}, {"name": "CN_104C", "new_location": true, "wkt_wgs84": null}, {"name": "CN_105", "new_location": true, "wkt_wgs84": null}, {"name": "CN_106", "new_location": true, "wkt_wgs84": null}, {"name": "CN_106B", "new_location": true, "wkt_wgs84": null}, {"name": "CN_107", "new_location": true, "wkt_wgs84": null}, {"name": "CN_107A", "new_location": true, "wkt_wgs84": null}, {"name": "CN_107B", "new_location": true, "wkt_wgs84": null}, {"name": "CN_108", "new_location": true, "wkt_wgs84": null}, {"name": "CN_109", "new_location": true, "wkt_wgs84": null}, {"name": "CN_110", "new_location": true, "wkt_wgs84": null}, {"name": "CN_111", "new_location": true, "wkt_wgs84": null}, {"name": "CN_112", "new_location": true, "wkt_wgs84": null}, {"name": "CN_113", "new_location": true, "wkt_wgs84": null}, {"name": "CN_114", "new_location": true, "wkt_wgs84": null}, {"name": "CN_115", "new_location": true, "wkt_wgs84": null}, {"name": "CN_116", "new_location": true, "wkt_wgs84": null}, {"name": "CN_117", "new_location": true, "wkt_wgs84": null}, {"name": "CN_118", "new_location": true, "wkt_wgs84": null}, {"name": "CN_119", "new_location": true, "wkt_wgs84": null}, {"name": "CN_NA", "new_location": true, "wkt_wgs84": null}, {"name": "CN_1001", "new_location": true, "wkt_wgs84": null}, {"name": "CN_1002", "new_location": true, "wkt_wgs84": null}, {"name": "CN_1012", "new_location": true, "wkt_wgs84": null}, {"name": "CN_1014", "new_location": true, "wkt_wgs84": null}, {"name": "CN_1016", "new_location": true, "wkt_wgs84": null}, {"name": "CN_1017", "new_location": true, "wkt_wgs84": null}, {"name": "CN_1023", "new_location": true, "wkt_wgs84": null}, {"name": "CN_1024", "new_location": true, "wkt_wgs84": null}, {"name": "CN_1025", "new_location": true, "wkt_wgs84": null}, {"name": "CN_1026", "new_location": true, "wkt_wgs84": null}, {"name": "CN_1029", "new_location": true, "wkt_wgs84": null}, {"name": "CN_1030", "new_location": true, "wkt_wgs84": null}]}
+{
+    "funders": [
+        {
+            "body": "Sime Darby",
+            "url": null,
+            "ref": null,
+            "type": "grant"
+        }
+    ],
+    "longitudinal_extent": [
+        116.75,
+        117.82
+    ],
+    "embargo_date": null,
+    "description": "Start and end dates of salvage logging activity at the SAFE Project experimental site",
+    "latitudinal_extent": [
+        4.5,
+        5.07
+    ],
+    "title": "Quantifying the spatial heterogeneity of forest conversion costs and how it relates to biodiversity, conservation and land use history",
+    "permits": [
+        {
+            "type": "Research",
+            "number": "na",
+            "authority": "Sabah Biodiversity Council "
+        }
+    ],
+    "temporal_extent": [
+        "2013-01-02 00:00:00",
+        "2015-12-31 00:00:00"
+    ],
+    "filename": "template_Symes.xlsx",
+    "access": "open",
+    "external_files": [
+        {
+            "description": "SAFE coupe data",
+            "file": "SAFE_COUPE.zip"
+        }
+    ],
+    "dataworksheets": [
+        {
+            "taxa_fields": [],
+            "max_row": 192,
+            "name": "Data",
+            "max_col": 11,
+            "title": "Salvage logging records",
+            "descriptors": [
+                "field_type",
+                "description",
+                "units",
+                "method",
+                "field_name"
+            ],
+            "external": null,
+            "fields": [
+                {
+                    "field_type": "Location",
+                    "description": "Coupe number",
+                    "method": null,
+                    "units": null,
+                    "field_name": "CoupeNumber",
+                    "col_idx": 1
+                },
+                {
+                    "field_type": "Date",
+                    "description": "Earliest date of logging activity recorded through GPS loggers on bulldozers",
+                    "method": null,
+                    "range": [
+                        "2013-01-02 00:00:00",
+                        "2013-11-26 00:00:00"
+                    ],
+                    "units": "dd/mm/yyyy",
+                    "field_name": "StartDateTrack",
+                    "col_idx": 2
+                },
+                {
+                    "field_type": "Date",
+                    "description": "Last date of logging activity recorded through GPS loggers on bulldozers",
+                    "method": null,
+                    "range": [
+                        "2013-02-03 00:00:00",
+                        "2013-12-31 00:00:00"
+                    ],
+                    "units": "dd/mm/yyyy",
+                    "field_name": "EndDateTrack",
+                    "col_idx": 3
+                },
+                {
+                    "field_type": "Date",
+                    "description": "Earliest date of logging activity recorded through 'Location' method",
+                    "method": null,
+                    "range": [
+                        "2015-01-01 00:00:00",
+                        "2015-08-01 00:00:00"
+                    ],
+                    "units": "dd/mm/yyyy",
+                    "field_name": "StartDateLocation",
+                    "col_idx": 4
+                },
+                {
+                    "field_type": "Date",
+                    "description": "Last date of logging activity recorded through 'Location' method",
+                    "method": null,
+                    "range": [
+                        "2015-01-31 00:00:00",
+                        "2015-12-31 00:00:00"
+                    ],
+                    "units": "dd/mm/yyyy",
+                    "field_name": "EndDateLocation",
+                    "col_idx": 5
+                },
+                {
+                    "field_type": "Date",
+                    "description": "Earliest date of logging activity recorded through 'Measurement' method",
+                    "method": null,
+                    "range": [
+                        "2014-07-03 00:00:00",
+                        "2015-06-29 00:00:00"
+                    ],
+                    "units": "dd/mm/yyyy",
+                    "field_name": "StartDateMeasurement",
+                    "col_idx": 6
+                },
+                {
+                    "field_type": "Date",
+                    "description": "Last date of logging activity recorded through 'Measurement' method",
+                    "method": null,
+                    "range": [
+                        "2014-07-17 00:00:00",
+                        "2015-06-30 00:00:00"
+                    ],
+                    "units": "dd/mm/yyyy",
+                    "field_name": "EndDateMeasurement",
+                    "col_idx": 7
+                },
+                {
+                    "field_type": "ID",
+                    "description": "Name of the contractor responsible for the coupe",
+                    "method": null,
+                    "units": null,
+                    "field_name": "Contractor",
+                    "col_idx": 8
+                },
+                {
+                    "field_type": "Date",
+                    "description": "Earliest date of any recorded salvage logging activity",
+                    "method": "Earliest date from 'StartDateTract', 'StartDateLocation' and 'StartDateMeasurement'",
+                    "range": [
+                        "2013-01-02 00:00:00",
+                        "2015-08-01 00:00:00"
+                    ],
+                    "units": "dd/mm/yyyy",
+                    "field_name": "GlobalStart",
+                    "col_idx": 9
+                },
+                {
+                    "field_type": "Date",
+                    "description": "Last date of any recorded salvage logging activity",
+                    "method": "Latest date from 'EndDateTract', 'EndDateLocation' and 'EndDateMeasurement'",
+                    "range": [
+                        "2013-02-03 00:00:00",
+                        "2015-12-31 00:00:00"
+                    ],
+                    "units": "dd/mm/yyyy",
+                    "field_name": "GlobalEnd",
+                    "col_idx": 10
+                }
+            ],
+            "field_name_row": 5,
+            "n_data_row": 187,
+            "description": "Dates of earliest and latest known salvage logging activity in logging coupes"
+        }
+    ],
+    "authors": [
+        {
+            "orcid": null,
+            "affiliation": "National University of Singapore",
+            "name": "Symes, William",
+            "email": null
+        },
+        {
+            "orcid": null,
+            "affiliation": "National University of Singapore",
+            "name": "Carrasco, Roman",
+            "email": null
+        }
+    ],
+    "keywords": [
+        "Salvage logging records",
+        "disturbance",
+        "fragmentation"
+    ],
+    "project_id": 6,
+    "publication_date": "2019-07-03 08:39:42",
+    "zenodo_concept_id": 3266826,
+    "zenodo_record_id": 3266827,
+    "gbif_taxa": [],
+    "locations": [
+        {
+            "name": "CN_1",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_2",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_3",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_4",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_5",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_6",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_7",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_8",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_9",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_10",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_11",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_12",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_13",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_14",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_15",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_15A",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_16",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_16A",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_16B",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_16C",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_16D",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_17",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_17A",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_17B",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_17C",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_18",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_18A",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_18B",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_18S",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_19",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_19A",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_20",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_21",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_22",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_24",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_25",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_25B",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_26",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_27",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_27A",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_28",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_29",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_29A",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_29B",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_30",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_31",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_32",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_32A",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_32B",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_33",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_34",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_34B",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_35",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_36",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_37A",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_37",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_38",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_39",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_40",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_41",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_42",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_43",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_44",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_45",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_46",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_47",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_48/49",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_50",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_51",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_52/58",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_53",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_54",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_55",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_56",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_57",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_59",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_60",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_61",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_62",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_63",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_64",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_65",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_66",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_66A",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_66B",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_67",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_68",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_68B",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_69",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_70",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_70A",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_71A",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_71",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_72",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_72A",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_73",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_74",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_75",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_75A",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_76",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_76A",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_76B",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_77",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_77A",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_77B",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_78",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_78B",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_79",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_80",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_81",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_82",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_83",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_84",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_85A",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_85B",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_86",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_86B",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_87",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_88A",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_88B",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_88",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_89",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_90",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_90A",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_90B",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_91",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_91A",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_91B",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_92",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_92A",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_92B",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_93B",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_94",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_94A",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_94B",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_95",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_96",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_96A",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_96B",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_97",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_97A",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_97B",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_98",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_98A",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_98B",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_99A",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_99B",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_100",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_101",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_101A",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_102",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_103",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_104",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_104A",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_104B",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_104C",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_105",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_106",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_106B",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_107",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_107A",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_107B",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_108",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_109",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_110",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_111",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_112",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_113",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_114",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_115",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_116",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_117",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_118",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_119",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_NA",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_1001",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_1002",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_1012",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_1014",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_1016",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_1017",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_1023",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_1024",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_1025",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_1026",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_1029",
+            "new_location": true,
+            "wkt_wgs84": null
+        },
+        {
+            "name": "CN_1030",
+            "new_location": true,
+            "wkt_wgs84": null
+        }
+    ]
+}
