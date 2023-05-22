@@ -32,6 +32,6 @@ skip_if_no_internet <- function() {
     #' function tests for no internet _and_ no request callback handler.
 
     if ((!curl::has_internet()) && is.null(httr::get_callback("request"))) {
-        skip("No internet - skipping test")
+        testthat::skip("No internet - skipping test")
     }
 }

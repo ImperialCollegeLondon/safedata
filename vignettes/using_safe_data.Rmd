@@ -14,27 +14,27 @@ library(knitr)
 # Knit hook to truncate output.
 hook_output <- knit_hooks$get("output")
 knit_hooks$set(output = function(x, options) {
-  lines <- options$output.lines
-  if (is.null(lines)) {
-    return(hook_output(x, options)) # pass to default hook
-  }
-  x <- unlist(strsplit(x, "\n"))
-  more <- "..."
-  if (length(lines) == 1) { # first n lines
-    if (length(x) > lines) {
-      # truncate the output, but add ....
-      x <- c(head(x, lines), more)
+    lines <- options$output.lines
+    if (is.null(lines)) {
+        return(hook_output(x, options)) # pass to default hook
     }
-  } else {
-    x <- c(more, x[lines], more)
-  }
-  # paste these lines together
-  x <- paste(c(x, ""), collapse = "\n")
-  hook_output(x, options)
+    x <- unlist(strsplit(x, "\n"))
+    more <- "..."
+    if (length(lines) == 1) { # first n lines
+        if (length(x) > lines) {
+            # truncate the output, but add ....
+            x <- c(head(x, lines), more)
+        }
+    } else {
+        x <- c(more, x[lines], more)
+    }
+    # paste these lines together
+    x <- paste(c(x, ""), collapse = "\n")
+    hook_output(x, options)
 })
 # Comments as #> not ##
 knitr::opts_chunk$set(
-  comment = "#>"
+    comment = "#>"
 )
 ```
 
@@ -103,8 +103,8 @@ metadata for your data community.
 safe_dir_path <- file.path(tempdir(), "my_safe_directory")
 # Create a new safedata directory
 create_safedata_dir(
-  safe_dir_path,
-  url = "http://example.safedata.server"
+    safe_dir_path,
+    url = "http://example.safedata.server"
 )
 ```
 
@@ -291,9 +291,9 @@ you can validate multiple references at once.
 
 ```{r validate_recs, echo=TRUE}
 recs <- validate_record_ids(c(
-  "https://doi.org/10.5281/zenodo.3247631",
-  "10.5281/zenodo.3266827",
-  "https://zenodo.org/record/3266821"
+    "https://doi.org/10.5281/zenodo.3247631",
+    "10.5281/zenodo.3266827",
+    "https://zenodo.org/record/3266821"
 ))
 print(recs)
 ```
@@ -476,23 +476,23 @@ dataset. Some generate simple tables of taxa:
    or using an existing loaded `safedata` object.
 
     ```{r get_taxa}
-    beetle_taxa <- get_taxa(beetle_abund)
-    str(beetle_taxa)
+beetle_taxa <- get_taxa(beetle_abund)
+str(beetle_taxa)
     ```
 
 2. `add_taxa()`: This function adds taxonomic details to an already loaded data worksheet. 
 
     ```{r add_taxa}
-    beetle_morph <- load_safe_data(1400562, "MorphFunctTraits")
-    beetle_morph <- add_taxa(beetle_morph)
-    str(beetle_morph)
+beetle_morph <- load_safe_data(1400562, "MorphFunctTraits")
+beetle_morph <- add_taxa(beetle_morph)
+str(beetle_morph)
     ```
 
 3. The `get_taxon_coverage` function can be used to get a taxon table of all
    taxa currently referenced in _all_ datasets.
 
     ```{r get_taxon_coverage, eval=FALSE}
-    all_taxa <- get_taxon_coverage()
+all_taxa <- get_taxon_coverage()
     ```
 
 The other functions convert taxon tables into graphs (vertices and edges) and
@@ -518,9 +518,9 @@ that the graph is a connected, simple, directed acyclic graph.
    in turn to go straight to a phylogeny.
 
     ```{r get_phylo}
-    library(ape)
-    beetle_phylo <- get_phylogeny(1400562)
-    plot(beetle_phylo, show.node.label = TRUE, font = 1, no.margin = TRUE)
+library(ape)
+beetle_phylo <- get_phylogeny(1400562)
+plot(beetle_phylo, show.node.label = TRUE, font = 1, no.margin = TRUE)
     ```
 
 ## Dataset locations
@@ -542,8 +542,8 @@ further spatial analysis.
    **new locations**.
 
     ```{r load_gazetteer}
-    gazetteer <- load_gazetteer()
-    print(gazetteer)
+gazetteer <- load_gazetteer()
+print(gazetteer)
     ```
 
 2. `get_locations()`: This function returns an `sf` object containing the
@@ -560,23 +560,23 @@ further spatial analysis.
     known locations.
 
     ```{r get_locations}
-    library(sf)
-    beetle_locs <- get_locations(1400562)
-    print(beetle_locs)
-    fragments <- subset(gazetteer, type == "SAFE forest fragment")
-    par(mar = c(3, 3, 1, 1))
-    plot(st_geometry(fragments), col = "khaki", graticule = TRUE)
-    plot(st_geometry(beetle_locs), add = TRUE, col = "red", pch = 4)
+library(sf)
+beetle_locs <- get_locations(1400562)
+print(beetle_locs)
+fragments <- subset(gazetteer, type == "SAFE forest fragment")
+par(mar = c(3, 3, 1, 1))
+plot(st_geometry(fragments), col = "khaki", graticule = TRUE)
+plot(st_geometry(beetle_locs), add = TRUE, col = "red", pch = 4)
     ```
 	
 3. `add_locations()`: This functions adds location data to an already loaded
    worksheet. The result is a `safedata` object that is also an `sf` object.
 
     ```{r add_locations}
-    beetle_env <- load_safe_data(1400562, "EnvironVariables")
-    beetle_env <- add_locations(beetle_env)
-    print(beetle_env)
-    plot(beetle_env["Cover"], key.pos = 4, breaks = seq(0, 100, by = 5))
+beetle_env <- load_safe_data(1400562, "EnvironVariables")
+beetle_env <- add_locations(beetle_env)
+print(beetle_env)
+plot(beetle_env["Cover"], key.pos = 4, breaks = seq(0, 100, by = 5))
     ```
 
 # Inserting datasets
@@ -594,7 +594,7 @@ in the current SAFE data directory.
 
 ```{r insert_dataset}
 files <- system.file("api_data", "template_ClareWfunctiondata.xlsx",
-  package = "safedata"
+    package = "safedata"
 )
 insert_dataset(1237719, files)
 dat <- load_safe_data(1237719, "Data")

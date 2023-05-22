@@ -278,7 +278,8 @@ print.safedata <- function(x, n = 10, ...) {
 # Access notes: There are two routes to files within Zenodo - via the API
 # and via the website URL. For example, these two URLs get the same file:
 #
-# https://zenodo.org/api/files/2edc1bf2-e84e-40be-882d-08ce476c3bcb/SAFE_Gazetteer_metadata_v3.xlsx
+# https://zenodo.org/api/files/...
+#    2edc1bf2-e84e-40be-882d-08ce476c3bcb/SAFE_Gazetteer_metadata_v3.xlsx
 # https://www.zenodo.org/record/3906082/files/SAFE_Gazetteer_metadata_v3.xlsx
 #
 # ** API URLs **
@@ -443,7 +444,8 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
         verbose_message(msg)
     }
 
-    # download metadata if requested - bail if metadata requested and unavailable
+    # download metadata if requested - bail if metadata requested
+    # and unavailable
     if (download_metadata) {
         success <- fetch_record_metadata(record_set)
 
@@ -461,7 +463,9 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
     for (these_files in files_by_record) {
         current_record <- these_files$zenodo_record_id[1]
 
-        if (!is.null(token) && all(these_files$dataset_access == "restricted")) {
+        if (
+            !is.null(token) && all(these_files$dataset_access == "restricted")
+        ) {
             verbose_message("Using token to access restricted record")
         } else if (!these_files$available[1]) {
             msg <- "%i files for record %i: under embargo or restricted"
@@ -513,8 +517,8 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
                     )
                 }
 
-                # Download the target file to the directory - report failures but
-                # don't abort - try and get as much as possible.
+                # Download the target file to the directory - report
+                # failures but don't abort - try and get as much as possible.
                 result <- try_to_download(this_file$public_url,
                     local_path = this_file$full_path
                 )
