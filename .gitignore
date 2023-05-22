@@ -41,3 +41,10 @@ rsconnect/
 
 # Ignore the pkgdown docs folder.
 docs/*
+
+# Ignore any local lint file
+lint.txt
+
+# pyenv files
+.python-version
+

@@ -4,7 +4,8 @@
 # for CRAN packages.
 
 # The implementation borrows heavily from discussion here:
-# https://community.rstudio.com/t/internet-resources-should-fail-gracefully/49199/4
+# https://community.rstudio.com/t/...
+#        internet-resources-should-fail-gracefully/49199/4
 # and the implementation of that discussion in:
 # https://github.com/jlacko/RCzechia/
 

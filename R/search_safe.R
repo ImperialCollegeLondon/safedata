@@ -73,33 +73,33 @@
 #' @return An object of class \code{\link{safe_record_set}} of datasets that
 #'    match the query.
 #' @examples
-#'    \donttest{
-#'    search_dates("2014-06-12")
-#'    search_dates(as.POSIXct(c("2014-06-12", "2015-06-11")))
-#'    search_dates(c("2014-06-12", "2015-06-11"), match_type = "contain")
-#'    search_fields(field_text = "temperature")
-#'    search_fields(field_type = "numeric")
-#'    search_fields(field_text = "temperature", field_type = "numeric")
-#'    search_authors("Ewers")
-#'    search_taxa(taxon_name = "Formicidae")
-#'    search_taxa(gbif_id = 4342)
-#'    search_taxa(taxon_rank = "family")
-#'    search_text("forest")
-#'    search_text("ant")
-#'    search_spatial(wkt = "Point(116.5 4.75)")
-#'    search_spatial(wkt = "Point(116.5 4.75)", distance = 100000)
-#'    search_spatial(wkt = "Polygon((110 0, 110 10,120 10,120 0,110 0))")
-#'    search_spatial(location = "A_1")
-#'    search_spatial(location = "A_1", distance = 2500)
+#' \donttest{
+#' search_dates("2014-06-12")
+#' search_dates(as.POSIXct(c("2014-06-12", "2015-06-11")))
+#' search_dates(c("2014-06-12", "2015-06-11"), match_type = "contain")
+#' search_fields(field_text = "temperature")
+#' search_fields(field_type = "numeric")
+#' search_fields(field_text = "temperature", field_type = "numeric")
+#' search_authors("Ewers")
+#' search_taxa(taxon_name = "Formicidae")
+#' search_taxa(gbif_id = 4342)
+#' search_taxa(taxon_rank = "family")
+#' search_text("forest")
+#' search_text("ant")
+#' search_spatial(wkt = "Point(116.5 4.75)")
+#' search_spatial(wkt = "Point(116.5 4.75)", distance = 100000)
+#' search_spatial(wkt = "Polygon((110 0, 110 10,120 10,120 0,110 0))")
+#' search_spatial(location = "A_1")
+#' search_spatial(location = "A_1", distance = 2500)
 #'
-#'    # combining searches using logical operators
-#'    fish <- search_taxa('Actinopterygii')
-#'    odonates <- search_taxa("Odonata")
-#'    ewers <- search_authors("Ewers")
-#'    aquatic <- fish | odonates
-#'    aquatic_ewers <- aquatic & ewers
-#'    all_in_one <- (fish | odonates) & ewers
-#'    }
+#' # combining searches using logical operators
+#' fish <- search_taxa("Actinopterygii")
+#' odonates <- search_taxa("Odonata")
+#' ewers <- search_authors("Ewers")
+#' aquatic <- fish | odonates
+#' aquatic_ewers <- aquatic & ewers
+#' all_in_one <- (fish | odonates) & ewers
+#' }
 #' @name search_safe
 
 NULL
@@ -107,7 +107,6 @@ NULL
 
 search_dates <- function(dates, match_type = "intersect",
                          most_recent = FALSE, ids = NULL) {
-
     #' @describeIn search_safe Search datasets by date extent
     #' @export
 
@@ -117,7 +116,7 @@ search_dates <- function(dates, match_type = "intersect",
     validate_query_param("dates", dates, c("character", "POSIXt"), c(1, 2))
 
     # Convert character to POSIXt to validate content
-    if (inherits(dates,  "character")) {
+    if (inherits(dates, "character")) {
         dates <- try(as.POSIXct(dates))
         if (inherits(dates, "try-error")) {
             stop("dates not formatted in POSIX format (yyyy-mm-dd).")
@@ -133,8 +132,7 @@ search_dates <- function(dates, match_type = "intersect",
 
 
 search_fields <- function(field_text = NULL, field_type = NULL,
-                           ids = NULL, most_recent = FALSE) {
-
+                          ids = NULL, most_recent = FALSE) {
     #' @describeIn search_safe Search data worksheet field metadata.
     #' @export
 
@@ -148,7 +146,6 @@ search_fields <- function(field_text = NULL, field_type = NULL,
 
 
 search_authors <- function(author, ids = NULL, most_recent = FALSE) {
-
     #' @describeIn search_safe Search by dataset author
     #' @export
 
@@ -157,13 +154,11 @@ search_authors <- function(author, ids = NULL, most_recent = FALSE) {
 
     params <- c(name = author)
     return(safe_api_search("authors", params, ids, most_recent))
-
 }
 
 
 search_taxa <- function(taxon_name = NULL, taxon_rank = NULL, gbif_id = NULL,
                         ids = NULL, most_recent = FALSE) {
-
     #' @describeIn search_safe Search by taxon name, rank or GBIF ID.
     #' @export
 
@@ -174,12 +169,10 @@ search_taxa <- function(taxon_name = NULL, taxon_rank = NULL, gbif_id = NULL,
 
     params <- c(name = taxon_name, rank = taxon_rank, gbif_id = gbif_id)
     return(safe_api_search("taxa", params, ids, most_recent))
-
 }
 
 
 search_text <- function(text, ids = NULL, most_recent = FALSE) {
-
     #' @describeIn search_safe Search dataset, worksheet and field titles
     #'    and descriptions
     #' @export
@@ -188,13 +181,11 @@ search_text <- function(text, ids = NULL, most_recent = FALSE) {
 
     params <- c(text = text)
     return(safe_api_search("text", params, ids, most_recent))
-
 }
 
 
 search_spatial <- function(wkt = NULL, location = NULL, distance = NULL,
-                            ids = NULL, most_recent = FALSE) {
-
+                           ids = NULL, most_recent = FALSE) {
     #' @describeIn search_safe Search by spatial sampling area/named location.
     #' @export
 
@@ -204,9 +195,9 @@ search_spatial <- function(wkt = NULL, location = NULL, distance = NULL,
     validate_query_param("distance", distance, "numeric")
 
     # look for one or other of wkt and locations and do further validation
-    if (! xor(is.null(wkt), is.null(location))) {
+    if (!xor(is.null(wkt), is.null(location))) {
         stop("Provide either wkt or location.")
-    } else if (! is.null(wkt)) {
+    } else if (!is.null(wkt)) {
         ft <- try(sf::st_as_sfc(wkt))
         if (inherits(ft, "try-error")) {
             stop("wkt string not valid")
@@ -214,7 +205,7 @@ search_spatial <- function(wkt = NULL, location = NULL, distance = NULL,
         # TODO - check whether passing WGS84 or UTM50N
     } else {
         gazetteer <- load_gazetteer()
-        if (! location %in% gazetteer$location) {
+        if (!location %in% gazetteer$location) {
             stop("Location name not found in gazetteer")
         }
     }
@@ -231,7 +222,6 @@ search_spatial <- function(wkt = NULL, location = NULL, distance = NULL,
 
 safe_api_search <- function(endpoint, params, ids = NULL,
                             most_recent = FALSE) {
-
     #' Internal SAFE dataset API search functions
     #'
     #' The two internal functions described here handle validating the
@@ -257,17 +247,17 @@ safe_api_search <- function(endpoint, params, ids = NULL,
 
     # All of the search_* functions ultimately need the data index to construct
     # the safe_record_set, so ensure the safedata_dir is set:
-    safedir <- get_data_dir()
+    get_data_dir()
 
     # construct query string - note that the use in the search_* functions
     # of c(name = value, name = value) automatically drops NULL values.
     params <- paste(names(params), params, sep = "=", collapse = "&")
 
-    if (! is.null(ids)) {
+    if (!is.null(ids)) {
         # convert ids to safe_record_set if needed
-        if (! inherits(ids, "safe_record_set")) {
+        if (!inherits(ids, "safe_record_set")) {
             ids <- validate_record_ids(ids)
-            if (! nrow(ids)) {
+            if (!nrow(ids)) {
                 stop("No valid record identifiers found in ids")
             }
         } else if (nrow(ids) == 0) {
@@ -275,7 +265,7 @@ safe_api_search <- function(endpoint, params, ids = NULL,
         }
 
         # reduce to record ids (not concept ids)
-        ids <- ids$record[! is.na(ids$record)]
+        ids <- ids$record[!is.na(ids$record)]
         ids <- paste("ids", ids, sep = "=", collapse = "&")
         params <- paste0(params, "&", ids)
     }
@@ -303,12 +293,14 @@ safe_api_search <- function(endpoint, params, ids = NULL,
 
     # convert search results to safe_record_set
     if (content$count > 0) {
-        recids <-  sapply(content$entries, '[[', 'zenodo_record_id')
+        recids <- sapply(content$entries, "[[", "zenodo_record_id")
         ret <- validate_record_ids(recids)
     } else {
-        ret <- data.frame(concept = numeric(0), record = numeric(0),
-                          available = logical(0), most_recent = numeric(0),
-                          mra = numeric(0))
+        ret <- data.frame(
+            concept = numeric(0), record = numeric(0),
+            available = logical(0), most_recent = numeric(0),
+            mra = numeric(0)
+        )
         class(ret) <- c("safe_record_set", "data.frame")
     }
 
@@ -317,16 +309,18 @@ safe_api_search <- function(endpoint, params, ids = NULL,
 
 
 validate_query_param <- function(name, val, class = "character", length = 1) {
-
     #' @describeIn safe_api_search A basic query parameter validation handler
     #' @keywords internal
 
-    if (! is.null(val) &&
-        (! inherits(val, class) || ! length(val) %in% length)) {
-            msg <- paste0("Parameter %s must be of length %s and ",
-                          "have one of the following classes: %s")
-            stop(sprintf(msg, name, paste(length, collapse = ","),
-                         paste(class, collapse = ",")))
+    if (!is.null(val) &&
+        (!inherits(val, class) || !length(val) %in% length)) {
+        msg <- paste0(
+            "Parameter %s must be of length %s and ",
+            "have one of the following classes: %s"
+        )
+        stop(sprintf(
+            msg, name, paste(length, collapse = ","),
+            paste(class, collapse = ",")
+        ))
     }
-
 }

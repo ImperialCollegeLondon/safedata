@@ -31,7 +31,7 @@ mock_api_urls <- list(
         content = "1400562.json",
         status_code = 200L
     ),
-    "https://www.zenodo.org/record/1400562/files/Psomas_Ant_Pselaphine_SAFE_dataset.xlsx" = list(
+    "https://www.zenodo.org/record/1400562/files/Psomas_Ant_Pselaphine_SAFE_dataset.xlsx" = list( # nolint
         content = "Psomas_Ant_Pselaphine_SAFE_dataset.xlsx",
         status_code = 200L
     ),
@@ -39,7 +39,7 @@ mock_api_urls <- list(
         content = "3247631.json",
         status_code = 200L
     ),
-    "https://www.zenodo.org/record/3247631/files/Both_tree_functional_traits.xlsx" = list(
+    "https://www.zenodo.org/record/3247631/files/Both_tree_functional_traits.xlsx" = list( # nolint
         content = "Both_tree_functional_traits.xlsx",
         status_code = 200L
     ),
@@ -72,7 +72,7 @@ mock_api_urls <- list(
         content = "spatial_location_BL_A.json",
         status_code = 200L
     ),
-    "http://example.safedata.server/api/search/spatial?wkt=POINT(116.97394%204.73481)&distance=2000" = list(
+    "http://example.safedata.server/api/search/spatial?wkt=POINT(116.97394%204.73481)&distance=2000" = list( # nolint
         content = "spatial_wkt_point_distance_2000.json",
         status_code = 200L
     ),
@@ -88,7 +88,7 @@ mock_api_urls <- list(
         content = "authors_name_Ewers.json",
         status_code = 200L
     ),
-    "http://example.safedata.server/api/search/authors?name=Ewers&ids=1237719&ids=4072959&ids=3982665&ids=1478526&ids=3926374&ids=3974971&ids=6368114&ids=5820902&ids=5710509&ids=6477764" = list(
+    "http://example.safedata.server/api/search/authors?name=Ewers&ids=1237719&ids=4072959&ids=3982665&ids=1478526&ids=3926374&ids=3974971&ids=6368114&ids=5820902&ids=5710509&ids=6477764" = list( # nolint
         content = "authors_ewers_within_ids.json",
         status_code = 200L
     ),

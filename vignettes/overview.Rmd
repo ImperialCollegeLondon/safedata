@@ -133,7 +133,7 @@ For example:
 ```
 gazetteer.geojson
 index.json
-location_aliases.csv
+location_aliases.json
 url.json
 1400561/1400562/1400562.json
 1400561/1400562/Psomas_Ant_Pselaphine_SAFE_dataset.xlsx

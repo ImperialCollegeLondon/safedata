@@ -78,7 +78,7 @@ test_that("no API fails gracefully on update", {
     Sys.unsetenv("URL_DOWN")
 })
 
-test_that("Specific resource unavailable fails gracefully on update - atomic update.", {
+test_that("Specific resource unavailable - test atomic update.", {
     local_sdd <- local_create_sdd()
 
     Sys.setenv(RESOURCE_DOWN = "/api/metadata_index.json$")

@@ -544,8 +544,8 @@ igraph_to_phylo <- function(g, labels = "taxon_name") {
     #' @return An \code{\link[ape:read.tree]{phylo}} object.
     #' @export
 
-    if (!igraph::is_simple(g) |
-        !igraph::is_connected(g) |
+    if (!igraph::is_simple(g) ||
+        !igraph::is_connected(g) ||
         !igraph::is_dag(g)) {
         stop("Taxon graph is not a simple, connected, directed acylic graph")
     }
