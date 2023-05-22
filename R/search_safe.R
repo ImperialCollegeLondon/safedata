@@ -158,12 +158,15 @@ search_authors <- function(author, ids = NULL, most_recent = FALSE) {
 
 
 search_taxa <- function(taxon_name = NULL, taxon_rank = NULL,
-                        taxon_id = NULL, taxon_auth = c("GBIF", "NCBI"),
+                        taxon_id = NULL, taxon_auth = NULL,
                         ids = NULL, most_recent = FALSE) {
     #' @describeIn search_safe Search by taxon name, rank or taxon ID.
     #' @export
 
-    taxon_auth <- match.arg(taxon_auth)
+    # Validate taxon auth unless it is missing
+    if (!is.null(taxon_auth)) {
+        taxon_auth <- match.arg(taxon_auth, c("GBIF", "NCBI"))
+    }
 
     # check inputs
     validate_query_param("taxon_name", taxon_name)
