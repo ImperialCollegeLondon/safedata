@@ -24,7 +24,8 @@ search_authors(author, ids = NULL, most_recent = FALSE)
 search_taxa(
   taxon_name = NULL,
   taxon_rank = NULL,
-  gbif_id = NULL,
+  taxon_id = NULL,
+  taxon_auth = NULL,
   ids = NULL,
   most_recent = FALSE
 )
@@ -66,8 +67,6 @@ full (or partial) names.}
 
 \item{taxon_rank}{A taxonomic rank to search for.}
 
-\item{gbif_id}{A GBIF taxonomic ID number.}
-
 \item{text}{Character string to look for within a SAFE dataset, worksheet,
 title, field description, and dataset keywords.}
 
@@ -78,6 +77,8 @@ longitude in WGS84 (EPSG:4326).}
 
 \item{distance}{A buffer distance for spatial searches, giving the distance
 in metres within which to match either location or wkt searches.}
+
+\item{gbif_id}{A GBIF taxonomic ID number.}
 }
 \value{
 An object of class \code{\link{safe_record_set}} of datasets that
@@ -113,7 +114,7 @@ date is provided.
 
 \item \code{search_authors}: Search by dataset author
 
-\item \code{search_taxa}: Search by taxon name, rank or GBIF ID.
+\item \code{search_taxa}: Search by taxon name, rank or taxon ID.
 
 \item \code{search_text}: Search dataset, worksheet and field titles
 and descriptions
@@ -152,31 +153,31 @@ coordinate information.
 }
 
 \examples{
-   \donttest{
-   search_dates("2014-06-12")
-   search_dates(as.POSIXct(c("2014-06-12", "2015-06-11")))
-   search_dates(c("2014-06-12", "2015-06-11"), match_type = "contain")
-   search_fields(field_text = "temperature")
-   search_fields(field_type = "numeric")
-   search_fields(field_text = "temperature", field_type = "numeric")
-   search_authors("Ewers")
-   search_taxa(taxon_name = "Formicidae")
-   search_taxa(gbif_id = 4342)
-   search_taxa(taxon_rank = "family")
-   search_text("forest")
-   search_text("ant")
-   search_spatial(wkt = "Point(116.5 4.75)")
-   search_spatial(wkt = "Point(116.5 4.75)", distance = 100000)
-   search_spatial(wkt = "Polygon((110 0, 110 10,120 10,120 0,110 0))")
-   search_spatial(location = "A_1")
-   search_spatial(location = "A_1", distance = 2500)
+\donttest{
+search_dates("2014-06-12")
+search_dates(as.POSIXct(c("2014-06-12", "2015-06-11")))
+search_dates(c("2014-06-12", "2015-06-11"), match_type = "contain")
+search_fields(field_text = "temperature")
+search_fields(field_type = "numeric")
+search_fields(field_text = "temperature", field_type = "numeric")
+search_authors("Ewers")
+search_taxa(taxon_name = "Formicidae")
+search_taxa(taxon_id = 4342, taxon_auth = "GBIF")
+search_taxa(taxon_rank = "family")
+search_text("forest")
+search_text("ant")
+search_spatial(wkt = "Point(116.5 4.75)")
+search_spatial(wkt = "Point(116.5 4.75)", distance = 100000)
+search_spatial(wkt = "Polygon((110 0, 110 10,120 10,120 0,110 0))")
+search_spatial(location = "A_1")
+search_spatial(location = "A_1", distance = 2500)
 
-   # combining searches using logical operators
-   fish <- search_taxa('Actinopterygii')
-   odonates <- search_taxa("Odonata")
-   ewers <- search_authors("Ewers")
-   aquatic <- fish | odonates
-   aquatic_ewers <- aquatic & ewers
-   all_in_one <- (fish | odonates) & ewers
-   }
+# combining searches using logical operators
+fish <- search_taxa("Actinopterygii")
+odonates <- search_taxa("Odonata")
+ewers <- search_authors("Ewers")
+aquatic <- fish | odonates
+aquatic_ewers <- aquatic & ewers
+all_in_one <- (fish | odonates) & ewers
+}
 }
