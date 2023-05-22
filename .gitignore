@@ -44,3 +44,7 @@ docs/*
 
 # Ignore any local lint file
 lint.txt
+
+# pyenv files
+.python-version
+
