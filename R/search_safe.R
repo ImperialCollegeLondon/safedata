@@ -324,8 +324,10 @@ validate_query_param <- function(name, val, class = "character", length = 1) {
     #' @describeIn safe_api_search A basic query parameter validation handler
     #' @keywords internal
 
-    if (!is.null(val) &&
-        (!inherits(val, class) || !length(val) %in% length)) {
+    if (
+        !is.null(val) &&
+            (!inherits(val, class) || !length(val) %in% length)
+    ) {
         msg <- paste0(
             "Parameter %s must be of length %s and ",
             "have one of the following classes: %s"
