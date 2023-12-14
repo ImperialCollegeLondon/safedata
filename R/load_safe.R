@@ -282,8 +282,8 @@ print.safedata <- function(x, n = 10, ...) {
 # and via the website URL. For example, these two URLs get the same file:
 #
 # https://zenodo.org/api/files/...
-#    2edc1bf2-e84e-40be-882d-08ce476c3bcb/SAFE_Gazetteer_metadata_v3.xlsx
-# https://www.zenodo.org/record/3906082/files/SAFE_Gazetteer_metadata_v3.xlsx
+#    2edc1bf2-e84e-40be-882d-08ce476c3bcb/SAFE_Gazetteer_metadata_v3.xlsx  # nolint
+# https://www.zenodo.org/record/3906082/files/SAFE_Gazetteer_metadata_v3.xlsx  # nolint
 #
 # ** API URLs **
 # The API link requires that hex 'bucket' id - and these are not stable

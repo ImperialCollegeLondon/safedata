@@ -47,4 +47,5 @@ lint.txt
 
 # pyenv files
 .python-version
-
+/doc/
+/Meta/

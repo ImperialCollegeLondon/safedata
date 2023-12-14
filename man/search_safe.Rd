@@ -148,10 +148,11 @@ coordinate information.
 
 \describe{
    \item{SAFE data API}{e.g. \url{https://www.safeproject.net/api}}
-   \item{Worksheet field types}{\url{https://safedata-validator.readthedocs.io/en/latest/data_format/data.html#field-types}}
+   \item{Worksheet field
+   types}{\url{https://safedata-validator.readthedocs.io/en/latest/data_format/data.html#field-types}}  # nolint
    \item{SAFE gazetteer}{See \code{\link{load_gazetteer}} and e.g.
          \url{https://www.safeproject.net/info/gazetteer}}
-   \item{WKT}{\url{https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry}}
+   \item{WKT}{\url{https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry}}  # nolint
 }
 }
 
