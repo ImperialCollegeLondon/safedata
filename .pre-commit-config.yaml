@@ -5,7 +5,7 @@ repos:
     rev: v0.3.2.9027
     hooks: 
     -   id: style-files
-        args: [--style_pkg=styler, --indent_by=4, --style_fun=tidyverse_style]    
+        args: [--style_pkg=styler, --indent_by=4, --style_fun=tidyverse_style]
     -   id: roxygenize
         additional_dependencies:
             - readxl

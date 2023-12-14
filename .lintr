@@ -1,7 +1,8 @@
 linters: linters_with_defaults(
     cyclocomp_linter(complexity_limit = 40L), # TODO - this is silly, but not refactoring these right now
-    commented_code_linter = NULL  # TODO - remove when tests renabled
-  )
+    commented_code_linter = NULL,  # TODO - remove when tests renabled
+    indentation_linter(indent = 4L)
+)
 exclusions: list(# Linting long lines in docstrings and the like
                  "R/zzz.R" = 1, # .onAttach is require hook name
                  "R/search_safe.R" = 43, # URL - remove line length restriction
