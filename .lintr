@@ -5,9 +5,10 @@ linters: linters_with_defaults(
     object_usage_linter = NULL  # TODO - Not recognizing internal variables
   )
 exclusions: list(# Linting long lines in docstrings and the like
-                 "R/zzz.R" = 1, # .onAttach is require hook name
-                 "R/search_safe.R" = 43, # URL - remove line length restriction
-                 "R/search_safe.R" = 46, # URL
-                 "R/taxa.R" = 44, # URL 
-                 "R/load_safe.R" = 254, # URL 
-                 "R/load_safe.R" = 255) # URL 
+                 # "R/zzz.R" = 1, # .onAttach is require hook name
+                 # "R/search_safe.R" = 43, # URL - remove line length restriction
+                 # "R/search_safe.R" = 46, # URL
+                 # "R/taxa.R" = 44, # URL 
+                 # "R/load_safe.R" = 254, # URL 
+                 # "R/load_safe.R" = 255 # URL 
+  ) 
