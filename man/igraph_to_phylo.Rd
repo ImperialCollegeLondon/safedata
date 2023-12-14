@@ -43,9 +43,9 @@ The function \code{get_phylogeny} is simply a wrapper that calls
 }
 \section{Functions}{
 \itemize{
-\item \code{get_phylogeny}: Get a phylogeny for a dataset
-}}
+\item \code{get_phylogeny()}: Get a phylogeny for a dataset
 
+}}
 \examples{
    set_example_safedata_dir()
    beetle_graph <- get_taxon_graph(1400562)

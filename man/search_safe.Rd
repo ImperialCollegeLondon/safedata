@@ -111,20 +111,20 @@ date is provided.
 }
 \section{Functions}{
 \itemize{
-\item \code{search_dates}: Search datasets by date extent
+\item \code{search_dates()}: Search datasets by date extent
 
-\item \code{search_fields}: Search data worksheet field metadata.
+\item \code{search_fields()}: Search data worksheet field metadata.
 
-\item \code{search_authors}: Search by dataset author
+\item \code{search_authors()}: Search by dataset author
 
-\item \code{search_taxa}: Search by taxon name, rank or taxon ID.
+\item \code{search_taxa()}: Search by taxon name, rank or taxon ID.
 
-\item \code{search_text}: Search dataset, worksheet and field titles
+\item \code{search_text()}: Search dataset, worksheet and field titles
 and descriptions
 
-\item \code{search_spatial}: Search by spatial sampling area/named location.
-}}
+\item \code{search_spatial()}: Search by spatial sampling area/named location.
 
+}}
 \section{Spatial searches}{
 
 For spatial searches, users can select a location name from a SAFE
