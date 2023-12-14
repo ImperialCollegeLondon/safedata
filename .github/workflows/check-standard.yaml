@@ -26,7 +26,7 @@ jobs:
           use-public-rspm: true
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: rcmdcheck, pkgdown
+          extra-packages: rcmdcheck, pkgdown, R.cache
       - uses: pre-commit/action@v3.0.0
 
   R-CMD-check:
