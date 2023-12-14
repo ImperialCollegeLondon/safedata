@@ -1,6 +1,7 @@
 .lintr
 .python-version
 ^.*\.Rproj$
+^Meta$
 ^\.Rproj\.user$
 ^\.github$
 ^\.pre-commit-config\.yaml$

@@ -3,14 +3,13 @@
 This repository and package uses a number of systems that you need to be aware
 of if you plan to work with the codebase:
 
-* The repository uses the git flow approach to maintaining `develop` and `master`
-  branches and uses continuous integration, with changes accepted into `develop` only
-  via pull requests from branches that pass checks.
-* The repository uses GitHub Actions to carry out out those checks on pushes and pull
-  requests. These include passing `R CMD CHECK --as-cran` and that the documentation
-  builds as expected.
+* The repository uses the git flow approach to maintaining `develop` and `main`
+  branches and uses continuous integration, with changes accepted into `develop` or
+  `main` only through pull requests.
+* The repository uses GitHub Actions to carry out out checks on pushes and pull
+  requests.
 * Documentation for the package is maintained using `roxygen` and `pkgdown`.
-* The code should be checked using linting for consistent style.
+* The code is checked using linting for consistent style.
 
 These notes provide a brief walk through for these systems and some package specific
 requirements for releases.
@@ -25,13 +24,16 @@ checks then a pull request onto the `develop` branch should be made.
 A new release start from the `develop` branch, following merged pull requests for
 features and bug fixes that are going to be included in the new release. A suitably
 named `release` branch should be made to check and make final changes. That `release`
-branch is then merged into `master` and tagged as the new release, and also back into
-`develop` to bring back last minute fixes. The `master` branch should only ever
+branch is then merged into `main` and tagged as the new release, and also back into
+`develop` to bring back last minute fixes. The `main` branch should only ever
 see merges in from a `release` branch - you must not work on it directly.
 
 The package uses ([semantic version numbering](https://semver.org/)) and code on the
 development branch should use the prerelease token `9000`. This is explained in more
 detail below in the description of the release cycle.
+
+You should install the R `devtools` package as well as the `safedata` package
+dependencies.
 
 ## GitHub Actions
 
@@ -41,7 +43,7 @@ built and checked using GitHub Actions:
 [https://github.com/ImperialCollegeLondon/safedata/actions](https://github.com/ImperialCollegeLondon/safedata/actions)
 
 Checking happens on pushes to all branches, so day to day commits to feature branches
-will be built as well as pull requests onto `develop` and merges onto `master` from
+will be built as well as pull requests onto `develop` and merges onto `main` from
 `release` branches. If you have made changes that you do not want to be built and
 checked then you can include `[ci skip]` in the commit message, but the idea is that all
 changes should be checked so this is typically only used for minor documentation changes
@@ -49,30 +51,67 @@ and the like.
 
 The currently configured actions do the following:
 
-* On `push` or `pull_requests` to `feature`, `develop` or `master` branches, the actions
-  run `R CMD CHECK --as-cran` and `pkgdown::build_site()`.
-* On `pull_requests` to master, a second action will run `pkgdown::deploy_to_branch()`
+* On `push` or `pull_requests` to `feature`, `develop` or `main` branches, the actions
+  run:
+  * Quality assurance checks by running `pre-commit` using the configured R
+    `precommit` steps.
+  * Package build checks by running `R CMD CHECK --as-cran`
+  * Documentation checks using `pkgdown::build_site()`.
+* On `pull_requests` to main, a second action will run `pkgdown::deploy_to_branch()`
   to publish the new documentation for the released version.
+
+## The `pre-commit` setup
+
+`pre-commit` is a Python program that runs a set of hooks when any changes are committed
+to the repository. These hooks are used to check that the code is free of any common
+issues _before_ it is committed - if the checks fail, the commit will be aborted and you
+will need to fix the issues and re-commit your changes.
+
+You will need to:
+
+1. Install [`pre-commit`](https://pre-commit.com/#install)
+2. Install the `pre-commit` configuration for the package from within your clone of the
+   `safedata` repositrory by using: `pre-commit install`
+
+At present, the automatic checking includes:
+
+* Code styling
+* Regeneration of the R documentation (`man`) files to ensure the source code and
+  documentation are synchronised (see below).
+* Checking that the DESCRIPTION file structure is correct and contains all package
+  dependencies used in the code.
+* Automatic linting of the R source files.
+* Basic checks that the R code is parsable and contains no `browser()` or `debug()`
+  statements.
+* Checks for common file issues: sorting, missing line endings, oversized files and the
+  inclusion of 'artifact' files such as `.Rhistory` files.
+
+Note that _some_ of these steps may make changes to your files to fix issues, such as to
+update `man` files and apply common styling. When this happens, the `pre-commit` step
+will fail but you can simply add the changed files to the commit and re-commit to add
+the automatic fixes.
 
 ## Package documentation
 
 With the `roxygen2` package , all of the package documentation content is located in
-source files that are then processed to generate the actual documentation content. When
-these source files are changed, that documentation content should be rebuilt to make
-sure all of the content is up to date before checking through GitHub Actions.
+source files. These are then processed to automatically generate the standard R
+documentation files (the `man/*.Rd` files).
 
 ### The `man` pages
 
 The `man` directory contains all of the package documentation as `.Rd` format files, but
 these files are built automatically by the `roxygen2` package from docstrings in the `R`
-source files. If you have changed those docstrings, then you need to run the following
-to update the `Rd` file content:
+source files.  When these source files are changed, that documentation content needs to
+be rebuilt to make sure all of the content is up to date. This step is built into the
+`pre-commit` checking, so commits should automatically include any updates to the `man`
+pages.
+
+If you do want to rebuild `man` pages manually - to check what changes look like before
+committing - the command is:
 
 ```sh
 Rscript -e "devtools::document()"
 ```
-
-Note that this update does not happen automatically during package building.
 
 ### Vignettes
 
@@ -155,11 +194,12 @@ against live content.
 ## Linting
 
 The linting process inspects the R code files in the package to check they have a
-consistent coding and syntax style. Running the command below from the package root
-runs the linting and updates a file `lint.txt` in the package root.
+consistent coding and syntax style. Linting is run automatically during `pre-commit`
+checks but running the command below from the package root will also generate a linting
+report.
 
 ```sh
-Rscript -e "lintr::lint_package()" > lint.txt
+Rscript -e "lintr::lint_package()"
 ```
 
 The `.lintr` file in the package root is used to configure the linting and set any
@@ -170,7 +210,9 @@ these lines `.lintr` has to be updated to exclude linting on specific line numbe
 Currently, the `.lintr` configuration:
 
 * sets a very lax limit on cyclomatic complexity,
-* permits commented out code - there are a couple of temporarily retired tests.
+* permits commented out code - there are a couple of temporarily retired tests,
+* updates the indenting depth to 4 and not the default 2 spaces, and
+* turns off object usage checking, this needs to be renabled at some point.
 
 ## Release cycle
 
@@ -295,7 +337,7 @@ You then need to upload that file to `win-builder`. The python script
 `build_scripts/upload_to_win-builder.py`  will do this for you - it is simply automating
 the process of using FTP to upload the current version for checking under both R stable
 and R devel. Note that `win-builder` communicates by email with the package maintainer
-(whoever has the `cre` flag in the `authors` section of the `DESCRIPTION` file.
+(whoever has the `cre` flag in the `authors` section of the `DESCRIPTION` file).
 
 ```sh
 python build_scripts/upload_to_win-builder.py
@@ -347,19 +389,19 @@ git flow release finish 1.0.6
 
 You will be asked for some commit messages and a new tag comment, which will simply be
 the version number. You should then be on the `develop` branch. You now need to checkout
-the `master` branch which should now have all the commits since the last release and a
+the `main` branch which should now have all the commits since the last release and a
 new tag with the version number. You can now push this to create the release - if you've
 set the config described above then a single push will create the commit and tag.
 
 ```sh
-git checkout master
+git checkout main
 git push
 ```
 
 This will set off another round of GitHub Actions checking - you should see the tagged
 version being built and checked. This should all go cleanly!
 
-You should now **immediately** get off the `master` branch and back onto `develop`,
+You should now **immediately** get off the `main` branch and back onto `develop`,
 before you accidentally change the files or commit to it, You should also
 **immediately** update the version number in `DESCRIPTION`, adding `-9000` to show that
 this is now the development version from the new release. This is a trivial change, so

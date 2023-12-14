@@ -41,8 +41,12 @@ validate_record_ids <- function(record_set) {
     # Only run validation if the input is not already a record set
     if (!inherits(record_set, "safe_record_set")) {
         # Otherwise validate
-        if (!(is.vector(record_set) &&
-            mode(record_set) %in% c("character", "numeric"))) {
+        if (
+            !(
+                is.vector(record_set) &&
+                    mode(record_set) %in% c("character", "numeric")
+            )
+        ) {
             stop("record_set must be a character or numeric vector")
         }
 
@@ -162,7 +166,8 @@ validate_record_ids <- function(record_set) {
     # Sort by concept id (increasing from earliest) and then by record id
     # (decreasing from most recent) and keep NAs at the top, so concept ids
     # come first.
-    record_set <- record_set[order(record_set$concept, record_set$record,
+    record_set <- record_set[order(
+        record_set$concept, record_set$record,
         decreasing = c(FALSE, TRUE),
         method = "radix", na.last = FALSE
     ), ]
@@ -347,9 +352,10 @@ load_record_metadata <- function(record_set) {
     #' @describeIn fetch_record_metadata Load JSON metadata for a record
     #' @keywords internal
 
-    if ((!inherits(record_set, "safe_record_set")) ||
-        (nrow(record_set) > 1) ||
-        (any(is.na(record_set)))
+    if (
+        !inherits(record_set, "safe_record_set") ||
+            nrow(record_set) > 1 ||
+            any(is.na(record_set))
     ) {
         stop(
             "Expects a single row safe_record_set object ",
@@ -433,14 +439,15 @@ show_concepts <- function(obj) {
     # and cut into record chunks
     index <- get_index()
 
-    rows <- subset(index, zenodo_concept_id %in% record_set$concept &
-        grepl(".xlsx$", filename),
-    select = c(
-        zenodo_concept_id, zenodo_record_id,
-        dataset_title, publication_date, available,
-        most_recent_available, dataset_embargo,
-        local_copy
-    )
+    rows <- subset(index,
+        zenodo_concept_id %in% record_set$concept &
+            grepl(".xlsx$", filename),
+        select = c(
+            zenodo_concept_id, zenodo_record_id,
+            dataset_title, publication_date, available,
+            most_recent_available, dataset_embargo,
+            local_copy
+        )
     )
 
     rows <- unique(rows)
@@ -469,9 +476,10 @@ show_concepts <- function(obj) {
         )
         version_available[which(concept$most_recent_available)[1]] <- "*"
         publ_date <- format(concept$publication_date, "%Y-%m-%d")
-        emb_date <- ifelse(is.na(concept$dataset_embargo) |
-            concept$dataset_embargo < Sys.time(),
-        "--", format(concept$dataset_embargo, "%Y-%m-%d")
+        emb_date <- ifelse(
+            is.na(concept$dataset_embargo) |
+                concept$dataset_embargo < Sys.time(),
+            "--", format(concept$dataset_embargo, "%Y-%m-%d")
         )
         version_table <- data.frame(
             record_id = concept$zenodo_record_id,
@@ -480,9 +488,11 @@ show_concepts <- function(obj) {
             available = version_available
         )
 
-        text <- c(text, utils::capture.output(print(version_table,
-            row.names = FALSE
-        )), "\n")
+        text <- c(
+            text,
+            utils::capture.output(print(version_table, row.names = FALSE)),
+            "\n"
+        )
         return(text)
     }
 
@@ -541,9 +551,12 @@ show_record <- function(obj) {
 
     ext_files <- metadata$external_files
     if (!is.null(ext_files)) {
-        cat(sprintf("External files: %s\n", paste(ext_files$file,
-            collapse = " ,"
-        )))
+        cat(
+            sprintf(
+                "External files: %s\n",
+                paste(ext_files$file, collapse = " ,")
+            )
+        )
     }
 
     # Taxa reporting - gbif_taxa and ncbi_taxa are both lists in the metadata,
@@ -692,8 +705,11 @@ file_status <- function(metadata) {
 
     # Data access status - check for local private copy
     index <- get_index()
-    file_row <- subset(index, grepl(".xlsx$", filename) &
-        zenodo_record_id == metadata$zenodo_record_id)
+    file_row <- subset(
+        index,
+        grepl(".xlsx$", filename) &
+            zenodo_record_id == metadata$zenodo_record_id
+    )
 
     status <- "open"
     if (metadata$access == "embargo") {

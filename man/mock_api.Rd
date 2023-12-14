@@ -29,7 +29,7 @@ responses into its registry rather than on request.
 }
 \section{Functions}{
 \itemize{
-\item \code{mock_handler}: A mock handler for URL callbacks
-}}
+\item \code{mock_handler()}: A mock handler for URL callbacks
 
+}}
 \keyword{internal}

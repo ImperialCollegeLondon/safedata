@@ -36,9 +36,9 @@ modified by users.
 }
 \section{Functions}{
 \itemize{
-\item \code{create_safedata_dir}: Create a new safedata directory
-}}
+\item \code{create_safedata_dir()}: Create a new safedata directory
 
+}}
 \section{The safedata directory structure}{
 
 

@@ -49,13 +49,13 @@ Currently, this function only loads data from SAFE formatted
 \code{.xlsx} files - data stored in external files is not yet
 handled.
 }
-\section{Methods (by generic)}{
+\section{Functions}{
 \itemize{
-\item \code{str}: Display structure of a safedata data frame
+\item \code{str(safedata)}: Display structure of a safedata data frame
 
-\item \code{print}: Print safedata data frame
+\item \code{print(safedata)}: Print safedata data frame
+
 }}
-
 \examples{
    set_example_safedata_dir()
    beetle_abund <- load_safe_data(1400562, "Ant-Psel")

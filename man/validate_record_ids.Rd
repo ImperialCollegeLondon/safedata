@@ -48,18 +48,18 @@ to provide a common output for the search functions but is exported
 to allow users to check record ids and display summary information
 using the print method.
 }
-\section{Methods (by generic)}{
+\section{Functions}{
 \itemize{
-\item \code{print}: Print a brief summary of
+\item \code{print(safe_record_set)}: Print a brief summary of
 "safe_record_set" objects.
 
-\item \code{&}: Combine two record sets, retaining only
+\item \code{ & }: Combine two record sets, retaining only
 records that are present in both.
 
-\item \code{|}: Combine two record sets, including the
+\item \code{ | }: Combine two record sets, including the
 records that are present in either.
-}}
 
+}}
 \examples{
    set_example_safedata_dir()
    validate_record_ids(c(3247631, 3266827, 3266821, -1000))

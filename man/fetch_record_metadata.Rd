@@ -30,12 +30,12 @@ SAFE data directory for reuse.
 }
 \section{Functions}{
 \itemize{
-\item \code{fetch_record_metadata}: Download and store JSON metadata for
+\item \code{fetch_record_metadata()}: Download and store JSON metadata for
 a record
 
-\item \code{load_record_metadata}: Load JSON metadata for a record
-}}
+\item \code{load_record_metadata()}: Load JSON metadata for a record
 
+}}
 \examples{
    \donttest{
      \dontshow{

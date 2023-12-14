@@ -35,7 +35,7 @@ worksheet data included.
 
 
 For more details on the structure of the taxon worksheets see:
-\url{https://safedata-validator.readthedocs.io/en/latest/data_format/taxa.html}
+\url{https://safedata-validator.readthedocs.io/en/latest/data_format/taxa.html}  # nolint
 }
 \section{Synonyms}{
 

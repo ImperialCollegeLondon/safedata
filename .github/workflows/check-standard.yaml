@@ -2,13 +2,34 @@
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
-    branches: [develop, release/*, master, feature/*, bugfix/*]
+    branches: [develop, release/*, main, feature/*, bugfix/*]
   pull_request:
-    branches: [develop, release/*, master]
+    branches: [develop, release/*, main]
 
 name: R-CMD-check
 
 jobs:
+
+  qa:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: 'release'
+          use-public-rspm: true
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: rcmdcheck, pkgdown, R.cache
+      - uses: pre-commit/action@v3.0.0
+
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
 

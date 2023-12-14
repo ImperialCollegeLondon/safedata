@@ -48,8 +48,11 @@ load_safe_data <- function(record_id, worksheet, ...) {
     # Look for a local copy of the file. If it doesn't exist, download it
     # if possible
     index <- get_index()
-    index_row <- subset(index, zenodo_record_id == record_set$record &
-        grepl(".xlsx$", filename))
+    index_row <- subset(
+        index,
+        zenodo_record_id == record_set$record &
+            grepl(".xlsx$", filename)
+    )
 
     if (nrow(record_set) != 1) {
         stop("Requires a single valid record or concept id")
@@ -279,8 +282,8 @@ print.safedata <- function(x, n = 10, ...) {
 # and via the website URL. For example, these two URLs get the same file:
 #
 # https://zenodo.org/api/files/...
-#    2edc1bf2-e84e-40be-882d-08ce476c3bcb/SAFE_Gazetteer_metadata_v3.xlsx
-# https://www.zenodo.org/record/3906082/files/SAFE_Gazetteer_metadata_v3.xlsx
+#    2edc1bf2-e84e-40be-882d-08ce476c3bcb/SAFE_Gazetteer_metadata_v3.xlsx  # nolint
+# https://www.zenodo.org/record/3906082/files/SAFE_Gazetteer_metadata_v3.xlsx  # nolint
 #
 # ** API URLs **
 # The API link requires that hex 'bucket' id - and these are not stable
@@ -394,8 +397,11 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
 
     # Get the set of files
     if (xlsx_only) {
-        targets <- subset(index, zenodo_record_id %in% records_to_get &
-            grepl(".xlsx$", filename))
+        targets <- subset(
+            index,
+            zenodo_record_id %in% records_to_get &
+                grepl(".xlsx$", filename)
+        )
     } else {
         targets <- subset(index, zenodo_record_id %in% records_to_get)
     }
@@ -476,8 +482,7 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
         verbose_message(sprintf(
             "%i files for record %i: %i to download",
             nrow(these_files), current_record,
-            sum((!these_files$local_copy) |
-                these_files$refresh)
+            sum((!these_files$local_copy) | these_files$refresh)
         ))
 
         these_files <- subset(these_files, (!local_copy) | refresh)

@@ -1,4 +1,3 @@
-
 get_taxa <- function(obj) {
     #' Obtaining taxonomy for a SAFE dataset.
     #'
@@ -41,7 +40,7 @@ get_taxa <- function(obj) {
     #'
     #' @details
     #' For more details on the structure of the taxon worksheets see:
-    #' \url{https://safedata-validator.readthedocs.io/en/latest/data_format/taxa.html}
+    #' \url{https://safedata-validator.readthedocs.io/en/latest/data_format/taxa.html}  # nolint
     #'
     #' @param obj A single record id, or an existing safedata dataframe.
     #' @return A taxonomy table of classes "safe_taxa" and "data.frame".
@@ -544,9 +543,11 @@ igraph_to_phylo <- function(g, labels = "taxon_name") {
     #' @return An \code{\link[ape:read.tree]{phylo}} object.
     #' @export
 
-    if (!igraph::is_simple(g) ||
-        !igraph::is_connected(g) ||
-        !igraph::is_dag(g)) {
+    if (
+        !igraph::is_simple(g) ||
+            !igraph::is_connected(g) ||
+            !igraph::is_dag(g)
+    ) {
         stop("Taxon graph is not a simple, connected, directed acylic graph")
     }
 

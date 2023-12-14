@@ -65,8 +65,10 @@ get_locations <- function(obj, gazetteer_info = FALSE) {
     # Load location aliases and reduce to global aliases and aliases
     # specific to this record
     location_aliases <- load_location_aliases()
-    location_aliases <- subset(location_aliases, is.na(zenodo_record_id) |
-        zenodo_record_id == record_set$record)
+    location_aliases <- subset(
+        location_aliases,
+        is.na(zenodo_record_id) | zenodo_record_id == record_set$record
+    )
 
     # Now fill in the geometries from the possible sources
     # a) Known locations - look for gazetteer names and aliases
@@ -136,8 +138,9 @@ get_locations <- function(obj, gazetteer_info = FALSE) {
     # c) Finally, we can convert any WKT information from the locations table
     # for new locations and put that into blanks in the geometry, specifically
     # avoiding locations where step b) has inserted gazetteer data.
-    wkt_data <- which((!is.na(locations$wkt_wgs84)) &
-        (sf::st_is_empty(locations)))
+    wkt_data <- which(
+        (!is.na(locations$wkt_wgs84)) & (sf::st_is_empty(locations))
+    )
 
     if (length(wkt_data)) {
         new_geom <- locations$wkt_wgs84[wkt_data]

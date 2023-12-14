@@ -404,11 +404,9 @@ load_index <- function() {
     # Identify availability and most recent available records
     index$available <- with(
         index,
-        ifelse(dataset_access == "embargo" &
-            dataset_embargo >= Sys.time(), FALSE,
-        ifelse(dataset_access == "restricted",
-            FALSE, TRUE
-        )
+        ifelse(dataset_access == "embargo" & dataset_embargo >= Sys.time(),
+            FALSE,
+            ifelse(dataset_access == "restricted", FALSE, TRUE)
         )
     )
 

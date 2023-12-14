@@ -46,10 +46,10 @@ API calls from the parameters and the common \code{ids} and
 }
 \section{Functions}{
 \itemize{
-\item \code{safe_api_search}: Constructs, submits and formats calls to
+\item \code{safe_api_search()}: Constructs, submits and formats calls to
 the SAFE API.
 
-\item \code{validate_query_param}: A basic query parameter validation handler
-}}
+\item \code{validate_query_param()}: A basic query parameter validation handler
 
+}}
 \keyword{internal}

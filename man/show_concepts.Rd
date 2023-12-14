@@ -57,14 +57,14 @@ using \code{\link{insert_dataset}}.
 }
 \section{Functions}{
 \itemize{
-\item \code{show_concepts}: Show the records associated with a
+\item \code{show_concepts()}: Show the records associated with a
 dataset concept.
 
-\item \code{show_record}: Show details of a specific dataset
+\item \code{show_record()}: Show details of a specific dataset
 
-\item \code{show_worksheet}: Show details of a data worksheet
+\item \code{show_worksheet()}: Show details of a data worksheet
+
 }}
-
 \examples{
    set_example_safedata_dir()
    recs <- validate_record_ids(c(1400562, 3266827, 3266821))
