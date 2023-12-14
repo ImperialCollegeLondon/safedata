@@ -3,7 +3,7 @@
 This repository and package uses a number of systems that you need to be aware
 of if you plan to work with the codebase:
 
-* The repository uses the git flow approach to maintaining `develop` and `master`
+* The repository uses the git flow approach to maintaining `develop` and `main`
   branches and uses continuous integration, with changes accepted into `develop` only
   via pull requests from branches that pass checks.
 * The repository uses GitHub Actions to carry out out those checks on pushes and pull
@@ -25,8 +25,8 @@ checks then a pull request onto the `develop` branch should be made.
 A new release start from the `develop` branch, following merged pull requests for
 features and bug fixes that are going to be included in the new release. A suitably
 named `release` branch should be made to check and make final changes. That `release`
-branch is then merged into `master` and tagged as the new release, and also back into
-`develop` to bring back last minute fixes. The `master` branch should only ever
+branch is then merged into `main` and tagged as the new release, and also back into
+`develop` to bring back last minute fixes. The `main` branch should only ever
 see merges in from a `release` branch - you must not work on it directly.
 
 The package uses ([semantic version numbering](https://semver.org/)) and code on the
@@ -41,7 +41,7 @@ built and checked using GitHub Actions:
 [https://github.com/ImperialCollegeLondon/safedata/actions](https://github.com/ImperialCollegeLondon/safedata/actions)
 
 Checking happens on pushes to all branches, so day to day commits to feature branches
-will be built as well as pull requests onto `develop` and merges onto `master` from
+will be built as well as pull requests onto `develop` and merges onto `main` from
 `release` branches. If you have made changes that you do not want to be built and
 checked then you can include `[ci skip]` in the commit message, but the idea is that all
 changes should be checked so this is typically only used for minor documentation changes
@@ -49,9 +49,9 @@ and the like.
 
 The currently configured actions do the following:
 
-* On `push` or `pull_requests` to `feature`, `develop` or `master` branches, the actions
+* On `push` or `pull_requests` to `feature`, `develop` or `main` branches, the actions
   run `R CMD CHECK --as-cran` and `pkgdown::build_site()`.
-* On `pull_requests` to master, a second action will run `pkgdown::deploy_to_branch()`
+* On `pull_requests` to main, a second action will run `pkgdown::deploy_to_branch()`
   to publish the new documentation for the released version.
 
 ## Package documentation
@@ -347,19 +347,19 @@ git flow release finish 1.0.6
 
 You will be asked for some commit messages and a new tag comment, which will simply be
 the version number. You should then be on the `develop` branch. You now need to checkout
-the `master` branch which should now have all the commits since the last release and a
+the `main` branch which should now have all the commits since the last release and a
 new tag with the version number. You can now push this to create the release - if you've
 set the config described above then a single push will create the commit and tag.
 
 ```sh
-git checkout master
+git checkout main
 git push
 ```
 
 This will set off another round of GitHub Actions checking - you should see the tagged
 version being built and checked. This should all go cleanly!
 
-You should now **immediately** get off the `master` branch and back onto `develop`,
+You should now **immediately** get off the `main` branch and back onto `develop`,
 before you accidentally change the files or commit to it, You should also
 **immediately** update the version number in `DESCRIPTION`, adding `-9000` to show that
 this is now the development version from the new release. This is a trivial change, so
