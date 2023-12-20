@@ -20,7 +20,7 @@
 #'
 #' @docType package
 #' @name safedata
-
+#' @aliases safedata-package
 
 # All of the variables below appear in non standard evaluation formats
 # (e.g. subset etc.) and so get NOTEd by R CMD CHECK. This suppresses the

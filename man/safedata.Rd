@@ -3,6 +3,7 @@
 \docType{package}
 \name{safedata}
 \alias{safedata}
+\alias{safedata-package}
 \title{Finding and using data from the SAFE Project.}
 \description{
 The SAFE Project is one of the largest ecological experiments in the world.
