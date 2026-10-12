@@ -127,23 +127,18 @@ set_safedata_dir <- function(safedir, update = TRUE) {
         safedata.use_zenodo_sandbox = settings$use_zenodo_sandbox
     )
 
+    # Check for live server
+    message <- get_server_message()
+    if (isFALSE(message)) {
+        tidy_up(paste0("No response from server, skipping updates: ", url))
+        update = FALSE
+        load_index()
+        return(invisible(TRUE))
+    }
+
     # Look for updates
     if (update) {
         verbose_message("Checking for updates")
-
-        # Try to get the current index hashes from the SAFE Data API and
-        # then check each of the three index files
-        api <- paste0(getOption("safedata.url"), "/api/index_hashes.json")
-        index_hashes <- try_to_download(api)
-
-        if (isFALSE(index_hashes)) {
-            message("Unable to download updates, using existing index files: ")
-            message(attr(index_hashes, "fail_msg"))
-            load_index()
-            return(invisible(TRUE))
-        } else {
-            index_hashes <- httr::content(index_hashes)
-        }
 
         # Update the indexing files as an atomic commit - there is unlikely
         # to be an issue in having non-contemporary versions, but why risk it
@@ -154,43 +149,54 @@ set_safedata_dir <- function(safedir, update = TRUE) {
         # hashes, three download wrapper functions and three reporting names
         update_details <- list(
             list(
-                "Index",
-                getOption("safedata.index"),
-                index_hashes$index,
-                download_index
+                fname="Index",
+                path=getOption("safedata.index"),
+                api="/api/datasets/index/hash/",
+                dfun=download_index
             ),
             list(
-                "Gazetteer",
-                getOption("safedata.gazetteer"),
-                index_hashes$gazetteer,
-                download_gazetteer
+                fname="Gazetteer",
+                path=getOption("safedata.gazetteer"),
+                api="/api/gazetteer/hash/",
+                dfun=download_gazetteer
             ),
             list(
-                "Location aliases",
-                getOption("safedata.loc_aliases"),
-                index_hashes$location_aliases,
-                download_location_aliases
+                fname="Location aliases",
+                path=getOption("safedata.loc_aliases"),
+                api="/api/gazetteer/aliases/hash/",
+                dfun=download_location_aliases
             )
         )
 
         for (details in update_details) {
-            fname <- details[[1]]
-            local_path <- details[[2]]
-            current_hash <- details[[3]]
-            download_func <- details[[4]]
 
-            if (tools::md5sum(local_path) != current_hash) {
-                verbose_message(sprintf(" - Updating %s", fname))
+            # Try to get the current index hashes from the SAFE Data API and
+            # then check each of the three index files
+            api <- paste0(getOption("safedata.url"), details$api)
+            index_hash <- try_to_download(api)
+
+            if (isFALSE(index_hash)) {
+                update_successful <- FALSE
+                verbose_message(
+                    sprintf(" - Cannot retrieve remote file hash: %s", details$fname)
+                )
+                next
+            } else {
+                index_hash <- httr::content(index_hash)$md5
+            }
+
+            if (tools::md5sum(details$path) != index_hash) {
+                verbose_message(sprintf(" - Updating %s", details$fname))
                 # Save the current version in case we need to roll back
-                file.rename(local_path, paste0(local_path, ".oldbkp"))
-                backed_up <- c(backed_up, local_path)
+                file.rename(details$path, paste0(details$path, ".oldbkp"))
+                backed_up <- c(backed_up, details$path)
                 # Try and get the new version
-                got_update <- download_func()
+                got_update <- details$dfun()
                 if (!got_update) {
                     update_successful <- FALSE
                 }
             } else {
-                verbose_message(sprintf(" - %s up to date", fname))
+                verbose_message(sprintf(" - %s up to date", details$fname))
             }
         }
 
