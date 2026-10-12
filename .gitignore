@@ -49,3 +49,5 @@ lint.txt
 .python-version
 /doc/
 /Meta/
+/.uvr/library/
+/.uvr/activate*

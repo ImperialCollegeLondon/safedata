@@ -54,8 +54,12 @@ repos:
     -   id: no-browser-statement
     -   id: no-debug-statement
     -   id: deps-in-desc
+-   repo: https://github.com/posit-dev/air-pre-commit
+    rev: 0.12.0
+    hooks:
+      - id: air-format
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v6.0.0
     hooks: 
     -   id: check-added-large-files
         args: ['--maxkb=200']
@@ -66,7 +70,7 @@ repos:
 -   repo: https://github.com/pre-commit-ci/pre-commit-ci-config
     rev: v1.6.1
     hooks:
-    # Only reuiqred when https://pre-commit.ci is used for config validation
+    # Only required when https://pre-commit.ci is used for config validation
     -   id: check-pre-commit-ci-config
 -   repo: local
     hooks:

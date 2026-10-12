@@ -1,0 +1,23 @@
+[project]
+name = "safedata"
+description = "Interface to Data from the SAFE Project"
+
+[dependencies]
+chron = "*"
+curl = "*"
+devtools = "*"
+httr = "*"
+igraph = "*"
+jsonlite = "*"
+readxl = "*"
+sf = "*"
+
+[dev-dependencies]
+ape = "*"
+knitr = "*"
+rmarkdown = "*"
+testthat = ">=2.1.0"
+withr = "*"
+
+[activate]
+prompt = true
