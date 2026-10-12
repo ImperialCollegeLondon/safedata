@@ -247,7 +247,21 @@ create_safedata_dir <- function(safedir,
     settings <- list(url = url, use_zenodo_sandbox = use_zenodo_sandbox)
     jsonlite::write_json(settings, getOption("safedata.url_settings"))
 
-    # download the index file, then cache it
+    # Local cleanup function
+    tidy_up <- function(msg){
+        unlink(safedir, recursive = TRUE)
+        options(safedata.dir = NULL, safedata.url = NULL)
+        message(msg)
+    }
+
+    # Test the responsiveness of the server using the message API
+    message <- get_server_message()
+    if (isFALSE(message)) {
+        tidy_up(paste0("No response from server: ", url))
+        return(invisible(FALSE))
+    }
+
+    # Try and download the index and gazetteer files
     got_index <- download_index()
     got_gazetteer <- download_gazetteer()
     got_loc_aliases <- download_location_aliases()
@@ -255,12 +269,8 @@ create_safedata_dir <- function(safedir,
     # If any of these fail then remove the directory since we already
     # checked it didn't exist, and then tidy up options
     if (!(got_index && got_gazetteer && got_loc_aliases)) {
-        unlink(safedir, recursive = TRUE)
-        options(safedata.dir = NULL, safedata.url = NULL)
-        message(
-            "Could not download required files: ",
-            "SAFE data directory not created"
-        )
+        tidy_up(c("Could not download required files: ",
+            "SAFE data directory not created"))
         return(invisible(FALSE))
     }
 
@@ -288,19 +298,43 @@ set_safedata_paths <- function(safedir) {
     )
 }
 
+get_server_message <- function() {
+    #' Retrieves the metadata server message
+    #'
+    #' This function fetches the metadata server message from the `safedata_server`
+    #' API (e.g. \url{https://data.safeproject.net/api/message/?format=json}).
+    #'
+    #' @return NULL
+    #' @keywords internal
+
+    # Get the URL
+    url <- getOption("safedata.url")
+    api <- paste0(url, "/api/message/?format=json")
+
+    # Try and get the content
+    message <- try_to_download(api)
+
+    if (! isFALSE(message)) {
+        message <- httr::content(message)
+    }
+
+    return(message)
+
+}
+
 download_index <- function() {
     #' Downloads the current dataset index
     #'
-    #' This function downloads the dataset index from the SAFE data
-    #' API (e.g. \url{https://www.safeproject.net/api/index}) and saves
-    #' it in the root SAFE data directory
+    #' This function downloads the dataset index from the `safedata_server` API
+    #' API (e.g. \url{https://data.safeproject.net//api/datasets/index/download/}) and
+    #' saves it in the safedata directory
     #'
     #' @return NULL
     #' @keywords internal
 
     path <- getOption("safedata.index")
     url <- getOption("safedata.url")
-    api <- paste0(url, "/api/metadata_index.json")
+    api <- paste0(url, "/api/datasets/index/download/")
 
     success <- try_to_download(api, path)
 
@@ -316,16 +350,16 @@ download_index <- function() {
 download_gazetteer <- function() {
     #' Downloads the current SAFE gazetteer
     #'
-    #' This function downloads the gazetteer from the SAFE data
-    #' gazetteer API (e.g. \url{https://www.safeproject.net/api/gazetteer})
-    #' and saves it in the root of the safe data directory.
+    #' This function downloads the gazetteer from the `safedata_server` API (e.g.
+    #' \url{https://www.safeproject.net/api/gazetteer/download/}) and saves it in the 
+    #' safedata directory.
     #'
     #' @return NULL
     #' @keywords internal
 
     path <- getOption("safedata.gazetteer")
     url <- getOption("safedata.url")
-    api <- paste0(url, "/api/gazetteer.json")
+    api <- paste0(url, "/api/gazetteer/download/")
 
     success <- try_to_download(api, path)
 
@@ -341,17 +375,16 @@ download_gazetteer <- function() {
 download_location_aliases <- function() {
     #' Downloads the current SAFE location aliases
     #'
-    #' This function downloads the location aliases from the SAFE data
-    #' location aliases API (for example,
-    #' \url{https://www.safeproject.net/api/location_aliases})
-    #' and saves it in the root of the safe data directory.
+    #' This function downloads the location aliases from the `safedata_server` API (e.g.
+    #' \url{https://www.safeproject.net/api/gazetteer/aliases/download/}) and saves it
+    #' in the safedata directory.
     #'
     #' @return NULL
     #' @keywords internal
 
     path <- getOption("safedata.loc_aliases")
     url <- getOption("safedata.url")
-    api <- paste0(url, "/api/location_aliases.json")
+    api <- paste0(url, "/api/gazetteer/aliases/download/")
     success <- try_to_download(api, path)
 
     if (!success) {
