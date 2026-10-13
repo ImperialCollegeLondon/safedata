@@ -428,11 +428,44 @@ load_index <- function() {
 
     verbose_message("Loading and caching index")
 
-    index <- jsonlite::fromJSON(getOption("safedata.index"))
+    # Load the index data - do not use fromJSON as need to preserve nested structure
+    index_data <- jsonlite::read_json(getOption("safedata.index"))
+    
+    # Convert JSON data from records and nested files to a single dataframe
+    index_entries <- list()
+    concept_most_recent <- list()
 
-    # format the datetime classes
-    index$publication_date <- as.POSIXct(index$publication_date)
-    index$dataset_embargo <- as.POSIXct(index$dataset_embargo)
+    for (idx in seq_along(index_data)){
+        entry <- index_data[[idx]]
+        
+        # Extract files data and convert to dataframe
+        files <- do.call(rbind, lapply(entry$files, data.frame))
+        entry$files <- NULL
+
+        # Format dates and handle NA embargo dates
+        entry$dataset_embargo <- ifelse(
+            is.null(entry$dataset_embargo), NA, as.POSIXct(entry$dataset_embargo)
+        )
+        entry$publication_date <- as.POSIXct(entry$publication_date)
+
+        # Combine record data with files - single row is duplicated to match files
+        index_entries[[idx]] <- cbind(data.frame(entry), files)
+
+        # Update most recent concept
+        cid <- as.character(entry$zenodo_concept_id)
+        if (! cid %in% concept_most_recent) {
+            concept_most_recent[[cid]] <- entry
+        } else {
+            if (entry$publication_date > concept_most_recent[[cid]]$publication_date) {
+                concept_most_recent[[cid]] <- entry
+            }
+        }
+    }
+
+    # Combine to a single data frame and flag the most recent version
+    index <- do.call(rbind, index_entries)
+    most_recent <- do.call(rbind, lapply(concept_most_recent, data.frame))
+    index$most_recent <- index$zenodo_record_id %in% most_recent$zenodo_record_id
 
     # Add the path relative to the data directory
     index$path <- with(index, file.path(

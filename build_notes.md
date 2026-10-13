@@ -3,11 +3,10 @@
 This repository and package uses a number of systems that you need to be aware
 of if you plan to work with the codebase:
 
-* The repository uses the git flow approach to maintaining `develop` and `main`
-  branches and uses continuous integration, with changes accepted into `develop` or
-  `main` only through pull requests.
+* The repository uses trunk based releases from the `main`branch with changes accepted
+  into `main` only through pull requests.
 * The repository uses GitHub Actions to carry out out checks on pushes and pull
-  requests.
+  requests to support continuous integration.
 * Documentation for the package is maintained using `roxygen` and `pkgdown`.
 * The code is checked using linting for consistent style.
 
