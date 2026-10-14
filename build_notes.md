@@ -175,6 +175,12 @@ CMD CHECK` during Github Actions but can also be run locally using:
 Rscript -e "devtools::test()"
 ```
 
+If you want to run a single file of tests, use:
+
+```sh
+Rscript -e "testthat::test_file('tests/testthat/test-local_sdd.R')"
+```
+
 ## Web mocking
 
 The `safedata` package uses the internet extensively for downloading package data and

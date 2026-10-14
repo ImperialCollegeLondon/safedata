@@ -6,7 +6,7 @@ test_that("no internet fails gracefully on create", {
 
     success <- expect_message(
         create_safedata_dir(testsd),
-        regexp = "Could not download required files",
+        regexp = "No response from server: ",
     )
     expect_false(success)
     Sys.unsetenv("NETWORK_DOWN")
@@ -18,7 +18,7 @@ test_that("no API fails gracefully on create", {
 
     success <- expect_message(
         create_safedata_dir(testsd),
-        regexp = "Could not download required files",
+        regexp = "No response from server: ",
     )
     expect_false(success)
     Sys.unsetenv("URL_DOWN")
@@ -30,7 +30,7 @@ test_that("BAD API url fails gracefully on create", {
         create_safedata_dir(testsd,
             url = "https://www.safeproject.netzzz"
         ),
-        regexp = "Could not download required files",
+        regexp = "No response from server: ",
     )
     expect_false(success)
 })
@@ -57,7 +57,7 @@ test_that("no internet fails gracefully on update", {
 
     success <- expect_message(
         set_safedata_dir(local_sdd, update = TRUE),
-        regexp = "Unable to download updates, using existing index files",
+        regexp = "No response from server, skipping updates:",
     )
     # defaults to existing local copy, so expect true
     expect_true(success)
@@ -71,7 +71,7 @@ test_that("no API fails gracefully on update", {
 
     success <- expect_message(
         set_safedata_dir(local_sdd, update = TRUE),
-        regexp = "Unable to download updates, using existing index files",
+        regexp = "No response from server, skipping updates:",
     )
     # defaults to existing local copy, so expect true
     expect_true(success)
@@ -81,7 +81,7 @@ test_that("no API fails gracefully on update", {
 test_that("Specific resource unavailable - test atomic update.", {
     local_sdd <- local_create_sdd()
 
-    Sys.setenv(RESOURCE_DOWN = "/api/metadata_index.json$")
+    Sys.setenv(RESOURCE_DOWN = "api/datasets/index/download/$")
 
     # Nerf the index file by adding trailing spaces so that the
     # hashes don't match and the file therefore requires updating
@@ -89,7 +89,7 @@ test_that("Specific resource unavailable - test atomic update.", {
 
     success <- expect_message(
         set_safedata_dir(local_sdd, update = TRUE),
-        regexp = "Unable to download updates, using existing index files",
+        regexp = "Unable to download all updates, using existing index files",
     )
     # defaults to existing local copy, so expect true
     expect_true(success)

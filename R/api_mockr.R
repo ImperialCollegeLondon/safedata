@@ -9,21 +9,35 @@
 #' @keywords internal
 
 mock_api_urls <- list(
+
+    "http://example.safedata.server/api/message/?format=json" = list(
+        content = "index_2.0.1.json",
+        status_code = 200L    ),
+
     # Main index files
-    "http://example.safedata.server/api/metadata_index.json" = list(
-        content = "index_new.json",
+    "http://example.safedata.server/api/datasets/index/download/" = list(
+        content = "index_2.0.1.json",
         status_code = 200L
     ),
-    "http://example.safedata.server/api/gazetteer.json" = list(
+    "http://example.safedata.server/api/gazetteer/download/" = list(
         content = "gazetteer.geojson",
         status_code = 200L
     ),
-    "http://example.safedata.server/api/location_aliases.json" = list(
+    "http://example.safedata.server/api/gazetteer/aliases/download/" = list(
         content = "location_aliases.json",
         status_code = 200L
     ),
-    "http://example.safedata.server/api/index_hashes.json" = list(
-        content = "index_hashes.json",
+    "http://example.safedata.server/api/datasets/index/hash/" = list(
+        content = "index_hash.json",
+        status_code = 200L
+    ),
+
+    "http://example.safedata.server/api/gazetteer/hash/" = list(
+        content = "gazetteer_hash.json",
+        status_code = 200L
+    ),
+    "http://example.safedata.server/api/gazetteer/aliases/hash/" = list(
+        content = "aliases_hash.json",
         status_code = 200L
     ),
     # Example datasets used and metadata JSON
