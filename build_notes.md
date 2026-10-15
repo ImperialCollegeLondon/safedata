@@ -3,7 +3,7 @@
 This repository and package uses a number of systems that you need to be aware
 of if you plan to work with the codebase:
 
-* The repository uses trunk based releases from the `main`branch with changes accepted
+* The repository uses trunk based releases from the `main` branch with changes accepted
   into `main` only through pull requests.
 * The repository uses GitHub Actions to carry out out checks on pushes and pull
   requests to support continuous integration.
@@ -18,14 +18,9 @@ requirements for releases.
 Any new feature or bug fix should start with a new [GitHub
 issue](https://github.com/ImperialCollegeLondon/safedata/issues) and then the creation
 of a new branch to implement the new code. When that branch is complete and passing
-checks then a pull request onto the `develop` branch should be made.
-
-A new release start from the `develop` branch, following merged pull requests for
-features and bug fixes that are going to be included in the new release. A suitably
-named `release` branch should be made to check and make final changes. That `release`
-branch is then merged into `main` and tagged as the new release, and also back into
-`develop` to bring back last minute fixes. The `main` branch should only ever
-see merges in from a `release` branch - you must not work on it directly.
+checks then a pull request onto the `main` branch should be made. New releases are made
+directly from the `main` branch, following merged pull requests for features and bug
+fixes that are going to be included in the new release.
 
 The package uses ([semantic version numbering](https://semver.org/)) and code on the
 development branch should use the prerelease token `9000`. This is explained in more
@@ -42,21 +37,19 @@ built and checked using GitHub Actions:
 [https://github.com/ImperialCollegeLondon/safedata/actions](https://github.com/ImperialCollegeLondon/safedata/actions)
 
 Checking happens on pushes to all branches, so day to day commits to feature branches
-will be built as well as pull requests onto `develop` and merges onto `main` from
-`release` branches. If you have made changes that you do not want to be built and
-checked then you can include `[ci skip]` in the commit message, but the idea is that all
-changes should be checked so this is typically only used for minor documentation changes
-and the like.
+will be built as well as pull requests onto `main`. If you have made changes that you do
+not want to be built and checked then you can include `[ci skip]` in the commit message,
+but the idea is that all changes should be checked so this is typically only used for
+minor documentation changes and the like.
 
 The currently configured actions do the following:
 
-* On `push` or `pull_requests` to `feature`, `develop` or `main` branches, the actions
-  run:
+* On `push` or `pull_requests` to the `main` branch, the actions run:
   * Quality assurance checks by running `pre-commit` using the configured R
     `precommit` steps.
   * Package build checks by running `R CMD CHECK --as-cran`
   * Documentation checks using `pkgdown::build_site()`.
-* On `pull_requests` to main, a second action will run `pkgdown::deploy_to_branch()`
+* On `pull_requests` to `main`, a second action will run `pkgdown::deploy_to_branch()`
   to publish the new documentation for the released version.
 
 ## The `pre-commit` setup
@@ -221,10 +214,9 @@ Currently, the `.lintr` configuration:
 
 ## Release cycle
 
-These are the steps needed to release a new version of `safedata`.  Using pull requests
-into `develop` and GitHub Actions should ensure that `develop` is always building
-correctly but checking should be repeated during the release process to ensure that
-everything is up to date.
+These are the steps needed to release a new version of `safedata`. GitHub Actions should
+ensure that `main` is always building correctly but checking should be repeated during
+the release process to ensure that everything is up to date.
 
 ### Configure `git`
 
@@ -237,55 +229,27 @@ tagged version. This only needs to be set once.
 set git config --global push.followTags true
 ```
 
-### Create the new release branch
+### Update `main` ready for a release
 
-The following creates a new candidate branch containing the current `develop` code. You
-need to specify the upcoming release version number, so for example to release version
-`1.0.6`:
+Once you have decided that the changes added to `main` require a new release then you
+also need to create a PR to update the following files:
 
-```sh
-git flow release start 1.0.6
-```
+* Update the `DESCRIPTION` file to increment the version number to the new
+  release. For example, a bug patch release would update the line `Version: 1.0.5-9000`
+  to `Version: 1.0.6`
 
-This will create the `release/1.0.6` branch and check it out.
+* Update `NEWS` to document the changes since the previous version
 
-You should now immediately update the `DESCRIPTION` file to match that version
-number. In this example, that should mean changing the previous development
-version number (`-9000` is used to indicate code in development between versions
-):
+When this PR is merged into `main`, the GitHub Actions will run the testing described
+above.
 
-```txt
-Version: 1.0.5-9000
-```
+### Run package build and validation
 
-to
-
-```txt
-Version: 1.0.6
-```
-
-You can then commit that change:
-
-```sh
-git commit -m "Update version number" DESCRIPTION
-```
-
-At the moment, the `release` branch is only local. The release branch and code needs to
-be pushed to Github to be picked up GitHub Actions. There is a specific `git flow`
-command to do this:
-
-```sh
-git flow release publish 1.0.6
-```
-
-This sends the release branch up to be checked. In addition, there is now a release
-branch on origin so any other last minutes fixes and commits can be pushed in order to
-check those.
-
-### Double check the code
-
-All of the checking steps are compiled into a single script in
-`build_scripts/build_and_check.sh`. The content is:
+The GitHub Actions run day-to-day quality checks on the code but a more stringent set of
+testing is needed to add a package onto CRAN. The set of checks has been compiled into a
+single script in `build_scripts/build_and_check.sh`. The content of this script is shown
+below - you may prefer to run the code step by step and the components are described
+below.
 
 ```sh
 #!/bin/bash
@@ -327,13 +291,13 @@ that is about to be fixed.
 
 ### Checking on different platforms
 
-The GitHub Action build process should now be underway for the `release` branch. Git
+The GitHub Action build process should now be underway for the `main` branch. Git
 Actions is configured (see `.github/workflows/check-standard.yaml`) to build the package
 under R stable on Ubuntu, Mac and Windows and R devel on Ubuntu.
 
 Although Windows is included in the GitHub Actions testing environment, the R Project
 also maintains a Windows test environment that can be used. This needs a built copy of
-the `release` branch, so run `build_scripts/build_and_check.sh` again. This should
+the `main` branch, so run `build_scripts/build_and_check.sh` again. This should
 create a newly built package with the new version number (e.g. `safedata_1.0.6.tar.gz`).
 If everything checked out ok before creating the release, this is really just updating
 the version name.
@@ -360,9 +324,8 @@ round of GitHub Actions checking and you will need to rebuild and resubmit to
 
 ### Final edits
 
-There are some final edits to check you have made:
+Before submitting the code to CRAN you should make the following changes:
 
-* Update `NEWS` to document the changes since the previous version
 * Update `cran-comments.md` to record the R versions and environments used for testing
   and the outcomes of those builds. This should all be `status: OK` but there might be
   notes that should be explained.
@@ -384,47 +347,17 @@ fix them!
 
 ### Finish the release
 
-Once the `release` branch is passing checks on all platforms, then the candidate release
-is ready to be released as a version.  Again using `1.0.6` as the example version
-number, the command is:
-
-```sh
-git flow release finish 1.0.6
-```
-
-You will be asked for some commit messages and a new tag comment, which will simply be
-the version number. You should then be on the `develop` branch. You now need to checkout
-the `main` branch which should now have all the commits since the last release and a
-new tag with the version number. You can now push this to create the release - if you've
-set the config described above then a single push will create the commit and tag.
-
-```sh
-git checkout main
-git push
-```
-
-This will set off another round of GitHub Actions checking - you should see the tagged
-version being built and checked. This should all go cleanly!
-
-You should now **immediately** get off the `main` branch and back onto `develop`,
-before you accidentally change the files or commit to it, You should also
-**immediately** update the version number in `DESCRIPTION`, adding `-9000` to show that
-this is now the development version from the new release. This is a trivial change, so
-we can use `[ci skip]` to avoid triggering Github Actions.
-
-```sh
-git checkout develop
-# Edit DESCRIPTION to e.g. version 1.0.6-9000
-git commit -m "Bump develop version [ci skip]" DESCRIPTION
-git push
-```
+Once the `main` branch is passing checks on all platforms, then the candidate release
+is ready to be released as a version. Create a release on the [Github release
+page](https://github.com/ImperialCollegeLondon/safedata/releases) to tag the specific
+commit to the `main` branch that was just used to build the final package version.
 
 ### Release to CRAN
 
 You can then submit the built version of the source package that was created during the
 release process at: ()[https://cran.r-project.org/submit.html]
 
-You  should  take the up-to-date contents of `cran-comments.md` and  copy that in the
+You  should take the up-to-date contents of `cran-comments.md` and  copy that in the
 comments section of the submission form. The CRAN maintainers expect submitted packages
 to be functional and fully checked and these notes will help them see that the package
 has been properly checked.

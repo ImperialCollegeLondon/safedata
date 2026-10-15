@@ -12,3 +12,6 @@
 build_notes.md
 cran-comments.md
 lint.txt
+.uvr
+.vscode
+.mypy-cache

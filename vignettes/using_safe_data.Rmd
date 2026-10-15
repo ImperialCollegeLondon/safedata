@@ -179,9 +179,10 @@ print(soil_datasets)
 ### Taxon search details
 
 Published datasets contain a taxonomic index of any organisms referred to within
-the data - see
-[here](https://safedata-validator.readthedocs.io/en/latest/data_format/taxa.html)
-for details of the Taxa worksheet containing the index.
+the data. The `safedata_validator` website provides for [details of Taxa 
+worksheets](https://safedata-validator.readthedocs.io/en/stable/data_providers/data_format/taxa.html) 
+containing the index.
+
 
 The taxa in this index, along with all of the parent taxa in the taxonomic
 hierarchy leading up to that those taxa, are added to a taxonomic database on
@@ -449,7 +450,7 @@ used for further data processing and adding brief metadata to the `str` and
 `print` methods.
 
 Some data formatting takes place based on [field
-types](https://safedata-validator.readthedocs.io/en/latest/data_format/data.html#field-types):
+types](https://safedata-validator.readthedocs.io/en/stable/data_providers/data_format/data.html#field-types):
 categorical variables are converted to factors; dates and datetimes are
 converted to `POSIXct` and times are converted to `chron::time` objects. 
 
