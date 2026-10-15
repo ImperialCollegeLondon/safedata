@@ -230,7 +230,7 @@ set_safedata_dir <- function(safedir, update = TRUE) {
 
 
 create_safedata_dir <- function(safedir,
-                                url = "https://www.safeproject.net",
+                                url = "https://data.safeproject.net",
                                 use_zenodo_sandbox = FALSE) {
     #' @describeIn set_safedata_dir Create a new safedata directory
     #' @export
@@ -336,7 +336,7 @@ download_index <- function() {
     #' Downloads the current dataset index
     #'
     #' This function downloads the dataset index from the `safedata_server` API
-    #' API (e.g. \url{https://data.safeproject.net//api/datasets/index/download/}) and
+    #' API (e.g. \url{https://data.safeproject.net/api/datasets/index/download/}) and
     #' saves it in the safedata directory
     #'
     #' @return NULL
@@ -361,7 +361,7 @@ download_gazetteer <- function() {
     #' Downloads the current SAFE gazetteer
     #'
     #' This function downloads the gazetteer from the `safedata_server` API (e.g.
-    #' \url{https://www.safeproject.net/api/gazetteer/download/}) and saves it in the 
+    #' \url{https://data.safeproject.net/api/gazetteer/download/}) and saves it in the 
     #' safedata directory.
     #'
     #' @return NULL
@@ -386,7 +386,7 @@ download_location_aliases <- function() {
     #' Downloads the current SAFE location aliases
     #'
     #' This function downloads the location aliases from the `safedata_server` API (e.g.
-    #' \url{https://www.safeproject.net/api/gazetteer/aliases/download/}) and saves it
+    #' \url{https://data.safeproject.net/api/gazetteer/aliases/download/}) and saves it
     #' in the safedata directory.
     #'
     #' @return NULL

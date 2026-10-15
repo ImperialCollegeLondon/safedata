@@ -53,3 +53,5 @@ lint.txt
 
 .uvr/
 .vscode/
+/.uvr/library/
+/.uvr/activate*

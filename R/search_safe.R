@@ -22,7 +22,7 @@
 #'
 #' @section Spatial searches:
 #' For spatial searches, users can select a location name from a SAFE
-#' data gazetteer (see e.g. \url{https://www.safeproject.net/info/gazetteer}
+#' data gazetteer (see e.g. \url{https://data.safeproject.net/gazetteer/map/}
 #' or \code{\link{load_gazetteer}}) or provide a WKT geometry. The sampling
 #' locations provided in each SAFE dataset are tested to see if they intersect
 #' the search geometry.
@@ -39,11 +39,11 @@
 #'
 #' @section Links:
 #' \describe{
-#'    \item{SAFE data API}{e.g. \url{https://www.safeproject.net/api}}
+#'    \item{SAFE data API}{e.g. \url{https://data.safeproject.net/api/docs/}}
 #'    \item{Worksheet field
-#'    types}{\url{https://safedata-validator.readthedocs.io/en/latest/data_format/data.html#field-types}}  # nolint
+#'    types}{\url{https://safedata-validator.readthedocs.io/en/stable/data_providers/data_format/data.html#field-types}}  # nolint
 #'    \item{SAFE gazetteer}{See \code{\link{load_gazetteer}} and e.g.
-#'          \url{https://www.safeproject.net/info/gazetteer}}
+#'          \url{https://data.safeproject.net/gazetteer/map/}}
 #'    \item{WKT}{\url{https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry}}  # nolint
 #' }
 #' @param dates A vector of length 1 or 2, containing either ISO format date

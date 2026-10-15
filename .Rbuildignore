@@ -14,4 +14,7 @@ cran-comments.md
 lint.txt
 .uvr
 .vscode
-.mypy-cache
+.mypy_cache
+^uvr\.toml$
+^uvr\.lock$
+^\.uvr$

@@ -2,6 +2,7 @@
 % Please edit documentation in R/safedata.R
 \docType{package}
 \name{safedata}
+\alias{safedata-package}
 \alias{safedata}
 \title{Finding and using data from the SAFE Project.}
 \description{
@@ -20,7 +21,25 @@ to find and analyse our research data outputs.
 }
 \section{Links}{
 
-   \url{https://www.safeproject.net/datasets/view_datasets}
-   \url{https://www.zenodo.org/communities/safe}
+   \url{https://data.safeproject.net/datasets/}
+   \url{https://zenodo.org/communities/safe}
 }
 
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://imperialcollegelondon.github.io/safedata/index.html}
+  \item Report bugs at \url{https://github.com/ImperialCollegeLondon/safedata/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: David Orme \email{d.orme@imperial.ac.uk} (\href{https://orcid.org/0000-0002-7005-1394}{ORCID})
+
+Authors:
+\itemize{
+  \item David Orme \email{d.orme@imperial.ac.uk} (\href{https://orcid.org/0000-0002-7005-1394}{ORCID})
+  \item Andy Aldersley \email{a.aldersley@imperial.ac.uk}
+}
+
+}

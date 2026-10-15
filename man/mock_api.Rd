@@ -10,22 +10,20 @@ mock_handler(req)
 mock_api(on = TRUE)
 }
 \description{
-These functions allows a curated list of URLs used in the package
-to be mocked for use in examples, vignettes and testing. This avoids the
-package relying on web connections for testing and allows vignettes to
-use actual live code when building, rather than having to fake those
-code blocks. It also separates the safedata server API from package
-development, so that package testing does not require an actual server
-running an updated API, but can simulate it it locally.
+These functions allows a curated list of URLs used in the package to be mocked
+for use in examples, vignettes and testing. This avoids the package relying on
+web connections for testing and allows vignettes to use actual live code when
+building, rather than having to fake those code blocks. It also separates the
+safedata server API from package development, so that package testing does not
+require an actual server running an updated API, but can simulate it it locally.
 }
 \details{
-The \code{api_mock} function turns the HTTR mocking on and off, by
-adding the \code{mock_handler} callback handler via
-\code{\link[httr:set_callback]{set_callback}}.
-This handler is very basic and it would be more robust to use something
-like the \pkg{webmockr} package, but at present that does not support
-binary mocked files and also (less importantly) loads the content of
-responses into its registry rather than on request.
+The \code{api_mock} function turns the HTTR mocking on and off, by adding the
+\code{mock_handler} callback handler via
+\code{\link[httr:set_callback]{set_callback}}. This handler is very basic and it
+would be more robust to use something like the \pkg{webmockr} package, but at
+present that does not support binary mocked files and also (less importantly)
+loads the content of responses into its registry rather than on request.
 }
 \section{Functions}{
 \itemize{

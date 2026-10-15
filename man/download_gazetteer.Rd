@@ -7,8 +7,8 @@
 download_gazetteer()
 }
 \description{
-This function downloads the gazetteer from the SAFE data
-gazetteer API (e.g. \url{https://www.safeproject.net/api/gazetteer})
-and saves it in the root of the safe data directory.
+This function downloads the gazetteer from the `safedata_server` API (e.g.
+\url{https://data.safeproject.net/api/gazetteer/download/}) and saves it in the 
+safedata directory.
 }
 \keyword{internal}

@@ -11,7 +11,7 @@ vignette: >
 
 The `safedata` R package is designed to discover and work with data using the formatting and
 indexing API designed for the Stability of Altered Forest Ecosystems (SAFE) Project. The [SAFE
-Project](https://www.safeproject.net/) is one the largest ecological experiments in the world,
+Project](https://data.safeproject.net/) is one the largest ecological experiments in the world,
 investigating the effects of human activities on biodiversity and ecosystem function in the
 Malaysian rainforest.
 
@@ -91,7 +91,9 @@ three access status:
 
 * **Open**: the dataset is open for download, or
 * **Embargoed**: the dataset will become open at a given date in the future, or
-* **Restricted**: accessing the dataset requires permission. Zenodo provides a mechanism to request permission from the SAFE Project, which will always be passed onto the specific dataset authors. 
+* **Restricted**: accessing the dataset requires permission. Zenodo provides a mechanism
+ to request permission from the SAFE Project, which will always be passed onto the 
+ specific dataset authors. 
 
 In practice, restricted data is little used and a fourth 'Closed' status is not accepted for SAFE 
 datasets. Note that a particular dataset concept may have a versions with a mixture of access
@@ -102,7 +104,8 @@ statuses.
 The Zenodo website provides the ability to search the text of record descriptions, including a search
 tool specifically for the [SAFE Project community](https://www.zenodo.org/communities/safe/search).
 However, these searches are unstructured and do not cover all of the metadata contained within
-published datasets. The SAFE Project website therefore maintains a [search API](https://www.safeproject.net/api) that allows 
+published datasets. The SAFE Project website therefore maintains a [search 
+API](https://data.safeproject.net/api/docs/) that allows 
 structured queries to be performed on the following:
 
 * **`dates`**: the start and endpoints of data collection within a dataset, 
@@ -112,7 +115,8 @@ structured queries to be performed on the following:
 * **`taxa`**: the taxa included  in a dataset, and
 * **`spatial`**: matching datasets by sampling location.
 
-In addition, the API provides a **`record`** endpoint that allows the full record metadata to be downloaded in JSON format.
+In addition, the API provides a **`record`** endpoint that allows the full record 
+metadata to be downloaded in JSON format.
 
  
 # SAFE data directories

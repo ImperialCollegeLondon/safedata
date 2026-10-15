@@ -1,12 +1,10 @@
 
 
-# safedata_installed <- try(library(safedata), silent=TRUE)
-# if (inherits(safedata_installed, 'try-error')) {
-#     devtools::load_all("../../")
-# }
+safedata_installed <- try(library(safedata), silent=TRUE)
+if (inherits(safedata_installed, 'try-error')) {
+    devtools::load_all("../../")
+}
 
-# Always use the current code
-devtools::load_all("../../")
 
 # This functionality should extended with a switch to allow use of
 # an actual live metadata server and test Zenodo community

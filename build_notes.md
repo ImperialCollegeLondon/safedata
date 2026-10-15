@@ -44,13 +44,15 @@ minor documentation changes and the like.
 
 The currently configured actions do the following:
 
-* On `push` or `pull_requests` to the `main` branch, the actions run:
+* `.github/workflows/check-standard.yaml`: on `push` or `pull_requests` to the `main` 
+  branch, the actions  in this file runs:
   * Quality assurance checks by running `pre-commit` using the configured R
     `precommit` steps.
   * Package build checks by running `R CMD CHECK --as-cran`
   * Documentation checks using `pkgdown::build_site()`.
-* On `pull_requests` to `main`, a second action will run `pkgdown::deploy_to_branch()`
-  to publish the new documentation for the released version.
+* `.github/workflows/pkgdown.yaml`: when a release is published on GitHub this action
+ runs `pkgdown::deploy_to_branch()` to publish the new documentation for the released 
+ version.
 
 ## The `pre-commit` setup
 
@@ -112,7 +114,7 @@ these need to be built into HTML files using the `knitr` package and installed i
 `inst/doc` directory. The following tool can be used to rebuild the vignettes:
 
 ```sh
-Rscript -e "devtools::build_vignettes()"
+ Rscript -e "devtools::build_articles()" 
 ```
 
 However, the `R CMD BUILD` process, which is used to generate the source R package for
@@ -124,7 +126,7 @@ checking.
 In addition to using `roxygen2` and `knitr` to maintain the package documentation and
 vignettes, `safedata` also uses `pkgdown` to create a documentation website. This
 basically builds a complete website and index around the `Rd` files as an API reference
-and the vignettes as explanatory content.
+and the vignettes as explanatory content ('articles').
 
 The configuration for this is in the `_pkgdown.yml` file. This file typically only needs
 updating when new functions are added, as they need to be added into the reference
@@ -132,7 +134,7 @@ structure. The website will contain an HTML version of the Rd files and vignette
 also extra content: for example `README.md` is used to create `index.html` and other
 markdown files can be used to provide other content.
 
-Rebuilding the website uses two commands:
+Rebuilding a local copy of the website uses two commands:
 
 ```sh
 Rscript -e " pkgdown::clean_site()"
@@ -140,19 +142,20 @@ Rscript -e " pkgdown::build_site()"
 ```
 
 This removes old files and recreates the website in the `docs` directory (_not_ `doc`!).
-This directory is then automatically deployed by GitHub Actions to the Github Pages
-package website at:
-
-[<https://imperialcollegelondon.github.io/safedata/](https://imperialcollegelondon.github.io/safedata/)>
 
 The website files themselves are _not_ part of the continuous integration of the package
 and having to build and then commit changes within `docs` is untidy. The `safedata`
 package therefore includes `docs` in the `.gitignore` file: you can have a local copy of
 the website but it is not managed by git.
 
-Instead, a GitHub Action has been configured to run `pkgdown` - when a new release has
-passed checks, the action can be triggered in order to update the `gh-pages` branch
-using the most recent code.
+Instead, the GitHub Action [described above](#github-actions) runs the
+`pkgdown::deploy_to_branch()` command whenever a new release is added on GitHub. This
+command builds the website files (as in the local commands above) but then copies these
+files to the `gh-pages` branch in the repository. This branch is then automatically
+deployed to the Github Pages package website at:
+
+[<https://imperialcollegelondon.github.io/safedata/](https://imperialcollegelondon.github.io/safedata/)>
+
 
 For local use, the package and website build steps have been bundled together in
 `build_scripts/build_docs.sh`.

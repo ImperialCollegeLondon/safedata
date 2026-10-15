@@ -28,7 +28,7 @@ test_that("BAD API url fails gracefully on create", {
     testsd <- file.path(tempdir(), "testsd")
     success <- expect_message(
         create_safedata_dir(testsd,
-            url = "https://www.safeproject.netzzz"
+            url = "https://not.a.safedata.server.url"
         ),
         regexp = "No response from server: ",
     )

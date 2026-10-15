@@ -40,7 +40,7 @@ get_taxa <- function(obj) {
     #'
     #' @details
     #' For more details on the structure of the taxon worksheets see:
-    #' \url{https://safedata-validator.readthedocs.io/en/latest/data_format/taxa.html}  # nolint
+    #' \url{https://safedata-validator.readthedocs.io/en/stable/data_providers/data_format/taxa.html}  # nolint
     #'
     #' @param obj A single record id, or an existing safedata dataframe.
     #' @return A taxonomy table of classes "safe_taxa" and "data.frame".

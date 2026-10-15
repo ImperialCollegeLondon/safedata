@@ -2,9 +2,9 @@
 
 This is an R package for discovering and using datasets produced by scientific research at the SAFE Project. See the following links:
 
-* for more information about the [SAFE Project homepage](https://www.safeproject.net/),
+* for more information about the [SAFE Project homepage](https://data.safeproject.net/),
 * to browse the published [SAFE project datasets](https://zenodo.org/communities/safe),
-* to learn more about the [SAFE dataset structure and validation](https://safedata-validator.readthedocs.io/en/latest/)
+* to learn more about the [SAFE dataset structure and validation](https://safedata-validator.readthedocs.io/en/stable/)
 
 ## Using `safedata`
 
