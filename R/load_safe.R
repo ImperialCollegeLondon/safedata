@@ -1,24 +1,22 @@
 load_safe_data <- function(record_id, worksheet, ...) {
-    #' Loads data from a SAFE dataset.
+    #' Load data from a safedata dataset.
     #'
-    #' This function returns a data frame containing the data from a data
-    #' worksheet in a SAFE dataset. Note that SAFE dataset .xlsx files include
-    #' the other (non-data) worksheets Summary, Taxa, Locations that contain
-    #' metadata: see  \code{\link{get_taxa}}, \code{\link{get_locations}},
-    #' \code{\link{add_taxa}} and \code{\link{add_locations}} for accessing
-    #' and using this metadata.
+    #' This function returns a data frame containing the data from a data worksheet in a
+    #' safedata dataset. Note that safedata \code{.xlsx} files include other (non-data)
+    #' worksheets Summary, Taxa, Locations that contain metadata: see
+    #' \code{\link{get_taxa}}, \code{\link{get_locations}}, \code{\link{add_taxa}} and
+    #' \code{\link{add_locations}} for accessing and using this metadata.
     #'
-    #' In particular, the large amount of data worksheet summary metadata is
-    #' not attached as attributes to the data frame returned by this function.
-    #' This is largely to avoid excessive output to the console during normal
-    #' use of the data frame: an extended description of a worksheet can be
-    #' displayed using \code{\link{show_worksheet}}.
+    #' In particular, the large amount of data worksheet summary metadata is not
+    #' attached as attributes to the data frame returned by this function. This is
+    #' largely to avoid excessive output to the console during normal use of the data
+    #' frame: an extended description of a worksheet can be displayed using
+    #' \code{\link{show_worksheet}}.
     #'
-    #' Currently, this function only loads data from SAFE formatted
-    #' \code{.xlsx} files - data stored in external files is not yet
-    #' handled.
+    #' Currently, this function only loads data from safedata formatted \code{.xlsx}
+    #' files - data stored in external files is not yet handled.
     #'
-    #' @param record_id A SAFE dataset record id
+    #' @param record_id A safedata dataset record id
     #' @param worksheet The name of the worksheet to load
     #' @param x,object A \code{safedata} object.
     #' @param n The number of rows to show in the \code{print} method.
@@ -120,7 +118,7 @@ load_safe_data <- function(record_id, worksheet, ...) {
     if (local_md5 != index_row$checksum) {
         stop(
             "Local file has been modified - ",
-            "do not edit files within the SAFE data directory"
+            "do not edit files within a safedata directory"
         )
     }
 
@@ -242,7 +240,7 @@ str.safedata <- function(object, ...) {
     #' @export
 
     object_attr <- attr(object, "metadata")
-    msg <- "SAFE dataset\nConcept: %i; Record %i; Worksheet: %s\n"
+    msg <- "safedata dataset\nConcept: %i; Record %i; Worksheet: %s\n"
     with(object_attr, cat(sprintf(
         msg, safe_record_set$concept,
         safe_record_set$record, name
@@ -260,7 +258,7 @@ print.safedata <- function(x, n = 10, ...) {
     #' @export
 
     x_attr <- attr(x, "metadata")
-    msg <- "SAFE dataset:\nConcept: %i; Record %i; Worksheet: %s\n"
+    msg <- "safedata dataset:\nConcept: %i; Record %i; Worksheet: %s\n"
     with(x_attr, cat(sprintf(
         msg, safe_record_set$concept,
         safe_record_set$record, name
@@ -281,68 +279,67 @@ print.safedata <- function(x, n = 10, ...) {
 # Access notes: There are two routes to files within Zenodo - via the API
 # and via the website URL. For example, these two URLs get the same file:
 #
-# https://zenodo.org/api/files/...
-#    2edc1bf2-e84e-40be-882d-08ce476c3bcb/SAFE_Gazetteer_metadata_v3.xlsx  # nolint
+# https://zenodo.org/api/files/2edc1bf2-e84e-40be-882d-08ce476c3bcb/SAFE_Gazetteer_metadata_v3.xlsx  # nolint
 # https://www.zenodo.org/record/3906082/files/SAFE_Gazetteer_metadata_v3.xlsx  # nolint
 #
 # ** API URLs **
-# The API link requires that hex 'bucket' id - and these are not stable
-# so need to be retrieved when a user requests a download. The record,
-# details are available from an API call:
-# ,
-# https://zenodo.org/api/records/3906082
-# ,
-# If the record is _open_ then the JSON response contains a files array
-# giving the API download path. However, if the record is not open, that
-# files array is not present in the response.,
 #
-# An access token can be passed to the records API call, which will then
-# report file URLs for any record in the community. The same token can then
-# be used with the files API to allow any file to be downloaded. However,
-# these are developer tokens and provide root access so are not for public
-# use.
+# The API link requires that hex 'bucket' id - and these are not stable so need to be
+# retrieved when a user requests a download. The record, details are available from an
+# API call:
+# 
+# https://zenodo.org/api/records/3906082
+# 
+# If the record is _open_ then the JSON response contains a files array giving the API
+# download path. However, if the record is not open, that files array is not present in
+# the response.,
+#
+# An access token can be passed to the records API call, which will then report file
+# URLs for any record in the community. The same token can then be used with the files
+# API to allow any file to be downloaded. However, these are developer tokens and
+# provide root access so are not for public use.
 #
 # ** WWW URLs **
-# The safedata index actually contains all the details needed to recreate a
-# URL for any file - only the record number and filename are needed. The
-# filenames are not typically known for embargoed and restricted files,
-# but safedata stores them. However, the file URL will raise a 404 error
-# unless the file is open access.,
-# ,
-# There is a special case - if a user requests access to restricted,
-# dataset, then they get a token that will allow that file to be downloaded
-# from the appropriate WWW URL (_not_ via the API URL):
+#
+# The safedata index actually contains all the details needed to recreate a URL for any
+# file - only the record number and filename are needed. The filenames are not typically
+# known for embargoed and restricted files, but safedata stores them. However, the file
+# URL will raise a 404 error unless the file is open access.
+# 
+# There is a special case - if a user requests access to restricted, dataset, then they
+# get a token that will allow that file to be downloaded from the appropriate WWW URL
+# (_not_ via the API URL):
 #
 # https://sandbox.zenodo.org/record/315677/files/test.xlsx?token=eyJhbGc...
 #
-# There is currently no such mechanism for embargoed data - you just have,
-# to wait it out or contact the authors.
+# There is currently no such mechanism for embargoed data - you just have, to wait it
+# out or contact the authors.
 #
-# The download_safe_files function uses the WWW URLs to support restricted
-# file tokens and to remove the need for an API intermediate call. A
-# developer version could use the API URLs as a common framework to download
-# everything using an API token.
+# The download_safe_files function uses the WWW URLs to support restricted file tokens
+# and to remove the need for an API intermediate call. The safedata_validator package
+# provides the `sync_local_dir` command that uses API URLs as a common framework to
+# download everything using an API token.
 
 download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
                                 download_metadata = TRUE, refresh = FALSE,
                                 token = NULL) {
-    #' Download SAFE dataset files
+    #' Download safedata dataset files
     #'
-    #' This downloads files associated with SAFE datasets, either all of the
-    #' files included in a set of records (\code{xlsx_only = FALSE}) or just
-    #' the core .xlsx files (\code{xlsx_only = FALSE}), and stores them in the
-    #' SAFE data directory. See \code{\link{insert_dataset}} for details on
-    #' using embargoed or restricted datasets.
+    #' This downloads files associated with safedata datasets, either all of the files
+    #' included in a set of records (\code{xlsx_only = FALSE}) or just the core .xlsx
+    #' files (\code{xlsx_only = FALSE}), and stores them in the safedata directory. See
+    #' \code{\link{insert_dataset}} for details on using embargoed or restricted
+    #' datasets.
     #'
     #' By default, the function will also download the dataset metadata. This
-    #' information is required by many of the functions in the package but users
-    #' can turn off automatic metadata download.
+    #' information is required by many of the functions in the package but users can
+    #' turn off automatic metadata download.
     #'
-    #' @section Warning:
-    #' Using \code{refresh = TRUE} will \strong{overwrite locally modified
-    #' files} and replace them with the versions of record from Zenodo.
+    #' @section Warning: Using \code{refresh = TRUE} will \strong{overwrite locally
+    #' modified files} and replace them with the versions of record from Zenodo. You
+    #' should not, in general, modify files within a safedata directory.
     #'
-    #' @param record_ids A vector of SAFE dataset record ids or a
+    #' @param record_ids A vector of safedata dataset record ids or a
     #'    \code{\link{safe_record_set}} object.
     #' @param confirm Requires the user to confirm before download (logical)
     #' @param xlsx_only Should all files be downloaded or just the core .xslx
@@ -572,14 +569,14 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
 
 
 insert_dataset <- function(record_id, files) {
-    #' Inserts local copies of files from a dataset into a SAFE data directory
+    #' Inserts local copies of files from a dataset into a safedata directory
     #'
-    #' If files are embargoed or restricted, then users may request the
-    #' datafiles from the authors. This function allows provided files
-    #' to be incorporated into a SAFE data directory, so that they will
-    #' then work seamlessly alongside openly available data.
+    #' If files are embargoed or restricted, then users may request the datafiles from
+    #' the authors. This function allows provided files to be incorporated into a
+    #' safedata directory, so that they will then work seamlessly alongside openly
+    #' available data.
     #'
-    #' @param record_id A SAFE dataset record id
+    #' @param record_id A safedata dataset record id
     #' @param files A vector of files to insert into the data directory
     #' @return NULL
     #' @examples

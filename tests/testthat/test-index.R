@@ -41,7 +41,7 @@ test_that("Create succeeds otherwise", {
         create_safedata_dir(testsd,
             url = "http://example.safedata.server"
         ),
-        regexp = "Safe data directory created",
+        regexp = "safedata directory created",
     )
     expect_true(success)
 
