@@ -246,7 +246,7 @@ fish <- search_taxa("Actinopterygii")
 dragonflies <- search_taxa("Odonata")
 ewers <- search_authors("Ewers")
 # Find datasets published by Ewers that reference fish or dragonflies
-joint <- (fish | odonates) & ewers
+joint <- (fish | dragonflies) & ewers
 ```
 
 Another approach is to restrict the records that will be searched in the online

@@ -4,7 +4,7 @@ author: "Andy Aldersley and David Orme"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{An overview of the safedata package}
+  %\VignetteIndexEntry{Overview of the safedata system}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---

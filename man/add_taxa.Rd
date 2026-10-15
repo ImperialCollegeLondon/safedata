@@ -2,7 +2,7 @@
 % Please edit documentation in R/taxa.R
 \name{add_taxa}
 \alias{add_taxa}
-\title{Add a taxonomic hierarchy to a SAFE data worksheet.}
+\title{Add a taxonomic hierarchy to a safedata worksheet.}
 \usage{
 add_taxa(
   obj,
@@ -31,29 +31,26 @@ rather than the name used in the dataset.}
 A modified \code{safedata} object with added taxonomic columns.
 }
 \description{
-Data tables in a safedata dataset can contain "taxa" fields, which tie
-an observation to a particular taxon used in the dataset. All datasets
-containing taxon observations provide taxonomic data about those taxa,
-validated against either NCBI or GBIF. The taxon table for an entire
-dataset can be accessed using \code{\link{get_taxa}}, but this function
-allows the taxonomic hierachy to be added for the specific taxa used in
-in a taxa field in a data worksheet.
+Data tables in a safedata dataset can contain "taxa" fields, which tie an
+observation to a particular taxon used in the dataset. All datasets containing
+taxon observations provide taxonomic data about those taxa, validated against
+either NCBI or GBIF. The taxon table for an entire dataset can be accessed using
+\code{\link{get_taxa}}, but this function allows the taxonomic hierachy to be
+added for the specific taxa used in in a taxa field in a data worksheet.
 }
 \details{
-An existing taxon table from \code{\link{get_taxa}} can be provided to
-this function, but the table will be automatically loaded if no table
-is provided. If a data worksheet only contains a single taxon field,
-then that field will be used automatically, otherwise users have to
-specify which taxon field to use. A prefix can be added to taxon fields
-in order to discrimate between taxon hierarchy fields added from
-different taxon fields.
+An existing taxon table from \code{\link{get_taxa}} can be provided to this
+function, but the table will be automatically loaded if no table is provided. If
+a data worksheet only contains a single taxon field, then that field will be used
+automatically, otherwise users have to specify which taxon field to use. A prefix
+can be added to taxon fields in order to discrimate between taxon hierarchy
+fields added from different taxon fields.
 
-By default, the taxonomy data added to the table will use the original
-taxon name used in the dataset, even if that usage is considered a
-synonym or is merged in GBIF or NCBI (see \code{\link{get_taxa}}).
-The \code{use_canon} option can be set to TRUE to instead show the
-canonical taxon name used in the taxonomy database for synonomous or
-merged taxa.
+By default, the taxonomy data added to the table will use the original taxon name
+used in the dataset, even if that usage is considered a synonym or is merged in
+GBIF or NCBI (see \code{\link{get_taxa}}). The \code{use_canon} option can be set
+to TRUE to instead show the canonical taxon name used in the taxonomy database
+for synonomous or merged taxa.
 }
 \examples{
    set_example_safedata_dir()

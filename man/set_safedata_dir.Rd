@@ -25,7 +25,7 @@ directory (str).}
 are stored in the main Zenodo site or the sandbox Zenodo site.}
 }
 \value{
-Invisibly, a boolean showing whether a SAFE data directory was
+Invisibly, a boolean showing whether a safedata directory was
    created or set successfully.
 }
 \description{
@@ -55,8 +55,8 @@ The root of the data directory also holds three index files and a
 settings file for the safedata diretory:
 \describe{
   \item{\code{index.json}}{, containing a full list of the
-        files and dataset records available in the SAFE data
-        repository;}
+        files and dataset records available in the safedata community 
+        for a project;}
   \item{\code{gazetteer.geojson}}{, containing the official list of
         known sampling locations and GIS data; and}
   \item{\code{location_aliases.json}}{, a list of alternative names

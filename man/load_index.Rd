@@ -12,7 +12,7 @@ Returns NULL invisibly - use get_index() to obtain the
 }
 \description{
 This function loads the dataset record index from the JSON file in
-the SAFE data directory and sets which datasets are currently available
+the safedata directory and sets which datasets are currently available
 and which records are the most recent available under a given concept.
 The function also checks to see if there are any user modifications to
 the directory structure.
