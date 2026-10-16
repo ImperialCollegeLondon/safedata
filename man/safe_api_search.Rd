@@ -3,7 +3,7 @@
 \name{safe_api_search}
 \alias{safe_api_search}
 \alias{validate_query_param}
-\title{Internal safedata dataset API search functions}
+\title{Internal SAFE dataset API search functions}
 \usage{
 safe_api_search(endpoint, params, ids = NULL, most_recent = FALSE)
 

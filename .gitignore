@@ -51,7 +51,6 @@ lint.txt
 /doc/
 /Meta/
 
-.uvr/
 .vscode/
 /.uvr/library/
 /.uvr/activate*

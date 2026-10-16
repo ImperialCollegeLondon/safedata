@@ -2,7 +2,7 @@
 % Please edit documentation in R/taxa.R
 \name{add_taxa}
 \alias{add_taxa}
-\title{Add a taxonomic hierarchy to a safedata worksheet.}
+\title{Add a taxonomic hierarchy to a SAFE data worksheet.}
 \usage{
 add_taxa(
   obj,

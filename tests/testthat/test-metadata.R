@@ -7,8 +7,8 @@ test_that("no internet fails gracefully on fetch", {
     recs <- validate_record_ids(c(1237733, 1237731))
 
     success <- expect_message(
-        safedata:::fetch_record_metadata(recs),
-        regexp = "Failed to download metadata",
+        fetch_record_metadata(recs),
+        regexp = "Failed to download metadata"
     )
 
     expect_false(success)
@@ -22,8 +22,8 @@ test_that("no API fails gracefully on fetch", {
     recs <- validate_record_ids(c(1237733, 1237731))
 
     success <- expect_message(
-        safedata:::fetch_record_metadata(recs),
-        regexp = "Failed to download metadata",
+        fetch_record_metadata(recs),
+        regexp = "Failed to download metadata"
     )
 
     expect_false(success)
@@ -38,8 +38,8 @@ test_that("API fails gracefully on partial fetch", {
     recs <- validate_record_ids(c(1237733, 1237731))
 
     success <- expect_message(
-        safedata:::fetch_record_metadata(recs),
-        regexp = "Failed to download metadata",
+        fetch_record_metadata(recs),
+        regexp = "Failed to download metadata"
     )
 
     expect_false(success)
@@ -57,8 +57,8 @@ test_that("API works normally", {
     recs <- validate_record_ids(c(1237733, 1237731))
 
     success <- expect_message(
-        safedata:::fetch_record_metadata(recs),
-        regexp = "Downloaded metadata",
+        fetch_record_metadata(recs),
+        regexp = "Downloaded metadata"
     )
 
     expect_true(success)

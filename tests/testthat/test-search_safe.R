@@ -7,7 +7,7 @@ test_that("no internet fails gracefully on search", {
 
     success <- expect_message(
         search_text("ant"),
-        regexp = "Search API unavailable",
+        regexp = "Search API unavailable"
     )
     expect_null(success)
     Sys.unsetenv("NETWORK_DOWN")
@@ -20,7 +20,7 @@ test_that("no API fails gracefully on search", {
 
     success <- expect_message(
         search_text("ant"),
-        regexp = "Search API unavailable",
+        regexp = "Search API unavailable"
     )
     expect_null(success)
     Sys.unsetenv("URL_DOWN")
@@ -37,7 +37,7 @@ test_that("normal search behaviour", {
 
     success <- expect_message(
         search_text("soil"),
-        regexp = "Search returned",
+        regexp = "Search returned"
     )
     expect_true(inherits(success, "safe_record_set"))
 })

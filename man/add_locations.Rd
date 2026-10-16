@@ -2,7 +2,7 @@
 % Please edit documentation in R/locations.R
 \name{add_locations}
 \alias{add_locations}
-\title{Add location data to a safedata worksheet.}
+\title{Adds location data to a SAFE data worksheet.}
 \usage{
 add_locations(
   obj,

@@ -2,7 +2,7 @@
 % Please edit documentation in R/load_safe.R
 \name{download_safe_files}
 \alias{download_safe_files}
-\title{Download safedata dataset files}
+\title{Download SAFE dataset files}
 \usage{
 download_safe_files(
   record_ids,

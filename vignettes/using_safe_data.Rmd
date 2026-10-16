@@ -40,6 +40,9 @@ knitr::opts_chunk$set(
 ```
 
 ```{r load_remote_data, echo=FALSE}
+#| jarl-ignore-chunk:
+#|   - internal_function: called in hidden chunk to turn on mocked resources
+
 # All the API and download calls for remote data used in building this
 # vignette is mocked and served up locally from the inst/api_data directory.
 safedata:::mock_api(on = TRUE)
@@ -608,7 +611,10 @@ get_file_details(1237719)
 ```
 
 ```{r unset, echo=FALSE}
+#| jarl-ignore-chunk:
+#|   - internal_function: called in hidden chunk to turn on mocked resources
+
 # Turn off URL mocking and tidy up
-safedata:::mock_api(on = TRUE)
+safedata:::mock_api(on = FALSE)
 unlink(safe_dir_path, recursive = TRUE)
 ```

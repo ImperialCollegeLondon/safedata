@@ -42,10 +42,8 @@ validate_record_ids <- function(record_set) {
     if (!inherits(record_set, "safe_record_set")) {
         # Otherwise validate
         if (
-            !(
-                is.vector(record_set) &&
-                    mode(record_set) %in% c("character", "numeric")
-            )
+            !(is.vector(record_set) &&
+                mode(record_set) %in% c("character", "numeric"))
         ) {
             stop("record_set must be a character or numeric vector")
         }
@@ -60,7 +58,7 @@ validate_record_ids <- function(record_set) {
             not_pos <- record_set <= 0
             valid <- (!not_int) & (!not_pos)
 
-            if (any(!valid)) {
+            if (!all(valid)) {
                 mismatches <- record_set[!valid]
                 record_set <- record_set[valid]
                 warning(paste0(
@@ -79,7 +77,7 @@ validate_record_ids <- function(record_set) {
             match <- regexpr(zen_regex, record_set, perl = TRUE)
             valid <- match != -1
 
-            if (any(!valid)) {
+            if (!all(valid)) {
                 mismatches <- record_set[!valid]
                 record_set <- record_set[valid]
                 warning(paste0(
@@ -94,7 +92,8 @@ validate_record_ids <- function(record_set) {
             }
 
             # convert matching patterns to numeric
-            record_set <- structure(as.numeric(regmatches(record_set, match)),
+            record_set <- structure(
+                as.numeric(regmatches(record_set, match)),
                 names = record_set
             )
         }
@@ -111,10 +110,11 @@ validate_record_ids <- function(record_set) {
         }
 
         # Do they appear in the index as concept ids or record ids
-        known <- record_set %in% c(
-            index$zenodo_record_id,
-            index$zenodo_concept_id
-        )
+        known <- record_set %in%
+            c(
+                index$zenodo_record_id,
+                index$zenodo_concept_id
+            )
 
         if (!all(known)) {
             unknown <- record_set[!known]
@@ -126,18 +126,19 @@ validate_record_ids <- function(record_set) {
         }
 
         # split concepts and records
-        concept <- ifelse(record_set %in% index$zenodo_concept_id,
-            record_set, NA
+        concept <- ifelse(
+            record_set %in% index$zenodo_concept_id,
+            record_set,
+            NA
         )
-        record <- ifelse(record_set %in% index$zenodo_record_id,
-            record_set, NA
-        )
+        record <- ifelse(record_set %in% index$zenodo_record_id, record_set, NA)
         record_set <- data.frame(concept = concept, record = record)
 
         # fill in concepts for records
         record_concept <- match(record_set$record, index$zenodo_record_id)
         record_concept <- index$zenodo_concept_id[record_concept]
-        record_set$concept <- ifelse(is.na(record_set$concept),
+        record_set$concept <- ifelse(
+            is.na(record_set$concept),
             record_concept,
             record_set$concept
         )
@@ -151,13 +152,17 @@ validate_record_ids <- function(record_set) {
     available <- match(record_set$record, index$zenodo_record_id)
     record_set$available <- index$available[available]
 
-    most_recent <- subset(index, most_recent,
+    most_recent <- subset(
+        index,
+        most_recent,
         select = c(zenodo_concept_id, zenodo_record_id)
     )
     which_mr <- match(record_set$concept, most_recent$zenodo_concept_id)
     record_set$most_recent <- most_recent$zenodo_record_id[which_mr]
 
-    mra <- subset(index, most_recent_available,
+    mra <- subset(
+        index,
+        most_recent_available,
         select = c(zenodo_concept_id, zenodo_record_id)
     )
     which_mra <- match(record_set$concept, mra$zenodo_concept_id)
@@ -166,11 +171,15 @@ validate_record_ids <- function(record_set) {
     # Sort by concept id (increasing from earliest) and then by record id
     # (decreasing from most recent) and keep NAs at the top, so concept ids
     # come first.
-    record_set <- record_set[order(
-        record_set$concept, record_set$record,
-        decreasing = c(FALSE, TRUE),
-        method = "radix", na.last = FALSE
-    ), ]
+    record_set <- record_set[
+        order(
+            record_set$concept,
+            record_set$record,
+            decreasing = c(FALSE, TRUE),
+            method = "radix",
+            na.last = FALSE
+        ),
+    ]
 
     rownames(record_set) <- seq_along(record_set$record)
     return(record_set)
@@ -190,19 +199,26 @@ print.safe_record_set <- function(x, ...) {
     )
 
     # record availability flags and counts
-    x$available <- with(x, ifelse(is.na(record), "",
-        ifelse(!available, "x",
-            ifelse(record == mra, "*", "o")
+    x$available <- with(
+        x,
+        ifelse(
+            is.na(record),
+            "",
+            ifelse(!available, "x", ifelse(record == mra, "*", "o"))
         )
-    ))
+    )
     n_status <- c("*" = 0, "x" = 0, "o" = 0)
     counts <- table(x$available)
     n_status[names(counts)] <- counts
     n_records <- sum(!is.na(x$record))
 
     cat(sprintf(
-        msg, length(unique(x$concept)), n_records,
-        n_status["*"], n_status["o"], n_status["x"]
+        msg,
+        length(unique(x$concept)),
+        n_records,
+        n_status["*"],
+        n_status["o"],
+        n_status["x"]
     ))
 
     # This relies on the sort order set in validate_record_ids
@@ -244,27 +260,27 @@ print.safe_record_set <- function(x, ...) {
     return(all)
 }
 
+# jarl-ignore-start internal_function: demonstrating internal usage
 
 fetch_record_metadata <- function(record_set) {
     #' Get and load safedata metadata
     #'
     #' Internal handlers to:
-    #' 
+    #'
     #' \enumerate{
-    #'    \item ensure there are local copies of record metadata, fetching it using the 
+    #'    \item ensure there are local copies of record metadata, fetching it using the
     #'          safedata_server API if needed and
     #'    \item load thatdata from file.
     #' }
-    #' 
+    #'
     #' This is the same metadata used to populate the Zenodo description but is
     #' downloaded as JSON format and stored within the record directory in the safedata
     #' directory for reuse.
     #'
     #' @param record_set An object of class \code{\link{safe_record_set}}.
-    #' @return The \code{fetch_record_metadata} function invisibly returns a
-    #'    logical value indicating if all records were fetched successfully and
-    #'    \code{load_record_metadata} returns a list object containing record
-    #'    metadata
+    #' @return The \code{fetch_record_metadata} function invisibly returns a logical
+    #'    value indicating if all records were fetched successfully and
+    #'    \code{load_record_metadata} returns a list object containing record metadata
     #' @describeIn fetch_record_metadata Download and store JSON metadata for
     #'    a record
     #' @examples
@@ -306,7 +322,8 @@ fetch_record_metadata <- function(record_set) {
 
         if (nrow(record_set)) {
             verbose_message(
-                "Downloading ", nrow(record_set),
+                "Downloading ",
+                nrow(record_set),
                 " record metadata files\n"
             )
         }
@@ -351,6 +368,7 @@ fetch_record_metadata <- function(record_set) {
     return(invisible(fetch_successful))
 }
 
+# jarl-ignore-end internal_function
 
 load_record_metadata <- function(record_set) {
     #' @describeIn fetch_record_metadata Load JSON metadata for a record
@@ -359,7 +377,7 @@ load_record_metadata <- function(record_set) {
     if (
         !inherits(record_set, "safe_record_set") ||
             nrow(record_set) > 1 ||
-            any(is.na(record_set))
+            anyNA(record_set)
     ) {
         stop(
             "Expects a single row safe_record_set object ",
@@ -372,10 +390,15 @@ load_record_metadata <- function(record_set) {
 
     # load it and return it
     safedir <- get_data_dir()
-    metadata_file <- with(record_set, file.path(
-        safedir, concept, record,
-        sprintf("%i.json", record)
-    ))
+    metadata_file <- with(
+        record_set,
+        file.path(
+            safedir,
+            concept,
+            record,
+            sprintf("%i.json", record)
+        )
+    )
     return(jsonlite::fromJSON(metadata_file))
 }
 
@@ -385,7 +408,7 @@ show_concepts <- function(obj) {
     #'
     #' These functions provide access to the metadata associated with safedata datasets.
     #' The functions provide three levels of information:
-    #' 
+    #'
     #' \describe{
     #'      \item{\code{show_concepts}}{displays the record versions grouped
     #'            under dataset concepts,}
@@ -394,17 +417,17 @@ show_concepts <- function(obj) {
     #'      \item{\code{show_worksheet}}{displays metadata about data worksheet
     #'            fields within a record.}
     #' }
-    #' 
+    #'
     #' All three functions accept a first argument \code{obj}, which can be one
     #' of three things:
-    #' 
+    #'
     #' \enumerate{
     #'    \item A character or numeric vector of safedata record or concept ids, which
     #'          will be validated using \code{\link{validate_record_ids}}, or
     #'    \item An already validated \code{\link{safe_record_set}} object, or
     #'    \item A \code{safedata} data frame loaded using \code{\link{load_safe_data}}.
     #' }
-    #' 
+    #'
     #' If \code{show_concepts} is passed a record id, then the function looks
     #' up the relevant concept. The version table indicates which versions
     #' are available ("*" for the most recent available version and "o"
@@ -445,13 +468,17 @@ show_concepts <- function(obj) {
     # and cut into record chunks
     index <- get_index()
 
-    rows <- subset(index,
-        zenodo_concept_id %in% record_set$concept &
-            grepl(".xlsx$", filename),
+    rows <- subset(
+        index,
+        zenodo_concept_id %in% record_set$concept & grepl(".xlsx$", filename),
         select = c(
-            zenodo_concept_id, zenodo_record_id,
-            dataset_title, publication_date, available,
-            most_recent_available, dataset_embargo,
+            zenodo_concept_id,
+            zenodo_record_id,
+            dataset_title,
+            publication_date,
+            available,
+            most_recent_available,
+            dataset_embargo,
             local_copy
         )
     )
@@ -472,12 +499,15 @@ show_concepts <- function(obj) {
         n_unavail <- nrow(concept) - n_avail
         nvers <- sprintf(
             "Versions: %i available, %i embargoed or restricted\n",
-            n_avail, n_unavail
+            n_avail,
+            n_unavail
         )
         text <- c(text, nvers)
 
         # Version summary
-        version_available <- ifelse(concept$available, "o",
+        version_available <- ifelse(
+            concept$available,
+            "o",
             ifelse(concept$local_copy, "!", "x")
         )
         version_available[which(concept$most_recent_available)[1]] <- "*"
@@ -485,7 +515,8 @@ show_concepts <- function(obj) {
         emb_date <- ifelse(
             is.na(concept$dataset_embargo) |
                 concept$dataset_embargo < Sys.time(),
-            "--", format(concept$dataset_embargo, "%Y-%m-%d")
+            "--",
+            format(concept$dataset_embargo, "%Y-%m-%d")
         )
         version_table <- data.frame(
             record_id = concept$zenodo_record_id,
@@ -596,14 +627,35 @@ show_record <- function(obj) {
         cl_nch <- max(ceiling(log10(dwksh$max_col)), 4)
         rw_nch <- max(ceiling(log10(dwksh$n_data_row)), 4)
         cat("\nData worksheets:\n")
-        cat(sprintf(
-            "%*s %*s %*s %s", nm_nch, "name", cl_nch, "ncol",
-            rw_nch, "nrow", "description"
-        ), sep = "\n")
-        cat(with(dwksh, sprintf(
-            "%*s %*i %*i %s", nm_nch, name, cl_nch, max_col,
-            rw_nch, n_data_row, description
-        )), sep = "\n")
+        cat(
+            sprintf(
+                "%*s %*s %*s %s",
+                nm_nch,
+                "name",
+                cl_nch,
+                "ncol",
+                rw_nch,
+                "nrow",
+                "description"
+            ),
+            sep = "\n"
+        )
+        cat(
+            with(
+                dwksh,
+                sprintf(
+                    "%*s %*i %*i %s",
+                    nm_nch,
+                    name,
+                    cl_nch,
+                    max_col,
+                    rw_nch,
+                    n_data_row,
+                    description
+                )
+            ),
+            sep = "\n"
+        )
         cat("\n")
     }
 
@@ -669,19 +721,23 @@ show_worksheet <- function(obj, worksheet = NULL, extended_fields = FALSE) {
         for (field_idx in seq_along(fields$field_name)) {
             fld <- fields[field_idx, ]
             cat(fld$field_name, ":\n")
-            other_descriptors <- subset(fld,
+            other_descriptors <- subset(
+                fld,
                 select = -c(field_name, col_idx, range)
             )
             descriptor_string <- paste0(
-                " - ", names(other_descriptors),
-                ": ", other_descriptors
+                " - ",
+                names(other_descriptors),
+                ": ",
+                other_descriptors
             )
             cat(descriptor_string[!is.na(other_descriptors)], sep = "\n")
         }
         cat("\n")
     } else {
         # print a table of name, type and description (truncated to width)
-        descriptors <- subset(fields,
+        descriptors <- subset(
+            fields,
             select = c(field_name, field_type, description)
         )
 
@@ -691,8 +747,10 @@ show_worksheet <- function(obj, worksheet = NULL, extended_fields = FALSE) {
             substr(descriptors$description, 0, max_desc - 3),
             "..."
         )
-        descriptors$description <- ifelse(nc[, 3] < max_desc,
-            descriptors$description, trim_desc
+        descriptors$description <- ifelse(
+            nc[, 3] < max_desc,
+            descriptors$description,
+            trim_desc
         )
 
         print(descriptors, right = FALSE)
@@ -734,7 +792,9 @@ file_status <- function(metadata) {
         if (file_row$local_copy) {
             status <- paste0(
                 "Local private copy available\n",
-                "        ** Dataset ", status, " ** "
+                "        ** Dataset ",
+                status,
+                " ** "
             )
         } else {
             status <- paste0("Dataset ", status, ", only metadata available")

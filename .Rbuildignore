@@ -9,11 +9,14 @@
 ^\.github$
 ^\.pre-commit-config\.yaml$
 ^\.uvr$
+^\.uvr$
 ^_pkgdown\.yml$
 ^build_scripts$
 ^doc$
 ^docs$
 ^uvr\.lock$
+^uvr\.lock$
+^uvr\.toml$
 ^uvr\.toml$
 build_notes.md
 cran-comments.md

@@ -28,7 +28,9 @@ get_file_details <- function(record_id) {
         stop("Requires a single valid record id - not a concept id")
     }
 
-    files <- subset(index, zenodo_record_id == record_set$record,
+    files <- subset(
+        index,
+        zenodo_record_id == record_set$record,
         select = c(filename, dataset_access, path)
     )
     files$path <- file.path(getOption("safedata.dir"), files$path)

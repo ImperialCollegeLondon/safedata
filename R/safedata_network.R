@@ -33,7 +33,6 @@
 # taxa.R
 # - download taxon coverage - offline mode.
 
-
 #' Network resources and the safedata package.
 #'
 #' @description
@@ -98,7 +97,6 @@ try_to_download <- function(url, local_path = NULL, timeout = 10) {
     #'    download attempt was successful.
     #' @keywords internal
 
-
     # Dummy variables used to implement unit testing of network failures
     network_down <- as.logical(Sys.getenv("NETWORK_DOWN", unset = FALSE))
     url_down <- as.logical(Sys.getenv("URL_DOWN", unset = FALSE))
@@ -115,7 +113,7 @@ try_to_download <- function(url, local_path = NULL, timeout = 10) {
 
     # Otherwise, is a resource _specifically_ being blocked for testing purposes
     if ((!is.na(resource_down) && grepl(resource_down, url)) || url_down) {
-        attr(fail, "fail_msg") <- sprintf("URL error: 404")
+        attr(fail, "fail_msg") <- "URL error: 404"
         return(fail)
     }
 
@@ -154,7 +152,8 @@ try_to_download <- function(url, local_path = NULL, timeout = 10) {
             return(fail)
         } else {
             attr(fail, "fail_msg") <- paste0(
-                "Unknown curl response: ", response
+                "Unknown curl response: ",
+                response
             )
             return(fail)
         }

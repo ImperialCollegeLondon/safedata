@@ -6,7 +6,7 @@ test_that("no internet fails gracefully on create", {
 
     success <- expect_message(
         create_safedata_dir(testsd),
-        regexp = "No response from server: ",
+        regexp = "No response from server: "
     )
     expect_false(success)
     Sys.unsetenv("NETWORK_DOWN")
@@ -18,7 +18,7 @@ test_that("no API fails gracefully on create", {
 
     success <- expect_message(
         create_safedata_dir(testsd),
-        regexp = "No response from server: ",
+        regexp = "No response from server: "
     )
     expect_false(success)
     Sys.unsetenv("URL_DOWN")
@@ -27,10 +27,8 @@ test_that("no API fails gracefully on create", {
 test_that("BAD API url fails gracefully on create", {
     testsd <- file.path(tempdir(), "testsd")
     success <- expect_message(
-        create_safedata_dir(testsd,
-            url = "https://not.a.safedata.server.url"
-        ),
-        regexp = "No response from server: ",
+        create_safedata_dir(testsd, url = "https://not.a.safedata.server.url"),
+        regexp = "No response from server: "
     )
     expect_false(success)
 })
@@ -38,10 +36,8 @@ test_that("BAD API url fails gracefully on create", {
 test_that("Create succeeds otherwise", {
     testsd <- file.path(tempdir(), "testsd")
     success <- expect_message(
-        create_safedata_dir(testsd,
-            url = "http://example.safedata.server"
-        ),
-        regexp = "safedata directory created",
+        create_safedata_dir(testsd, url = "http://example.safedata.server"),
+        regexp = "safedata directory created"
     )
     expect_true(success)
 
@@ -57,7 +53,7 @@ test_that("no internet fails gracefully on update", {
 
     success <- expect_message(
         set_safedata_dir(local_sdd, update = TRUE),
-        regexp = "No response from server, skipping updates:",
+        regexp = "No response from server, skipping updates:"
     )
     # defaults to existing local copy, so expect true
     expect_true(success)
@@ -71,7 +67,7 @@ test_that("no API fails gracefully on update", {
 
     success <- expect_message(
         set_safedata_dir(local_sdd, update = TRUE),
-        regexp = "No response from server, skipping updates:",
+        regexp = "No response from server, skipping updates:"
     )
     # defaults to existing local copy, so expect true
     expect_true(success)
@@ -89,7 +85,7 @@ test_that("Specific resource unavailable - test atomic update.", {
 
     success <- expect_message(
         set_safedata_dir(local_sdd, update = TRUE),
-        regexp = "Unable to download all updates, using existing index files",
+        regexp = "Unable to download all updates, using existing index files"
     )
     # defaults to existing local copy, so expect true
     expect_true(success)
@@ -107,7 +103,7 @@ test_that("Update works otherwise", {
 
     success <- expect_message(
         set_safedata_dir(local_sdd, update = TRUE),
-        regexp = "Index files successfully updated",
+        regexp = "Index files successfully updated"
     )
     expect_true(success)
 })

@@ -10,7 +10,7 @@ test_that("Download dataset fails gracefully on internet down", {
     # to avoid having to interact with the function.
     success <- expect_message(
         download_safe_files(1198475, confirm = FALSE),
-        regexp = "Could not download metadata, aborting download",
+        regexp = "Could not download metadata, aborting download"
     )
     expect_false(success)
 
@@ -27,7 +27,7 @@ test_that("Download dataset fails gracefully on metadata server down", {
     # to avoid having to interact with the function.
     success <- expect_message(
         download_safe_files(1198475, confirm = FALSE),
-        regexp = "Could not download metadata, aborting download",
+        regexp = "Could not download metadata, aborting download"
     )
     expect_false(success)
 
@@ -50,7 +50,7 @@ test_that("Download dataset fails gracefully on Zenodo down", {
     # Pre-fetch the metadata JSON, so that if the metadata server is down we can
     # skip the rest of the test.
     recs <- validate_record_ids(1198475)
-    success <- safedata:::fetch_record_metadata(recs)
+    success <- fetch_record_metadata(recs)
     if (!success) {
         skip("Metadata server down - skipping test")
     }
@@ -63,7 +63,7 @@ test_that("Download dataset fails gracefully on Zenodo down", {
     # to avoid having to interact with the function.
     success <- expect_message(
         download_safe_files(1198475, confirm = FALSE),
-        regexp = "Failed to download data:",
+        regexp = "Failed to download data:"
     )
 
     # No successfully downloaded file names

@@ -13,17 +13,16 @@ load_record_metadata(record_set)
 \item{record_set}{An object of class \code{\link{safe_record_set}}.}
 }
 \value{
-The \code{fetch_record_metadata} function invisibly returns a
-   logical value indicating if all records were fetched successfully and
-   \code{load_record_metadata} returns a list object containing record
-   metadata
+The \code{fetch_record_metadata} function invisibly returns a logical
+   value indicating if all records were fetched successfully and
+   \code{load_record_metadata} returns a list object containing record metadata
 }
 \description{
 Internal handlers to:
 }
 \details{
 \enumerate{
-   \item ensure there are local copies of record metadata, fetching it using the 
+   \item ensure there are local copies of record metadata, fetching it using the
          safedata_server API if needed and
    \item load thatdata from file.
 }
