@@ -250,7 +250,7 @@ str.safedata <- function(object, ...) {
     # to str(x, ...)
     attr(object, "metadata") <- NULL
     class(object) <- "data.frame"
-    invisible(str(object, ...))
+    return(invisible(str(object, ...)))
 }
 
 print.safedata <- function(x, n = 10, ...) {
@@ -287,9 +287,9 @@ print.safedata <- function(x, n = 10, ...) {
 # The API link requires that hex 'bucket' id - and these are not stable so need to be
 # retrieved when a user requests a download. The record, details are available from an
 # API call:
-# 
+#
 # https://zenodo.org/api/records/3906082
-# 
+#
 # If the record is _open_ then the JSON response contains a files array giving the API
 # download path. However, if the record is not open, that files array is not present in
 # the response.,
@@ -305,7 +305,7 @@ print.safedata <- function(x, n = 10, ...) {
 # file - only the record number and filename are needed. The filenames are not typically
 # known for embargoed and restricted files, but safedata stores them. However, the file
 # URL will raise a 404 error unless the file is open access.
-# 
+#
 # There is a special case - if a user requests access to restricted, dataset, then they
 # get a token that will allow that file to be downloaded from the appropriate WWW URL
 # (_not_ via the API URL):
@@ -564,7 +564,7 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
         assign("index", index, safedata_env)
     }
 
-    invisible(downloaded)
+    return(invisible(downloaded))
 }
 
 

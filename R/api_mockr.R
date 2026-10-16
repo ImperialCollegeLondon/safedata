@@ -9,7 +9,6 @@
 #' @keywords internal
 
 mock_api_urls <- list(
-
     "http://example.safedata.server/api/message/?format=json" = list(
         content = "message.json",
         status_code = 200L
@@ -32,7 +31,6 @@ mock_api_urls <- list(
         content = "index_hash.json",
         status_code = 200L
     ),
-
     "http://example.safedata.server/api/gazetteer/hash/" = list(
         content = "gazetteer_hash.json",
         status_code = 200L
@@ -221,4 +219,6 @@ mock_api <- function(on = TRUE) {
     } else {
         httr::set_callback("request")
     }
+
+    return()
 }

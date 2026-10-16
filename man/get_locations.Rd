@@ -16,12 +16,12 @@ returned \code{\link[sf]{sf}} object.}
 An object of classes "safe_locations", "sf" and "data.frame".
 }
 \description{
-This function returns a spatial 'simple features' (\code{\link[sf]{sf}})
-object for a dataset record, including basic information about locations
-for the gazetteer if requested.
+This function returns a spatial 'simple features' (\code{\link[sf]{sf}}) object
+for a dataset record, including basic information about locations for the
+gazetteer if requested.
 }
 \details{
-Safedata datasets recording observations from the field will typically include a
+A safedata dataset recording observations from the field will typically include a
 Locations worksheet, containing all of the location names used in Locations type
 fields in data worksheets. These entries are matched against existing location
 names in the curated gazetteer. Users can also include "new" location names in

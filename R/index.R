@@ -34,7 +34,7 @@ set_safedata_dir <- function(safedir, update = TRUE) {
     #' settings file for the safedata diretory:
     #' \describe{
     #'   \item{\code{index.json}}{, containing a full list of the
-    #'         files and dataset records available in the safedata community 
+    #'         files and dataset records available in the safedata community
     #'         for a project;}
     #'   \item{\code{gazetteer.geojson}}{, containing the official list of
     #'         known sampling locations and GIS data; and}
@@ -150,27 +150,26 @@ set_safedata_dir <- function(safedir, update = TRUE) {
         # hashes, three download wrapper functions and three reporting names
         update_details <- list(
             list(
-                fname="Index",
-                path=getOption("safedata.index"),
-                api="/api/datasets/index/hash/",
-                dfun=download_index
+                fname = "Index",
+                path = getOption("safedata.index"),
+                api = "/api/datasets/index/hash/",
+                dfun = download_index
             ),
             list(
-                fname="Gazetteer",
-                path=getOption("safedata.gazetteer"),
-                api="/api/gazetteer/hash/",
-                dfun=download_gazetteer
+                fname = "Gazetteer",
+                path = getOption("safedata.gazetteer"),
+                api = "/api/gazetteer/hash/",
+                dfun = download_gazetteer
             ),
             list(
-                fname="Location aliases",
-                path=getOption("safedata.loc_aliases"),
-                api="/api/gazetteer/aliases/hash/",
-                dfun=download_location_aliases
+                fname = "Location aliases",
+                path = getOption("safedata.loc_aliases"),
+                api = "/api/gazetteer/aliases/hash/",
+                dfun = download_location_aliases
             )
         )
 
         for (details in update_details) {
-
             # Try to get the current index hashes from the safedata_server API and
             # then check each of the three index files
             api <- paste0(getOption("safedata.url"), details$api)
@@ -258,10 +257,11 @@ create_safedata_dir <- function(safedir,
     jsonlite::write_json(settings, getOption("safedata.url_settings"))
 
     # Local cleanup function
-    tidy_up <- function(msg){
+    tidy_up <- function(msg) {
         unlink(safedir, recursive = TRUE)
         options(safedata.dir = NULL, safedata.url = NULL)
         message(msg)
+        return()
     }
 
     # Test the responsiveness of the server using the message API
@@ -279,8 +279,10 @@ create_safedata_dir <- function(safedir,
     # If any of these fail then remove the directory since we already
     # checked it didn't exist, and then tidy up options
     if (!(got_index && got_gazetteer && got_loc_aliases)) {
-        tidy_up(c("Could not download required files: ",
-            "safedata directory not created"))
+        tidy_up(c(
+            "Could not download required files: ",
+            "safedata directory not created"
+        ))
         return(invisible(FALSE))
     }
 
@@ -306,6 +308,8 @@ set_safedata_paths <- function(safedir) {
         safedata.loc_aliases = file.path(safedir, "location_aliases.csv"),
         safedata.url_settings = file.path(safedir, "url.json")
     )
+
+    return()
 }
 
 get_server_message <- function() {
@@ -324,12 +328,11 @@ get_server_message <- function() {
     # Try and get the content
     message <- try_to_download(api)
 
-    if (! isFALSE(message)) {
+    if (!isFALSE(message)) {
         message <- httr::content(message)
     }
 
     return(message)
-
 }
 
 download_index <- function() {
@@ -361,7 +364,7 @@ download_gazetteer <- function() {
     #' Downloads the gazetteer from a safedata metadata server.
     #'
     #' This function downloads the gazetteer using the `safedata_server` API (e.g.
-    #' \url{https://data.safeproject.net/api/gazetteer/download/}) and saves it in the 
+    #' \url{https://data.safeproject.net/api/gazetteer/download/}) and saves it in the
     #' safedata directory.
     #'
     #' @return NULL
@@ -534,7 +537,7 @@ load_index <- function() {
     # save the index into the cache
     assign("index", index, safedata_env)
 
-    invisible()
+    return(invisible(TRUE))
 }
 
 
@@ -668,6 +671,8 @@ verbose_message <- function(str, ...) {
     if (getOption("safedata.verbose")) {
         message(str, ...)
     }
+
+    return()
 }
 
 

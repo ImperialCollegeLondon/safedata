@@ -55,7 +55,7 @@ The root of the data directory also holds three index files and a
 settings file for the safedata diretory:
 \describe{
   \item{\code{index.json}}{, containing a full list of the
-        files and dataset records available in the safedata community 
+        files and dataset records available in the safedata community
         for a project;}
   \item{\code{gazetteer.geojson}}{, containing the official list of
         known sampling locations and GIS data; and}
