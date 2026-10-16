@@ -9,7 +9,7 @@ set_safedata_dir(safedir, update = TRUE)
 
 create_safedata_dir(
   safedir,
-  url = "https://www.safeproject.net",
+  url = "https://data.safeproject.net",
   use_zenodo_sandbox = FALSE
 )
 }

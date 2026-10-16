@@ -127,23 +127,19 @@ set_safedata_dir <- function(safedir, update = TRUE) {
         safedata.use_zenodo_sandbox = settings$use_zenodo_sandbox
     )
 
+    # Check for live server
+    message <- get_server_message()
+
+    if (isFALSE(message)) {
+        message(paste0("No response from server, skipping updates: ", settings$url))
+        update <- FALSE
+        load_index()
+        return(invisible(TRUE))
+    }
+
     # Look for updates
     if (update) {
         verbose_message("Checking for updates")
-
-        # Try to get the current index hashes from the SAFE Data API and
-        # then check each of the three index files
-        api <- paste0(getOption("safedata.url"), "/api/index_hashes.json")
-        index_hashes <- try_to_download(api)
-
-        if (isFALSE(index_hashes)) {
-            message("Unable to download updates, using existing index files: ")
-            message(attr(index_hashes, "fail_msg"))
-            load_index()
-            return(invisible(TRUE))
-        } else {
-            index_hashes <- httr::content(index_hashes)
-        }
 
         # Update the indexing files as an atomic commit - there is unlikely
         # to be an issue in having non-contemporary versions, but why risk it
@@ -154,55 +150,68 @@ set_safedata_dir <- function(safedir, update = TRUE) {
         # hashes, three download wrapper functions and three reporting names
         update_details <- list(
             list(
-                "Index",
-                getOption("safedata.index"),
-                index_hashes$index,
-                download_index
+                fname = "Index",
+                path = getOption("safedata.index"),
+                api = "/api/datasets/index/hash/",
+                dfun = download_index
             ),
             list(
-                "Gazetteer",
-                getOption("safedata.gazetteer"),
-                index_hashes$gazetteer,
-                download_gazetteer
+                fname = "Gazetteer",
+                path = getOption("safedata.gazetteer"),
+                api = "/api/gazetteer/hash/",
+                dfun = download_gazetteer
             ),
             list(
-                "Location aliases",
-                getOption("safedata.loc_aliases"),
-                index_hashes$location_aliases,
-                download_location_aliases
+                fname = "Location aliases",
+                path = getOption("safedata.loc_aliases"),
+                api = "/api/gazetteer/aliases/hash/",
+                dfun = download_location_aliases
             )
         )
 
         for (details in update_details) {
-            fname <- details[[1]]
-            local_path <- details[[2]]
-            current_hash <- details[[3]]
-            download_func <- details[[4]]
+            # Try to get the current index hashes from the SAFE Data API and
+            # then check each of the three index files
+            api <- paste0(getOption("safedata.url"), details$api)
+            index_hash <- try_to_download(api)
 
-            if (tools::md5sum(local_path) != current_hash) {
-                verbose_message(sprintf(" - Updating %s", fname))
+            if (isFALSE(index_hash)) {
+                update_successful <- FALSE
+                verbose_message(
+                    sprintf(" - Cannot retrieve remote file hash: %s", details$fname)
+                )
+                next
+            } else {
+                index_hash <- httr::content(index_hash)$md5
+            }
+
+            if (tools::md5sum(details$path) != index_hash) {
+                verbose_message(sprintf(" - Updating %s", details$fname))
                 # Save the current version in case we need to roll back
-                file.rename(local_path, paste0(local_path, ".oldbkp"))
-                backed_up <- c(backed_up, local_path)
+                file.rename(details$path, paste0(details$path, ".oldbkp"))
+                backed_up <- c(backed_up, details$path)
                 # Try and get the new version
-                got_update <- download_func()
+                got_update <- details$dfun()
                 if (!got_update) {
+                    verbose_message(
+                        sprintf(" - Could not download update: %s", details$fname)
+                    )
                     update_successful <- FALSE
                 }
             } else {
-                verbose_message(sprintf(" - %s up to date", fname))
+                verbose_message(sprintf(" - %s up to date", details$fname))
             }
         }
 
         if (!update_successful) {
             # Delete successful downloads and restore backups
+            message("Unable to download all updates, using existing index files")
             for (local_path in backed_up) {
                 if (file.exists(local_path)) {
                     file.remove(local_path)
                 }
                 file.rename(paste0(local_path, ".oldbkp"), local_path)
             }
-            message("Unable to download updates, using existing index files")
         } else {
             # remove backups
             for (local_path in backed_up) {
@@ -220,7 +229,7 @@ set_safedata_dir <- function(safedir, update = TRUE) {
 
 
 create_safedata_dir <- function(safedir,
-                                url = "https://www.safeproject.net",
+                                url = "https://data.safeproject.net",
                                 use_zenodo_sandbox = FALSE) {
     #' @describeIn set_safedata_dir Create a new safedata directory
     #' @export
@@ -247,7 +256,22 @@ create_safedata_dir <- function(safedir,
     settings <- list(url = url, use_zenodo_sandbox = use_zenodo_sandbox)
     jsonlite::write_json(settings, getOption("safedata.url_settings"))
 
-    # download the index file, then cache it
+    # Local cleanup function
+    tidy_up <- function(msg) {
+        unlink(safedir, recursive = TRUE)
+        options(safedata.dir = NULL, safedata.url = NULL)
+        message(msg)
+        return()
+    }
+
+    # Test the responsiveness of the server using the message API
+    message <- get_server_message()
+    if (isFALSE(message)) {
+        tidy_up(paste0("No response from server: ", url))
+        return(invisible(FALSE))
+    }
+
+    # Try and download the index and gazetteer files
     got_index <- download_index()
     got_gazetteer <- download_gazetteer()
     got_loc_aliases <- download_location_aliases()
@@ -255,12 +279,10 @@ create_safedata_dir <- function(safedir,
     # If any of these fail then remove the directory since we already
     # checked it didn't exist, and then tidy up options
     if (!(got_index && got_gazetteer && got_loc_aliases)) {
-        unlink(safedir, recursive = TRUE)
-        options(safedata.dir = NULL, safedata.url = NULL)
-        message(
+        tidy_up(c(
             "Could not download required files: ",
             "SAFE data directory not created"
-        )
+        ))
         return(invisible(FALSE))
     }
 
@@ -286,21 +308,46 @@ set_safedata_paths <- function(safedir) {
         safedata.loc_aliases = file.path(safedir, "location_aliases.csv"),
         safedata.url_settings = file.path(safedir, "url.json")
     )
+
+    return()
+}
+
+get_server_message <- function() {
+    #' Retrieves the metadata server message
+    #'
+    #' This function fetches the metadata server message from the `safedata_server`
+    #' API (e.g. \url{https://data.safeproject.net/api/message/?format=json}).
+    #'
+    #' @return NULL
+    #' @keywords internal
+
+    # Get the URL
+    url <- getOption("safedata.url")
+    api <- paste0(url, "/api/message/?format=json")
+
+    # Try and get the content
+    message <- try_to_download(api)
+
+    if (!isFALSE(message)) {
+        message <- httr::content(message)
+    }
+
+    return(message)
 }
 
 download_index <- function() {
     #' Downloads the current dataset index
     #'
-    #' This function downloads the dataset index from the SAFE data
-    #' API (e.g. \url{https://www.safeproject.net/api/index}) and saves
-    #' it in the root SAFE data directory
+    #' This function downloads the dataset index from the `safedata_server` API
+    #' API (e.g. \url{https://data.safeproject.net/api/datasets/index/download/}) and
+    #' saves it in the safedata directory
     #'
     #' @return NULL
     #' @keywords internal
 
     path <- getOption("safedata.index")
     url <- getOption("safedata.url")
-    api <- paste0(url, "/api/metadata_index.json")
+    api <- paste0(url, "/api/datasets/index/download/")
 
     success <- try_to_download(api, path)
 
@@ -316,16 +363,16 @@ download_index <- function() {
 download_gazetteer <- function() {
     #' Downloads the current SAFE gazetteer
     #'
-    #' This function downloads the gazetteer from the SAFE data
-    #' gazetteer API (e.g. \url{https://www.safeproject.net/api/gazetteer})
-    #' and saves it in the root of the safe data directory.
+    #' This function downloads the gazetteer from the `safedata_server` API (e.g.
+    #' \url{https://data.safeproject.net/api/gazetteer/download/}) and saves it in the
+    #' safedata directory.
     #'
     #' @return NULL
     #' @keywords internal
 
     path <- getOption("safedata.gazetteer")
     url <- getOption("safedata.url")
-    api <- paste0(url, "/api/gazetteer.json")
+    api <- paste0(url, "/api/gazetteer/download/")
 
     success <- try_to_download(api, path)
 
@@ -341,17 +388,16 @@ download_gazetteer <- function() {
 download_location_aliases <- function() {
     #' Downloads the current SAFE location aliases
     #'
-    #' This function downloads the location aliases from the SAFE data
-    #' location aliases API (for example,
-    #' \url{https://www.safeproject.net/api/location_aliases})
-    #' and saves it in the root of the safe data directory.
+    #' This function downloads the location aliases from the `safedata_server` API (e.g.
+    #' \url{https://data.safeproject.net/api/gazetteer/aliases/download/}) and saves it
+    #' in the safedata directory.
     #'
     #' @return NULL
     #' @keywords internal
 
     path <- getOption("safedata.loc_aliases")
     url <- getOption("safedata.url")
-    api <- paste0(url, "/api/location_aliases.json")
+    api <- paste0(url, "/api/gazetteer/aliases/download/")
     success <- try_to_download(api, path)
 
     if (!success) {
@@ -389,16 +435,17 @@ load_index <- function() {
 
     verbose_message("Loading and caching index")
 
+    # Load the index data - this has been structured to make it quick to load into a
+    # dataframe using fromJSON().
     index <- jsonlite::fromJSON(getOption("safedata.index"))
 
-    # format the datetime classes
-    index$publication_date <- as.POSIXct(index$publication_date)
+    # Convert dates
     index$dataset_embargo <- as.POSIXct(index$dataset_embargo)
+    index$publication_date <- as.POSIXct(index$publication_date)
 
     # Add the path relative to the data directory
     index$path <- with(index, file.path(
-        zenodo_concept_id,
-        zenodo_record_id, filename
+        zenodo_concept_id, zenodo_record_id, filename
     ))
 
     # Identify availability and most recent available records
@@ -490,7 +537,7 @@ load_index <- function() {
     # save the index into the cache
     assign("index", index, safedata_env)
 
-    invisible()
+    return(invisible(TRUE))
 }
 
 
@@ -625,6 +672,8 @@ verbose_message <- function(str, ...) {
     if (getOption("safedata.verbose")) {
         message(str, ...)
     }
+
+    return()
 }
 
 

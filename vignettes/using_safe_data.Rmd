@@ -31,6 +31,7 @@ knit_hooks$set(output = function(x, options) {
     # paste these lines together
     x <- paste(c(x, ""), collapse = "\n")
     hook_output(x, options)
+    return()
 })
 # Comments as #> not ##
 knitr::opts_chunk$set(
@@ -138,7 +139,7 @@ project Zenodo site or from its metadata server. For example, for the SAFE Proje
 these links are:
 
 * our [SAFE Zenodo community](https://zenodo.org/communities/safe) or
-* the  [SAFE Project website](https://www.safeproject.net/datasets/view_datasets). 
+* the [SAFE Project website](https://data.safeproject.net/datasets/). 
 
 If you have done this, or have a dataset DOI from another source, then you can look up
 the dataset directly. 
@@ -179,9 +180,10 @@ print(soil_datasets)
 ### Taxon search details
 
 Published datasets contain a taxonomic index of any organisms referred to within
-the data - see
-[here](https://safedata-validator.readthedocs.io/en/latest/data_format/taxa.html)
-for details of the Taxa worksheet containing the index.
+the data. The `safedata_validator` website provides for [details of Taxa 
+worksheets](https://safedata-validator.readthedocs.io/en/stable/data_providers/data_format/taxa.html) 
+containing the index.
+
 
 The taxa in this index, along with all of the parent taxa in the taxonomic
 hierarchy leading up to that those taxa, are added to a taxonomic database on
@@ -213,7 +215,7 @@ ants <- search_taxa(taxon_id = 4342, taxon_auth = "GBIF")
 
 Datasets also have to provide a full index of sampling locations used in the
 data. Sampling locations are either linked to existing sampling locations
-included in the [SAFE gazetteer](https://www.safeproject.net/info/gazetteer) or
+included in the [SAFE gazetteer](https://data.safeproject.net/gazetteer/map/) or
 users can identify new sampling locations and provide location data if possible.
 
 
@@ -449,7 +451,7 @@ used for further data processing and adding brief metadata to the `str` and
 `print` methods.
 
 Some data formatting takes place based on [field
-types](https://safedata-validator.readthedocs.io/en/latest/data_format/data.html#field-types):
+types](https://safedata-validator.readthedocs.io/en/stable/data_providers/data_format/data.html#field-types):
 categorical variables are converted to factors; dates and datetimes are
 converted to `POSIXct` and times are converted to `chron::time` objects. 
 

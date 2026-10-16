@@ -15,12 +15,11 @@
 #' to find and analyse our research data outputs.
 #'
 #' @section Links:
-#'    \url{https://www.safeproject.net/datasets/view_datasets}
-#'    \url{https://www.zenodo.org/communities/safe}
+#'    \url{https://data.safeproject.net/datasets/}
+#'    \url{https://zenodo.org/communities/safe}
 #'
-#' @docType package
 #' @name safedata
-
+"_PACKAGE"
 
 # All of the variables below appear in non standard evaluation formats
 # (e.g. subset etc.) and so get NOTEd by R CMD CHECK. This suppresses the
