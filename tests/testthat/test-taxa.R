@@ -6,7 +6,7 @@ test_that("no internet fails gracefully get_taxon_coverage", {
     Sys.setenv(NETWORK_DOWN = TRUE)
     success <- expect_message(
         get_taxon_coverage(),
-        regexp = "Unable to download taxon index",
+        regexp = "Unable to download taxon index"
     )
     expect_null(success)
 
@@ -20,7 +20,7 @@ test_that("API down fails gracefully get_taxon_coverage", {
 
     success <- expect_message(
         get_taxon_coverage(),
-        regexp = "Unable to download taxon index",
+        regexp = "Unable to download taxon index"
     )
     expect_null(success)
 

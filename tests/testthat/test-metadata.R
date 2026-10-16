@@ -8,7 +8,7 @@ test_that("no internet fails gracefully on fetch", {
 
     success <- expect_message(
         fetch_record_metadata(recs),
-        regexp = "Failed to download metadata",
+        regexp = "Failed to download metadata"
     )
 
     expect_false(success)
@@ -23,7 +23,7 @@ test_that("no API fails gracefully on fetch", {
 
     success <- expect_message(
         fetch_record_metadata(recs),
-        regexp = "Failed to download metadata",
+        regexp = "Failed to download metadata"
     )
 
     expect_false(success)
@@ -39,7 +39,7 @@ test_that("API fails gracefully on partial fetch", {
 
     success <- expect_message(
         fetch_record_metadata(recs),
-        regexp = "Failed to download metadata",
+        regexp = "Failed to download metadata"
     )
 
     expect_false(success)
@@ -58,7 +58,7 @@ test_that("API works normally", {
 
     success <- expect_message(
         fetch_record_metadata(recs),
-        regexp = "Downloaded metadata",
+        regexp = "Downloaded metadata"
     )
 
     expect_true(success)

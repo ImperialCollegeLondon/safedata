@@ -10,7 +10,7 @@ test_that("Download dataset fails gracefully on internet down", {
     # to avoid having to interact with the function.
     success <- expect_message(
         download_safe_files(1198475, confirm = FALSE),
-        regexp = "Could not download metadata, aborting download",
+        regexp = "Could not download metadata, aborting download"
     )
     expect_false(success)
 
@@ -27,7 +27,7 @@ test_that("Download dataset fails gracefully on metadata server down", {
     # to avoid having to interact with the function.
     success <- expect_message(
         download_safe_files(1198475, confirm = FALSE),
-        regexp = "Could not download metadata, aborting download",
+        regexp = "Could not download metadata, aborting download"
     )
     expect_false(success)
 
@@ -63,7 +63,7 @@ test_that("Download dataset fails gracefully on Zenodo down", {
     # to avoid having to interact with the function.
     success <- expect_message(
         download_safe_files(1198475, confirm = FALSE),
-        regexp = "Failed to download data:",
+        regexp = "Failed to download data:"
     )
 
     # No successfully downloaded file names
