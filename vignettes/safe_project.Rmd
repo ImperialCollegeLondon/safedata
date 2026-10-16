@@ -1,0 +1,25 @@
+---
+title: "The SAFE Project"
+author: "Andy Aldersley and David Orme"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{The SAFE Project}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+The [Stability of Altered Forest Ecosystems (SAFE)
+Project](https://data.safeproject.net/) is one the largest ecological experiments in the
+world, investigating the effects of human activities on biodiversity and ecosystem
+function in the Malaysian rainforest.
+
+Research conducted at the SAFE Project encompasses expertise from many disciplines and
+institutions, each running interlinked projects that help to develop our understanding
+of ecology within changing environments. The SAFE Project generates a very wide range of
+field data outputs including field ecology, nutrient cycling, hydrology and many other
+research areas.
+
+The `safedata` system was originally designed to handle the data outputs from the SAFE
+Project and to ensure that data could continue to be discovered and used from the the
+data archive hosted on [Zenodo](https://zenodo.org/communities/safe/).
