@@ -252,7 +252,7 @@ str.safedata <- function(object, ...) {
     # to str(x, ...)
     attr(object, "metadata") <- NULL
     class(object) <- "data.frame"
-    invisible(str(object, ...))
+    return(invisible(str(object, ...)))
 }
 
 print.safedata <- function(x, n = 10, ...) {
@@ -567,7 +567,7 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
         assign("index", index, safedata_env)
     }
 
-    invisible(downloaded)
+    return(invisible(downloaded))
 }
 
 
