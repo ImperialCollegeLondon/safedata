@@ -1,11 +1,11 @@
 get_locations <- function(obj, gazetteer_info = FALSE) {
     #' Obtaining locations for a safedata dataset.
     #'
-    #' This function returns a spatial 'simple features' (\code{\link[sf]{sf}})
-    #' object for a dataset record, including basic information about locations
-    #' for the gazetteer if requested.
+    #' This function returns a spatial 'simple features' (\code{\link[sf]{sf}}) object
+    #' for a dataset record, including basic information about locations for the
+    #' gazetteer if requested.
     #'
-    #' Safedata datasets recording observations from the field will typically include a
+    #' A safedata dataset recording observations from the field will typically include a
     #' Locations worksheet, containing all of the location names used in Locations type
     #' fields in data worksheets. These entries are matched against existing location
     #' names in the curated gazetteer. Users can also include "new" location names in
@@ -165,13 +165,12 @@ get_locations <- function(obj, gazetteer_info = FALSE) {
 
 add_locations <- function(obj, location_field = NULL,
                           location_table = NULL, gazetteer_info = FALSE) {
-    #' Adds location data to a SAFE data worksheet.
+    #' Add location data to a safedata worksheet.
     #'
-    #' This function adds location data to the rows of a SAFE data worksheet,
-    #' converting it into a \code{\link[sf]{sf}} spatial features object. Rows
-    #' are matched to values in a location_field: if there is only one location
-    #' field, it will be used automatically; otherwise, the specific field must
-    #' be provided.
+    #' This function adds location data to the rows of a safedata worksheet, converting
+    #' it into a \code{\link[sf]{sf}} spatial features object. Rows are matched to
+    #' values in a location_field: if there is only one location field, it will be used
+    #' automatically; otherwise, the specific field must be provided.
     #'
     #' @param obj An existing object of class \code{safedata}
     #' @param location_field The name of a location field in a

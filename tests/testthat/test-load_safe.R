@@ -1,4 +1,4 @@
-context("Test that download SAFE data fails gracefully")
+context("Test that download safedata fails gracefully")
 
 test_that("Download dataset fails gracefully on internet down", {
     # Use the local safe directory fixture
@@ -35,10 +35,10 @@ test_that("Download dataset fails gracefully on metadata server down", {
 })
 
 test_that("Download dataset fails gracefully on Zenodo down", {
-    # This _specifically_ checks behaviour if Zenodo is down. If there is a
-    # _real_ (not simulated) outage of the internet or SAFE database then this
-    # will fail at the JSON metadata stage (test above), so _only_ run this if
-    # the specific failure case can be simulated.
+    # This _specifically_ checks behaviour if Zenodo is down. If there is a _real_ (not
+    # simulated) outage of the internet or the safedata_server database then this will
+    # fail at the JSON metadata stage (test above), so _only_ run this if the specific
+    # failure case can be simulated.
 
     if (!curl::has_internet()) {
         skip("No internet - skipping test")
