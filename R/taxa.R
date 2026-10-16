@@ -175,8 +175,17 @@ taxon_index_to_taxon_table <- function(taxon_index) {
 
     # Get the backbone ranks
     table_fields <- c(
-        "superkingdom", "kingdom", "phylum", "class", "order", "family",
-        "genus", "species", "subspecies", "variety", "form"
+        "superkingdom",
+        "kingdom",
+        "phylum",
+        "class",
+        "order",
+        "family",
+        "genus",
+        "species",
+        "subspecies",
+        "variety",
+        "form"
     )
     n_fields <- length(table_fields)
 
@@ -192,8 +201,10 @@ taxon_index_to_taxon_table <- function(taxon_index) {
     }
 
     # create a taxon table to fill in with columns keyed by taxon rank
-    taxon_table <- matrix(NA,
-        ncol = n_fields, nrow = nrow(worksheet_taxa),
+    taxon_table <- matrix(
+        NA,
+        ncol = n_fields,
+        nrow = nrow(worksheet_taxa),
         dimnames = list(NULL, table_fields)
     )
 
@@ -219,7 +230,10 @@ taxon_index_to_taxon_table <- function(taxon_index) {
     # Append information about the worksheet taxa to the table, handling extra
     # fields in the data for get_taxon_coverage
     tax_fields <- c(
-        "worksheet_name", "taxon_name", "taxon_rank", "taxon_status"
+        "worksheet_name",
+        "taxon_name",
+        "taxon_rank",
+        "taxon_status"
     )
     if ("n_datasets" %in% names(worksheet_taxa)) {
         tax_fields <- c(tax_fields, "taxon_auth", "n_datasets")
@@ -235,8 +249,13 @@ taxon_index_to_taxon_table <- function(taxon_index) {
 }
 
 
-add_taxa <- function(obj, taxon_field = NULL, taxon_table = NULL,
-                     prefix = NULL, use_canon = FALSE) {
+add_taxa <- function(
+    obj,
+    taxon_field = NULL,
+    taxon_table = NULL,
+    prefix = NULL,
+    use_canon = FALSE
+) {
     #' Add a taxonomic hierarchy to a SAFE data worksheet.
     #'
     #' Data tables in a safedata dataset can contain "taxa" fields, which tie
@@ -446,18 +465,22 @@ get_taxon_graph <- function(record, which = c("gbif", "ncbi")) {
     g <- igraph::make_empty_graph()
 
     # Populate with vertex data and add a root taxon
-    g <- g + igraph::vertices(
-        taxon_index$vertex_name,
-        worksheet_name = taxon_index$worksheet_name,
-        taxon_id = taxon_index$taxon_id,
-        taxon_name = taxon_index$taxon_name,
-        taxon_rank = taxon_index$taxon_rank,
-        taxon_status = taxon_index$taxon_status
-    )
-    g <- g + igraph::vertex(
-        "root",
-        taxon_name = "root", worksheet_name = "root", taxon_rank = "root"
-    )
+    g <- g +
+        igraph::vertices(
+            taxon_index$vertex_name,
+            worksheet_name = taxon_index$worksheet_name,
+            taxon_id = taxon_index$taxon_id,
+            taxon_name = taxon_index$taxon_name,
+            taxon_rank = taxon_index$taxon_rank,
+            taxon_status = taxon_index$taxon_status
+        )
+    g <- g +
+        igraph::vertex(
+            "root",
+            taxon_name = "root",
+            worksheet_name = "root",
+            taxon_rank = "root"
+        )
 
     # Make a lookup table for vertex names from taxon id to use to add edges
     # from taxa to parent. Note that this will collapse user taxa with taxon_id
@@ -465,7 +488,9 @@ get_taxon_graph <- function(record, which = c("gbif", "ncbi")) {
     # using taxon id as list names and to include root as parent
     taxon_index$taxon_id <- as.character(taxon_index$taxon_id)
     taxon_index$parent_id <- ifelse(
-        is.na(taxon_index$parent_id), "root", taxon_index$parent_id
+        is.na(taxon_index$parent_id),
+        "root",
+        taxon_index$parent_id
     )
 
     parent_lookup <- list("root" = "root")
@@ -565,7 +590,9 @@ igraph_to_phylo <- function(g, labels = "taxon_name") {
     node_id <- ifelse(is_leaf, cumsum(is_leaf), cumsum(!is_leaf) + n_leaf)
 
     # Store the node ids on the graph
-    g <- igraph::set_vertex_attr(g, "node_id",
+    g <- igraph::set_vertex_attr(
+        g,
+        "node_id",
         index = traverse$order,
         value = node_id
     )

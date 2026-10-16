@@ -108,8 +108,12 @@
 NULL
 
 
-search_dates <- function(dates, match_type = "intersect",
-                         most_recent = FALSE, ids = NULL) {
+search_dates <- function(
+    dates,
+    match_type = "intersect",
+    most_recent = FALSE,
+    ids = NULL
+) {
     #' @describeIn search_safe Search datasets by date extent
     #' @export
 
@@ -134,8 +138,12 @@ search_dates <- function(dates, match_type = "intersect",
 }
 
 
-search_fields <- function(field_text = NULL, field_type = NULL,
-                          ids = NULL, most_recent = FALSE) {
+search_fields <- function(
+    field_text = NULL,
+    field_type = NULL,
+    ids = NULL,
+    most_recent = FALSE
+) {
     #' @describeIn search_safe Search data worksheet field metadata.
     #' @export
 
@@ -160,9 +168,14 @@ search_authors <- function(author, ids = NULL, most_recent = FALSE) {
 }
 
 
-search_taxa <- function(taxon_name = NULL, taxon_rank = NULL,
-                        taxon_id = NULL, taxon_auth = NULL,
-                        ids = NULL, most_recent = FALSE) {
+search_taxa <- function(
+    taxon_name = NULL,
+    taxon_rank = NULL,
+    taxon_id = NULL,
+    taxon_auth = NULL,
+    ids = NULL,
+    most_recent = FALSE
+) {
     #' @describeIn search_safe Search by taxon name, rank or taxon ID.
     #' @export
 
@@ -178,8 +191,10 @@ search_taxa <- function(taxon_name = NULL, taxon_rank = NULL,
     validate_query_param("taxon_auth", taxon_auth)
 
     params <- c(
-        name = taxon_name, rank = taxon_rank,
-        taxon_id = taxon_id, auth = taxon_auth
+        name = taxon_name,
+        rank = taxon_rank,
+        taxon_id = taxon_id,
+        auth = taxon_auth
     )
     return(safe_api_search("taxa", params, ids, most_recent))
 }
@@ -197,8 +212,13 @@ search_text <- function(text, ids = NULL, most_recent = FALSE) {
 }
 
 
-search_spatial <- function(wkt = NULL, location = NULL, distance = NULL,
-                           ids = NULL, most_recent = FALSE) {
+search_spatial <- function(
+    wkt = NULL,
+    location = NULL,
+    distance = NULL,
+    ids = NULL,
+    most_recent = FALSE
+) {
     #' @describeIn search_safe Search by spatial sampling area/named location.
     #' @export
 
@@ -233,8 +253,7 @@ search_spatial <- function(wkt = NULL, location = NULL, distance = NULL,
 }
 
 
-safe_api_search <- function(endpoint, params, ids = NULL,
-                            most_recent = FALSE) {
+safe_api_search <- function(endpoint, params, ids = NULL, most_recent = FALSE) {
     #' Internal SAFE dataset API search functions
     #'
     #' The two internal functions described here handle validating the
@@ -310,8 +329,10 @@ safe_api_search <- function(endpoint, params, ids = NULL,
         ret <- validate_record_ids(recids)
     } else {
         ret <- data.frame(
-            concept = numeric(0), record = numeric(0),
-            available = logical(0), most_recent = numeric(0),
+            concept = numeric(0),
+            record = numeric(0),
+            available = logical(0),
+            most_recent = numeric(0),
             mra = numeric(0)
         )
         class(ret) <- c("safe_record_set", "data.frame")
@@ -334,7 +355,9 @@ validate_query_param <- function(name, val, class = "character", length = 1) {
             "have one of the following classes: %s"
         )
         stop(sprintf(
-            msg, name, paste(length, collapse = ","),
+            msg,
+            name,
+            paste(length, collapse = ","),
             paste(class, collapse = ",")
         ))
     }

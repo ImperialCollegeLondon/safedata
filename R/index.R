@@ -131,7 +131,10 @@ set_safedata_dir <- function(safedir, update = TRUE) {
     message <- get_server_message()
 
     if (isFALSE(message)) {
-        message(paste0("No response from server, skipping updates: ", settings$url))
+        message(paste0(
+            "No response from server, skipping updates: ",
+            settings$url
+        ))
         update <- FALSE
         load_index()
         return(invisible(TRUE))
@@ -178,7 +181,10 @@ set_safedata_dir <- function(safedir, update = TRUE) {
             if (isFALSE(index_hash)) {
                 update_successful <- FALSE
                 verbose_message(
-                    sprintf(" - Cannot retrieve remote file hash: %s", details$fname)
+                    sprintf(
+                        " - Cannot retrieve remote file hash: %s",
+                        details$fname
+                    )
                 )
                 next
             } else {
@@ -194,7 +200,10 @@ set_safedata_dir <- function(safedir, update = TRUE) {
                 got_update <- details$dfun()
                 if (!got_update) {
                     verbose_message(
-                        sprintf(" - Could not download update: %s", details$fname)
+                        sprintf(
+                            " - Could not download update: %s",
+                            details$fname
+                        )
                     )
                     update_successful <- FALSE
                 }
@@ -205,7 +214,9 @@ set_safedata_dir <- function(safedir, update = TRUE) {
 
         if (!update_successful) {
             # Delete successful downloads and restore backups
-            message("Unable to download all updates, using existing index files")
+            message(
+                "Unable to download all updates, using existing index files"
+            )
             for (local_path in backed_up) {
                 if (file.exists(local_path)) {
                     file.remove(local_path)
@@ -228,9 +239,11 @@ set_safedata_dir <- function(safedir, update = TRUE) {
 }
 
 
-create_safedata_dir <- function(safedir,
-                                url = "https://data.safeproject.net",
-                                use_zenodo_sandbox = FALSE) {
+create_safedata_dir <- function(
+    safedir,
+    url = "https://data.safeproject.net",
+    use_zenodo_sandbox = FALSE
+) {
     #' @describeIn set_safedata_dir Create a new safedata directory
     #' @export
 
@@ -444,14 +457,20 @@ load_index <- function() {
     index$publication_date <- as.POSIXct(index$publication_date)
 
     # Add the path relative to the data directory
-    index$path <- with(index, file.path(
-        zenodo_concept_id, zenodo_record_id, filename
-    ))
+    index$path <- with(
+        index,
+        file.path(
+            zenodo_concept_id,
+            zenodo_record_id,
+            filename
+        )
+    )
 
     # Identify availability and most recent available records
     index$available <- with(
         index,
-        ifelse(dataset_access == "embargo" & dataset_embargo >= Sys.time(),
+        ifelse(
+            dataset_access == "embargo" & dataset_embargo >= Sys.time(),
             FALSE,
             ifelse(dataset_access == "restricted", FALSE, TRUE)
         )
@@ -461,10 +480,14 @@ load_index <- function() {
     # (dropping the multiple files), drop unavailable records, sort by
     # publication date and return the first zenodo_record_id.
     concepts <- split(
-        subset(index, select = c(
-            available, zenodo_record_id,
-            publication_date
-        )),
+        subset(
+            index,
+            select = c(
+                available,
+                zenodo_record_id,
+                publication_date
+            )
+        ),
         f = index$zenodo_concept_id
     )
 
@@ -482,9 +505,7 @@ load_index <- function() {
 
     mra <- with(
         index,
-        ifelse(zenodo_record_id %in% unlist(mr_avail),
-            TRUE, FALSE
-        )
+        ifelse(zenodo_record_id %in% unlist(mr_avail), TRUE, FALSE)
     )
     index$most_recent_available <- mra
 
@@ -522,7 +543,8 @@ load_index <- function() {
     if (sum(local_expected$altered)) {
         warning(
             "Local copies of dataset files have been modified",
-            paste(local_expected$filename[local_expected$altered],
+            paste(
+                local_expected$filename[local_expected$altered],
                 collapse = ", "
             )
         )
@@ -602,13 +624,13 @@ load_gazetteer <- function() {
     #' @seealso \code{\link{load_location_aliases}}, \code{\link{load_index}}
     #' @export
 
-
     if (exists("gazetteer", safedata_env)) {
         gazetteer <- get("gazetteer", safedata_env)
     } else {
         gazetteer <- sf::st_read(
             getOption("safedata.gazetteer"),
-            quiet = TRUE, stringsAsFactors = FALSE
+            quiet = TRUE,
+            stringsAsFactors = FALSE
         )
         assign("gazetteer", gazetteer, safedata_env)
     }

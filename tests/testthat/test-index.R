@@ -27,9 +27,7 @@ test_that("no API fails gracefully on create", {
 test_that("BAD API url fails gracefully on create", {
     testsd <- file.path(tempdir(), "testsd")
     success <- expect_message(
-        create_safedata_dir(testsd,
-            url = "https://not.a.safedata.server.url"
-        ),
+        create_safedata_dir(testsd, url = "https://not.a.safedata.server.url"),
         regexp = "No response from server: ",
     )
     expect_false(success)
@@ -38,9 +36,7 @@ test_that("BAD API url fails gracefully on create", {
 test_that("Create succeeds otherwise", {
     testsd <- file.path(tempdir(), "testsd")
     success <- expect_message(
-        create_safedata_dir(testsd,
-            url = "http://example.safedata.server"
-        ),
+        create_safedata_dir(testsd, url = "http://example.safedata.server"),
         regexp = "Safe data directory created",
     )
     expect_true(success)

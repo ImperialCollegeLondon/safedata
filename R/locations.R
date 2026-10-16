@@ -89,10 +89,13 @@ get_locations <- function(obj, gazetteer_info = FALSE) {
     }
 
     # create a merge column for the gazetteer data
-    locations$merge_gazetteer <- ifelse(known & !is.na(gazetteer_match),
-        gazetteer$location[gazetteer_match], NA
+    locations$merge_gazetteer <- ifelse(
+        known & !is.na(gazetteer_match),
+        gazetteer$location[gazetteer_match],
+        NA
     )
-    locations$merge_gazetteer <- ifelse(known & !is.na(alias_match),
+    locations$merge_gazetteer <- ifelse(
+        known & !is.na(alias_match),
         location_aliases$location[alias_match],
         locations$merge_gazetteer
     )
@@ -104,9 +107,12 @@ get_locations <- function(obj, gazetteer_info = FALSE) {
 
     new_locations <- locations[!known, ]
 
-    new_locations <- merge(new_locations, location_aliases,
+    new_locations <- merge(
+        new_locations,
+        location_aliases,
         by.x = c("zenodo_record_id", "name"),
-        by.y = c("zenodo_record_id", "alias"), all.x = TRUE
+        by.y = c("zenodo_record_id", "alias"),
+        all.x = TRUE
     )
 
     # switch in any aliased new locations
@@ -130,9 +136,12 @@ get_locations <- function(obj, gazetteer_info = FALSE) {
     # merge(data.frame, sf, all.x = TRUE) that causes it to fail with non
     #  matching lines, but merge(sf, data.frame, all.y = TRUE) works as
     # expected.
-    locations <- sf::st_sf(merge(gazetteer, locations,
+    locations <- sf::st_sf(merge(
+        gazetteer,
+        locations,
         by.y = "merge_gazetteer",
-        by.x = "location", all.y = TRUE
+        by.x = "location",
+        all.y = TRUE
     ))
 
     # c) Finally, we can convert any WKT information from the locations table
@@ -163,8 +172,12 @@ get_locations <- function(obj, gazetteer_info = FALSE) {
 }
 
 
-add_locations <- function(obj, location_field = NULL,
-                          location_table = NULL, gazetteer_info = FALSE) {
+add_locations <- function(
+    obj,
+    location_field = NULL,
+    location_table = NULL,
+    gazetteer_info = FALSE
+) {
     #' Adds location data to a SAFE data worksheet.
     #'
     #' This function adds location data to the rows of a SAFE data worksheet,

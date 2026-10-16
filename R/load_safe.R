@@ -83,14 +83,16 @@ load_safe_data <- function(record_id, worksheet, ...) {
             } else {
                 stop(
                     "Record ID provided: version is under embargo or ",
-                    "restricted. Most recent available is ", record_set$mra
+                    "restricted. Most recent available is ",
+                    record_set$mra
                 )
             }
         } else {
             if (!(record_set$record == record_set$mra)) {
                 verbose_message(
                     "Outdated record: the most recent available ",
-                    "version is ", record_set$mra
+                    "version is ",
+                    record_set$mra
                 )
             }
         }
@@ -137,17 +139,25 @@ load_safe_data <- function(record_id, worksheet, ...) {
     fields <- dwksh$fields[[1]]
     field_types <- tolower(fields$field_type)
     readxl_map <- c(
-        "date" = "guess", "datetime" = "guess", "time" = "guess",
-        "location" = "text", "latitude" = "numeric",
-        "longitude" = "numeric", "replicate" = "text",
-        "id" = "text", "categorical" = "text",
-        "ordered categorical" = "text", "numeric" = "numeric",
-        "taxa" = "text", "abundance" = "numeric",
+        "date" = "guess",
+        "datetime" = "guess",
+        "time" = "guess",
+        "location" = "text",
+        "latitude" = "numeric",
+        "longitude" = "numeric",
+        "replicate" = "text",
+        "id" = "text",
+        "categorical" = "text",
+        "ordered categorical" = "text",
+        "numeric" = "numeric",
+        "taxa" = "text",
+        "abundance" = "numeric",
         "ordered categorical trait" = "text",
         "categorical trait" = "text",
         "numeric trait" = "numeric",
         "categorical interaction" = "text",
-        "numeric interaction" = "numeric", "file" = "text",
+        "numeric interaction" = "numeric",
+        "file" = "text",
         "comments" = "text"
     )
 
@@ -165,9 +175,12 @@ load_safe_data <- function(record_id, worksheet, ...) {
     # make.names on both to avoid trivial mismatches. Turn off trim_ws in
     # read_xlsx because that occurs before name repair and makes names
     # with whitespace diverge between metadata and data names
-    data <- readxl::read_xlsx(local_path, worksheet,
+    data <- readxl::read_xlsx(
+        local_path,
+        worksheet,
         skip = dwksh$field_name_row - 1,
-        n_max = dwksh$n_data_row, na = "NA",
+        n_max = dwksh$n_data_row,
+        na = "NA",
         col_types = col_types,
         trim_ws = FALSE,
         .name_repair = ~ make.names(.x, unique = TRUE)
@@ -195,13 +208,15 @@ load_safe_data <- function(record_id, worksheet, ...) {
             # if they haven't been converted already, then the user has supplied
             # POSIX strings not Excel Date/Time
             if (!inherits(values, "POSIXt")) {
-                values <- try(as.POSIXct(values,
-                    tryFormats =
-                        c(
-                            "%Y-%m-%d %H:%M:%OS",
-                            "%Y-%m-%d %H:%M", "%Y-%m-%d",
-                            "%H:%M:%OS", "%H:%M"
-                        )
+                values <- try(as.POSIXct(
+                    values,
+                    tryFormats = c(
+                        "%Y-%m-%d %H:%M:%OS",
+                        "%Y-%m-%d %H:%M",
+                        "%Y-%m-%d",
+                        "%H:%M:%OS",
+                        "%H:%M"
+                    )
                 ))
                 if (inherits(values, "try-error")) {
                     stop(
@@ -243,10 +258,15 @@ str.safedata <- function(object, ...) {
 
     object_attr <- attr(object, "metadata")
     msg <- "SAFE dataset\nConcept: %i; Record %i; Worksheet: %s\n"
-    with(object_attr, cat(sprintf(
-        msg, safe_record_set$concept,
-        safe_record_set$record, name
-    )))
+    with(
+        object_attr,
+        cat(sprintf(
+            msg,
+            safe_record_set$concept,
+            safe_record_set$record,
+            name
+        ))
+    )
 
     # reduce the safedata object to a simple data frame and pass back
     # to str(x, ...)
@@ -261,10 +281,15 @@ print.safedata <- function(x, n = 10, ...) {
 
     x_attr <- attr(x, "metadata")
     msg <- "SAFE dataset:\nConcept: %i; Record %i; Worksheet: %s\n"
-    with(x_attr, cat(sprintf(
-        msg, safe_record_set$concept,
-        safe_record_set$record, name
-    )))
+    with(
+        x_attr,
+        cat(sprintf(
+            msg,
+            safe_record_set$concept,
+            safe_record_set$record,
+            name
+        ))
+    )
 
     if (inherits(x, "sf")) {
         options(sf_max_print = n)
@@ -323,9 +348,14 @@ print.safedata <- function(x, n = 10, ...) {
 # developer version could use the API URLs as a common framework to download
 # everything using an API token.
 
-download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
-                                download_metadata = TRUE, refresh = FALSE,
-                                token = NULL) {
+download_safe_files <- function(
+    record_ids,
+    confirm = TRUE,
+    xlsx_only = TRUE,
+    download_metadata = TRUE,
+    refresh = FALSE,
+    token = NULL
+) {
     #' Download SAFE dataset files
     #'
     #' This downloads files associated with SAFE datasets, either all of the
@@ -399,8 +429,7 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
     if (xlsx_only) {
         targets <- subset(
             index,
-            zenodo_record_id %in% records_to_get &
-                grepl(".xlsx$", filename)
+            zenodo_record_id %in% records_to_get & grepl(".xlsx$", filename)
         )
     } else {
         targets <- subset(index, zenodo_record_id %in% records_to_get)
@@ -433,10 +462,15 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
     }
 
     msg <- sprintf(
-        msg, nrow(targets), length(unique(targets$zenodo_record_id)),
-        nrow(local), size_to_human(sum(local$filesize)),
-        nrow(unavail), size_to_human(sum(unavail$filesize)),
-        nrow(to_download), size_to_human(sum(to_download$filesize))
+        msg,
+        nrow(targets),
+        length(unique(targets$zenodo_record_id)),
+        nrow(local),
+        size_to_human(sum(local$filesize)),
+        nrow(unavail),
+        size_to_human(sum(unavail$filesize)),
+        nrow(to_download),
+        size_to_human(sum(to_download$filesize))
     )
 
     if (confirm) {
@@ -481,7 +515,8 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
 
         verbose_message(sprintf(
             "%i files for record %i: %i to download",
-            nrow(these_files), current_record,
+            nrow(these_files),
+            current_record,
             sum((!these_files$local_copy) | these_files$refresh)
         ))
 
@@ -507,7 +542,8 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
             if (!is.null(token)) {
                 these_files$public_url <- paste0(
                     these_files$public_url,
-                    "?token=", token
+                    "?token=",
+                    token
                 )
             }
 
@@ -517,14 +553,13 @@ download_safe_files <- function(record_ids, confirm = TRUE, xlsx_only = TRUE,
 
                 # Look to see if the target directory exists.
                 if (!file.exists(dirname(this_file$full_path))) {
-                    dir.create(dirname(this_file$full_path),
-                        recursive = TRUE
-                    )
+                    dir.create(dirname(this_file$full_path), recursive = TRUE)
                 }
 
                 # Download the target file to the directory - report
                 # failures but don't abort - try and get as much as possible.
-                result <- try_to_download(this_file$public_url,
+                result <- try_to_download(
+                    this_file$public_url,
                     local_path = this_file$full_path
                 )
 
@@ -614,11 +649,16 @@ insert_dataset <- function(record_id, files) {
 
     # Add index data on to the local files
     local_files <- data.frame(
-        local_path = files, filename = basename(files),
-        local_md5 = local_md5, stringsAsFactors = FALSE
+        local_path = files,
+        filename = basename(files),
+        local_md5 = local_md5,
+        stringsAsFactors = FALSE
     )
-    local_files <- merge(local_files, record_files,
-        by = "filename", all.x = TRUE
+    local_files <- merge(
+        local_files,
+        record_files,
+        by = "filename",
+        all.x = TRUE
     )
 
     # Are the provided filenames part of the record
@@ -635,9 +675,7 @@ insert_dataset <- function(record_id, files) {
     if (any(non_matching_checksums)) {
         stop(
             "Local file checksums do not match record metadata: ",
-            paste0(local_files$filename[non_matching_checksums],
-                collapse = ","
-            )
+            paste0(local_files$filename[non_matching_checksums], collapse = ",")
         )
     }
 
@@ -654,9 +692,7 @@ insert_dataset <- function(record_id, files) {
     if (any(local_files$local_copy)) {
         verbose_message(
             "Skipping files already present: ",
-            paste0(local_files$filename[local_files$local_copy],
-                collapse = ","
-            )
+            paste0(local_files$filename[local_files$local_copy], collapse = ",")
         )
         local_files <- subset(local_files, !local_copy)
     }

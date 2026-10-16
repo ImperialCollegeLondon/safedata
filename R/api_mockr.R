@@ -44,7 +44,8 @@ mock_api_urls <- list(
         content = "1400562.json",
         status_code = 200L
     ),
-    "https://www.zenodo.org/record/1400562/files/Psomas_Ant_Pselaphine_SAFE_dataset.xlsx" = list( # nolint
+    "https://www.zenodo.org/record/1400562/files/Psomas_Ant_Pselaphine_SAFE_dataset.xlsx" = list(
+        # nolint
         content = "Psomas_Ant_Pselaphine_SAFE_dataset.xlsx",
         status_code = 200L
     ),
@@ -52,7 +53,8 @@ mock_api_urls <- list(
         content = "3247631.json",
         status_code = 200L
     ),
-    "https://www.zenodo.org/record/3247631/files/Both_tree_functional_traits.xlsx" = list( # nolint
+    "https://www.zenodo.org/record/3247631/files/Both_tree_functional_traits.xlsx" = list(
+        # nolint
         content = "Both_tree_functional_traits.xlsx",
         status_code = 200L
     ),
@@ -77,7 +79,8 @@ mock_api_urls <- list(
         content = "taxa_name_Formicidae.json",
         status_code = 200L
     ),
-    "http://example.safedata.server/api/search/taxa?taxon_id=4342&auth=GBIF" = list( # nolint
+    "http://example.safedata.server/api/search/taxa?taxon_id=4342&auth=GBIF" = list(
+        # nolint
         content = "taxa_gbif_id_4342.json",
         status_code = 200L
     ),
@@ -85,7 +88,8 @@ mock_api_urls <- list(
         content = "spatial_location_BL_A.json",
         status_code = 200L
     ),
-    "http://example.safedata.server/api/search/spatial?wkt=POINT(116.97394%204.73481)&distance=2000" = list( # nolint
+    "http://example.safedata.server/api/search/spatial?wkt=POINT(116.97394%204.73481)&distance=2000" = list(
+        # nolint
         content = "spatial_wkt_point_distance_2000.json",
         status_code = 200L
     ),
@@ -101,7 +105,8 @@ mock_api_urls <- list(
         content = "authors_name_Ewers.json",
         status_code = 200L
     ),
-    "http://example.safedata.server/api/search/authors?name=Ewers&ids=1237719&ids=4072959&ids=3982665&ids=1478526&ids=3926374&ids=3974971&ids=6368114&ids=5820902&ids=5710509&ids=6477764" = list( # nolint
+    "http://example.safedata.server/api/search/authors?name=Ewers&ids=1237719&ids=4072959&ids=3982665&ids=1478526&ids=3926374&ids=3974971&ids=6368114&ids=5820902&ids=5710509&ids=6477764" = list(
+        # nolint
         content = "authors_ewers_within_ids.json",
         status_code = 200L
     ),
@@ -147,7 +152,8 @@ mock_handler <- function(req) {
     if (!is.null(mocked_response$content)) {
         # Get the path to the local canned response content
         response_file <- system.file(
-            "api_data", mocked_response$content,
+            "api_data",
+            mocked_response$content,
             package = "safedata"
         )
 
@@ -167,7 +173,8 @@ mock_handler <- function(req) {
         } else {
             content <- readBin(
                 response_file,
-                what = "raw", file.info(response_file)$size
+                what = "raw",
+                file.info(response_file)$size
             )
         }
     } else {
@@ -176,21 +183,24 @@ mock_handler <- function(req) {
     }
 
     # Build a very basic mocked response object (as in httr:::response(url...))
-    response <- structure(list(
-        url = req$url,
-        status_code = mocked_response$status_code,
-        headers = list(
-            "Content-Type" = "application/json",
-            "content-type" = "application/json"
+    response <- structure(
+        list(
+            url = req$url,
+            status_code = mocked_response$status_code,
+            headers = list(
+                "Content-Type" = "application/json",
+                "content-type" = "application/json"
+            ),
+            all_headers = list(),
+            cookies = list(),
+            content = content,
+            date = Sys.time(),
+            times = numeric(0),
+            request = req,
+            handle = NULL
         ),
-        all_headers = list(),
-        cookies = list(),
-        content = content,
-        date = Sys.time(),
-        times = numeric(0),
-        request = req,
-        handle = NULL
-    ), class = "response")
+        class = "response"
+    )
 
     return(response)
 }

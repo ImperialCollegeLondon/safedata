@@ -4,8 +4,8 @@ repos:
 -   repo: https://github.com/lorenzwalthert/precommit
     rev: v0.4.3.9030
     hooks: 
-    -   id: style-files
-        args: [--style_pkg=styler, --indent_by=4, --style_fun=tidyverse_style]
+    # -   id: style-files
+    #     args: [--style_pkg=styler, --indent_by=4, --style_fun=tidyverse_style]
     -   id: roxygenize
         additional_dependencies:
             - readxl
@@ -48,14 +48,18 @@ repos:
     #       \.github/workflows/.*|
     #       data/.*|
     #       )$
-    -   id: lintr
-        additional_dependencies:
-        - cyclocomp
+    # -   id: lintr
+    #     additional_dependencies:
+    #     - cyclocomp
     -   id: readme-rmd-rendered
     -   id: parsable-R
     -   id: no-browser-statement
     -   id: no-debug-statement
     -   id: deps-in-desc
+-   repo: https://github.com/etiennebacher/jarl-pre-commit
+    rev: 0.4.0
+    hooks:
+      - id: jarl-check
 -   repo: https://github.com/posit-dev/air-pre-commit
     rev: 0.12.0
     hooks:
