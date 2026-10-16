@@ -1,24 +1,22 @@
 get_taxa <- function(obj) {
-    #' Obtaining taxonomy for a SAFE dataset.
+    #' Obtaining taxonomy for a safedata dataset.
     #'
-    #' This function generates a taxonomy table for a specified SAFE dataset
-    #' record. Each row represent a taxon used in the data worksheets in the
-    #' dataset and the table fields show the taxonomic hierarchy for those taxa.
+    #' This function generates a taxonomy table for a specified safedata dataset record.
+    #' Each row represent a taxon used in the data worksheets in the dataset and the
+    #' table fields show the taxonomic hierarchy for those taxa.
     #'
-    #' All SAFE datasets containing taxa must include worksheets providing
-    #' taxonomy details, used to validate the taxa in the dataset against
-    #' either or both of the GBIF or NCBI taxonomy database. All entries in
-    #' these worksheet are  validated against the databases before
-    #' publication and are used to populate a taxonomic index for safedata
-    #' datasets. The validated taxonomic index for a specific dataset is
-    #' also available in the metadata for a record and this function converts
-    #' that metadata into a taxonomy table for the dataset.
+    #' A safedata dataset with observations about taxa must include worksheets providing
+    #' taxonomy details, used to validate the taxa in the dataset against either or both
+    #' of the GBIF or NCBI taxonomy database. All entries in these worksheet are
+    #' validated against the databases before publication and are used to populate a
+    #' taxonomic index for safedata datasets. The validated taxonomic index for a
+    #' specific dataset is also available in the metadata for a record and this function
+    #' converts that metadata into a taxonomy table for the dataset.
     #'
-    #' The returned table includes the fields \code{worksheet_name},
-    #' \code{taxon_name}, \code{taxon_rank} and \code{taxon_status}, along
-    #' with the taxonomy database used to validate the taxon
-    #' (\code{taxon_auth}). These fields provide the original taxonomy
-    #' worksheet data included.
+    #' The returned table includes the fields \code{worksheet_name}, \code{taxon_name},
+    #' \code{taxon_rank} and \code{taxon_status}, along with the taxonomy database used
+    #' to validate the taxon (\code{taxon_auth}). These fields provide the original
+    #' taxonomy worksheet data included.
     #'
     #' @section Synonyms:
     #' The taxon table will include extra rows for worksheet taxa that are
@@ -237,30 +235,27 @@ taxon_index_to_taxon_table <- function(taxon_index) {
 
 add_taxa <- function(obj, taxon_field = NULL, taxon_table = NULL,
                      prefix = NULL, use_canon = FALSE) {
-    #' Add a taxonomic hierarchy to a SAFE data worksheet.
+    #' Add a taxonomic hierarchy to a safedata worksheet.
     #'
-    #' Data tables in a safedata dataset can contain "taxa" fields, which tie
-    #' an observation to a particular taxon used in the dataset. All datasets
-    #' containing taxon observations provide taxonomic data about those taxa,
-    #' validated against either NCBI or GBIF. The taxon table for an entire
-    #' dataset can be accessed using \code{\link{get_taxa}}, but this function
-    #' allows the taxonomic hierachy to be added for the specific taxa used in
-    #' in a taxa field in a data worksheet.
+    #' Data tables in a safedata dataset can contain "taxa" fields, which tie an
+    #' observation to a particular taxon used in the dataset. All datasets containing
+    #' taxon observations provide taxonomic data about those taxa, validated against
+    #' either NCBI or GBIF. The taxon table for an entire dataset can be accessed using
+    #' \code{\link{get_taxa}}, but this function allows the taxonomic hierachy to be
+    #' added for the specific taxa used in in a taxa field in a data worksheet.
     #'
-    #' An existing taxon table from \code{\link{get_taxa}} can be provided to
-    #' this function, but the table will be automatically loaded if no table
-    #' is provided. If a data worksheet only contains a single taxon field,
-    #' then that field will be used automatically, otherwise users have to
-    #' specify which taxon field to use. A prefix can be added to taxon fields
-    #' in order to discrimate between taxon hierarchy fields added from
-    #' different taxon fields.
+    #' An existing taxon table from \code{\link{get_taxa}} can be provided to this
+    #' function, but the table will be automatically loaded if no table is provided. If
+    #' a data worksheet only contains a single taxon field, then that field will be used
+    #' automatically, otherwise users have to specify which taxon field to use. A prefix
+    #' can be added to taxon fields in order to discrimate between taxon hierarchy
+    #' fields added from different taxon fields.
     #'
-    #' By default, the taxonomy data added to the table will use the original
-    #' taxon name used in the dataset, even if that usage is considered a
-    #' synonym or is merged in GBIF or NCBI (see \code{\link{get_taxa}}).
-    #' The \code{use_canon} option can be set to TRUE to instead show the
-    #' canonical taxon name used in the taxonomy database for synonomous or
-    #' merged taxa.
+    #' By default, the taxonomy data added to the table will use the original taxon name
+    #' used in the dataset, even if that usage is considered a synonym or is merged in
+    #' GBIF or NCBI (see \code{\link{get_taxa}}). The \code{use_canon} option can be set
+    #' to TRUE to instead show the canonical taxon name used in the taxonomy database
+    #' for synonomous or merged taxa.
     #'
     #' @param obj An existing object of class \code{safedata}
     #' @param taxon_field The name of a taxon field in a \code{safedata} for

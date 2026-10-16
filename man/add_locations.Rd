@@ -2,7 +2,7 @@
 % Please edit documentation in R/locations.R
 \name{add_locations}
 \alias{add_locations}
-\title{Adds location data to a SAFE data worksheet.}
+\title{Add location data to a safedata worksheet.}
 \usage{
 add_locations(
   obj,
@@ -28,11 +28,10 @@ the returned \code{\link[sf]{sf}}  object. See
 A modified \code{safedata} object including geometry data.
 }
 \description{
-This function adds location data to the rows of a SAFE data worksheet,
-converting it into a \code{\link[sf]{sf}} spatial features object. Rows
-are matched to values in a location_field: if there is only one location
-field, it will be used automatically; otherwise, the specific field must
-be provided.
+This function adds location data to the rows of a safedata worksheet, converting
+it into a \code{\link[sf]{sf}} spatial features object. Rows are matched to
+values in a location_field: if there is only one location field, it will be used
+automatically; otherwise, the specific field must be provided.
 }
 \examples{
    set_example_safedata_dir()

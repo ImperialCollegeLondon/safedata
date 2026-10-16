@@ -2,17 +2,16 @@
 % Please edit documentation in R/index.R
 \name{load_gazetteer}
 \alias{load_gazetteer}
-\title{Load and cache the SAFE gazetteer}
+\title{Load and cache the safedata gazetteer}
 \usage{
 load_gazetteer()
 }
 \value{
-An \code{\link[sf]{sf}} object containing the SAFE gazetteer
-   locations.
+An \code{\link[sf]{sf}} object containing the gazetteer locations.
 }
 \description{
-This function loads the SAFE gazetteer, stored as a geojson file in the
-root of the SAFE data directory, as an \code{\link[sf]{sf}} GIS object.
+This function loads the gazetteer, stored as a geojson file in the
+root of the safedata directory, as an \code{\link[sf]{sf}} GIS object.
 The GIS data uses the WGS84 (EPSG:4326) geographic coordinate system.
 }
 \details{

@@ -2,12 +2,12 @@
 % Please edit documentation in R/index.R
 \name{download_gazetteer}
 \alias{download_gazetteer}
-\title{Downloads the current SAFE gazetteer}
+\title{Downloads the gazetteer from a safedata metadata server.}
 \usage{
 download_gazetteer()
 }
 \description{
-This function downloads the gazetteer from the `safedata_server` API (e.g.
+This function downloads the gazetteer using the `safedata_server` API (e.g.
 \url{https://data.safeproject.net/api/gazetteer/download/}) and saves it in the
 safedata directory.
 }

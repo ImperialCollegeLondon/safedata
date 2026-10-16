@@ -2,7 +2,7 @@
 % Please edit documentation in R/taxa.R
 \name{get_taxa}
 \alias{get_taxa}
-\title{Obtaining taxonomy for a SAFE dataset.}
+\title{Obtaining taxonomy for a safedata dataset.}
 \usage{
 get_taxa(obj)
 }
@@ -13,25 +13,23 @@ get_taxa(obj)
 A taxonomy table of classes "safe_taxa" and "data.frame".
 }
 \description{
-This function generates a taxonomy table for a specified SAFE dataset
-record. Each row represent a taxon used in the data worksheets in the
-dataset and the table fields show the taxonomic hierarchy for those taxa.
+This function generates a taxonomy table for a specified safedata dataset record.
+Each row represent a taxon used in the data worksheets in the dataset and the
+table fields show the taxonomic hierarchy for those taxa.
 }
 \details{
-All SAFE datasets containing taxa must include worksheets providing
-taxonomy details, used to validate the taxa in the dataset against
-either or both of the GBIF or NCBI taxonomy database. All entries in
-these worksheet are  validated against the databases before
-publication and are used to populate a taxonomic index for safedata
-datasets. The validated taxonomic index for a specific dataset is
-also available in the metadata for a record and this function converts
-that metadata into a taxonomy table for the dataset.
+A safedata dataset with observations about taxa must include worksheets providing
+taxonomy details, used to validate the taxa in the dataset against either or both
+of the GBIF or NCBI taxonomy database. All entries in these worksheet are
+validated against the databases before publication and are used to populate a
+taxonomic index for safedata datasets. The validated taxonomic index for a
+specific dataset is also available in the metadata for a record and this function
+converts that metadata into a taxonomy table for the dataset.
 
-The returned table includes the fields \code{worksheet_name},
-\code{taxon_name}, \code{taxon_rank} and \code{taxon_status}, along
-with the taxonomy database used to validate the taxon
-(\code{taxon_auth}). These fields provide the original taxonomy
-worksheet data included.
+The returned table includes the fields \code{worksheet_name}, \code{taxon_name},
+\code{taxon_rank} and \code{taxon_status}, along with the taxonomy database used
+to validate the taxon (\code{taxon_auth}). These fields provide the original
+taxonomy worksheet data included.
 
 
 For more details on the structure of the taxon worksheets see:

@@ -2,20 +2,20 @@
 % Please edit documentation in R/index.R
 \name{load_location_aliases}
 \alias{load_location_aliases}
-\title{Load and cache the SAFE location aliases}
+\title{Load and cache location aliases}
 \usage{
 load_location_aliases()
 }
 \value{
-A data frame containing the SAFE location aliases.
+A data frame containing location aliases.
 }
 \description{
-This function loads the SAFE locations alias, stored as a csv file in
-the root of the SAFE data directory, as data frame.
+This function loads location aliases, stored as a csv file in the root of the
+safedata directory, as data frame.
 }
 \details{
-When this function is first called in a session, the loaded data frame
-object is cached for re-use (see \code{\link{load_index}}).
+When this function is first called in a session, the loaded data frame object is
+cached for re-use (see \code{\link{load_index}}).
 }
 \seealso{
 \code{\link{load_gazetteer}}, \code{\link{load_index}}

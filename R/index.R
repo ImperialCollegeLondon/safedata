@@ -34,8 +34,8 @@ set_safedata_dir <- function(safedir, update = TRUE) {
     #' settings file for the safedata diretory:
     #' \describe{
     #'   \item{\code{index.json}}{, containing a full list of the
-    #'         files and dataset records available in the SAFE data
-    #'         repository;}
+    #'         files and dataset records available in the safedata community
+    #'         for a project;}
     #'   \item{\code{gazetteer.geojson}}{, containing the official list of
     #'         known sampling locations and GIS data; and}
     #'   \item{\code{location_aliases.json}}{, a list of alternative names
@@ -77,7 +77,7 @@ set_safedata_dir <- function(safedir, update = TRUE) {
     #' @param url A URL for a safedata metadata server.
     #' @param use_zenodo_sandbox A boolean indicating whether the datafiles
     #'    are stored in the main Zenodo site or the sandbox Zenodo site.
-    #' @return Invisibly, a boolean showing whether a SAFE data directory was
+    #' @return Invisibly, a boolean showing whether a safedata directory was
     #'    created or set successfully.
     #' @export
 
@@ -170,7 +170,7 @@ set_safedata_dir <- function(safedir, update = TRUE) {
         )
 
         for (details in update_details) {
-            # Try to get the current index hashes from the SAFE Data API and
+            # Try to get the current index hashes from the safedata_server API and
             # then check each of the three index files
             api <- paste0(getOption("safedata.url"), details$api)
             index_hash <- try_to_download(api)
@@ -281,12 +281,12 @@ create_safedata_dir <- function(safedir,
     if (!(got_index && got_gazetteer && got_loc_aliases)) {
         tidy_up(c(
             "Could not download required files: ",
-            "SAFE data directory not created"
+            "safedata directory not created"
         ))
         return(invisible(FALSE))
     }
 
-    verbose_message("Safe data directory created")
+    verbose_message("safedata directory created")
     load_index()
     return(invisible(TRUE))
 }
@@ -361,9 +361,9 @@ download_index <- function() {
 
 
 download_gazetteer <- function() {
-    #' Downloads the current SAFE gazetteer
+    #' Downloads the gazetteer from a safedata metadata server.
     #'
-    #' This function downloads the gazetteer from the `safedata_server` API (e.g.
+    #' This function downloads the gazetteer using the `safedata_server` API (e.g.
     #' \url{https://data.safeproject.net/api/gazetteer/download/}) and saves it in the
     #' safedata directory.
     #'
@@ -386,9 +386,9 @@ download_gazetteer <- function() {
 
 
 download_location_aliases <- function() {
-    #' Downloads the current SAFE location aliases
+    #' Downloads location aliases from a safedata metadata server.
     #'
-    #' This function downloads the location aliases from the `safedata_server` API (e.g.
+    #' This function downloads location aliases from a `safedata_server` API (e.g.
     #' \url{https://data.safeproject.net/api/gazetteer/aliases/download/}) and saves it
     #' in the safedata directory.
     #'
@@ -413,7 +413,7 @@ load_index <- function() {
     #' Load and cache the dataset index
     #'
     #' This function loads the dataset record index from the JSON file in
-    #' the SAFE data directory and sets which datasets are currently available
+    #' the safedata directory and sets which datasets are currently available
     #' and which records are the most recent available under a given concept.
     #' The function also checks to see if there are any user modifications to
     #' the directory structure.
@@ -509,7 +509,7 @@ load_index <- function() {
     local_unexpected <- setdiff(local_files, index$path)
     if (length(local_unexpected)) {
         warning(
-            "SAFE data directory contains unexpected files: ",
+            "safedata directory contains unexpected files: ",
             paste(local_unexpected, collapse = ", ")
         )
     }
@@ -562,10 +562,10 @@ get_index <- function() {
 
 
 load_gazetteer <- function() {
-    #' Load and cache the SAFE gazetteer
+    #' Load and cache the safedata gazetteer
     #'
-    #' This function loads the SAFE gazetteer, stored as a geojson file in the
-    #' root of the SAFE data directory, as an \code{\link[sf]{sf}} GIS object.
+    #' This function loads the gazetteer, stored as a geojson file in the
+    #' root of the safedata directory, as an \code{\link[sf]{sf}} GIS object.
     #' The GIS data uses the WGS84 (EPSG:4326) geographic coordinate system.
     #'
     #' The gazetteer contains the following fields:
@@ -597,8 +597,7 @@ load_gazetteer <- function() {
     #' \code{\link[sf]{sf}} object is cached for re-use (see
     #' \code{\link{load_index}}).
     #'
-    #' @return An \code{\link[sf]{sf}} object containing the SAFE gazetteer
-    #'    locations.
+    #' @return An \code{\link[sf]{sf}} object containing the gazetteer locations.
     #' @seealso \code{\link{load_location_aliases}}, \code{\link{load_index}}
     #' @export
 
@@ -618,15 +617,15 @@ load_gazetteer <- function() {
 
 
 load_location_aliases <- function() {
-    #' Load and cache the SAFE location aliases
+    #' Load and cache location aliases
     #'
-    #' This function loads the SAFE locations alias, stored as a csv file in
-    #' the root of the SAFE data directory, as data frame.
+    #' This function loads location aliases, stored as a csv file in the root of the
+    #' safedata directory, as data frame.
     #'
-    #' When this function is first called in a session, the loaded data frame
-    #' object is cached for re-use (see \code{\link{load_index}}).
+    #' When this function is first called in a session, the loaded data frame object is
+    #' cached for re-use (see \code{\link{load_index}}).
     #'
-    #' @return A data frame containing the SAFE location aliases.
+    #' @return A data frame containing location aliases.
     #' @seealso \code{\link{load_gazetteer}}, \code{\link{load_index}}
     #' @keywords internal
 
@@ -653,7 +652,7 @@ get_data_dir <- function() {
     ddir <- getOption("safedata.dir")
 
     if (is.null(ddir)) {
-        stop("SAFE data directory not set.")
+        stop("safedata directory not set.")
     }
 
     return(ddir)
