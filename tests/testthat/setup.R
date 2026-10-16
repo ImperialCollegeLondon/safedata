@@ -1,7 +1,5 @@
-
-
-safedata_installed <- try(library(safedata), silent=TRUE)
-if (inherits(safedata_installed, 'try-error')) {
+safedata_installed <- try(library(safedata), silent = TRUE)
+if (inherits(safedata_installed, "try-error")) {
     devtools::load_all("../../")
 }
 
@@ -38,4 +36,6 @@ skip_if_no_internet <- function() {
     if ((!curl::has_internet()) && is.null(httr::get_callback("request"))) {
         testthat::skip("No internet - skipping test")
     }
+
+    return()
 }
