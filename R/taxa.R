@@ -323,7 +323,7 @@ add_taxa <- function(
         taxon_table <- get_taxa(obj_attr$safe_record_set)
     } else if (inherits(taxon_table, "safe_taxa")) {
         taxa_record_set <- attr(taxon_table, "metadata")$safe_record_set
-        if (!all.equal(taxa_record_set, obj_attr$safe_record_set)) {
+        if (!isTRUE(all.equal(taxa_record_set, obj_attr$safe_record_set))) {
             stop("Provided 'taxon_table' is for a different dataset.")
         }
     } else {
@@ -352,7 +352,7 @@ add_taxa <- function(
     # table and generate matching table
     idx <- match(obj[, taxon_field], taxon_table$worksheet_name)
 
-    if (any(is.na(idx))) {
+    if (anyNA(idx)) {
         stop(
             "Not all taxa names found in taxon index,",
             " contact package developers."

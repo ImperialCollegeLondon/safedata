@@ -50,7 +50,7 @@ test_that("Download dataset fails gracefully on Zenodo down", {
     # Pre-fetch the metadata JSON, so that if the metadata server is down we can
     # skip the rest of the test.
     recs <- validate_record_ids(1198475)
-    success <- safedata:::fetch_record_metadata(recs)
+    success <- fetch_record_metadata(recs)
     if (!success) {
         skip("Metadata server down - skipping test")
     }

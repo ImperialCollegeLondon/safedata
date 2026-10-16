@@ -28,7 +28,7 @@ local_create_sdd <- function(dir = tempfile(), env = parent.frame()) {
 
 skip_if_no_internet <- function() {
     #' Some tests rely on having the internet available to generate
-    #' the various error messages from safedata:::try_to_download()
+    #' the various error messages from try_to_download()
     #' via httpbin, so should not be run if there is a network outage.
     #' However, they _can_ run if the URLs are being mocked, so this
     #' function tests for no internet _and_ no request callback handler.

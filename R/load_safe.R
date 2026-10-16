@@ -88,7 +88,7 @@ load_safe_data <- function(record_id, worksheet, ...) {
                 )
             }
         } else {
-            if (!(record_set$record == record_set$mra)) {
+            if (record_set$record != record_set$mra) {
                 verbose_message(
                     "Outdated record: the most recent available ",
                     "version is ",
@@ -163,7 +163,7 @@ load_safe_data <- function(record_id, worksheet, ...) {
 
     # map the column types, including the first column of record numbers
     col_types <- c("numeric", readxl_map[match(field_types, names(readxl_map))])
-    if (any(is.na(col_types))) {
+    if (anyNA(col_types)) {
         stop("Problem with column type specification. Contact developers")
     }
 

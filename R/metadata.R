@@ -58,7 +58,7 @@ validate_record_ids <- function(record_set) {
             not_pos <- record_set <= 0
             valid <- (!not_int) & (!not_pos)
 
-            if (any(!valid)) {
+            if (!all(valid)) {
                 mismatches <- record_set[!valid]
                 record_set <- record_set[valid]
                 warning(paste0(
@@ -77,7 +77,7 @@ validate_record_ids <- function(record_set) {
             match <- regexpr(zen_regex, record_set, perl = TRUE)
             valid <- match != -1
 
-            if (any(!valid)) {
+            if (!all(valid)) {
                 mismatches <- record_set[!valid]
                 record_set <- record_set[valid]
                 warning(paste0(
@@ -372,7 +372,7 @@ load_record_metadata <- function(record_set) {
     if (
         !inherits(record_set, "safe_record_set") ||
             nrow(record_set) > 1 ||
-            any(is.na(record_set))
+            anyNA(record_set)
     ) {
         stop(
             "Expects a single row safe_record_set object ",

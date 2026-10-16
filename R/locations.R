@@ -72,7 +72,7 @@ get_locations <- function(obj, gazetteer_info = FALSE) {
 
     # Now fill in the geometries from the possible sources
     # a) Known locations - look for gazetteer names and aliases
-    known <- locations$new_location == FALSE
+    known <- !locations$new_location # == FALSE
     gazetteer_match <- match(locations$name, gazetteer$location)
     alias_match <- match(locations$name, location_aliases$alias)
 
@@ -248,7 +248,7 @@ add_locations <- function(
     # Match taxon names to the taxon and generate matching table
     idx <- match(obj[, location_field], rownames(location_table))
 
-    if (any(is.na(idx))) {
+    if (anyNA(idx)) {
         stop(
             "Not all location names found in locations table,",
             " contact package developers."

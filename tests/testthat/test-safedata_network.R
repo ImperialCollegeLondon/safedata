@@ -4,7 +4,7 @@ test_that("no internet fails gracefully", {
     local_sdd <- local_create_sdd()
 
     Sys.setenv(NETWORK_DOWN = TRUE)
-    success <- safedata:::try_to_download("https://httpbin.org")
+    success <- try_to_download("https://httpbin.org")
 
     expect_false(success)
     expect_match(attr(success, "fail_msg"), regexp = "No internet connection")
@@ -18,7 +18,7 @@ test_that("no internet fails gracefully", {
 #     local_sdd <- local_create_sdd()
 #     skip_if_no_internet()
 
-#     success <- safedata:::try_to_download("https://url.invalid")
+#     success <- try_to_download("https://url.invalid")
 
 #     expect_false(success)
 #     expect_match(
@@ -32,7 +32,7 @@ test_that("no internet fails gracefully", {
 #     local_sdd <- local_create_sdd()
 #     skip_if_no_internet()
 
-#     success <- safedata:::try_to_download(
+#     success <- try_to_download(
 #         "https://httpbin.org/delay/2",
 #         timeout = 1
 #     )
@@ -46,7 +46,7 @@ test_that("URL errors fails gracefully", {
     local_sdd <- local_create_sdd()
     skip_if_no_internet()
 
-    success <- safedata:::try_to_download("https://httpbin.org/status/404")
+    success <- try_to_download("https://httpbin.org/status/404")
     expect_false(success)
 
     # If a real httpbin call issues a Gateway timeout 504, then "URL error"
@@ -61,7 +61,7 @@ test_that("Good URL works and returns object to memory", {
     local_sdd <- local_create_sdd()
     skip_if_no_internet()
 
-    success <- safedata:::try_to_download("https://httpbin.org/json")
+    success <- try_to_download("https://httpbin.org/json")
 
     # Screen for failure of the download due to timeout
     if (is.logical(success) && isFALSE(success)) {
@@ -77,7 +77,7 @@ test_that("Bad path fails gracefully", {
     local_sdd <- local_create_sdd()
     skip_if_no_internet()
 
-    success <- safedata:::try_to_download(
+    success <- try_to_download(
         "https://httpbin.org/json",
         local_path = "/does/not/exist"
     )

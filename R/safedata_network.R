@@ -113,7 +113,7 @@ try_to_download <- function(url, local_path = NULL, timeout = 10) {
 
     # Otherwise, is a resource _specifically_ being blocked for testing purposes
     if ((!is.na(resource_down) && grepl(resource_down, url)) || url_down) {
-        attr(fail, "fail_msg") <- sprintf("URL error: 404")
+        attr(fail, "fail_msg") <- "URL error: 404"
         return(fail)
     }
 
