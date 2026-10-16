@@ -7,7 +7,7 @@
 file_status(metadata)
 }
 \arguments{
-\item{A}{loaded metadata dictionary for a record}
+\item{metadata}{A loaded metadata dictionary for a record}
 }
 \description{
 This returns a formatted status string for \code{\link{show_record}} and

@@ -1,5 +1,8 @@
 development:
   mode: auto
+url: https://imperialcollegelondon.github.io/safedata/index.html
+template:
+  bootstrap: 5
 reference:
 - title: Indexing and download functions
   desc: >

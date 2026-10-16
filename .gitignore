@@ -4,6 +4,7 @@
 # History files
 .Rhistory
 .Rapp.history
+.Rprofile
 
 # Session Data files
 .RData
@@ -49,5 +50,7 @@ lint.txt
 .python-version
 /doc/
 /Meta/
+
+.vscode/
 /.uvr/library/
 /.uvr/activate*

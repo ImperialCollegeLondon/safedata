@@ -1,15 +1,17 @@
-library(safedata)
+safedata_installed <- try(library(safedata), silent = TRUE)
+if (inherits(safedata_installed, "try-error")) {
+    devtools::load_all("../../")
+}
 
 
 # This functionality should extended with a switch to allow use of
 # an actual live metadata server and test Zenodo community
 # https://github.com/ImperialCollegeLondon/safedata/issues/10
 
-
 # Turn on the mocking of URLs for API calls
-safedata:::mock_api(on = TRUE)
+mock_api(on = TRUE)
 # Turn it off again after tests run.
-withr::defer(safedata:::mock_api(on = FALSE), teardown_env())
+withr::defer(mock_api(on = FALSE), teardown_env())
 
 # Fixtures
 
@@ -34,4 +36,6 @@ skip_if_no_internet <- function() {
     if ((!curl::has_internet()) && is.null(httr::get_callback("request"))) {
         testthat::skip("No internet - skipping test")
     }
+
+    return()
 }

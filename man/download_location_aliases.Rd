@@ -7,9 +7,8 @@
 download_location_aliases()
 }
 \description{
-This function downloads the location aliases from the SAFE data
-location aliases API (for example,
-\url{https://www.safeproject.net/api/location_aliases})
-and saves it in the root of the safe data directory.
+This function downloads the location aliases from the `safedata_server` API (e.g.
+\url{https://data.safeproject.net/api/gazetteer/aliases/download/}) and saves it
+in the safedata directory.
 }
 \keyword{internal}

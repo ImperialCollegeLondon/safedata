@@ -9,21 +9,34 @@
 #' @keywords internal
 
 mock_api_urls <- list(
-    # Main index files
-    "http://example.safedata.server/api/metadata_index.json" = list(
-        content = "index_new.json",
+    "http://example.safedata.server/api/message/?format=json" = list(
+        content = "message.json",
         status_code = 200L
     ),
-    "http://example.safedata.server/api/gazetteer.json" = list(
+
+    # Main index files
+    "http://example.safedata.server/api/datasets/index/download/" = list(
+        content = "index.json",
+        status_code = 200L
+    ),
+    "http://example.safedata.server/api/gazetteer/download/" = list(
         content = "gazetteer.geojson",
         status_code = 200L
     ),
-    "http://example.safedata.server/api/location_aliases.json" = list(
+    "http://example.safedata.server/api/gazetteer/aliases/download/" = list(
         content = "location_aliases.json",
         status_code = 200L
     ),
-    "http://example.safedata.server/api/index_hashes.json" = list(
-        content = "index_hashes.json",
+    "http://example.safedata.server/api/datasets/index/hash/" = list(
+        content = "index_hash.json",
+        status_code = 200L
+    ),
+    "http://example.safedata.server/api/gazetteer/hash/" = list(
+        content = "gazetteer_hash.json",
+        status_code = 200L
+    ),
+    "http://example.safedata.server/api/gazetteer/aliases/hash/" = list(
+        content = "aliases_hash.json",
         status_code = 200L
     ),
     # Example datasets used and metadata JSON
@@ -185,21 +198,19 @@ mock_handler <- function(req) {
 mock_api <- function(on = TRUE) {
     #' Simple mocking of package URLS
     #'
-    #' These functions allows a curated list of URLs used in the package
-    #' to be mocked for use in examples, vignettes and testing. This avoids the
-    #' package relying on web connections for testing and allows vignettes to
-    #' use actual live code when building, rather than having to fake those
-    #' code blocks. It also separates the safedata server API from package
-    #' development, so that package testing does not require an actual server
-    #' running an updated API, but can simulate it it locally.
+    #' These functions allows a curated list of URLs used in the package to be mocked
+    #' for use in examples, vignettes and testing. This avoids the package relying on
+    #' web connections for testing and allows vignettes to use actual live code when
+    #' building, rather than having to fake those code blocks. It also separates the
+    #' safedata server API from package development, so that package testing does not
+    #' require an actual server running an updated API, but can simulate it it locally.
     #'
-    #' The \code{api_mock} function turns the HTTR mocking on and off, by
-    #' adding the \code{mock_handler} callback handler via
-    #' \code{\link[httr:set_callback]{set_callback}}.
-    #' This handler is very basic and it would be more robust to use something
-    #' like the \pkg{webmockr} package, but at present that does not support
-    #' binary mocked files and also (less importantly) loads the content of
-    #' responses into its registry rather than on request.
+    #' The \code{api_mock} function turns the HTTR mocking on and off, by adding the
+    #' \code{mock_handler} callback handler via
+    #' \code{\link[httr:set_callback]{set_callback}}. This handler is very basic and it
+    #' would be more robust to use something like the \pkg{webmockr} package, but at
+    #' present that does not support binary mocked files and also (less importantly)
+    #' loads the content of responses into its registry rather than on request.
     #'
     #' @keywords internal
 
@@ -208,4 +219,6 @@ mock_api <- function(on = TRUE) {
     } else {
         httr::set_callback("request")
     }
+
+    return()
 }

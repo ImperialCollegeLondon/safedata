@@ -2,5 +2,7 @@ linters: linters_with_defaults(
     cyclocomp_linter(complexity_limit = 40L), # TODO - this is silly, but not refactoring these right now
     commented_code_linter = NULL,  # TODO - remove when tests renabled
     indentation_linter(indent = 4L), 
-    object_usage_linter = NULL  # TODO - Not recognizing internal variables
+    object_usage_linter = NULL,  # TODO - Not recognizing internal variables
+    line_length_linter(length = 88L),
+    return_linter(return_style =  "explicit")
   )

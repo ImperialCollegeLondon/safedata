@@ -700,7 +700,7 @@ file_status <- function(metadata) {
     #' This returns a formatted status string for \code{\link{show_record}} and
     #' \code{\link{show_worksheet}} showing if a dataset is available globally
     #' or locally as a private copy.
-    #' @param A loaded metadata dictionary for a record
+    #' @param metadata A loaded metadata dictionary for a record
     #' @keywords internal
 
     # Data access status - check for local private copy
