@@ -8,7 +8,7 @@
 \alias{search_taxa}
 \alias{search_text}
 \alias{search_spatial}
-\title{SAFE dataset search functions.}
+\title{Metadata search functions for safedata datasets.}
 \usage{
 search_dates(dates, match_type = "intersect", most_recent = FALSE, ids = NULL)
 
@@ -50,7 +50,7 @@ character strings ("yyyy-mm-dd") or \code{POSIXt} dates.}
 returning only the most recent versions of the datasets found. By default
 all versions of matching dataset concepts are returned.}
 
-\item{ids}{A set of SAFE dataset record IDs to restrict a search. This will
+\item{ids}{A set of safedata dataset record IDs to restrict a search. This will
 typically be a \code{\link{safe_record_set}} object returned by another
 search but can also be a vector of record ids in any of the formats
 accepted by \code{\link{validate_record_ids}}.}
@@ -72,13 +72,13 @@ full (or partial) names.}
 \item{taxon_auth}{One of GBIF or NCBI. If not specified, results will match
 against taxa validated against either taxonomy database.}
 
-\item{text}{Character string to look for within a SAFE dataset, worksheet,
-title, field description, and dataset keywords.}
+\item{text}{Character string to look for within safedata datasets, worksheets,
+titles, field descriptions, and dataset keywords.}
 
 \item{wkt}{A well-known text geometry string, assumed to use latitude and
 longitude in WGS84 (EPSG:4326).}
 
-\item{location}{The name of a location in the SAFE gazetteer.}
+\item{location}{The name of a location in the gazetteer.}
 
 \item{distance}{A buffer distance for spatial searches, giving the distance
 in metres within which to match either location or wkt searches.}
@@ -88,26 +88,25 @@ An object of class \code{\link{safe_record_set}} of datasets that
    match the query.
 }
 \description{
-In addition to the datasets stored on Zenodo, the SAFE Project website
-provides an API to search dataset metadata in more depth. The search
-functions access this API and return \code{\link{safe_record_set}} objects
-identifying datasets that match a particular query.
+In addition to the datasets stored on Zenodo, the safedata system provides the
+`safedata_server` web application that serves an API to search dataset metadata in
+more depth. The search functions access this API and return
+\code{\link{safe_record_set}} objects identifying datasets that match a particular
+query.
 }
 \details{
-The API provides endpoints to search datasets by date extents, data
-worksheet fields, authors, taxa, free text and by spatial query. All
-of the functions accept the argument \code{most_recent}, which restricts
-the returned datasets to the most recent versions of each matching dataset
-concept. The functions can also be passed an existing
-\code{\link{safe_record_set}} object to search within the results
-of a previous search.
+The API provides endpoints to search datasets by date extents, data worksheet fields,
+authors, taxa, free text and by spatial query. All of the functions accept the
+argument \code{most_recent}, which restricts the returned datasets to the most recent
+versions of each matching dataset concept. The functions can also be passed an
+existing \code{\link{safe_record_set}} object to search within the results of a
+previous search.
 
-The \code{match_type} parameter specifies how to match date ranges and must
-be one of "intersect" (default), "contain", or "within". The "contain" option
-returns datasets that span a date range,  "within" returns datasets that
-fall within the given range and "intersect" selects datasets that overlap any
-part of the date range. Note that match_type is ignored when only a single
-date is provided.
+The \code{match_type} parameter specifies how to match date ranges and must be one of
+"intersect" (default), "contain", or "within". The "contain" option returns datasets
+that span a date range,  "within" returns datasets that fall within the given range
+and "intersect" selects datasets that overlap any part of the date range. Note that
+match_type is ignored when only a single date is provided.
 }
 \section{Functions}{
 \itemize{
@@ -127,30 +126,29 @@ and descriptions
 }}
 \section{Spatial searches}{
 
-For spatial searches, users can select a location name from a SAFE
-data gazetteer (see e.g. \url{https://data.safeproject.net/gazetteer/map/}
-or \code{\link{load_gazetteer}}) or provide a WKT geometry. The sampling
-locations provided in each SAFE dataset are tested to see if they intersect
-the search geometry.
+For spatial searches, users can select a location name from the project gazetteer
+(see e.g. \url{https://data.safeproject.net/gazetteer/map/} or
+\code{\link{load_gazetteer}}) or provide a WKT geometry. The sampling locations
+provided in each dataset are tested to see if they intersect the search geometry.
 
-A buffer \code{distance} can aso be provided to extend the search around the
-query geometry. Note that although WKT geometries should be provided
-using WGS84 lat/long coordinates, since this is typical field GPS data,
-distances must be provided as metres and all proximity calculations take
-place in the UTM50N projected coordinate system.
+A buffer \code{distance} can aso be provided to extend the search around the query
+geometry. Note that although WKT geometries should be provided using WGS84 lat/long
+coordinates, since this is typical field GPS data, distances must be provided as
+metres and all proximity calculations take place in the UTM50N projected coordinate
+system.
 
-The \code{search_spatial} function will not retrieve datasets that have not
-provided sampling locations or use newly defined locations that are missing
-coordinate information.
+The \code{search_spatial} function will not retrieve datasets that have not provided
+sampling locations or use newly defined locations that are missing coordinate
+information.
 }
 
 \section{Links}{
 
 \describe{
-   \item{SAFE data API}{e.g. \url{https://data.safeproject.net/api/docs/}}
+   \item{the safedata_server API}{e.g. \url{https://data.safeproject.net/api/docs/}}
    \item{Worksheet field
    types}{\url{https://safedata-validator.readthedocs.io/en/stable/data_providers/data_format/data.html#field-types}}  # nolint
-   \item{SAFE gazetteer}{See \code{\link{load_gazetteer}} and e.g.
+   \item{Project gazetteer}{See \code{\link{load_gazetteer}} and e.g.
          \url{https://data.safeproject.net/gazetteer/map/}}
    \item{WKT}{\url{https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry}}  # nolint
 }

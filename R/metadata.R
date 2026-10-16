@@ -262,15 +262,19 @@ print.safe_record_set <- function(x, ...) {
 
 
 fetch_record_metadata <- function(record_set) {
-    #' Get and load SAFE dataset metadata
+    #' Get and load safedata metadata
     #'
-    #' Internal handlers to i) ensure there are local copies of record metadata,
-    #' fetching it from the SAFE project website if needed and ii) load that
-    #' data from file.
+    #' Internal handlers to:
+    #'
+    #' \enumerate{
+    #'    \item ensure there are local copies of record metadata, fetching it using the
+    #'          safedata_server API if needed and
+    #'    \item load thatdata from file.
+    #' }
     #'
     #' This is the same metadata used to populate the Zenodo description but is
-    #' downloaded as JSON format and stored within the record directory in the
-    #' SAFE data directory for reuse.
+    #' downloaded as JSON format and stored within the record directory in the safedata
+    #' directory for reuse.
     #'
     #' @param record_set An object of class \code{\link{safe_record_set}}.
     #' @return The \code{fetch_record_metadata} function invisibly returns a
@@ -399,10 +403,11 @@ load_record_metadata <- function(record_set) {
 
 
 show_concepts <- function(obj) {
-    #' Show SAFE dataset metadata
+    #' Show safedata metadata
     #'
-    #' These functions provide access to the metadata associated with SAFE
-    #' datasets. The functions provide three levels of information:
+    #' These functions provide access to the metadata associated with safedata datasets.
+    #' The functions provide three levels of information:
+    #'
     #' \describe{
     #'      \item{\code{show_concepts}}{displays the record versions grouped
     #'            under dataset concepts,}
@@ -411,16 +416,17 @@ show_concepts <- function(obj) {
     #'      \item{\code{show_worksheet}}{displays metadata about data worksheet
     #'            fields within a record.}
     #' }
+    #'
     #' All three functions accept a first argument \code{obj}, which can be one
     #' of three things:
+    #'
     #' \enumerate{
-    #'    \item A character or numeric vector of SAFE dataset records or
-    #'          concepts, which will be validated using
-    #'          \code{\link{validate_record_ids}}, or
+    #'    \item A character or numeric vector of safedata record or concept ids, which
+    #'          will be validated using \code{\link{validate_record_ids}}, or
     #'    \item An already validated \code{\link{safe_record_set}} object, or
-    #'    \item A \code{safedata} data frame loaded using
-    #'          \code{\link{load_safe_data}}.
+    #'    \item A \code{safedata} data frame loaded using \code{\link{load_safe_data}}.
     #' }
+    #'
     #' If \code{show_concepts} is passed a record id, then the function looks
     #' up the relevant concept. The version table indicates which versions
     #' are available ("*" for the most recent available version and "o"
@@ -429,13 +435,13 @@ show_concepts <- function(obj) {
     #' local copy of an embargoed or restricted dataset has been inserted
     #' using \code{\link{insert_dataset}}.
     #'
-    #' @param obj A reference to SAFE records or a loaded worksheet (see above)
+    #' @param obj A reference to safedata records or a loaded worksheet (see above)
     #' @param worksheet The name of a worksheet to show. Obviously, if
     #'     \code{obj} is a loaded worksheet, that will be the worksheet
     #'     described and this can be left as NULL.
     #' @param extended_fields Logical - show a compact description of worksheet
     #'    fields or a longer output including full metadata descriptors.
-    #' @return Invisibly, a SAFE metadata object or a list of such objects.
+    #' @return Invisibly, a safedata metadata object or a list of such objects.
     #'     These are not really intended for end user consumption.
     #' @describeIn show_concepts Show the records associated with a
     #'     dataset concept.

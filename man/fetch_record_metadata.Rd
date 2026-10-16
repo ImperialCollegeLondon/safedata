@@ -3,7 +3,7 @@
 \name{fetch_record_metadata}
 \alias{fetch_record_metadata}
 \alias{load_record_metadata}
-\title{Get and load SAFE dataset metadata}
+\title{Get and load safedata metadata}
 \usage{
 fetch_record_metadata(record_set)
 
@@ -19,14 +19,18 @@ The \code{fetch_record_metadata} function invisibly returns a
    metadata
 }
 \description{
-Internal handlers to i) ensure there are local copies of record metadata,
-fetching it from the SAFE project website if needed and ii) load that
-data from file.
+Internal handlers to:
 }
 \details{
+\enumerate{
+   \item ensure there are local copies of record metadata, fetching it using the
+         safedata_server API if needed and
+   \item load thatdata from file.
+}
+
 This is the same metadata used to populate the Zenodo description but is
-downloaded as JSON format and stored within the record directory in the
-SAFE data directory for reuse.
+downloaded as JSON format and stored within the record directory in the safedata
+directory for reuse.
 }
 \section{Functions}{
 \itemize{

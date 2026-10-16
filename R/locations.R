@@ -1,17 +1,17 @@
 get_locations <- function(obj, gazetteer_info = FALSE) {
-    #' Obtaining locations for a SAFE dataset.
+    #' Obtaining locations for a safedata dataset.
     #'
-    #' This function returns a spatial 'simple features' (\code{\link[sf]{sf}})
-    #' object for a dataset record, including basic information about locations
-    #' for the SAFE gazetteer if requested.
+    #' This function returns a spatial 'simple features' (\code{\link[sf]{sf}}) object
+    #' for a dataset record, including basic information about locations for the
+    #' gazetteer if requested.
     #'
-    #' All SAFE datasets recording observations from the field must include a
-    #' Locations worksheet, which must contain all of the location names used
-    #' in Locations type fields in data worksheets. These entries are matched
-    #' against existing location names in the SAFE gazetteer. Users can
-    #' also include "new" location names in their dataset, which do not
-    #' necessarily have coordinates. Processing locations works as
-    #' follows:
+    #' A safedata dataset recording observations from the field will typically include a
+    #' Locations worksheet, containing all of the location names used in Locations type
+    #' fields in data worksheets. These entries are matched against existing location
+    #' names in the curated gazetteer. Users can also include "new" location names in
+    #' their dataset, which do not necessarily have coordinates. Processing locations
+    #' works as follows:
+    #'
     #' \enumerate{
     #'     \item Known locations (\code{new_location = FALSE}) are matched
     #'           against both the official location names in the gazetteer
@@ -29,7 +29,7 @@ get_locations <- function(obj, gazetteer_info = FALSE) {
     #' @param gazetteer_info Should all the gazetteer fields be included in the
     #'   returned \code{\link[sf]{sf}} object.
     #' @return An object of classes "safe_locations", "sf" and "data.frame".
-    #' @note Not all SAFE project datasets contain locations. In this case
+    #' @note Not all safedata datasets contain locations. In this case
     #'   \code{\link{get_locations}} will return NULL.
     #' @seealso \code{\link{add_locations}}, \code{\link{load_gazetteer}},
     #'    \code{\link{load_location_aliases}}
@@ -180,11 +180,10 @@ add_locations <- function(
 ) {
     #' Adds location data to a SAFE data worksheet.
     #'
-    #' This function adds location data to the rows of a SAFE data worksheet,
-    #' converting it into a \code{\link[sf]{sf}} spatial features object. Rows
-    #' are matched to values in a location_field: if there is only one location
-    #' field, it will be used automatically; otherwise, the specific field must
-    #' be provided.
+    #' This function adds location data to the rows of a safedata worksheet, converting
+    #' it into a \code{\link[sf]{sf}} spatial features object. Rows are matched to
+    #' values in a location_field: if there is only one location field, it will be used
+    #' automatically; otherwise, the specific field must be provided.
     #'
     #' @param obj An existing object of class \code{safedata}
     #' @param location_field The name of a location field in a

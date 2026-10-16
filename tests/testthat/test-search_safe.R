@@ -1,4 +1,4 @@
-context("Test that search SAFE fail gracefully")
+context("Test that search safedata_server fails gracefully")
 
 test_that("no internet fails gracefully on search", {
     local_sdd <- local_create_sdd()

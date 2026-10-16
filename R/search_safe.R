@@ -1,48 +1,46 @@
-#' SAFE dataset search functions.
+#' Metadata search functions for safedata datasets.
 #'
-#' In addition to the datasets stored on Zenodo, the SAFE Project website
-#' provides an API to search dataset metadata in more depth. The search
-#' functions access this API and return \code{\link{safe_record_set}} objects
-#' identifying datasets that match a particular query.
+#' In addition to the datasets stored on Zenodo, the safedata system provides the
+#' `safedata_server` web application that serves an API to search dataset metadata in
+#' more depth. The search functions access this API and return
+#' \code{\link{safe_record_set}} objects identifying datasets that match a particular
+#' query.
 #'
-#' The API provides endpoints to search datasets by date extents, data
-#' worksheet fields, authors, taxa, free text and by spatial query. All
-#' of the functions accept the argument \code{most_recent}, which restricts
-#' the returned datasets to the most recent versions of each matching dataset
-#' concept. The functions can also be passed an existing
-#' \code{\link{safe_record_set}} object to search within the results
-#' of a previous search.
+#' The API provides endpoints to search datasets by date extents, data worksheet fields,
+#' authors, taxa, free text and by spatial query. All of the functions accept the
+#' argument \code{most_recent}, which restricts the returned datasets to the most recent
+#' versions of each matching dataset concept. The functions can also be passed an
+#' existing \code{\link{safe_record_set}} object to search within the results of a
+#' previous search.
 #'
-#' The \code{match_type} parameter specifies how to match date ranges and must
-#' be one of "intersect" (default), "contain", or "within". The "contain" option
-#' returns datasets that span a date range,  "within" returns datasets that
-#' fall within the given range and "intersect" selects datasets that overlap any
-#' part of the date range. Note that match_type is ignored when only a single
-#' date is provided.
+#' The \code{match_type} parameter specifies how to match date ranges and must be one of
+#' "intersect" (default), "contain", or "within". The "contain" option returns datasets
+#' that span a date range,  "within" returns datasets that fall within the given range
+#' and "intersect" selects datasets that overlap any part of the date range. Note that
+#' match_type is ignored when only a single date is provided.
 #'
 #' @section Spatial searches:
-#' For spatial searches, users can select a location name from a SAFE
-#' data gazetteer (see e.g. \url{https://data.safeproject.net/gazetteer/map/}
-#' or \code{\link{load_gazetteer}}) or provide a WKT geometry. The sampling
-#' locations provided in each SAFE dataset are tested to see if they intersect
-#' the search geometry.
+#' For spatial searches, users can select a location name from the project gazetteer
+#' (see e.g. \url{https://data.safeproject.net/gazetteer/map/} or
+#' \code{\link{load_gazetteer}}) or provide a WKT geometry. The sampling locations
+#' provided in each dataset are tested to see if they intersect the search geometry.
 #'
-#' A buffer \code{distance} can aso be provided to extend the search around the
-#' query geometry. Note that although WKT geometries should be provided
-#' using WGS84 lat/long coordinates, since this is typical field GPS data,
-#' distances must be provided as metres and all proximity calculations take
-#' place in the UTM50N projected coordinate system.
+#' A buffer \code{distance} can aso be provided to extend the search around the query
+#' geometry. Note that although WKT geometries should be provided using WGS84 lat/long
+#' coordinates, since this is typical field GPS data, distances must be provided as
+#' metres and all proximity calculations take place in the UTM50N projected coordinate
+#' system.
 #'
-#' The \code{search_spatial} function will not retrieve datasets that have not
-#' provided sampling locations or use newly defined locations that are missing
-#' coordinate information.
+#' The \code{search_spatial} function will not retrieve datasets that have not provided
+#' sampling locations or use newly defined locations that are missing coordinate
+#' information.
 #'
 #' @section Links:
 #' \describe{
-#'    \item{SAFE data API}{e.g. \url{https://data.safeproject.net/api/docs/}}
+#'    \item{the safedata_server API}{e.g. \url{https://data.safeproject.net/api/docs/}}
 #'    \item{Worksheet field
 #'    types}{\url{https://safedata-validator.readthedocs.io/en/stable/data_providers/data_format/data.html#field-types}}  # nolint
-#'    \item{SAFE gazetteer}{See \code{\link{load_gazetteer}} and e.g.
+#'    \item{Project gazetteer}{See \code{\link{load_gazetteer}} and e.g.
 #'          \url{https://data.safeproject.net/gazetteer/map/}}
 #'    \item{WKT}{\url{https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry}}  # nolint
 #' }
@@ -59,14 +57,14 @@
 #' @param taxon_id A numeric taxon ID number from GBIF or NCBI.
 #' @param taxon_auth One of GBIF or NCBI. If not specified, results will match
 #'     against taxa validated against either taxonomy database.
-#' @param text Character string to look for within a SAFE dataset, worksheet,
-#'    title, field description, and dataset keywords.
+#' @param text Character string to look for within safedata datasets, worksheets,
+#'    titles, field descriptions, and dataset keywords.
 #' @param wkt A well-known text geometry string, assumed to use latitude and
 #'    longitude in WGS84 (EPSG:4326).
-#' @param location The name of a location in the SAFE gazetteer.
+#' @param location The name of a location in the gazetteer.
 #' @param distance A buffer distance for spatial searches, giving the distance
 #'    in metres within which to match either location or wkt searches.
-#' @param ids A set of SAFE dataset record IDs to restrict a search. This will
+#' @param ids A set of safedata dataset record IDs to restrict a search. This will
 #'    typically be a \code{\link{safe_record_set}} object returned by another
 #'    search but can also be a vector of record ids in any of the formats
 #'    accepted by \code{\link{validate_record_ids}}.
@@ -256,10 +254,9 @@ search_spatial <- function(
 safe_api_search <- function(endpoint, params, ids = NULL, most_recent = FALSE) {
     #' Internal SAFE dataset API search functions
     #'
-    #' The two internal functions described here handle validating the
-    #' parameters passed to the exported search functions and then constructing
-    #' API calls from the parameters and the common \code{ids} and
-    #' \code{most_recent} arguments.
+    #' The two internal functions described here handle validating the parameters passed
+    #' to the exported search functions and then constructing API calls from the
+    #' parameters and the common \code{ids} and \code{most_recent} arguments.
     #'
     #' @param endpoint The name of the search API endpoint to be used.
     #' @param params A character vector of the query parameters to be passed  to
@@ -270,11 +267,11 @@ safe_api_search <- function(endpoint, params, ids = NULL, most_recent = FALSE) {
     #' @param length Accepted input lengths
     #' @inheritParams search_dates
     #' @return The \code{safe_api_search} function returns an object of class
-    #'    \code{\link{safe_record_set}} of datasets that match the submitted
-    #'    query. The \code{validate_query_param} function either returns NULL
-    #'    on success or raises an error.
+    #'    \code{\link{safe_record_set}} of datasets that match the submitted query. The
+    #'    \code{validate_query_param} function either returns NULL on success or raises
+    #'    an error.
     #' @describeIn safe_api_search Constructs, submits and formats calls to
-    #'    the SAFE API.
+    #'    the `safedata_server` API.
     #' @keywords internal
 
     # All of the search_* functions ultimately need the data index to construct
