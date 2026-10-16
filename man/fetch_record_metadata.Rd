@@ -3,7 +3,7 @@
 \name{fetch_record_metadata}
 \alias{fetch_record_metadata}
 \alias{load_record_metadata}
-\title{Get and load SAFE dataset metadata}
+\title{Get and load safedata metadata}
 \usage{
 fetch_record_metadata(record_set)
 
@@ -13,36 +13,43 @@ load_record_metadata(record_set)
 \item{record_set}{An object of class \code{\link{safe_record_set}}.}
 }
 \value{
-The \code{fetch_record_metadata} function invisibly returns a
-   logical value indicating if all records were fetched successfully and
-   \code{load_record_metadata} returns a list object containing record
-   metadata
+The \code{fetch_record_metadata} function invisibly returns a logical
+   value indicating if all records were fetched successfully and
+   \code{load_record_metadata} returns a list object containing record metadata
 }
 \description{
-Internal handlers to i) ensure there are local copies of record metadata,
-fetching it from the SAFE project website if needed and ii) load that
-data from file.
+Internal handlers to:
 }
 \details{
+\enumerate{
+   \item ensure there are local copies of record metadata, fetching it using the
+         safedata_server API if needed and
+   \item load thatdata from file.
+}
+
 This is the same metadata used to populate the Zenodo description but is
-downloaded as JSON format and stored within the record directory in the
-SAFE data directory for reuse.
+downloaded as JSON format and stored within the record directory in the safedata
+directory for reuse.
 }
 \section{Functions}{
 \itemize{
-\item \code{fetch_record_metadata}: Download and store JSON metadata for
+\item \code{fetch_record_metadata()}: Download and store JSON metadata for
 a record
 
-\item \code{load_record_metadata}: Load JSON metadata for a record
-}}
+\item \code{load_record_metadata()}: Load JSON metadata for a record
 
+}}
 \examples{
    \donttest{
-   set_example_safe_dir()
-   rec <- validate_record_ids(1400562)
-   safedata:::fetch_record_metadata(rec)
-   metadata <- safedata:::load_record_metadata(rec)
-   unset_example_safe_dir()
+     \dontshow{
+       set_example_safedata_dir()
+     }
+     rec <- validate_record_ids(1400562)
+     safedata:::fetch_record_metadata(rec)
+     metadata <- safedata:::load_record_metadata(rec)
+     \dontshow{
+       set_example_safedata_dir(on=FALSE)
+     }
    }
 }
 \keyword{internal}

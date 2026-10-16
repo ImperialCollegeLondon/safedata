@@ -1,7 +1,8 @@
 .onAttach <- function(libname, pkgname) {
-
-    packageStartupMessage("SAFE package reminder: Please set SAFE data ",
-                          "directory using set_safe_dir()")
+    # nolint required
+    packageStartupMessage(
+        "safedata package reminder: Please set safedata ",
+        "directory using set_safedata_dir()"
+    )
     options(safedata.verbose = TRUE)
-
 }

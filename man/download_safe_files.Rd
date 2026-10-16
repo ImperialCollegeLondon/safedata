@@ -14,7 +14,7 @@ download_safe_files(
 )
 }
 \arguments{
-\item{record_ids}{A vector of SAFE dataset record ids or a
+\item{record_ids}{A vector of safedata dataset record ids or a
 \code{\link{safe_record_set}} object.}
 
 \item{confirm}{Requires the user to confirm before download (logical)}
@@ -40,29 +40,31 @@ Invisibly, a vector of paths within the `safe_dir` for
    the function returns FALSE.
 }
 \description{
-This downloads files associated with SAFE datasets, either all of the
-files included in a set of records (\code{xlsx_only = FALSE}) or just
-the core .xlsx files (\code{xlsx_only = FALSE}), and stores them in the
-SAFE data directory. See \code{\link{insert_dataset}} for details on
-using embargoed or restricted datasets.
+This downloads files associated with safedata datasets, either all of the files
+included in a set of records (\code{xlsx_only = FALSE}) or just the core .xlsx
+files (\code{xlsx_only = FALSE}), and stores them in the safedata directory. See
+\code{\link{insert_dataset}} for details on using embargoed or restricted
+datasets.
 }
 \details{
 By default, the function will also download the dataset metadata. This
-information is required by many of the functions in the package but users
-can turn off automatic metadata download.
+information is required by many of the functions in the package but users can
+turn off automatic metadata download.
 }
 \section{Warning}{
-
-Using \code{refresh = TRUE} will \strong{overwrite locally modified
-files} and replace them with the versions of record from Zenodo.
+ Using \code{refresh = TRUE} will \strong{overwrite locally
+modified files} and replace them with the versions of record from Zenodo. You
+should not, in general, modify files within a safedata directory.
 }
 
 \examples{
    \donttest{
-       set_example_safe_dir()
+       set_example_safedata_dir()
+       # Validate records to download
        recs <- validate_record_ids(c(3247631, 3266827, 3266821))
+       print(recs)
        download_safe_files(recs, confirm = FALSE)
-       unset_example_safe_dir()
+       set_example_safedata_dir(on = FALSE)
    }
    \dontrun{
        # This example requires a private token

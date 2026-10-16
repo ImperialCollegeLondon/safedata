@@ -2,7 +2,7 @@
 % Please edit documentation in R/locations.R
 \name{get_locations}
 \alias{get_locations}
-\title{Obtaining locations for a SAFE dataset.}
+\title{Obtaining locations for a safedata dataset.}
 \usage{
 get_locations(obj, gazetteer_info = FALSE)
 }
@@ -16,18 +16,18 @@ returned \code{\link[sf]{sf}} object.}
 An object of classes "safe_locations", "sf" and "data.frame".
 }
 \description{
-This function returns a spatial 'simple features' (\code{\link[sf]{sf}})
-object for a dataset record, including basic information about locations
-for the SAFE gazetteer if requested.
+This function returns a spatial 'simple features' (\code{\link[sf]{sf}}) object
+for a dataset record, including basic information about locations for the
+gazetteer if requested.
 }
 \details{
-All SAFE datasets recording observations from the field must include a
-Locations worksheet, which must contain all of the location names used
-in Locations type fields in data worksheets. These entries are matched
-against existing location names in the SAFE gazetteer. Users can
-also include "new" location names in their dataset, which do not
-necessarily have coordinates. Processing locations works as
-follows:
+A safedata dataset recording observations from the field will typically include a
+Locations worksheet, containing all of the location names used in Locations type
+fields in data worksheets. These entries are matched against existing location
+names in the curated gazetteer. Users can also include "new" location names in
+their dataset, which do not necessarily have coordinates. Processing locations
+works as follows:
+
 \enumerate{
     \item Known locations (\code{new_location = FALSE}) are matched
           against both the official location names in the gazetteer
@@ -43,13 +43,13 @@ follows:
 }
 }
 \note{
-Not all SAFE project datasets contain locations. In this case
+Not all safedata datasets contain locations. In this case
   \code{\link{get_locations}} will return NULL.
 }
 \examples{
-   set_example_safe_dir()
+   set_example_safedata_dir()
    locations <- get_locations(1400562)
-   unset_example_safe_dir()
+   set_example_safedata_dir(on=FALSE)
 }
 \seealso{
 \code{\link{add_locations}}, \code{\link{load_gazetteer}},

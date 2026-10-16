@@ -4,7 +4,7 @@
 \alias{show_concepts}
 \alias{show_record}
 \alias{show_worksheet}
-\title{Show SAFE dataset metadata}
+\title{Show safedata metadata}
 \usage{
 show_concepts(obj)
 
@@ -13,7 +13,7 @@ show_record(obj)
 show_worksheet(obj, worksheet = NULL, extended_fields = FALSE)
 }
 \arguments{
-\item{obj}{A reference to SAFE records or a loaded worksheet (see above)}
+\item{obj}{A reference to safedata records or a loaded worksheet (see above)}
 
 \item{worksheet}{The name of a worksheet to show. Obviously, if
 \code{obj} is a loaded worksheet, that will be the worksheet
@@ -23,12 +23,14 @@ described and this can be left as NULL.}
 fields or a longer output including full metadata descriptors.}
 }
 \value{
-Invisibly, a SAFE metadata object or a list of such objects.
+Invisibly, a safedata metadata object or a list of such objects.
     These are not really intended for end user consumption.
 }
 \description{
-These functions provide access to the metadata associated with SAFE
-datasets. The functions provide three levels of information:
+These functions provide access to the metadata associated with safedata datasets.
+The functions provide three levels of information:
+}
+\details{
 \describe{
      \item{\code{show_concepts}}{displays the record versions grouped
            under dataset concepts,}
@@ -37,16 +39,17 @@ datasets. The functions provide three levels of information:
      \item{\code{show_worksheet}}{displays metadata about data worksheet
            fields within a record.}
 }
+
 All three functions accept a first argument \code{obj}, which can be one
 of three things:
+
 \enumerate{
-   \item A character or numeric vector of SAFE dataset records or
-         concepts, which will be validated using
-         \code{\link{validate_record_ids}}, or
+   \item A character or numeric vector of safedata record or concept ids, which
+         will be validated using \code{\link{validate_record_ids}}, or
    \item An already validated \code{\link{safe_record_set}} object, or
-   \item A \code{safedata} data frame loaded using
-         \code{\link{load_safe_data}}.
+   \item A \code{safedata} data frame loaded using \code{\link{load_safe_data}}.
 }
+
 If \code{show_concepts} is passed a record id, then the function looks
 up the relevant concept. The version table indicates which versions
 are available ("*" for the most recent available version and "o"
@@ -57,16 +60,16 @@ using \code{\link{insert_dataset}}.
 }
 \section{Functions}{
 \itemize{
-\item \code{show_concepts}: Show the records associated with a
+\item \code{show_concepts()}: Show the records associated with a
 dataset concept.
 
-\item \code{show_record}: Show details of a specific dataset
+\item \code{show_record()}: Show details of a specific dataset
 
-\item \code{show_worksheet}: Show details of a data worksheet
+\item \code{show_worksheet()}: Show details of a data worksheet
+
 }}
-
 \examples{
-   set_example_safe_dir()
+   set_example_safedata_dir()
    recs <- validate_record_ids(c(1400562, 3266827, 3266821))
    show_concepts(recs)
    show_record(recs[1,])
@@ -74,5 +77,5 @@ dataset concept.
    show_worksheet(1400562, "EnvironVariables")
    beetle_abund <- load_safe_data(1400562, "Ant-Psel")
    show_worksheet(beetle_abund, extended_fields = TRUE)
-   unset_example_safe_dir()
+   set_example_safedata_dir(on=FALSE)
 }

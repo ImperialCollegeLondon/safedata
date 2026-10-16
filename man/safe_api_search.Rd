@@ -15,7 +15,7 @@ validate_query_param(name, val, class = "character", length = 1)
 \item{params}{A character vector of the query parameters to be passed  to
 the API endpoint.}
 
-\item{ids}{A set of SAFE dataset record IDs to restrict a search. This will
+\item{ids}{A set of safedata dataset record IDs to restrict a search. This will
 typically be a \code{\link{safe_record_set}} object returned by another
 search but can also be a vector of record ids in any of the formats
 accepted by \code{\link{validate_record_ids}}.}
@@ -34,22 +34,21 @@ all versions of matching dataset concepts are returned.}
 }
 \value{
 The \code{safe_api_search} function returns an object of class
-   \code{\link{safe_record_set}} of datasets that match the submitted
-   query. The \code{validate_query_param} function either returns NULL
-   on success or raises an error.
+   \code{\link{safe_record_set}} of datasets that match the submitted query. The
+   \code{validate_query_param} function either returns NULL on success or raises
+   an error.
 }
 \description{
-The two internal functions described here handle validating the
-parameters passed to the exported search functions and then constructing
-API calls from the parameters and the common \code{ids} and
-\code{most_recent} arguments.
+The two internal functions described here handle validating the parameters passed
+to the exported search functions and then constructing API calls from the
+parameters and the common \code{ids} and \code{most_recent} arguments.
 }
 \section{Functions}{
 \itemize{
-\item \code{safe_api_search}: Constructs, submits and formats calls to
-the SAFE API.
+\item \code{safe_api_search()}: Constructs, submits and formats calls to
+the `safedata_server` API.
 
-\item \code{validate_query_param}: A basic query parameter validation handler
+\item \code{validate_query_param()}: A basic query parameter validation handler
+
 }}
-
 \keyword{internal}

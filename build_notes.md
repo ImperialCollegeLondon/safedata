@@ -1,230 +1,259 @@
-# Building and releasing safedata
+# Developing and releasing `safedata`
 
 This repository and package uses a number of systems that you need to be aware
 of if you plan to work with the codebase:
 
-* Documentation for the package is maintained using `roxygen` and `pkgdown`.
-* The code should be checked using linting for consistent style.
-* The repository has (now) been set up to use the git flow system for
-  controlling development and releases across branches.
-* The repository uses GitHub Actions to carry out continuous integration (CI).
+* The repository uses trunk based releases from the `main` branch with changes accepted
+  into `main` only through pull requests. We used to use the `git flow` approach with
+  release branches from `develop` onto `main` but moved to trunk based releases from
+  version 2.0.0.
+* Documentation for the package is maintained using `roxygen2` and `pkgdown`.
+* The code uses the `pre-commit` package to carry out QA checking on commits.
+* The repository uses GitHub Actions to carry out out checks on pull requests to support
+  continuous integration.
 
-These notes provide a brief walk through for these systems and some package
-specific requirements for releases.
+These notes provide a brief walk through for these systems and some package specific
+requirements for releases.
 
-## Build scripts
+## Code development
 
-The `build_scripts` folder in the repository contains scripts containing the
-code blocks used in some of the steps described below. All are set up to be run
-from directly inside the `build_scripts` directory. Scripts are described in
-context below
+Any new feature or bug fix should start with a new [GitHub
+issue](https://github.com/ImperialCollegeLondon/safedata/issues) and then the creation
+of a new branch to implement the new code. Make a pull request from that branch onto
+`main` with code to add and document the new code: you will need to request a review and
+wait for code QA to pass before the PR can be merged. New releases are made directly
+from the `main` branch, following merged pull requests for features and bug fixes that
+are going to be included in the new release.
+
+The repository includes a `uvr.toml` configuration file for the
+[uvr](https://nbafrank.github.io/uvr/) package manager for R. It is highly recommended
+that you download and use `uvr` to manage the development environment for the package.
+
+* The `uvr sync` command will create and update a local R library (`.uvr/library`)
+  containing all of the packages required to develop and run the code in the repository.
+* The `uv run` command can be used to run specific R script files.
+* Alternatively `source .uvr/activate` can be used to activate the configured R
+  environment. While the environment is activated, all R commands will use the
+  configured package setup.
+
+If you do not use `uvr`, look at the `uvr.toml` file for the package and development
+requirements.
+
+The package uses [semantic version numbering](https://semver.org/) and code on the
+development branch should use the prerelease token `9000`. This is explained in more
+detail below in the description of the release cycle.
 
 ## Package documentation
 
-With the `roxygen` package , all of the package documentation is located in one
-of three places:
+R packages require a `man` directory containing `Rd` format files that provide
+package documentation. Rather than maintain separate files manually, the `roxygen2`
+package allows R objects to be documented directly in the R code files. The `roxygen2`
+package can then be used to automatically rebuild and organise the `man` directory when
+documentation in the R source files changes.
 
-1. Markup inside the `R` source files - there are blocks of comments starting
-   with `#'` that contain all of the documentation that goes into the normal R
-   documentation (`.Rd`) files.
-2. Vignettes, formatted as `Rmarkdown` files in the `vignettes` directory.
-
-When the documentation has been changed then the `.Rd` files in `man` and any
-vignettes in `doc` can be built automatically. The key command is:
+The `devtools` package provides a wrapper function that can be run to updates `man`
+files:
 
 ```sh
 Rscript -e "devtools::document()"
 ```
 
-These documentation pages are a key part of the package and so whenever the code
-changes, the documentation should be rebuilt  before commits are made: this
-ensures that the full package is submitted to GitHub Actions.
+However, the [`pre-commit` configuration](#the-pre-commit-setup) for `safedata` includes
+a step that automatically runs this update. If you try to commit code without updating
+the matching `man` files, then the commit will fail and the documentation will have been
+updated.
 
-## Website
+### Vignettes
 
-In addition to using `roxygen` to maintain the in-package documentation,
-`safedata` also uses `pkgdown` to create a documentation website. The
-configuration for this is in the `_pkgdown.yml` file. This file typically only
-needs updating when new functions are added, as they need to be added into the
-reference structure. The website will contain an HTML version of the Rd files
-and vignettes but also extra content: for example `README.md` is used to create
-`index.html` and other markdown files can be used to provide other content.
+R packages contain *vignettes* that provide additional documentation such as background
+and how to guides. The source content for vignettes are `Rmarkdown` files in the
+`vignettes` directory and are set up to use the `knitr` package to convert the Markdown
+and code to HTML. The following tool can be used to rebuild the vignettes:
 
-Rebuilding the website uses two commands:
+```sh
+ Rscript -e "devtools::build_articles()" 
+```
+
+However, the `R CMD BUILD` process, which is used to generate the source R package for
+release also builds the vignettes. This is run during both local package checking and on
+GitHub Action checking.
+
+### Website
+
+In addition to using `roxygen2` and `knitr` to maintain the package documentation and
+vignettes, `safedata` also uses `pkgdown` to create a documentation website. This
+basically builds a complete website and index around the `man` files as an API reference
+and the vignettes as explanatory content ('articles').
+
+The configuration for this is in the `_pkgdown.yml` file. This file typically only needs
+updating when new functions are added, as they need to be added into the reference
+structure. The website will contain an HTML version of the Rd files and vignettes but
+also extra content: for example `README.md` is used to create `index.html` and other
+markdown files can be used to provide other content.
+
+You can use the following commands to remove previous website builds and then recreate
+the website in the `docs` directory.
 
 ```sh
 Rscript -e " pkgdown::clean_site()"
 Rscript -e " pkgdown::build_site()"
 ```
 
-This removes old files and recreates the website in the `docs` directory (_not_
-`doc`!). This directory is then automatically used by GitHub Pages to create the
-package website at:
+The `docs` directory is *not* part of the continuous integration of the package as it
+can be generated automatically from the `Rd` and `Rmd` files. The `safedata`
+package therefore includes `docs` in the `.gitignore` file: you can view the local copy
+of the website that these commands generate but it is not managed by git.
 
-()[https://imperialcollegelondon.github.io/safedata/]
+The actual [`safedata` website](https://imperialcollegelondon.github.io/safedata/) can
+be rebuilt using the `pkgdown::deploy_to_branch()` command. This automatically builds
+the website files (as in the local commands above) and commits them to the `gh-pages`
+branch in the repository, which is then deployed to the Github Pages URL for the
+`safedata` package:
 
-The website files themselves are _not_ part of the continuous integration of the
-package and having to build and then commit changes within `docs` is untidy. The
-`safedata` package therefore includes `docs` in the `.gitignore` file: you can
-have a local copy of the website but it is not managed by git.
+[<https://imperialcollegelondon.github.io/safedata/](https://imperialcollegelondon.github.io/safedata/)>
 
-Instead, a GitHub Action has been configured to run `pkgdown` - when a new release has
-passed checks, the action can be triggered in order to update the `gh-pages` branch
-using the most recent code.
+### Documentation script
 
-For local use, the package and website build steps have been bundled together
-in `build_scripts/build_docs.sh`. However, note that there are two different
-things go
+For local use, the package and website build steps have been bundled together in
+`build_scripts/build_docs.sh`.
 
-## Linting
+## Code formatting and linting
 
-The linting process inspects the R code files in the package to check they have
-a consistent coding and syntax style. The file `build_scripts/collect_lint.sh`
-runs the code linting and updates the file `lint.txt` in the package root.
+The `safedata` package uses automatic code formatting and linting to maintain consistent
+code quality and layout.
 
-The `.lintr` file in the package root is used to configure the linting and set
-any exclusions. This is currently done on a line by line basis to note specific
-exceptions. It is also possible to exclude code from linting using `# nolint`
-tags in the source code, but I'm avoiding this to keep the code files relatively
-clean. It does mean that `.lintr` has to be updated if the line numbers of
-exceptions change.
+* The [`air` formatter](https://posit-dev.github.io/air/) provides fast R code
+  formatting, ensuring that changes to the package code follow consistent and stable
+  layout.
+* The [`jarl` linter](https://jarl.etiennebacher.com/) provides code linting: it
+  inspects the code using a set of rules and warns about programming errors, bugs and
+  suspicious code patterns.
+
+You do not need to install either of these packages manually, as they are included in
+the `pre-commit` setup and so are run automatically on any new code. However, if you
+want to run them independently of `pre-commit` then you need to install them.
+
+## The `pre-commit` setup
+
+`pre-commit` is a Python program that automates running a set of quality assurance and
+maintenance checks whenever `git commit` is run. If the checks fail, the commit will be
+aborted and you will need to fix the issues and re-commit your changes. You will need
+to:
+
+1. Install [`pre-commit`](https://pre-commit.com/#install)
+2. Install the `pre-commit` configuration for the package from within your clone of the
+   `safedata` repository by using: `pre-commit install`
+
+The set of checks ('hooks') are defined in the `.pre-commit-config.yaml` configuration
+file and the current checks are
+
+* Running `roxygen` to check if `Rd` files are up to date.
+* Inspecting the R code to check it can be loaded, contains no `browser()` or `debug()`
+  commands, and that the `DESCRIPTION` file is complete.
+* Code formatting and linting using `air` and `jarl`
+* Checks for common file issues: sorting, missing line endings, oversized files and the
+  inclusion of 'artifact' files such as `.Rhistory` files.
+
+Note that *some* of these steps may make changes to your files to fix issues, such as to
+update `man` files and apply formatting. When this happens, the `pre-commit` step will
+fail but you can simply add the changed files to the commit and re-commit to add the
+automatic fixes.
+
+## Web mocking
+
+The `safedata` package uses the internet extensively for downloading package data and
+metadata. This includes code used in function examples, vignettes and in [running
+tests](#package-test-suite). The private function `safedata:::mock_api()` is used in all
+of these situations to turn off connections to the actual internet and instead serve up
+content from the `inst/api_data` folder. This ensures that testing and documentation
+building is not reliant on internet connections.
+
+If you add new code to the project that requests content from the internet, you will
+need to extend the set of mocked URLS in the `mock_api_urls` list in `R/api_mockr.R` and
+include links to the expected content from those links.
+
+At some point, this needs to be made optional, to allow a package build to also be
+tested against live content.
+
+## Package test suite
+
+The package contains a test suite used for testing that functions behave as expected.
+Currently, this largely checks that network failures are handled gracefully. Those have
+to be passing before the package can be released. The tests are automatically run by `R
+CMD CHECK` during Github Actions but can also be run locally using:
 
 ```sh
-cd build_scripts
-./collect_lint.sh
+Rscript -e "devtools::test()"
 ```
 
-## Repository structure
+If you want to run a single file of tests, use:
 
-The package uses the Gitflow branching model for the package repository  and the
-`git-flow` extensions to help manage this ([](https://github.com/nvie/gitflow)).
-
-Day to day development happens on the `develop` branch, although you can also
-create specific `feature` branches for new features.  When you have code that
-you want to release as a new version then `git flow` is used to create a
-`release` branch that is used to check and make final changes. That `release`
-branch is then merged into `master` and tagged as the new release, and also back
-into `develop` to bring back last minute fixes. The `master` branch should
-really only ever see merges in from a `release` branch - you should not work on
-it directly.
-
-The package uses semantic version numbering ([](https://semver.org/)) and code on
-the development branch should use the prerelease token `9000`. This is explained
-in more detail below in the description of the release cycle.
-
-## GitHub Actions
-
-When commits are pushed to the Github origin then the package is automatically
-built and checked using GitHub Actions:
-
-[](https://github.com/ImperialCollegeLondon/safedata/actions)
-
-Checking happens on all branches, so day to day commits to `develop` will be built
-as well as commits to `release` branches and the creation of new tagged versions
-on `master`.
-
-If you have made changes that you do not want to be built and checked then you
-can include `[ci skip]` in the commit message, but the idea is that all changes
-should be checked so this is typically only used for documentation changes and
-the like.
+```sh
+Rscript -e "testthat::test_file('tests/testthat/test-local_sdd.R')"
+```
 
 ## Release cycle
 
-These are the steps needed to release a new version of `safedata`.
+These are the steps needed to release a new version of `safedata`. GitHub Actions should
+ensure that `main` is always building correctly but checking should be repeated during
+the release process to ensure that everything is up to date.
 
 ### Configure `git`
 
 It is easier if `git` is configured to push new tags along with commits. This
-essentially just means that new releases can be sent with a single commit, which
-is simpler and saves GitHub Actions from building both the the code commit and then the
+essentially just means that new releases can be sent with a single commit, which is
+simpler and saves GitHub Actions from building both the the code commit and then the
 tagged version. This only needs to be set once.
 
 ```sh
 set git config --global push.followTags true
 ```
 
-### Update the example directory
+### Update `main` ready for a release
 
-The `safedata` package ships with a zipped `safedata` directory that is used in
-the code examples. The search functionality in `safedata` uses the live database
-via the API so, unless you update this example directory, running the search
-examples may return Zenodo record IDs that are missing from the example
-directory. This will create checking errors.
+Once you have decided that the changes added to `main` require a new release then you
+also need to create a PR to update the following files:
 
-The file `build_scripts/refresh_example_dir.R` contains the code needed to the
-example directory with a freshly zipped copy with up to date indices. Of course,
-if someone publishes a new dataset before the release occurs, you may still get
-an error and have to repeat this step!
+* Update the `DESCRIPTION` file to increment the version number to the new
+  release. For example, a bug patch release would update the line `Version: 1.0.5-9000`
+  to `Version: 1.0.6`
 
-```sh
-cd build_scripts
-Rscript refresh_example_dir.R
-```
+* Update `NEWS` to document the changes since the previous version
 
-### Update the vignette objects
+When this PR is merged into `main`, the GitHub Actions will run the testing described
+above.
 
-The `safedata` package ships with a file `R/sysdata.rda` that contains all of
-the data displayed in the vignettes. This is so that the vignette code does not
-_require_ an internet connection for the code to be run, which is safer for
-CRAN. By default, these files are used in the vignette build and the file is
-created using:
+### Run package build and validation
+
+The GitHub Actions run day-to-day quality checks on the code but a more stringent set of
+testing is needed to add a package onto CRAN. The set of checks has been compiled into a
+single script in `build_scripts/build_and_check.sh`. The content of this script is shown
+below - you may prefer to run the code step by step and the components are described
+below.
 
 ```sh
-cd build_scripts
-Rscript vignette_objects.R
-```
+#!/bin/bash
+# Script to build and check safedata
 
-### Check the code
+# 0) Show R version being used
+R --version
 
-Releases start from the `develop` branch, with a bunch of commits that you want
-to release as a new version. Before you do anything, you should check that the
-current commit in `develop` is building correctly.
+printf "\n------------\n\n"
 
-There are three steps. First, the package contains a test suite, which currently
-only checks that network failures are handled gracefully. Those have to be passing
-before the package can be built so:
-
-```sh
-Rscript -e "devtools::test()"
-```
-
-If the tests pass, then the second step is to build and install the package with
-minimal checking to see that this works and to make sure all of the most recent
-updates are available in installed files
-
-```sh
- R CMD BUILD safedata --no-build-vignettes
- R CMD CHECK safedata_xxxxxxxx.tar.gz
-```
-
-With these files all in place, you can now verify that the complete code
-packaging, documentation building and formal CRAN checking passes.
-
-```sh
-cd build_scripts
-./build_and_check.sh
-```
-
-Because nearly all of the actual user changes happen in the vignette and R
-files, it is easy to forget to update the documentation, so a full checking
-process starts there. The code below runs the full checking process on your
-local machine. The code in `build_and_check.sh`  is reproduced here to show
-the steps.
-
-```sh
-# a) Move into the source directory and update the documents
+# 1) Move down into the source directory and update the documents 
 #    using Roxygen and pkgdown
-cd safedata
+cd ../
 Rscript -e "devtools::document()"
 Rscript -e " pkgdown::clean_site()"
 Rscript -e " pkgdown::build_site()"
-cd ../
 
-# b) Build the package from the source directory
+
+# 2) Move down again into the parent directory and 
+#    build the package from the source directory
+cd ../
 R CMD BUILD safedata
 
-# c) Identify the version name that just got built from the 
-#    package DESCRIPTION file and then check it for CRAN
+# 3) Identify the version name that just got built and check it for CRAN
 VERSION=$(sed -n -e '4p' safedata/DESCRIPTION  | cut -d " "  -f 2)
 R CMD CHECK --as-cran --run-donttest safedata_$VERSION.tar.gz 
 ```
@@ -233,7 +262,7 @@ Two points to note:
 
 1. The built package and check output are saved in the parent directory of the
    repository, not in the repository itself.
-2. The version built is the one in the _currently checked out branch_.
+2. The version built is the one in the *currently checked out branch*!
 
 The key file to look at is `safedata.Rcheck/00check.log`. This contains a long
 list of checks applied to the code. Look out for `NOTE`, `WARNING` and `ERROR`
@@ -241,94 +270,24 @@ and resolve these issues before moving on. If you are checking in the `develop`
 branch then you will see a note saying `Version contains large components` -
 that is about to be fixed.
 
-#### Vignette building
-
-By default, the vignettes should build without using the network to download
-resources. This can be verified by setting an environment variable and running
-from the package root:
-
-```sh
-export URL_DOWN=TRUE
-Rscript -e "pkgdown::build_articles()"
-```
-
-However, the articles can also be built using the network by setting the
-following:
-
- ```sh
-export BUILD_VIGNETTE_USING_REMOTE=TRUE
-Rscript -e "pkgdown::build_articles()"
-```
-
-This is marginally better, because it is automatically up to date and contains
-more of the expected messages, which haven't been fully duplicated in the
-offline mode.
-
-### Create the new release branch
-
-If all is ok then the code is in theory ready to release. The following creates
-a new candidate branch containing the current `develop` code. You need to
-specify the upcoming release version number, so for example to release version
-`1.0.6`:
-
-```sh
-git flow release start 1.0.6
-```
-
-This will create the `release/1.0.6` branch and check it out.
-
-You should now immediately update the `DESCRIPTION` file to match that version
-number. In this example, that should mean changing the previous development
-version number (`-9000` is used to indicate code in development between versions
-):
-
-```txt
-Version: 1.0.5-9000
-```
-
-to
-
-```txt
-Version: 1.0.6
-```
-
-You can then commit that change:
-
-```sh
-git commit -m "Update version number" DESCRIPTION
-```
-
-At the moment, the `release` branch is only local. The release branch and code
-needs to be pushed to Github to be picked up GitHub Actions. There is a specific
-`git flow` command to do this:
-
-```sh
-git flow release publish 1.0.6
-```
-
-This sends the release branch up to be checked. In addition, there is now a
-release branch on origin so any other last minutes fixes and commits can be
-pushed in order to check those.
-
 ### Checking on different platforms
 
-The Git Action build process should now be underway for the `release` branch.
-Git Actions is configured (see `.github/workflows/check-standard.yaml`) to build
-the package under R stable on Ubuntu, Mac and Windows and R devel on Ubuntu.
+The GitHub Action build process should now be underway for the `main` branch. Git
+Actions is configured (see `.github/workflows/check-standard.yaml`) to build the package
+under R stable on Ubuntu, Mac and Windows and R devel on Ubuntu.
 
-Although Windows is included in the GitHub Actions testing environment, the R
-Project also maintains a Windows test environment that can be used. This needs a
-built copy of the `release` branch, so run `build_scripts/build_and_check.sh`
-again. This should create a newly built package with the new version number
-(e.g. `safedata_1.0.6.tar.gz`). If everything checked out ok before creating the
-release, this is really just updating the version name.
+Although Windows is included in the GitHub Actions testing environment, the R Project
+also maintains a Windows test environment that can be used. This needs a built copy of
+the `main` branch, so run `build_scripts/build_and_check.sh` again. This should
+create a newly built package with the new version number (e.g. `safedata_1.0.6.tar.gz`).
+If everything checked out ok before creating the release, this is really just updating
+the version name.
 
 You then need to upload that file to `win-builder`. The python script
-`build_scripts/upload_to_win-builder.py`  will do this for you - it is simply
-automating the process of using FTP to upload the current version for checking
-under both R stable and R devel. Note that `win-builder` communicates by email
-with the package maintainer (whoever has the `cre` flag in the `authors` section
-of the `DESCRIPTION` file.
+`build_scripts/upload_to_win-builder.py`  will do this for you - it is simply automating
+the process of using FTP to upload the current version for checking under both R stable
+and R devel. Note that `win-builder` communicates by email with the package maintainer
+(whoever has the `cre` flag in the `authors` section of the `DESCRIPTION` file).
 
 ```sh
 python build_scripts/upload_to_win-builder.py
@@ -339,22 +298,20 @@ python build_scripts/upload_to_win-builder.py
 Ideally what happens now is that the build and check process on GitHub Actions and
 `win-builder` all pass. You **must** wait for these checks to complete!
 
-Obviously, if any errors or warnings crop up in the checking process, those
-should be fixed in the `release` branch. The changes should be committed and
-pushed to start a new round of GitHub Actions checking and you will need to rebuild
-and resubmit to `win-builder`
+Obviously, if any errors or warnings crop up in the checking process, those should be
+fixed in the `release` branch. The changes should be committed and pushed to start a new
+round of GitHub Actions checking and you will need to rebuild and resubmit to
+`win-builder`
 
 ### Final edits
 
-There are some final edits to check you have made:
+Before submitting the code to CRAN you should make the following changes:
 
-* Update `NEWS` to document the changes since the previous version
-* Update `cran-comments.md` to record the R versions and environments used for
-  testing and the outcomes of those builds. This should all be `status: OK` but
-  there might be notes that should be explained.
+* Update `cran-comments.md` to record the R versions and environments used for testing
+  and the outcomes of those builds. This should all be `status: OK` but there might be
+  notes that should be explained.
 
-You now should also build the final version of the release code to be submitted
-to CRAN:
+You now should also build the final version of the release code to be submitted to CRAN:
 
 ```sh
 cd build_scripts
@@ -364,55 +321,24 @@ cd build_scripts
 That should create the source package in the parent directory (e.g.
 `safedata-1.0.6.tar.gz`).
 
-These edits and building will obviously also need to be committed and so there
-is likely to be one last round of CI runs, but this will just be documentation
-and information changes and so is unlikely to reveal new issues. Of course, if
-it does, you'll have to fix them!
+These edits and building will obviously also need to be committed and so there is likely
+to be one last round of CI runs, but this will just be documentation and information
+changes and so is unlikely to reveal new issues. Of course, if it does, you'll have to
+fix them!
 
 ### Finish the release
 
-Once the `release` branch is passing checks on all platforms, then the candidate
-release is ready to be released as a version.  Again using `1.0.6` as the
-example version number, the command is:
-
-```sh
-git flow release finish 1.0.6
-```
-
-You will be asked for some commit messages and a new tag comment, which will
-simply be the version number. You should then be on the `develop` branch. You
-now need to checkout the `master` branch which should now have all the commits
-since the last release and a new tag with the version number. You can now push
-this to create the release - if you've set the config described above then a
-single push will create the commit and tag.
-
-```sh
-git checkout master
-git push
-```
-
-This will set off another round of GitHub Actions checking - you should see the
-tagged version being built and checked. This should all go cleanly!
-
-You should now **immediately** get off the `master` branch and back onto
-`develop`, before you accidentally change the files or commit to it, You should
-also **immediately** update the version number in `DESCRIPTION`, adding `-9000`
-to show that this is now the development version from the new release. This is a
-trivial change, so we can use `[ci skip]` to avoid triggering Github Actions.
-
-```sh
-git checkout develop
-# Edit DESCRIPTION to e.g. version 1.0.6-9000
-git commit -m "Bump develop version [ci skip]" DESCRIPTION
-git push
-```
+Once the `main` branch is passing checks on all platforms, then the candidate release
+is ready to be released as a version. Create a release on the [Github release
+page](https://github.com/ImperialCollegeLondon/safedata/releases) to tag the specific
+commit to the `main` branch that was just used to build the final package version.
 
 ### Release to CRAN
 
-You can then submit the built version of the source package that was created
-during the release process at: ()[https://cran.r-project.org/submit.html]
+You can then submit the built version of the source package that was created during the
+release process at: ()[https://cran.r-project.org/submit.html]
 
-You  should  take the up-to-date contents of `cran-comments.md` and  copy that
-in the comments section of the submission form. The CRAN maintainers expect
-submitted packages to be functional and fully checked and these notes will help
-them see that the package has been properly checked.
+You  should take the up-to-date contents of `cran-comments.md` and  copy that in the
+comments section of the submission form. The CRAN maintainers expect submitted packages
+to be functional and fully checked and these notes will help them see that the package
+has been properly checked.

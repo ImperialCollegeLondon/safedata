@@ -4,6 +4,7 @@
 # History files
 .Rhistory
 .Rapp.history
+.Rprofile
 
 # Session Data files
 .RData
@@ -41,3 +42,15 @@ rsconnect/
 
 # Ignore the pkgdown docs folder.
 docs/*
+
+# Ignore any local lint file
+lint.txt
+
+# pyenv files
+.python-version
+/doc/
+/Meta/
+
+.vscode/
+/.uvr/library/
+/.uvr/activate*

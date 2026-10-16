@@ -4,20 +4,23 @@
 \alias{load_safe_data}
 \alias{str.safedata}
 \alias{print.safedata}
-\title{Loads data from a SAFE dataset.}
+\title{Load data from a safedata dataset.}
 \usage{
-load_safe_data(record_id, worksheet)
+load_safe_data(record_id, worksheet, ...)
 
 \method{str}{safedata}(object, ...)
 
 \method{print}{safedata}(x, n = 10, ...)
 }
 \arguments{
-\item{record_id}{A SAFE dataset record id}
+\item{record_id}{A safedata dataset record id}
 
 \item{worksheet}{The name of the worksheet to load}
 
-\item{\dots}{Further arguments to \code{str} and \code{print} methods.}
+\item{\dots}{For \code{load_safe_data}, these are additional arguments
+passed on to \code{\link{download_safe_files}} if the data file needs
+to be downloaded. Otherwise, these are further arguments to the
+\code{str} and \code{print} methods.}
 
 \item{x, object}{A \code{safedata} object.}
 
@@ -28,36 +31,34 @@ A data frame with the additional \code{safedata} class and
    additional attribute data containing metadata for the data.
 }
 \description{
-This function returns a data frame containing the data from a data
-worksheet in a SAFE dataset. Note that SAFE dataset .xlsx files include
-the other (non-data) worksheets Summary, Taxa, Locations that contain
-metadata: see  \code{\link{get_taxa}}, \code{\link{get_locations}},
-\code{\link{add_taxa}} and \code{\link{add_locations}} for accessing
-and using this metadata.
+This function returns a data frame containing the data from a data worksheet in a
+safedata dataset. Note that safedata \code{.xlsx} files include other (non-data)
+worksheets Summary, Taxa, Locations that contain metadata: see
+\code{\link{get_taxa}}, \code{\link{get_locations}}, \code{\link{add_taxa}} and
+\code{\link{add_locations}} for accessing and using this metadata.
 }
 \details{
-In particular, the large amount of data worksheet summary metadata is
-not attached as attributes to the data frame returned by this function.
-This is largely to avoid excessive output to the console during normal
-use of the data frame: an extended description of a worksheet can be
-displayed using \code{\link{show_worksheet}}.
+In particular, the large amount of data worksheet summary metadata is not
+attached as attributes to the data frame returned by this function. This is
+largely to avoid excessive output to the console during normal use of the data
+frame: an extended description of a worksheet can be displayed using
+\code{\link{show_worksheet}}.
 
-Currently, this function only loads data from SAFE formatted
-\code{.xlsx} files - data stored in external files is not yet
-handled.
+Currently, this function only loads data from safedata formatted \code{.xlsx}
+files - data stored in external files is not yet handled.
 }
-\section{Methods (by generic)}{
+\section{Functions}{
 \itemize{
-\item \code{str}: Display structure of a safedata data frame
+\item \code{str(safedata)}: Display structure of a safedata data frame
 
-\item \code{print}: Print safedata data frame
+\item \code{print(safedata)}: Print safedata data frame
+
 }}
-
 \examples{
-   set_example_safe_dir()
+   set_example_safedata_dir()
    beetle_abund <- load_safe_data(1400562, "Ant-Psel")
    str(beetle_abund)
    # See also the show_worksheet function for further worksheet metadata
    show_worksheet(beetle_abund)
-   unset_example_safe_dir()
+   set_example_safedata_dir(on=FALSE)
 }

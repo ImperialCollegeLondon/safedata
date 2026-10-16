@@ -14,7 +14,7 @@ A data frame with fields: filename, dataset_access, path
    and local.
 }
 \description{
-This function returns a list of the files associated with a record.
+This function returns a data frame of the files associated with a record.
 The access status of the record is reported, along with the local
 absolute file path and whether a local copy is present. If there
 is no local copy and the dataset is open access, you can use
@@ -23,8 +23,8 @@ is embargoed or restricted, see \code{\link{insert_dataset}}.
 }
 \examples{
    \donttest{
-   set_example_safe_dir()
+   set_example_safedata_dir()
    files <- get_file_details(1400562)
-   unset_example_safe_dir()
+   set_example_safedata_dir(on=FALSE)
    }
 }

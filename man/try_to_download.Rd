@@ -26,15 +26,16 @@ codes.
 \details{
 If the download fails, the function returns FALSE and the return value
 attribute 'fail_msg' is used to provide details. Otherwise, an
-\code{\link[httr]{response}} object is returned containing the resource. If a
-local path is provided, the resource is downloaded to that path and the
-function returns TRUE to indicate success.
+\code{\link[httr]{response}} object is returned containing the resource
+ If a local path is provided, the resource is downloaded to that path
+and the function returns TRUE to indicate success.
 }
 \section{Note}{
 
 
-This function contains code to simulate network failures of varying kinds (no
-network, no API, specific resource unavailable) for use in unit testing.
+This function contains code to simulate network failures of varying
+kinds (no network, no API, specific resource unavailable) for use in
+unit testing.
 }
 
 \keyword{internal}
