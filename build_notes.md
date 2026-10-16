@@ -4,11 +4,13 @@ This repository and package uses a number of systems that you need to be aware
 of if you plan to work with the codebase:
 
 * The repository uses trunk based releases from the `main` branch with changes accepted
-  into `main` only through pull requests.
-* The repository uses GitHub Actions to carry out out checks on pushes and pull
-  requests to support continuous integration.
-* Documentation for the package is maintained using `roxygen` and `pkgdown`.
-* The code is checked using linting for consistent style.
+  into `main` only through pull requests. We used to use the `git flow` approach with
+  release branches from `develop` onto `main` but moved to trunk based releases from
+  version 2.0.0.
+* Documentation for the package is maintained using `roxygen2` and `pkgdown`.
+* The code uses the `pre-commit` package to carry out QA checking on commits.
+* The repository uses GitHub Actions to carry out out checks on pull requests to support
+  continuous integration.
 
 These notes provide a brief walk through for these systems and some package specific
 requirements for releases.
@@ -17,115 +19,70 @@ requirements for releases.
 
 Any new feature or bug fix should start with a new [GitHub
 issue](https://github.com/ImperialCollegeLondon/safedata/issues) and then the creation
-of a new branch to implement the new code. When that branch is complete and passing
-checks then a pull request onto the `main` branch should be made. New releases are made
-directly from the `main` branch, following merged pull requests for features and bug
-fixes that are going to be included in the new release.
+of a new branch to implement the new code. Make a pull request from that branch onto
+`main` with code to add and document the new code: you will need to request a review and
+wait for code QA to pass before the PR can be merged. New releases are made directly
+from the `main` branch, following merged pull requests for features and bug fixes that
+are going to be included in the new release.
 
-The package uses ([semantic version numbering](https://semver.org/)) and code on the
+The repository includes a `uvr.toml` configuration file for the
+[uvr](https://nbafrank.github.io/uvr/) package manager for R. It is highly recommended
+that you download and use `uvr` to manage the development environment for the package.
+
+* The `uvr sync` command will create and update a local R library (`.uvr/library`)
+  containing all of the packages required to develop and run the code in the repository.
+* The `uv run` command can be used to run specific R script files.
+* Alternatively `source .uvr/activate` can be used to activate the configured R
+  environment. While the environment is activated, all R commands will use the
+  configured package setup.
+
+If you do not use `uvr`, look at the `uvr.toml` file for the package and development
+requirements.
+
+The package uses [semantic version numbering](https://semver.org/) and code on the
 development branch should use the prerelease token `9000`. This is explained in more
 detail below in the description of the release cycle.
 
-You should install the R `devtools` package as well as the `safedata` package
-dependencies.
-
-## GitHub Actions
-
-When commits are pushed to the Github origin then the package is automatically
-built and checked using GitHub Actions:
-
-[https://github.com/ImperialCollegeLondon/safedata/actions](https://github.com/ImperialCollegeLondon/safedata/actions)
-
-Checking happens on pushes to all branches, so day to day commits to feature branches
-will be built as well as pull requests onto `main`. If you have made changes that you do
-not want to be built and checked then you can include `[ci skip]` in the commit message,
-but the idea is that all changes should be checked so this is typically only used for
-minor documentation changes and the like.
-
-The currently configured actions do the following:
-
-* `.github/workflows/check-standard.yaml`: on `push` or `pull_requests` to the `main` 
-  branch, the actions  in this file runs:
-  * Quality assurance checks by running `pre-commit` using the configured R
-    `precommit` steps.
-  * Package build checks by running `R CMD CHECK --as-cran`
-  * Documentation checks using `pkgdown::build_site()`.
-* `.github/workflows/pkgdown.yaml`: when a release is published on GitHub this action
- runs `pkgdown::deploy_to_branch()` to publish the new documentation for the released 
- version.
-
-## The `pre-commit` setup
-
-`pre-commit` is a Python program that runs a set of hooks when any changes are committed
-to the repository. These hooks are used to check that the code is free of any common
-issues _before_ it is committed - if the checks fail, the commit will be aborted and you
-will need to fix the issues and re-commit your changes.
-
-You will need to:
-
-1. Install [`pre-commit`](https://pre-commit.com/#install)
-2. Install the `pre-commit` configuration for the package from within your clone of the
-   `safedata` repositrory by using: `pre-commit install`
-
-At present, the automatic checking includes:
-
-* Code styling
-* Regeneration of the R documentation (`man`) files to ensure the source code and
-  documentation are synchronised (see below).
-* Checking that the DESCRIPTION file structure is correct and contains all package
-  dependencies used in the code.
-* Automatic linting of the R source files.
-* Basic checks that the R code is parsable and contains no `browser()` or `debug()`
-  statements.
-* Checks for common file issues: sorting, missing line endings, oversized files and the
-  inclusion of 'artifact' files such as `.Rhistory` files.
-
-Note that _some_ of these steps may make changes to your files to fix issues, such as to
-update `man` files and apply common styling. When this happens, the `pre-commit` step
-will fail but you can simply add the changed files to the commit and re-commit to add
-the automatic fixes.
-
 ## Package documentation
 
-With the `roxygen2` package , all of the package documentation content is located in
-source files. These are then processed to automatically generate the standard R
-documentation files (the `man/*.Rd` files).
+R packages require a `man` directory containing `Rd` format files that provide
+package documentation. Rather than maintain separate files manually, the `roxygen2`
+package allows R objects to be documented directly in the R code files. The `roxygen2`
+package can then be used to automatically rebuild and organise the `man` directory when
+documentation in the R source files changes.
 
-### The `man` pages
-
-The `man` directory contains all of the package documentation as `.Rd` format files, but
-these files are built automatically by the `roxygen2` package from docstrings in the `R`
-source files.  When these source files are changed, that documentation content needs to
-be rebuilt to make sure all of the content is up to date. This step is built into the
-`pre-commit` checking, so commits should automatically include any updates to the `man`
-pages.
-
-If you do want to rebuild `man` pages manually - to check what changes look like before
-committing - the command is:
+The `devtools` package provides a wrapper function that can be run to updates `man`
+files:
 
 ```sh
 Rscript -e "devtools::document()"
 ```
 
+However, the [`pre-commit` configuration](#the-pre-commit-setup) for `safedata` includes
+a step that automatically runs this update. If you try to commit code without updating
+the matching `man` files, then the commit will fail and the documentation will have been
+updated.
+
 ### Vignettes
 
-The source content for vignettes are `Rmarkdown` files in the `vignettes` directory, but
-these need to be built into HTML files using the `knitr` package and installed in the
-`inst/doc` directory. The following tool can be used to rebuild the vignettes:
+R packages contain *vignettes* that provide additional documentation such as background
+and how to guides. The source content for vignettes are `Rmarkdown` files in the
+`vignettes` directory and are set up to use the `knitr` package to convert the Markdown
+and code to HTML. The following tool can be used to rebuild the vignettes:
 
 ```sh
  Rscript -e "devtools::build_articles()" 
 ```
 
 However, the `R CMD BUILD` process, which is used to generate the source R package for
-release also builds the vignettes and this must pass without error on GitHub Action
-checking.
+release also builds the vignettes. This is run during both local package checking and on
+GitHub Action checking.
 
 ### Website
 
 In addition to using `roxygen2` and `knitr` to maintain the package documentation and
 vignettes, `safedata` also uses `pkgdown` to create a documentation website. This
-basically builds a complete website and index around the `Rd` files as an API reference
+basically builds a complete website and index around the `man` files as an API reference
 and the vignettes as explanatory content ('articles').
 
 The configuration for this is in the `_pkgdown.yml` file. This file typically only needs
@@ -134,31 +91,89 @@ structure. The website will contain an HTML version of the Rd files and vignette
 also extra content: for example `README.md` is used to create `index.html` and other
 markdown files can be used to provide other content.
 
-Rebuilding a local copy of the website uses two commands:
+You can use the following commands to remove previous website builds and then recreate
+the website in the `docs` directory.
 
 ```sh
 Rscript -e " pkgdown::clean_site()"
 Rscript -e " pkgdown::build_site()"
 ```
 
-This removes old files and recreates the website in the `docs` directory (_not_ `doc`!).
+The `docs` directory is *not* part of the continuous integration of the package as it
+can be generated automatically from the `Rd` and `Rmd` files. The `safedata`
+package therefore includes `docs` in the `.gitignore` file: you can view the local copy
+of the website that these commands generate but it is not managed by git.
 
-The website files themselves are _not_ part of the continuous integration of the package
-and having to build and then commit changes within `docs` is untidy. The `safedata`
-package therefore includes `docs` in the `.gitignore` file: you can have a local copy of
-the website but it is not managed by git.
-
-Instead, the GitHub Action [described above](#github-actions) runs the
-`pkgdown::deploy_to_branch()` command whenever a new release is added on GitHub. This
-command builds the website files (as in the local commands above) but then copies these
-files to the `gh-pages` branch in the repository. This branch is then automatically
-deployed to the Github Pages package website at:
+The actual [`safedata` website](https://imperialcollegelondon.github.io/safedata/) can
+be rebuilt using the `pkgdown::deploy_to_branch()` command. This automatically builds
+the website files (as in the local commands above) and commits them to the `gh-pages`
+branch in the repository, which is then deployed to the Github Pages URL for the
+`safedata` package:
 
 [<https://imperialcollegelondon.github.io/safedata/](https://imperialcollegelondon.github.io/safedata/)>
 
+### Documentation script
 
 For local use, the package and website build steps have been bundled together in
 `build_scripts/build_docs.sh`.
+
+## Code formatting and linting
+
+The `safedata` package uses automatic code formatting and linting to maintain consistent
+code quality and layout.
+
+* The [`air` formatter](https://posit-dev.github.io/air/) provides fast R code
+  formatting, ensuring that changes to the package code follow consistent and stable
+  layout.
+* The [`jarl` linter](https://jarl.etiennebacher.com/) provides code linting: it
+  inspects the code using a set of rules and warns about programming errors, bugs and
+  suspicious code patterns.
+
+You do not need to install either of these packages manually, as they are included in
+the `pre-commit` setup and so are run automatically on any new code. However, if you
+want to run them independently of `pre-commit` then you need to install them.
+
+## The `pre-commit` setup
+
+`pre-commit` is a Python program that automates running a set of quality assurance and
+maintenance checks whenever `git commit` is run. If the checks fail, the commit will be
+aborted and you will need to fix the issues and re-commit your changes. You will need
+to:
+
+1. Install [`pre-commit`](https://pre-commit.com/#install)
+2. Install the `pre-commit` configuration for the package from within your clone of the
+   `safedata` repository by using: `pre-commit install`
+
+The set of checks ('hooks') are defined in the `.pre-commit-config.yaml` configuration
+file and the current checks are
+
+* Running `roxygen` to check if `Rd` files are up to date.
+* Inspecting the R code to check it can be loaded, contains no `browser()` or `debug()`
+  commands, and that the `DESCRIPTION` file is complete.
+* Code formatting and linting using `air` and `jarl`
+* Checks for common file issues: sorting, missing line endings, oversized files and the
+  inclusion of 'artifact' files such as `.Rhistory` files.
+
+Note that *some* of these steps may make changes to your files to fix issues, such as to
+update `man` files and apply formatting. When this happens, the `pre-commit` step will
+fail but you can simply add the changed files to the commit and re-commit to add the
+automatic fixes.
+
+## Web mocking
+
+The `safedata` package uses the internet extensively for downloading package data and
+metadata. This includes code used in function examples, vignettes and in [running
+tests](#package-test-suite). The private function `safedata:::mock_api()` is used in all
+of these situations to turn off connections to the actual internet and instead serve up
+content from the `inst/api_data` folder. This ensures that testing and documentation
+building is not reliant on internet connections.
+
+If you add new code to the project that requests content from the internet, you will
+need to extend the set of mocked URLS in the `mock_api_urls` list in `R/api_mockr.R` and
+include links to the expected content from those links.
+
+At some point, this needs to be made optional, to allow a package build to also be
+tested against live content.
 
 ## Package test suite
 
@@ -176,44 +191,6 @@ If you want to run a single file of tests, use:
 ```sh
 Rscript -e "testthat::test_file('tests/testthat/test-local_sdd.R')"
 ```
-
-## Web mocking
-
-The `safedata` package uses the internet extensively for downloading package data and
-metadata. This includes code used in function examples, vignettes and in the test suite.
-The private function `safedata:::mock_api()` is used in all of these situations to turn
-off connections to the actual internet and instead serve up content from the
-`inst/api_data` folder. This ensures that testing and documentation building is not
-reliant on internet connections. If you add new code to the project that requests
-content from the internet, you will need to extend the set of mocked URLS in the
-`mock_api_urls` list in `R/api_mockr.R` and include links to the expected content from
-those links.
-
-At some point, this needs to be made optional, to allow package build to also be tested
-against live content.
-
-## Linting
-
-The linting process inspects the R code files in the package to check they have a
-consistent coding and syntax style. Linting is run automatically during `pre-commit`
-checks but running the command below from the package root will also generate a linting
-report.
-
-```sh
-Rscript -e "lintr::lint_package()"
-```
-
-The `.lintr` file in the package root is used to configure the linting and set any
-exclusions. Code lines can be excluded using the `# nolint` tag but this doesn't work
-well for comments and docstrings as code formatters aggresively wrap lines on save. For
-these lines `.lintr` has to be updated to exclude linting on specific line numbers.
-
-Currently, the `.lintr` configuration:
-
-* sets a very lax limit on cyclomatic complexity,
-* permits commented out code - there are a couple of temporarily retired tests,
-* updates the indenting depth to 4 and not the default 2 spaces, and
-* turns off object usage checking, this needs to be renabled at some point.
 
 ## Release cycle
 
@@ -263,7 +240,8 @@ R --version
 
 printf "\n------------\n\n"
 
-# 1) Move down into the source directory and update the documents using Roxygen and pkgdown
+# 1) Move down into the source directory and update the documents 
+#    using Roxygen and pkgdown
 cd ../
 Rscript -e "devtools::document()"
 Rscript -e " pkgdown::clean_site()"
@@ -284,7 +262,7 @@ Two points to note:
 
 1. The built package and check output are saved in the parent directory of the
    repository, not in the repository itself.
-2. The version built is the one in the _currently checked out branch_!
+2. The version built is the one in the *currently checked out branch*!
 
 The key file to look at is `safedata.Rcheck/00check.log`. This contains a long
 list of checks applied to the code. Look out for `NOTE`, `WARNING` and `ERROR`
