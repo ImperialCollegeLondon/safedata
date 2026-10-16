@@ -28,7 +28,7 @@ to find and analyse our research data outputs.
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://imperialcollegelondon.github.io/safedata/index.html}
+  \item \url{https://imperialcollegelondon.github.io/safedata/}
   \item Report bugs at \url{https://github.com/ImperialCollegeLondon/safedata/issues}
 }
 

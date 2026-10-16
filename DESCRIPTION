@@ -30,7 +30,7 @@ Suggests:
     withr,
     devtools
 Encoding: UTF-8
-URL: https://imperialcollegelondon.github.io/safedata/index.html
+URL: https://imperialcollegelondon.github.io/safedata/
 BugReports: https://github.com/ImperialCollegeLondon/safedata/issues
 VignetteBuilder: knitr
 Config/roxygen2/version: 8.1.1
