@@ -87,7 +87,7 @@ fresh, empty directory. Note that the directory path is stored in
 getOption("safedata.dir")
 ```
 
-    #> [1] "/tmp/Rtmph6GxVK/my_safe_directory"
+    #> [1] "/tmp/RtmpstsuBE/my_safe_directory"
 
 ## Using an existing `safedata` directory
 
@@ -1138,7 +1138,7 @@ absolute file path of those files.
     #>                            filename dataset_access
     #> 42 template_ClareWfunctiondata.xlsx           open
     #>                                                                                  path
-    #> 42 /tmp/Rtmph6GxVK/my_safe_directory/1198840/1237719/template_ClareWfunctiondata.xlsx
+    #> 42 /tmp/RtmpstsuBE/my_safe_directory/1198840/1237719/template_ClareWfunctiondata.xlsx
     #>    local
     #> 42  TRUE
 

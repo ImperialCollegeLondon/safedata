@@ -10,7 +10,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/ImperialCollegeLondon/safedata/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/ImperialCollegeLondon/safedata/blob/1.2.0-9000/DESCRIPTION)
 
 Aldersley A, Orme D (2026). *safedata: Interface to Data from the SAFE
 Project*. R package version 1.2.0-9000,
