@@ -1,0 +1,77 @@
+# Obtaining taxonomy for a safedata dataset.
+
+This function generates a taxonomy table for a specified safedata
+dataset record. Each row represent a taxon used in the data worksheets
+in the dataset and the table fields show the taxonomic hierarchy for
+those taxa.
+
+## Usage
+
+``` r
+get_taxa(obj)
+```
+
+## Arguments
+
+- obj:
+
+  A single record id, or an existing safedata dataframe.
+
+## Value
+
+A taxonomy table of classes "safe_taxa" and "data.frame".
+
+## Details
+
+A safedata dataset with observations about taxa must include worksheets
+providing taxonomy details, used to validate the taxa in the dataset
+against either or both of the GBIF or NCBI taxonomy database. All
+entries in these worksheet are validated against the databases before
+publication and are used to populate a taxonomic index for safedata
+datasets. The validated taxonomic index for a specific dataset is also
+available in the metadata for a record and this function converts that
+metadata into a taxonomy table for the dataset.
+
+The returned table includes the fields `worksheet_name`, `taxon_name`,
+`taxon_rank` and `taxon_status`, along with the taxonomy database used
+to validate the taxon (`taxon_auth`). These fields provide the original
+taxonomy worksheet data included.
+
+For more details on the structure of the taxon worksheets see:
+<https://safedata-validator.readthedocs.io/en/stable/data_providers/data_format/taxa.html>
+\# nolint
+
+## Synonyms
+
+The taxon table will include extra rows for worksheet taxa that are GBIF
+synonyms or are merged in the NCBI taxonomy. There will be a row giving
+the taxonomic hierarchy for the original taxon name provided with the
+dataset and an additional row providing the canonical taxon name. The
+worksheet name for these rows will be identical.
+
+## Taxonomic ranks
+
+NCBI and GBIF differ in their use of taxonomic ranks: GBIF uses a
+reduced set of core 'backbone' ranks, where NCBI supports a wider range
+of ranks. The taxon hierarchy used for safedata reduces NCBI to the core
+GBIF backbone ranks but adds Superkingdom, which is used for bacterial
+and viral groups.
+
+Especially note that the taxonomy used by GBIF and NCBI are \*\*not
+congruent\*\*: if the same taxon is included using both systems, it may
+well have substantially different ranks.
+
+## See also
+
+[`add_taxa`](https://imperialcollegelondon.github.io/safedata/dev/reference/add_taxa.md)
+
+## Examples
+
+``` r
+    set_example_safedata_dir()
+    taxa <- get_taxa(1400562)
+    set_example_safedata_dir(on=FALSE)
+#> No response from server, skipping updates: http://example.safedata.server
+#> Loading and caching index
+#> Validating directory
+```

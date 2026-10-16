@@ -1,0 +1,162 @@
+# Overview of the safedata system
+
+The `safedata` R package is part of a data management system designed
+for use with spatially and thematically linked research data outputs.
+The system was designed around ecological field data outputs from the
+[SAFE
+Project](https://imperialcollegelondon.github.io/safedata/dev/articles/safe_project.Rmd)
+but is intended to support data capture, curation and discovery for any
+research system that generates heterogenous data outputs.
+
+## The safedata workflow
+
+There are three wider components to the `safedata` system:
+
+1.  The [`safedata_validator` Python
+    package](https://safedata-validator.readthedocs.io/) is a data and
+    metadata validation and publication tool for datasets using the
+    system.
+
+2.  The [`safedata_server` web
+    application](https://github.com/ImperialCollegeLondon/safedata_server)
+    provides an API for publishing and querying dataset metadata.
+
+3.  The `safedata` R package (this package!) then provides an interface
+    for querying published metadata, downloading datasets of interest
+    and aligning datasets to answer new research questions.
+
+## Formatting and validation
+
+The [data and metadata
+format](https://safedata-validator.readthedocs.io/en/stable/data_providers/data_format/overview.html)
+for datasets using `safedata` is described on the `safedata_validator`
+website but in overview:
+
+Datasets are submitted as Microsoft Excel spreadsheets, containing the
+following worksheets:
+
+- **Summary**: simple metadata (authors, access rights) about the
+  dataset
+- **Taxa**: a description of the Taxa reported in the dataset
+- **Locations**: a description of all sampling locations in the dataset
+- **Data worksheets**: the actual data tables, described in the
+  **Summary** sheet
+
+Submitted datasets are validated using the Python program
+(`safedata_validator`)\[<https://github.com/ImperialCollegeLondon/safedata_validator>\].
+This checks that the dataset format is correct and that all the required
+metadata is provided and consistent. When a dataset fails validation, a
+report is returned to the submitter to help revise the dataset,
+otherwise validated datasets are published to Zenodo and the metadata is
+published to the `safedata_server` web application for the project.
+
+## Data publication
+
+[Zenodo](https://zenodo.org) is a scientific data repository backed by
+the CERN. Zenodo provides data **communities** that allow all of the
+datasets within the project to be collated into a single collection
+(e.g. \[<https://zenodo.org/communities/safe/>\]). The publication
+process uses the metadata provided in the submitted file to
+automatically create a detailed description of the dataset. Zenodo also
+issues DOIs for published datasets and provides versioning and access
+control.
+
+### Data versioning
+
+Zenodo uses a [DOI versioning](https://help.zenodo.org/) system that
+allows sets of dataset records to be grouped. When a dataset is
+published on Zenodo for the first time, two DOIs are registered:
+
+- the **record** DOI, representing the specific version of the dataset,
+  and
+- the **concept** DOI, representing all versions of the record.
+
+Subsequent versions of an upload are then logged under a new DOI. This
+means that multiple versions of a dataset can be stored and referenced
+clearly. The concept DOI refers to all versions of the dataset (and the
+DOI link resolves to the most recent version), while the version DOI
+refers to a particular instance.
+
+### Dataset access
+
+Datasets published to the SAFE Project community on Zenodo can have one
+of the following three access status:
+
+- **Open**: the dataset is open for download, or
+- **Embargoed**: the dataset will become open at a given date in the
+  future, or
+- **Restricted**: accessing the dataset requires permission. Zenodo
+  provides a mechanism to request permission from the SAFE Project,
+  which will always be passed onto the specific dataset authors. This
+  category can also be used to ‘retire’ datasets that have significant
+  problems and which should not be used for research.
+
+Note that a particular dataset concept may have a versions with a
+mixture of access statuses.
+
+## Dataset discovery
+
+The Zenodo website provides the ability to search the text of record
+descriptions, including searchs within the specific Zenodo community for
+a project (for example,
+<https://www.zenodo.org/communities/safe/search>).
+
+However, these searches are unstructured and do not cover all of the
+metadata contained within published datasets. The `safedata_server` web
+application fills this gap by providing an API for both maintaining an
+index of available datasets and running structured metadata queries to
+identify datasets of interest. Dataaset metadata can be queried on all
+of the following:
+
+- **`dates`**: the start and endpoints of data collection within a
+  dataset,
+- **`fields`**: the text and field type of fields within indidual data
+  tables within a dataset,
+- **`authors`**: the authors of datasets,
+- **`text`**: a free text search of dataset, worksheet and field titles
+  and descriptions.
+- **`taxa`**: the taxa included in a dataset, and
+- **`spatial`**: matching datasets by sampling location.
+
+## The `safedata` package
+
+The `safedata` package provides the user-facing part of the system. The
+package:
+
+- Maintains a local data directory for the specfic project containing
+  indexing information about published datasets.
+- Search tools to identify datasets of interest.
+- Download mechanisms to retrieve datasets of interest from Zenodo.
+- Data tools to align datasets and to add project specific spatial and
+  taxonomic information.
+
+### The `safedata` directory
+
+The `safedata` package stores downloaded datasets, record metadata and
+key index files within a `safedata` directory, which acts as the local
+repository of the datasets being used by a researcher. The structure of
+the directory is critical to the operation of the package and the
+datasets themselves are under version control: users **must not change**
+the structure or the file contents of this directory.
+
+The directory structure is as follows:
+
+- Four index files are stored in the root of the directory, that store:
+
+  - the specific `safedata_server` URL being used for this directory
+    (`url.json`),
+  - an index of published datasets (`index.json`), and
+  - spatial information on sampling sites across the project
+    (`gazetteer.geojson`, `location_aliases.json`)
+
+- Download datasets are then stored in directories nested by first the
+  **Zenodo concept id** of the dataset and then the specific **Zenodo
+  record id** of the dataset version. Each dataset folder will then
+  contain a JSON format file containing the dataset metadata and then
+  the dataset files themselves if they have been downloaded. For
+  example:
+
+  ``` sh
+  1400561/1400562/1400562.json
+  1400561/1400562/Psomas_Ant_Pselaphine_SAFE_dataset.xlsx
+  ```
