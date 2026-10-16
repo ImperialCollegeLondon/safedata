@@ -260,6 +260,7 @@ print.safe_record_set <- function(x, ...) {
     return(all)
 }
 
+# jarl-ignore-start internal_function: demonstrating internal usage
 
 fetch_record_metadata <- function(record_set) {
     #' Get and load safedata metadata
@@ -277,10 +278,9 @@ fetch_record_metadata <- function(record_set) {
     #' directory for reuse.
     #'
     #' @param record_set An object of class \code{\link{safe_record_set}}.
-    #' @return The \code{fetch_record_metadata} function invisibly returns a
-    #'    logical value indicating if all records were fetched successfully and
-    #'    \code{load_record_metadata} returns a list object containing record
-    #'    metadata
+    #' @return The \code{fetch_record_metadata} function invisibly returns a logical
+    #'    value indicating if all records were fetched successfully and
+    #'    \code{load_record_metadata} returns a list object containing record metadata
     #' @describeIn fetch_record_metadata Download and store JSON metadata for
     #'    a record
     #' @examples
@@ -368,6 +368,7 @@ fetch_record_metadata <- function(record_set) {
     return(invisible(fetch_successful))
 }
 
+# jarl-ignore-end internal_function
 
 load_record_metadata <- function(record_set) {
     #' @describeIn fetch_record_metadata Load JSON metadata for a record
