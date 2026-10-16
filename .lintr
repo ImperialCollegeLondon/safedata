@@ -3,4 +3,5 @@ linters: linters_with_defaults(
     commented_code_linter = NULL,  # TODO - remove when tests renabled
     indentation_linter(indent = 4L), 
     object_usage_linter = NULL  # TODO - Not recognizing internal variables
+    return_linter = return_linter(return_style =  "explicit")
   )

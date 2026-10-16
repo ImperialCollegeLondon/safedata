@@ -49,6 +49,8 @@ repos:
     #       data/.*|
     #       )$
     -   id: lintr
+        additional_dependencies:
+        - cyclocomp
     -   id: readme-rmd-rendered
     -   id: parsable-R
     -   id: no-browser-statement
