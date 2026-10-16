@@ -503,9 +503,7 @@ download_safe_files <- function(
     for (these_files in files_by_record) {
         current_record <- these_files$zenodo_record_id[1]
 
-        if (
-            !is.null(token) && all(these_files$dataset_access == "restricted")
-        ) {
+        if (!is.null(token) && all(these_files$dataset_access == "restricted")) {
             verbose_message("Using token to access restricted record")
         } else if (!these_files$available[1]) {
             msg <- "%i files for record %i: under embargo or restricted"

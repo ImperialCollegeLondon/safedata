@@ -472,7 +472,7 @@ load_index <- function() {
         ifelse(
             dataset_access == "embargo" & dataset_embargo >= Sys.time(),
             FALSE,
-            ifelse(dataset_access == "restricted", FALSE, TRUE)
+            !dataset_access == "restricted"
         )
     )
 
@@ -503,10 +503,7 @@ load_index <- function() {
         }
     })
 
-    mra <- with(
-        index,
-        ifelse(zenodo_record_id %in% unlist(mr_avail), TRUE, FALSE)
-    )
+    mra <- with(index, zenodo_record_id %in% unlist(mr_avail))
     index$most_recent_available <- mra
 
     # Validate the directory contents

@@ -1,3 +1,4 @@
 [format]
 indent-width = 4
 indent-style = "space"
+line-width = 88
