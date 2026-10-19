@@ -42,27 +42,25 @@ modified by users.
 \section{The safedata directory structure}{
 
 
-The safedata package uses a data directory to store local copies of
-dataset files along with index files. Files for a dataset record are
-stored in subdirectories using the zenodo concept id for the record
-and then record id: \code{3342494/3342495}, for example. In addition
-to data files from these records, these folders can also contain a
-JSON file containing record metadata (e.g. \code{3342495.json}): this
-is a structured version of the summary information shown on the
-Zenodo page.
+The safedata package uses a data directory to store local copies of dataset files
+along with index files. Files for a dataset record are stored in subdirectories
+using the zenodo concept id for the record and then record id:
+\code{3342494/3342495}, for example. In addition to data files from these
+records, these folders can also contain a JSON file containing record metadata
+(e.g. \code{3342495.json}): this is a structured version of the summary
+information shown on the Zenodo page.
 
-The root of the data directory also holds three index files and a
-settings file for the safedata diretory:
+The root of the data directory also holds three core resource files and a
+settings file for the safedata directory:
+
 \describe{
-  \item{\code{index.json}}{, containing a full list of the
-        files and dataset records available in the safedata community
-        for a project;}
-  \item{\code{gazetteer.geojson}}{, containing the official list of
-        known sampling locations and GIS data; and}
-  \item{\code{location_aliases.json}}{, a list of alternative names
-        permitted for some locations.}
-  \item{\code{url.json}}{, the URL settings for the safedata
-        metadata server}
+  \item{\code{index.json}}{, containing a full list of the files and dataset
+        records available in the safedata community for a project;}
+  \item{\code{gazetteer.geojson}}{, containing the official list of known
+        sampling locations and GIS data; and}
+  \item{\code{location_aliases.json}}{, a list of alternative names permitted for
+        some locations.}
+  \item{\code{url.json}}{, the URL settings for the safedata metadata server}
 }
 }
 
@@ -89,7 +87,7 @@ By default, the function will update the core index files to include
 data on newly published datasets in the fata index. This requires
 an internet connection to check for updates and a warning will be
 issued if no connection is available - the \code{update = FALSE}
-option can be use to surpress this message for offline use.
+option can be use to suppress this message for offline use.
 
 Setting a safedata directory will also trigger validation of the
 directory structure. This will issue warnings when files other than

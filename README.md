@@ -1,27 +1,50 @@
-# The `safedata` package
+# The `safedata` research data management
 
-This is an R package for discovering and using datasets produced by scientific research at the SAFE Project. See the following links:
+The `safedata` package for R is the data discovery and download system for research data
+published within the broader `safedata` system for research data management. The
+`safedata` system is designed to manage heterogeneous field datasets collected as part
+of a wider research system, such as a widely used field site. The system has three
+components:
 
-* for more information about the [SAFE Project homepage](https://data.safeproject.net/),
-* to browse the published [SAFE project datasets](https://zenodo.org/communities/safe),
-* to learn more about the [SAFE dataset structure and validation](https://safedata-validator.readthedocs.io/en/stable/)
+* The [`safedata_validator`
+  package](https://safedata-validator.readthedocs.io/en/stable/) is used to enforce
+  metadata and standarding formats on research datasets, ensuring that data are
+  reusable and well-documented. The `safedata_validator` package also handles the
+  publication of datasets to the Zenodo data archive, ensuring data accessibility and
+  longevity.
 
-## Using `safedata`
+* The [`safedata_server` web
+  application](https://github.com/ImperialCollegeLondon/safedata_server) provides data
+  discovery by providing a searchable metadata database of published datasets, and also
+  provides core resources across datasets, such as a gazetteer of sampling locations.
 
-The homepage for the package is at:
+* The [`safedata` package](https://imperialcollegelondon.github.io/safedata/) itself
+  then provides users with tools to search the metadata to find datasets of interest,
+  download tools to maintain local copies of datasets of interest and tools to map
+  spatial and taxonomic context onto datasets.
 
-[https://imperialcollegelondon.github.io/safedata/](https://imperialcollegelondon.github.io/safedata/).
+The `safedata` system was originally designed to manage the data outputs from the
+[Stability of Altered Forest Ecosystems (SAFE)
+Project](https://imperialcollegelondon.github.io/safedata/articles/safe_project.html).
 
-In particular, the following links provide:
-
-* the `safedata` [function reference](https://imperialcollegelondon.github.io/safedata/reference/index.html),
-* an vignette providing an [overview](https://imperialcollegelondon.github.io/safedata/articles/overview.html) of the SAFE project data, and
-* a short [user guide](https://imperialcollegelondon.github.io/safedata/articles/using_safe_data.html) for the package.
-
-## Building `safedata`
-
-The package repository structure and build processes are described [here](https://imperialcollegelondon.github.io/safedata/build_notes.html)
+## The `safedata` R package
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/ImperialCollegeLondon/safedata/actions/workflows/check-standard.yaml/badge.svg?branch=main)](https://github.com/ImperialCollegeLondon/safedata/actions/workflows/check-standard.yaml)
 <!-- badges: end -->
+
+For more information on using the `safedata` package in R, see:
+
+* the
+  [overview](https://imperialcollegelondon.github.io/safedata/articles/overview.html)
+  vignette for the `safedata` system,
+* the [user guide](https://imperialcollegelondon.github.io/safedata/articles/using_safe_data.html)
+  for the package, and
+* the `safedata` [function
+  reference](https://imperialcollegelondon.github.io/safedata/reference/index.html),
+
+## Building `safedata`
+
+See the [package development
+page](https://imperialcollegelondon.github.io/safedata/build_notes.html) for more
+information on package structure and build process.

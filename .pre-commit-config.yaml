@@ -49,6 +49,11 @@ repos:
         language: fail
         files: '\.(Rhistory|RData|Rds|rds)$'
         # `exclude: <regex>` to allow committing specific files
+-   repo: https://github.com/codespell-project/codespell
+    rev: v2.4.1 # Use the latest version available
+    hooks:
+    - id: codespell
+      exclude: '\.json'
 
 ci:
     autoupdate_schedule: monthly

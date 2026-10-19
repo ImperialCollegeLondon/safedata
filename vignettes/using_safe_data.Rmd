@@ -97,7 +97,7 @@ empty safedata directory. You will need the URL of the `safedata_server` web app
 that holds published metadata for the datasets in your research community.
 
 ```{r create_new_dir}
-# Create a temporary location for use in this walkthough
+# Create a temporary location for use in this walk through
 safe_dir_path <- file.path(tempdir(), "my_safe_directory")
 
 # Create a new safedata directory
@@ -565,7 +565,7 @@ par(mar = c(3, 3, 1, 1))
 plot(st_geometry(fragments), col = "khaki", graticule = TRUE)
 plot(st_geometry(beetle_locs), add = TRUE, col = "red", pch = 4)
     ```
-	
+
 3. `add_locations()`: This functions adds location data to an already loaded worksheet.
    The result is a `safedata` object that is also an `sf` object.
 
