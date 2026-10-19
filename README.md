@@ -2,14 +2,14 @@
 
 The `safedata` package for R is the data discovery and download system for research data
 published within the broader `safedata` system for research data management. The
-`safedata` system is designed to manage heterogenous field datasets collected as part of
-a wider research system, such as a widely used field site. The system has three
+`safedata` system is designed to manage heterogeneous field datasets collected as part
+of a wider research system, such as a widely used field site. The system has three
 components:
 
 * The [`safedata_validator`
   package](https://safedata-validator.readthedocs.io/en/stable/) is used to enforce
   metadata and standarding formats on research datasets, ensuring that data are
-  re-useable and well-documented. The `safedata_validator` package also handles the
+  reusable and well-documented. The `safedata_validator` package also handles the
   publication of datasets to the Zenodo data archive, ensuring data accessibility and
   longevity.
 

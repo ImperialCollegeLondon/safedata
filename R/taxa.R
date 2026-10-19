@@ -260,7 +260,7 @@ add_taxa <- function(
     #' observation to a particular taxon used in the dataset. All datasets containing
     #' taxon observations provide taxonomic data about those taxa, validated against
     #' either NCBI or GBIF. The taxon table for an entire dataset can be accessed using
-    #' \code{\link{get_taxa}}, but this function allows the taxonomic hierachy to be
+    #' \code{\link{get_taxa}}, but this function allows the taxonomic hierarchy to be
     #' added for the specific taxa used in in a taxa field in a data worksheet.
     #'
     #' An existing taxon table from \code{\link{get_taxa}} can be provided to this
@@ -274,7 +274,7 @@ add_taxa <- function(
     #' used in the dataset, even if that usage is considered a synonym or is merged in
     #' GBIF or NCBI (see \code{\link{get_taxa}}). The \code{use_canon} option can be set
     #' to TRUE to instead show the canonical taxon name used in the taxonomy database
-    #' for synonomous or merged taxa.
+    #' for synonymous or merged taxa.
     #'
     #' @param obj An existing object of class \code{safedata}
     #' @param taxon_field The name of a taxon field in a \code{safedata} for

@@ -87,7 +87,7 @@ By default, the function will update the core index files to include
 data on newly published datasets in the fata index. This requires
 an internet connection to check for updates and a warning will be
 issued if no connection is available - the \code{update = FALSE}
-option can be use to surpress this message for offline use.
+option can be use to suppress this message for offline use.
 
 Setting a safedata directory will also trigger validation of the
 directory structure. This will issue warnings when files other than

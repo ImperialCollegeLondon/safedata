@@ -97,7 +97,7 @@ empty safedata directory. You will need the URL of the `safedata_server` web app
 that holds published metadata for the datasets in your research community.
 
 ```{r create_new_dir}
-# Create a temporary location for use in this walkthough
+# Create a temporary location for use in this walk through
 safe_dir_path <- file.path(tempdir(), "my_safe_directory")
 
 # Create a new safedata directory

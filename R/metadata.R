@@ -432,7 +432,7 @@ show_concepts <- function(obj) {
     #' up the relevant concept. The version table indicates which versions
     #' are available ("*" for the most recent available version and "o"
     #' for older available versions), and which are unavailable due to
-    #' embargo or retriction ("x"). A "!" is used to show that a private
+    #' embargo or restriction ("x"). A "!" is used to show that a private
     #' local copy of an embargoed or restricted dataset has been inserted
     #' using \code{\link{insert_dataset}}.
     #'

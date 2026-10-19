@@ -54,7 +54,7 @@ set_safedata_dir <- function(safedir, update = TRUE) {
     #' data on newly published datasets in the fata index. This requires
     #' an internet connection to check for updates and a warning will be
     #' issued if no connection is available - the \code{update = FALSE}
-    #' option can be use to surpress this message for offline use.
+    #' option can be use to suppress this message for offline use.
     #'
     #' Setting a safedata directory will also trigger validation of the
     #' directory structure. This will issue warnings when files other than
@@ -582,7 +582,7 @@ load_gazetteer <- function() {
     #' }
     #'
     #' When this function is first called in a session, the loaded
-    #' \code{\link[sf]{sf}} object is cached for re-use (see
+    #' \code{\link[sf]{sf}} object is cached for reuse (see
     #' \code{\link{load_index}}).
     #'
     #' @return An \code{\link[sf]{sf}} object containing the gazetteer locations.
@@ -612,7 +612,7 @@ load_location_aliases <- function() {
     #' \code{\link{set_safedata_dir}}). The data is returned as a simple data frame.
     #'
     #' When this function is first called in a session, the loaded data frame object is
-    #' cached for re-use (see \code{\link{load_index}}).
+    #' cached for reuse (see \code{\link{load_index}}).
     #'
     #' @return A data frame containing location aliases.
     #' @seealso \code{\link{load_gazetteer}}, \code{\link{load_index}}

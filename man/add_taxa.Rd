@@ -35,7 +35,7 @@ Data tables in a safedata dataset can contain "taxa" fields, which tie an
 observation to a particular taxon used in the dataset. All datasets containing
 taxon observations provide taxonomic data about those taxa, validated against
 either NCBI or GBIF. The taxon table for an entire dataset can be accessed using
-\code{\link{get_taxa}}, but this function allows the taxonomic hierachy to be
+\code{\link{get_taxa}}, but this function allows the taxonomic hierarchy to be
 added for the specific taxa used in in a taxa field in a data worksheet.
 }
 \details{
@@ -50,7 +50,7 @@ By default, the taxonomy data added to the table will use the original taxon nam
 used in the dataset, even if that usage is considered a synonym or is merged in
 GBIF or NCBI (see \code{\link{get_taxa}}). The \code{use_canon} option can be set
 to TRUE to instead show the canonical taxon name used in the taxonomy database
-for synonomous or merged taxa.
+for synonymous or merged taxa.
 }
 \examples{
    set_example_safedata_dir()

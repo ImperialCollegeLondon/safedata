@@ -16,7 +16,7 @@ This function loads location alias data, stored in CSV format in the
 }
 \details{
 When this function is first called in a session, the loaded data frame object is
-cached for re-use (see \code{\link{load_index}}).
+cached for reuse (see \code{\link{load_index}}).
 }
 \seealso{
 \code{\link{load_gazetteer}}, \code{\link{load_index}}

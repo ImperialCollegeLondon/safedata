@@ -26,7 +26,7 @@ following two fields but may also contain project specific extra data.
 }
 
 When this function is first called in a session, the loaded
-\code{\link[sf]{sf}} object is cached for re-use (see
+\code{\link[sf]{sf}} object is cached for reuse (see
 \code{\link{load_index}}).
 }
 \seealso{
