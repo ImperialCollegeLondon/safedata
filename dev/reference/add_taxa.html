@@ -3,12 +3,12 @@
 observation to a particular taxon used in the dataset. All datasets containing
 taxon observations provide taxonomic data about those taxa, validated against
 either NCBI or GBIF. The taxon table for an entire dataset can be accessed using
-get_taxa, but this function allows the taxonomic hierachy to be
+get_taxa, but this function allows the taxonomic hierarchy to be
 added for the specific taxa used in in a taxa field in a data worksheet.'><meta property="og:description" content='Data tables in a safedata dataset can contain "taxa" fields, which tie an
 observation to a particular taxon used in the dataset. All datasets containing
 taxon observations provide taxonomic data about those taxa, validated against
 either NCBI or GBIF. The taxon table for an entire dataset can be accessed using
-get_taxa, but this function allows the taxonomic hierachy to be
+get_taxa, but this function allows the taxonomic hierarchy to be
 added for the specific taxa used in in a taxa field in a data worksheet.'><meta name="robots" content="noindex"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
@@ -17,7 +17,7 @@ added for the specific taxa used in in a taxa field in a data worksheet.'><meta 
 
     <a class="navbar-brand me-2" href="../index.html">safedata</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0-9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.0-9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,9 +32,9 @@ added for the specific taxa used in in a taxa field in a data worksheet.'><meta 
     <li><a class="dropdown-item" href="../articles/safe_project.html">The SAFE Project</a></li>
     <li><a class="dropdown-item" href="../articles/using_safe_data.html">Using the `safedata` package</a></li>
   </ul></li>
-      </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
- <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/ImperialCollegeLondon/safedata/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
+<li class="nav-item"><a class="nav-link" href="../build_notes.html">Development</a></li>
+      </ul><ul class="navbar-nav"><li class="nav-item"><a class="external-link nav-link" href="https://github.com/ImperialCollegeLondon/safedata/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -44,7 +44,7 @@ added for the specific taxa used in in a taxa field in a data worksheet.'><meta 
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Add a taxonomic hierarchy to a SAFE data worksheet.</h1>
-      <small class="dont-index">Source: <a href="https://github.com/ImperialCollegeLondon/safedata/blob/1.2.0-9000/R/taxa.R" class="external-link"><code>R/taxa.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ImperialCollegeLondon/safedata/blob/main/R/taxa.R" class="external-link"><code>R/taxa.R</code></a></small>
       <div class="d-none name"><code>add_taxa.Rd</code></div>
     </div>
 
@@ -53,7 +53,7 @@ added for the specific taxa used in in a taxa field in a data worksheet.'><meta 
 observation to a particular taxon used in the dataset. All datasets containing
 taxon observations provide taxonomic data about those taxa, validated against
 either NCBI or GBIF. The taxon table for an entire dataset can be accessed using
-<code><a href="get_taxa.html">get_taxa</a></code>, but this function allows the taxonomic hierachy to be
+<code><a href="get_taxa.html">get_taxa</a></code>, but this function allows the taxonomic hierarchy to be
 added for the specific taxa used in in a taxa field in a data worksheet.</p>
     </div>
 
@@ -112,7 +112,7 @@ fields added from different taxon fields.</p>
 used in the dataset, even if that usage is considered a synonym or is merged in
 GBIF or NCBI (see <code><a href="get_taxa.html">get_taxa</a></code>). The <code>use_canon</code> option can be set
 to TRUE to instead show the canonical taxon name used in the taxonomy database
-for synonomous or merged taxa.</p>
+for synonymous or merged taxa.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

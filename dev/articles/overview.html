@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">safedata</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0-9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.0-9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,11 +39,10 @@
     <li><a class="dropdown-item" href="../articles/using_safe_data.html">Using the `safedata` package</a></li>
   </ul>
 </li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
+<li class="nav-item"><a class="nav-link" href="../build_notes.html">Development</a></li>
       </ul>
 <ul class="navbar-nav">
-<li class="nav-item"><form class="form-inline" role="search">
- <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
-</form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/ImperialCollegeLondon/safedata/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
@@ -62,9 +61,9 @@
                         <h4 data-toc-skip class="author">Andy Aldersley
 and David Orme</h4>
             
-            <h4 data-toc-skip class="date">2026-10-16</h4>
+            <h4 data-toc-skip class="date">2026-10-19</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/ImperialCollegeLondon/safedata/blob/1.2.0-9000/vignettes/overview.Rmd" class="external-link"><code>vignettes/overview.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ImperialCollegeLondon/safedata/blob/main/vignettes/overview.Rmd" class="external-link"><code>vignettes/overview.Rmd</code></a></small>
       <div class="d-none name"><code>overview.Rmd</code></div>
     </div>
 
@@ -75,7 +74,7 @@ system designed for use with spatially and thematically linked research
 data outputs. The system was designed around ecological field data
 outputs from the <a href="./safe_project.Rmd">SAFE Project</a> but is
 intended to support data capture, curation and discovery for any
-research system that generates heterogenous data outputs.</p>
+research system that generates heterogeneous data outputs.</p>
 <div class="section level2">
 <h2 id="the-safedata-workflow">The safedata workflow<a class="anchor" aria-label="anchor" href="#the-safedata-workflow"></a>
 </h2>
@@ -181,8 +180,8 @@ mixture of access statuses.</p>
 <h2 id="dataset-discovery">Dataset discovery<a class="anchor" aria-label="anchor" href="#dataset-discovery"></a>
 </h2>
 <p>The Zenodo website provides the ability to search the text of record
-descriptions, including searchs within the specific Zenodo community for
-a project (for example, <a href="https://www.zenodo.org/communities/safe/search" class="external-link">https://www.zenodo.org/communities/safe/search</a>).</p>
+descriptions, including searches within the specific Zenodo community
+for a project (for example, <a href="https://www.zenodo.org/communities/safe/search" class="external-link">https://www.zenodo.org/communities/safe/search</a>).</p>
 <p>However, these searches are unstructured and do not cover all of the
 metadata contained within published datasets. The
 <code>safedata_server</code> web application fills this gap by providing
@@ -215,7 +214,7 @@ location.</li>
 <p>The <code>safedata</code> package provides the user-facing part of
 the system. The package:</p>
 <ul>
-<li>Maintains a local data directory for the specfic project containing
+<li>Maintains a local data directory for the specific project containing
 indexing information about published datasets.</li>
 <li>Search tools to identify datasets of interest.</li>
 <li>Download mechanisms to retrieve datasets of interest from

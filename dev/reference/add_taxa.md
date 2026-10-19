@@ -6,7 +6,7 @@ containing taxon observations provide taxonomic data about those taxa,
 validated against either NCBI or GBIF. The taxon table for an entire
 dataset can be accessed using
 [`get_taxa`](https://imperialcollegelondon.github.io/safedata/dev/reference/get_taxa.md),
-but this function allows the taxonomic hierachy to be added for the
+but this function allows the taxonomic hierarchy to be added for the
 specific taxa used in in a taxa field in a data worksheet.
 
 ## Usage
@@ -67,7 +67,7 @@ taxon name used in the dataset, even if that usage is considered a
 synonym or is merged in GBIF or NCBI (see
 [`get_taxa`](https://imperialcollegelondon.github.io/safedata/dev/reference/get_taxa.md)).
 The `use_canon` option can be set to TRUE to instead show the canonical
-taxon name used in the taxonomy database for synonomous or merged taxa.
+taxon name used in the taxonomy database for synonymous or merged taxa.
 
 ## See also
 

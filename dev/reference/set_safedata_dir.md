@@ -55,8 +55,8 @@ files from these records, these folders can also contain a JSON file
 containing record metadata (e.g. `3342495.json`): this is a structured
 version of the summary information shown on the Zenodo page.
 
-The root of the data directory also holds three index files and a
-settings file for the safedata diretory:
+The root of the data directory also holds three core resource files and
+a settings file for the safedata directory:
 
 - `index.json`:
 
@@ -96,7 +96,7 @@ By default, the function will update the core index files to include
 data on newly published datasets in the fata index. This requires an
 internet connection to check for updates and a warning will be issued if
 no connection is available - the `update = FALSE` option can be use to
-surpress this message for offline use.
+suppress this message for offline use.
 
 Setting a safedata directory will also trigger validation of the
 directory structure. This will issue warnings when files other than

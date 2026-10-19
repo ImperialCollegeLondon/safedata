@@ -1,0 +1,70 @@
+# Changelog
+
+## safedata 2.0.0
+
+- Update to handle new API and NCBI taxa from safedata_server and
+  safedata_validator 3.0.0
+- Replaced all API and URL calls in examples, vignettes and testing with
+  mocked content via a new api_mockr interface.
+
+## safedata 1.1.3
+
+CRAN release: 2023-05-05
+
+- Bugfix in try_to_download: need to properly test GET requests, not
+  just try HEAD, otherwise web failures (like httpbin timeouts) are not
+  handled gracefully. Complete revamp of try_to_download.
+
+## safedata 1.1.2
+
+CRAN release: 2022-08-11
+
+- Bugfix in test suite: test “Download dataset fails gracefully on
+  Zenodo down” was not correctly checking for real metadata server
+  failure before simulating Zenodo access failure.
+- Updated gh-pages build system for GitHub Actions.
+
+## safedata 1.1.1
+
+CRAN release: 2022-04-25
+
+- Updates of unit testing to gracefully handle *real* internet failures
+  as well as the failures explicitly simulated in the tests.
+
+## safedata 1.1.0
+
+CRAN release: 2022-03-18
+
+- Updated functionality and examples to fail gracefully for network
+  issues.
+- Fixed issue with data columns
+- Moved from Travis to Github Actions for CI.
+- Added testthat suite - currently just for graceful failure modes.
+
+## safedata 1.0.9
+
+CRAN release: 2020-11-18
+
+- Further fixing of indexing functions to separate load_index from
+  get_index to get clearer separation of setting safe dir and just
+  wanting the indexing contents.
+- Fixed download_safe_files so that it updates the cached index to
+  record the new local file copies.
+
+## safedata 1.0.8
+
+CRAN release: 2020-10-09
+
+- Reorganised set_safe_dir and load_index to fix bug with new
+  directories and give cleaner code flow and organisation.
+- Added logical operators & and \| for combining searches
+
+## safedata 1.0.7
+
+CRAN release: 2020-08-03
+
+- Moved download_safe_files to use the website download URLs not API
+- Added ability to use tokens for restricted datasets (pretty rare, but
+  requires website URLS)
+- Fixed checking for field names to handle what early versions of
+  safedata_validator missed

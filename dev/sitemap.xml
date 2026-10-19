@@ -6,6 +6,7 @@
 <url><loc>https://imperialcollegelondon.github.io/safedata/dev/authors.html</loc></url>
 <url><loc>https://imperialcollegelondon.github.io/safedata/dev/build_notes.html</loc></url>
 <url><loc>https://imperialcollegelondon.github.io/safedata/dev/index.html</loc></url>
+<url><loc>https://imperialcollegelondon.github.io/safedata/dev/news/index.html</loc></url>
 <url><loc>https://imperialcollegelondon.github.io/safedata/dev/reference/add_locations.html</loc></url>
 <url><loc>https://imperialcollegelondon.github.io/safedata/dev/reference/add_taxa.html</loc></url>
 <url><loc>https://imperialcollegelondon.github.io/safedata/dev/reference/download_gazetteer.html</loc></url>
@@ -16,13 +17,13 @@
 <url><loc>https://imperialcollegelondon.github.io/safedata/dev/reference/file_status.html</loc></url>
 <url><loc>https://imperialcollegelondon.github.io/safedata/dev/reference/get_data_dir.html</loc></url>
 <url><loc>https://imperialcollegelondon.github.io/safedata/dev/reference/get_file_details.html</loc></url>
-<url><loc>https://imperialcollegelondon.github.io/safedata/dev/reference/get_index.html</loc></url>
 <url><loc>https://imperialcollegelondon.github.io/safedata/dev/reference/get_locations.html</loc></url>
 <url><loc>https://imperialcollegelondon.github.io/safedata/dev/reference/get_server_message.html</loc></url>
 <url><loc>https://imperialcollegelondon.github.io/safedata/dev/reference/get_taxa.html</loc></url>
 <url><loc>https://imperialcollegelondon.github.io/safedata/dev/reference/get_taxon_coverage.html</loc></url>
 <url><loc>https://imperialcollegelondon.github.io/safedata/dev/reference/get_taxon_graph.html</loc></url>
 <url><loc>https://imperialcollegelondon.github.io/safedata/dev/reference/igraph_to_phylo.html</loc></url>
+<url><loc>https://imperialcollegelondon.github.io/safedata/dev/reference/index.html</loc></url>
 <url><loc>https://imperialcollegelondon.github.io/safedata/dev/reference/insert_dataset.html</loc></url>
 <url><loc>https://imperialcollegelondon.github.io/safedata/dev/reference/load_gazetteer.html</loc></url>
 <url><loc>https://imperialcollegelondon.github.io/safedata/dev/reference/load_index.html</loc></url>
@@ -32,7 +33,6 @@
 <url><loc>https://imperialcollegelondon.github.io/safedata/dev/reference/mock_api_urls.html</loc></url>
 <url><loc>https://imperialcollegelondon.github.io/safedata/dev/reference/safe_api_search.html</loc></url>
 <url><loc>https://imperialcollegelondon.github.io/safedata/dev/reference/safedata.html</loc></url>
-<url><loc>https://imperialcollegelondon.github.io/safedata/dev/reference/safedata_env.html</loc></url>
 <url><loc>https://imperialcollegelondon.github.io/safedata/dev/reference/safedata_network.html</loc></url>
 <url><loc>https://imperialcollegelondon.github.io/safedata/dev/reference/search_safe.html</loc></url>
 <url><loc>https://imperialcollegelondon.github.io/safedata/dev/reference/set_example_safedata_dir.html</loc></url>

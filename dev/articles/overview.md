@@ -6,7 +6,7 @@ The system was designed around ecological field data outputs from the
 [SAFE
 Project](https://imperialcollegelondon.github.io/safedata/dev/articles/safe_project.Rmd)
 but is intended to support data capture, curation and discovery for any
-research system that generates heterogenous data outputs.
+research system that generates heterogeneous data outputs.
 
 ## The safedata workflow
 
@@ -97,8 +97,8 @@ mixture of access statuses.
 ## Dataset discovery
 
 The Zenodo website provides the ability to search the text of record
-descriptions, including searchs within the specific Zenodo community for
-a project (for example,
+descriptions, including searches within the specific Zenodo community
+for a project (for example,
 <https://www.zenodo.org/communities/safe/search>).
 
 However, these searches are unstructured and do not cover all of the
@@ -123,7 +123,7 @@ of the following:
 The `safedata` package provides the user-facing part of the system. The
 package:
 
-- Maintains a local data directory for the specfic project containing
+- Maintains a local data directory for the specific project containing
   indexing information about published datasets.
 - Search tools to identify datasets of interest.
 - Download mechanisms to retrieve datasets of interest from Zenodo.

@@ -13,7 +13,7 @@ modified by users."><meta name="robots" content="noindex"></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">safedata</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0-9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.0-9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,9 +28,9 @@ modified by users."><meta name="robots" content="noindex"></head><body>
     <li><a class="dropdown-item" href="../articles/safe_project.html">The SAFE Project</a></li>
     <li><a class="dropdown-item" href="../articles/using_safe_data.html">Using the `safedata` package</a></li>
   </ul></li>
-      </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
- <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/ImperialCollegeLondon/safedata/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
+<li class="nav-item"><a class="nav-link" href="../build_notes.html">Development</a></li>
+      </ul><ul class="navbar-nav"><li class="nav-item"><a class="external-link nav-link" href="https://github.com/ImperialCollegeLondon/safedata/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -40,7 +40,7 @@ modified by users."><meta name="robots" content="noindex"></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Set or create a safedata directory</h1>
-      <small class="dont-index">Source: <a href="https://github.com/ImperialCollegeLondon/safedata/blob/1.2.0-9000/R/index.R" class="external-link"><code>R/index.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ImperialCollegeLondon/safedata/blob/main/R/index.R" class="external-link"><code>R/index.R</code></a></small>
       <div class="d-none name"><code>set_safedata_dir.Rd</code></div>
     </div>
 
@@ -99,31 +99,29 @@ are stored in the main Zenodo site or the sandbox Zenodo site.</p></dd>
 
 
 
-<p>The safedata package uses a data directory to store local copies of
-dataset files along with index files. Files for a dataset record are
-stored in subdirectories using the zenodo concept id for the record
-and then record id: <code>3342494/3342495</code>, for example. In addition
-to data files from these records, these folders can also contain a
-JSON file containing record metadata (e.g. <code>3342495.json</code>): this
-is a structured version of the summary information shown on the
-Zenodo page.</p>
-<p>The root of the data directory also holds three index files and a
-settings file for the safedata diretory:</p><dl><dt><code>index.json</code></dt>
-<dd><p>, containing a full list of the
-        files and dataset records available in the safedata community
-        for a project;</p></dd>
+<p>The safedata package uses a data directory to store local copies of dataset files
+along with index files. Files for a dataset record are stored in subdirectories
+using the zenodo concept id for the record and then record id:
+<code>3342494/3342495</code>, for example. In addition to data files from these
+records, these folders can also contain a JSON file containing record metadata
+(e.g. <code>3342495.json</code>): this is a structured version of the summary
+information shown on the Zenodo page.</p>
+<p>The root of the data directory also holds three core resource files and a
+settings file for the safedata directory:</p>
+<dl><dt><code>index.json</code></dt>
+<dd><p>, containing a full list of the files and dataset
+        records available in the safedata community for a project;</p></dd>
 
   <dt><code>gazetteer.geojson</code></dt>
-<dd><p>, containing the official list of
-        known sampling locations and GIS data; and</p></dd>
+<dd><p>, containing the official list of known
+        sampling locations and GIS data; and</p></dd>
 
   <dt><code>location_aliases.json</code></dt>
-<dd><p>, a list of alternative names
-        permitted for some locations.</p></dd>
+<dd><p>, a list of alternative names permitted for
+        some locations.</p></dd>
 
   <dt><code>url.json</code></dt>
-<dd><p>, the URL settings for the safedata
-        metadata server</p></dd>
+<dd><p>, the URL settings for the safedata metadata server</p></dd>
 
 
 </dl></div>
@@ -152,7 +150,7 @@ directory that will download data from the sandbox site.</p>
 data on newly published datasets in the fata index. This requires
 an internet connection to check for updates and a warning will be
 issued if no connection is available - the <code>update = FALSE</code>
-option can be use to surpress this message for offline use.</p>
+option can be use to suppress this message for offline use.</p>
 <p>Setting a safedata directory will also trigger validation of the
 directory structure. This will issue warnings when files other than
 those found in datasets are present within the data structure or
