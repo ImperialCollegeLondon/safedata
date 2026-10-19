@@ -10,32 +10,17 @@ load_gazetteer()
 An \code{\link[sf]{sf}} object containing the gazetteer locations.
 }
 \description{
-This function loads the gazetteer, stored as a geojson file in the
-root of the safedata directory, as an \code{\link[sf]{sf}} GIS object.
-The GIS data uses the WGS84 (EPSG:4326) geographic coordinate system.
+This function loads the gazetteer, stored as GeoJSON data in the
+\code{gazetteer.geojson} file in the root of the safedata directory  (see
+\code{\link{set_safedata_dir}}).
 }
 \details{
-The gazetteer contains the following fields:
+The data is loaded as an \code{\link[sf]{sf}} GIS object, using the WGS84
+(EPSG:4326) geographic coordinate system. The gazetteer will contain at least the
+following two fields but may also contain project specific extra data.
+
 \describe{
 \item{location}{The official gazetteer name for a sampling site.}
-\item{type}{A short description of location type - typically the project
-      that created the location}
-\item{plot_size}{Where applicable, the size of the plot at a location.
-      Note that point locations may define a sampling area with a plot
-      size.}
-\item{display_order}{DELETE}
-\item{parent}{DELETE}
-\item{region}{One of the four major large scale sampling areas: SAFE,
-      Maliau, Danum and VJR}
-\item{fractal_order}{Only defined for the SAFE core sampling points,
-      which follow a fractal layout.}
-\item{transect_order}{Again, for SAFE core sampling points, the
-      location of a point along the sampling design transect.}
-\item{centroid_x, centroid_y}{The centroid of the feature}
-\item{source}{The original source GIS file that the feature was
-      described in.}
-\item{bbox_xmin, bbox_ymin, bbox_xmax, bbox_ymax}{The bounding box of
-      the feature.}
 \item{geometry}{The GIS geometry for the data - a column of class
       \code{\link[sf]{sfc}}.}
 }

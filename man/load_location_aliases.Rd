@@ -10,8 +10,9 @@ load_location_aliases()
 A data frame containing location aliases.
 }
 \description{
-This function loads location aliases, stored as a csv file in the root of the
-safedata directory, as data frame.
+This function loads location alias data, stored in CSV format in the
+\code{location_aliases.csv} file in the root of the safedata directory  (see
+\code{\link{set_safedata_dir}}). The data is returned as a simple data frame.
 }
 \details{
 When this function is first called in a session, the loaded data frame object is

@@ -1,4 +1,4 @@
-.lintr
+.air.toml
 .mypy_cache
 .python-version
 .uvr
@@ -21,4 +21,3 @@
 ^uvr\.toml$
 build_notes.md
 cran-comments.md
-lint.txt

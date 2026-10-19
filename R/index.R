@@ -1,12 +1,4 @@
-#' Index file memory cache
-#'
-#' The \code{safedata_env} environment within the package namespace is
-#' used to cache a copy of the dataset index, gazetteer and location aliases
-#' rather than needing to repeatedly read these from file. This environment
-#' is accessed by internal functions and is not intended for the end user.
-#'
-#' @keywords internal
-#' @aliases index
+#' @describeIn load_index The caching environment for core resource data
 
 safedata_env <- new.env(parent = emptyenv())
 
@@ -21,27 +13,25 @@ set_safedata_dir <- function(safedir, update = TRUE) {
     #'
     #' @section The safedata directory structure:
     #'
-    #' The safedata package uses a data directory to store local copies of
-    #' dataset files along with index files. Files for a dataset record are
-    #' stored in subdirectories using the zenodo concept id for the record
-    #' and then record id: \code{3342494/3342495}, for example. In addition
-    #' to data files from these records, these folders can also contain a
-    #' JSON file containing record metadata (e.g. \code{3342495.json}): this
-    #' is a structured version of the summary information shown on the
-    #' Zenodo page.
+    #' The safedata package uses a data directory to store local copies of dataset files
+    #' along with index files. Files for a dataset record are stored in subdirectories
+    #' using the zenodo concept id for the record and then record id:
+    #' \code{3342494/3342495}, for example. In addition to data files from these
+    #' records, these folders can also contain a JSON file containing record metadata
+    #' (e.g. \code{3342495.json}): this is a structured version of the summary
+    #' information shown on the Zenodo page.
     #'
-    #' The root of the data directory also holds three index files and a
-    #' settings file for the safedata diretory:
+    #' The root of the data directory also holds three core resource files and a
+    #' settings file for the safedata directory:
+    #'
     #' \describe{
-    #'   \item{\code{index.json}}{, containing a full list of the
-    #'         files and dataset records available in the safedata community
-    #'         for a project;}
-    #'   \item{\code{gazetteer.geojson}}{, containing the official list of
-    #'         known sampling locations and GIS data; and}
-    #'   \item{\code{location_aliases.json}}{, a list of alternative names
-    #'         permitted for some locations.}
-    #'   \item{\code{url.json}}{, the URL settings for the safedata
-    #'         metadata server}
+    #'   \item{\code{index.json}}{, containing a full list of the files and dataset
+    #'         records available in the safedata community for a project;}
+    #'   \item{\code{gazetteer.geojson}}{, containing the official list of known
+    #'         sampling locations and GIS data; and}
+    #'   \item{\code{location_aliases.json}}{, a list of alternative names permitted for
+    #'         some locations.}
+    #'   \item{\code{url.json}}{, the URL settings for the safedata metadata server}
     #' }
     #'
     #' @section Creating a new safadata directory:
@@ -423,24 +413,24 @@ download_location_aliases <- function() {
 
 
 load_index <- function() {
-    #' Load and cache the dataset index
+    #' Load and cache the dataset index.
     #'
-    #' This function loads the dataset record index from the JSON file in
-    #' the safedata directory and sets which datasets are currently available
-    #' and which records are the most recent available under a given concept.
-    #' The function also checks to see if there are any user modifications to
-    #' the directory structure.
+    #' These functions are used to load and cache the dataset record index from the
+    #' \code{index.json} file in the safedata directory (see
+    #' \code{\link{set_safedata_dir}}).
     #'
-    #' When any of the three index files (\code{index.json},
-    #' \code{gazetteer.geojson} and \code{location_aliases.csv}) are loaded,
-    #' the file contents are cached in memory to reduce load times. The cache
-    #' is within an environment that is not exported in the package namespace
-    #' and is not intended to be user accessible.
+    #' When any of the three core resource files (\code{index.json}, \code{gazetteer.geojson}
+    #' and \code{location_aliases.csv}) are loaded, the file contents are cached in
+    #' a separate R environment (\code{safedata_env}) to reduce file loading while the
+    #' package is being used. This environment is not intended to be accessed by users
+    #' and changing the contents will break package functionality.
     #'
-    #' @return Returns NULL invisibly - use get_index() to obtain the
-    #'    index data.
-    #' @seealso \code{\link{load_location_aliases}},
-    #'    \code{\link{load_gazetteer}}
+    #' @return The \code{load_index} function loads and caches the index data, checks
+    #'   the availability of datasets and checks for user modifications to the safedata
+    #'   directory structure but does not return the index data. Use the
+    #'   \code{get_index} function to retrieve the data from the cache.
+    #' @describeIn load_index Load and cache dataset index data.
+    #' @seealso \code{\link{load_location_aliases}}, \code{\link{load_gazetteer}}
     #' @keywords internal
 
     # Check the safedata paths have been set
@@ -561,13 +551,7 @@ load_index <- function() {
 
 
 get_index <- function() {
-    #' Get the cached dataset index
-    #'
-    #' This function just safely retrieves the safedata index from the
-    #' package cache.
-    #'
-    #' @return A data frame containing the dataset index details.
-    #' @seealso \code{\link{load_index}}
+    #' @describeIn load_index Return the cached index data
     #' @keywords internal
 
     if (exists("index", safedata_env)) {
@@ -583,31 +567,16 @@ get_index <- function() {
 load_gazetteer <- function() {
     #' Load and cache the safedata gazetteer
     #'
-    #' This function loads the gazetteer, stored as a geojson file in the
-    #' root of the safedata directory, as an \code{\link[sf]{sf}} GIS object.
-    #' The GIS data uses the WGS84 (EPSG:4326) geographic coordinate system.
+    #' This function loads the gazetteer, stored as GeoJSON data in the
+    #' \code{gazetteer.geojson} file in the root of the safedata directory  (see
+    #' \code{\link{set_safedata_dir}}).
     #'
-    #' The gazetteer contains the following fields:
+    #' The data is loaded as an \code{\link[sf]{sf}} GIS object, using the WGS84
+    #' (EPSG:4326) geographic coordinate system. The gazetteer will contain at least the
+    #' following two fields but may also contain project specific extra data.
+    #'
     #' \describe{
     #' \item{location}{The official gazetteer name for a sampling site.}
-    #' \item{type}{A short description of location type - typically the project
-    #'       that created the location}
-    #' \item{plot_size}{Where applicable, the size of the plot at a location.
-    #'       Note that point locations may define a sampling area with a plot
-    #'       size.}
-    #' \item{display_order}{DELETE}
-    #' \item{parent}{DELETE}
-    #' \item{region}{One of the four major large scale sampling areas: SAFE,
-    #'       Maliau, Danum and VJR}
-    #' \item{fractal_order}{Only defined for the SAFE core sampling points,
-    #'       which follow a fractal layout.}
-    #' \item{transect_order}{Again, for SAFE core sampling points, the
-    #'       location of a point along the sampling design transect.}
-    #' \item{centroid_x, centroid_y}{The centroid of the feature}
-    #' \item{source}{The original source GIS file that the feature was
-    #'       described in.}
-    #' \item{bbox_xmin, bbox_ymin, bbox_xmax, bbox_ymax}{The bounding box of
-    #'       the feature.}
     #' \item{geometry}{The GIS geometry for the data - a column of class
     #'       \code{\link[sf]{sfc}}.}
     #' }
@@ -638,8 +607,9 @@ load_gazetteer <- function() {
 load_location_aliases <- function() {
     #' Load and cache location aliases
     #'
-    #' This function loads location aliases, stored as a csv file in the root of the
-    #' safedata directory, as data frame.
+    #' This function loads location alias data, stored in CSV format in the
+    #' \code{location_aliases.csv} file in the root of the safedata directory  (see
+    #' \code{\link{set_safedata_dir}}). The data is returned as a simple data frame.
     #'
     #' When this function is first called in a session, the loaded data frame object is
     #' cached for re-use (see \code{\link{load_index}}).

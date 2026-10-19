@@ -565,7 +565,7 @@ par(mar = c(3, 3, 1, 1))
 plot(st_geometry(fragments), col = "khaki", graticule = TRUE)
 plot(st_geometry(beetle_locs), add = TRUE, col = "red", pch = 4)
     ```
-	
+
 3. `add_locations()`: This functions adds location data to an already loaded worksheet.
    The result is a `safedata` object that is also an `sf` object.
 
