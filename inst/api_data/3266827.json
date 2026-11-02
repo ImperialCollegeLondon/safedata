@@ -37,7 +37,7 @@
             "file": "SAFE_COUPE.zip"
         }
     ],
-    "dataworksheets": [
+    "worksheets": [
         {
             "taxa_fields": [],
             "max_row": 192,
@@ -54,7 +54,7 @@
             "external": null,
             "fields": [
                 {
-                    "field_type": "Location",
+                    "field_type": "location",
                     "description": "Coupe number",
                     "method": null,
                     "units": null,
@@ -62,7 +62,7 @@
                     "col_idx": 1
                 },
                 {
-                    "field_type": "Date",
+                    "field_type": "date",
                     "description": "Earliest date of logging activity recorded through GPS loggers on bulldozers",
                     "method": null,
                     "range": [
@@ -74,7 +74,7 @@
                     "col_idx": 2
                 },
                 {
-                    "field_type": "Date",
+                    "field_type": "date",
                     "description": "Last date of logging activity recorded through GPS loggers on bulldozers",
                     "method": null,
                     "range": [
@@ -86,7 +86,7 @@
                     "col_idx": 3
                 },
                 {
-                    "field_type": "Date",
+                    "field_type": "date",
                     "description": "Earliest date of logging activity recorded through 'Location' method",
                     "method": null,
                     "range": [
@@ -98,7 +98,7 @@
                     "col_idx": 4
                 },
                 {
-                    "field_type": "Date",
+                    "field_type": "date",
                     "description": "Last date of logging activity recorded through 'Location' method",
                     "method": null,
                     "range": [
@@ -110,7 +110,7 @@
                     "col_idx": 5
                 },
                 {
-                    "field_type": "Date",
+                    "field_type": "date",
                     "description": "Earliest date of logging activity recorded through 'Measurement' method",
                     "method": null,
                     "range": [
@@ -122,7 +122,7 @@
                     "col_idx": 6
                 },
                 {
-                    "field_type": "Date",
+                    "field_type": "date",
                     "description": "Last date of logging activity recorded through 'Measurement' method",
                     "method": null,
                     "range": [
@@ -134,7 +134,7 @@
                     "col_idx": 7
                 },
                 {
-                    "field_type": "ID",
+                    "field_type": "id",
                     "description": "Name of the contractor responsible for the coupe",
                     "method": null,
                     "units": null,
@@ -142,7 +142,7 @@
                     "col_idx": 8
                 },
                 {
-                    "field_type": "Date",
+                    "field_type": "date",
                     "description": "Earliest date of any recorded salvage logging activity",
                     "method": "Earliest date from 'StartDateTract', 'StartDateLocation' and 'StartDateMeasurement'",
                     "range": [
@@ -154,7 +154,7 @@
                     "col_idx": 9
                 },
                 {
-                    "field_type": "Date",
+                    "field_type": "date",
                     "description": "Last date of any recorded salvage logging activity",
                     "method": "Latest date from 'EndDateTract', 'EndDateLocation' and 'EndDateMeasurement'",
                     "range": [

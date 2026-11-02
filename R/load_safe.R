@@ -98,10 +98,10 @@ load_safe_data <- function(record_id, worksheet, ...) {
 
     # Now get the metadata and check the target worksheet exists
     meta <- load_record_metadata(record_set)
-    if (!worksheet %in% meta$dataworksheets$name) {
+    if (!worksheet %in% meta$worksheets$name) {
         stop(
             "Data worksheet name not one of: ",
-            paste(meta$dataworksheets$name, collapse = ", ")
+            paste(meta$worksheets$name, collapse = ", ")
         )
     }
 
@@ -133,9 +133,12 @@ load_safe_data <- function(record_id, worksheet, ...) {
     # types to readxl col_types: "skip", "guess", "logical", "numeric", "date",
     # "text" or "list". Datetime fields are left to the guessing mechanism
     # because they can be Excel dates or POSIX strings.
-    dwksh <- meta$dataworksheets[meta$dataworksheets$name == worksheet, ]
+    dwksh <- meta$worksheets[meta$worksheets$name == worksheet, ]
     fields <- dwksh$fields[[1]]
-    field_types <- tolower(fields$field_type)
+
+    # Enforce lower case field types
+    fields$field_type <- tolower(fields$field_type)
+
     readxl_map <- c(
         "date" = "guess",
         "datetime" = "guess",
@@ -160,7 +163,7 @@ load_safe_data <- function(record_id, worksheet, ...) {
     )
 
     # map the column types, including the first column of record numbers
-    col_types <- c("numeric", readxl_map[match(field_types, names(readxl_map))])
+    col_types <- c("numeric", readxl_map[match(fields$field_type, names(readxl_map))])
     if (anyNA(col_types)) {
         stop("Problem with column type specification. Contact developers")
     }
@@ -196,12 +199,12 @@ load_safe_data <- function(record_id, worksheet, ...) {
         fld <- fields[idx, ]
 
         # Factors
-        if (grepl("Categorical", fld$field_type)) {
+        if (grepl("categorical", fld$field_type)) {
             data[fld$field_name] <- as.factor(data[[fld$field_name]])
         }
 
         # Dates, Datetimes and Times
-        if (fld$field_type %in% c("Date", "Datetime", "Time")) {
+        if (fld$field_type %in% c("date", "datetime", "time")) {
             values <- data[[fld$field_name]]
             # if they haven't been converted already, then the user has supplied
             # POSIX strings not Excel Date/Time
@@ -226,7 +229,7 @@ load_safe_data <- function(record_id, worksheet, ...) {
             # Use chron time - could use chron date + chron but they provide a
             # ugly pile of attributes in the data frame display and have to be
             # beaten with a stick to stop them using month/day/year formats.
-            if (fld$field_type == "Time") {
+            if (fld$field_type == "time") {
                 values <- chron::times(format(values, "%H:%M:%S"))
             }
             data[fld$field_name] <- values

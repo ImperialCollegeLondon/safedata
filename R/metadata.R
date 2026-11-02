@@ -337,7 +337,7 @@ fetch_record_metadata <- function(record_set) {
             #  to test fetch_record_metadata - maybe block specific IDs?
 
             url <- getOption("safedata.url")
-            api <- sprintf("%s/api/record/%i", url, to_get$record)
+            api <- sprintf("%s/api/records/%i/?format=json", url, to_get$record)
             response <- try_to_download(api)
 
             if (isFALSE(response)) {
@@ -619,7 +619,7 @@ show_record <- function(obj) {
     }
 
     # Data worksheets
-    dwksh <- metadata$dataworksheets
+    dwksh <- metadata$worksheets
     if (length(dwksh) == 0) {
         cat("\nData in external files only\n")
     } else {
@@ -692,7 +692,7 @@ show_worksheet <- function(obj, worksheet = NULL, extended_fields = FALSE) {
     metadata <- load_record_metadata(record_set)
 
     # Find the worksheet
-    dwksh <- metadata$dataworksheets
+    dwksh <- metadata$worksheets
     idx <- which(dwksh$name == worksheet)
     if (!length(idx)) {
         stop(
