@@ -40,7 +40,7 @@ get_locations <- function(obj, gazetteer_info = FALSE) {
     #' @export
 
     if (inherits(obj, "safedata")) {
-        record_set <- attr(obj, "safedata")$safe_record_set
+        record_set <- attr(obj, "metadata")$safe_record_set
     } else {
         record_set <- validate_record_ids(obj)
     }

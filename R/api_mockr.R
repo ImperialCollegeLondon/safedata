@@ -24,7 +24,7 @@ mock_api_urls <- list(
         status_code = 200L
     ),
     "http://example.safedata.server/api/gazetteer/aliases/download/" = list(
-        content = "location_aliases.json",
+        content = "location_aliases.csv",
         status_code = 200L
     ),
     "http://example.safedata.server/api/datasets/index/hash/" = list(
