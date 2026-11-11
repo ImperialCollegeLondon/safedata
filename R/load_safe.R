@@ -38,61 +38,59 @@ load_safe_data <- function(record_id, worksheet, ...) {
     # validate the record id
     record_set <- validate_record_ids(record_id)
 
-    # Logic of what to load.
-    # a) If a record is provided, return that unless it is unavailable, in
-    #    which case suggest an alternative.
-    # b) If a concept is provided, load MRA if there is one.
-
-    # Look for a local copy of the file. If it doesn't exist, download it
-    # if possible
-    index <- get_index()
-    index_row <- subset(
-        index,
-        zenodo_record_id == record_set$record &
-            grepl(".xlsx$", filename)
-    )
-
+    # Need a single record id
     if (nrow(record_set) != 1) {
         stop("Requires a single valid record or concept id")
-    } else if (is.na(record_set$record)) {
+    }
+
+    # If a concept ID is provided, look for a MRA and load that if available, otherwise
+    # exit.
+    if (is.na(record_set$record)) {
         # concept provided - we don't attempt to load local private copies here
         if (is.na(record_set$mra)) {
             stop("Concept ID provided: all records under embargo or restricted")
         } else {
             verbose_message(
-                "Concept ID provided: ",
-                "loading most recent available record"
+                "Concept ID provided: loading most recent available record (",
+                record_set$mra,
+                ")"
             )
             record_set <- validate_record_ids(record_set$mra)
         }
-    } else {
-        # record provided
-        if (!record_set$available) {
-            if (index_row$local_copy) {
-                verbose_message(
-                    "Loading data from private copy of ",
-                    "embargoed or restricted data"
-                )
-            } else if (is.na(record_set$mra)) {
-                stop(
-                    "Record ID provided: this and all other versions of this ",
-                    "dataset concept are under embargo or restricted"
-                )
-            } else {
-                stop(
-                    "Record ID provided: version is under embargo or ",
-                    "restricted. Most recent available is ",
-                    record_set$mra
-                )
-            }
+    }
+
+    # Now have either exited or have an actual record ID.
+    index <- get_index()
+    index_row <- subset(
+        index,
+        zenodo_record_id == record_set$record & grepl(".xlsx$", filename)
+    )
+
+    # Report on accessibility issues or out-of-date version
+    if (!record_set$available) {
+        if (index_row$local_copy) {
+            verbose_message(
+                "Loading data from private copy of embargoed or restricted data"
+            )
+        } else if (is.na(record_set$mra)) {
+            stop(
+                "Record ID provided: this and all other versions of this ",
+                "dataset concept are under embargo or restricted"
+            )
         } else {
-            if (record_set$record != record_set$mra) {
-                verbose_message(
-                    "Outdated record: the most recent available ",
-                    "version is ",
-                    record_set$mra
-                )
-            }
+            stop(
+                "Record ID provided: version is under embargo or ",
+                "restricted. Most recent available is ",
+                record_set$mra
+            )
+        }
+    } else {
+        if (record_set$record != record_set$mra) {
+            verbose_message(
+                "Outdated record: the most recent available ",
+                "version is ",
+                record_set$mra
+            )
         }
     }
 
