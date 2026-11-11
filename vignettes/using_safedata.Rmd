@@ -427,14 +427,14 @@ that this will **delete local changes**.
 
 ### Loading individual datasets
 
-The `load_safe_data` function is used to load a named data worksheet into R. If the
-datafile containing the worksheet is not currently downloaded, then `load_safe_data`
+The `load_safedata` function is used to load a named data worksheet into R. If the
+datafile containing the worksheet is not currently downloaded, then `load_safedata`
 will automatically download the file if available. In this example, `confirm=FALSE` is
 passed onto `download_safe_files` to remove the interactive confirmation before
 downloading.
 
-```{r load_safe_data}
-beetle_abund <- load_safe_data(1400562, "Ant-Psel", confirm = FALSE)
+```{r load_safedata}
+beetle_abund <- load_safedata(1400562, "Ant-Psel", confirm = FALSE)
 ```
 
 ## The `safedata` object
@@ -449,7 +449,7 @@ types](https://safedata-validator.readthedocs.io/en/stable/data_providers/data_f
 categorical variables are converted to factors; dates and datetimes are converted to
 `POSIXct` and times are converted to `chron::time` objects.
 
-```{r show_safe_data}
+```{r show_safedata}
 str(beetle_abund)
 print(beetle_abund)
 ```
@@ -484,7 +484,7 @@ str(beetle_taxa)
    worksheet.
 
     ```{r add_taxa}
-beetle_morph <- load_safe_data(1400562, "MorphFunctTraits")
+beetle_morph <- load_safedata(1400562, "MorphFunctTraits")
 beetle_morph <- add_taxa(beetle_morph)
 str(beetle_morph)
     ```
@@ -570,7 +570,7 @@ plot(st_geometry(beetle_locs), add = TRUE, col = "red", pch = 4)
    The result is a `safedata` object that is also an `sf` object.
 
     ```{r add_locations}
-beetle_env <- load_safe_data(1400562, "EnvironVariables")
+beetle_env <- load_safedata(1400562, "EnvironVariables")
 beetle_env <- add_locations(beetle_env)
 print(beetle_env)
 plot(beetle_env["Cover"], key.pos = 4, breaks = seq(0, 100, by = 5))
@@ -593,7 +593,7 @@ files <- system.file("api_data", "template_ClareWfunctiondata.xlsx",
     package = "safedata"
 )
 insert_dataset(1237719, files)
-dat <- load_safe_data(1237719, "Data")
+dat <- load_safedata(1237719, "Data")
 str(dat)
 ```
 
