@@ -10,7 +10,7 @@ get_taxa(obj)
 \item{obj}{A single record id, or an existing safedata dataframe.}
 }
 \value{
-A taxonomy table of classes "safe_taxa" and "data.frame".
+A taxonomy table of classes "safedata_taxa" and "data.frame".
 }
 \description{
 This function generates a taxonomy table for a specified safedata dataset record.

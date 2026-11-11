@@ -41,7 +41,7 @@ get_taxa <- function(obj) {
     #' \url{https://safedata-validator.readthedocs.io/en/stable/data_providers/data_format/taxa.html}  # nolint
     #'
     #' @param obj A single record id, or an existing safedata dataframe.
-    #' @return A taxonomy table of classes "safe_taxa" and "data.frame".
+    #' @return A taxonomy table of classes "safedata_taxa" and "data.frame".
     #' @seealso \code{\link{add_taxa}}
     #' @examples
     #'     set_example_safedata_dir()
@@ -241,7 +241,7 @@ taxon_index_to_taxon_table <- function(taxon_index) {
         taxon_table,
         subset(worksheet_taxa, select = tax_fields)
     )
-    class(taxon_table) <- c("safe_taxa", "data.frame")
+    class(taxon_table) <- c("safedata_taxa", "data.frame")
 
     return(taxon_table)
 }
@@ -316,13 +316,13 @@ add_taxa <- function(
     # one for the worksheet
     if (is.null(taxon_table)) {
         taxon_table <- get_taxa(obj_attr$safedata_records)
-    } else if (inherits(taxon_table, "safe_taxa")) {
+    } else if (inherits(taxon_table, "safedata_taxa")) {
         taxa_record_set <- attr(taxon_table, "metadata")$safedata_records
         if (!isTRUE(all.equal(taxa_record_set, obj_attr$safedata_records))) {
             stop("Provided 'taxon_table' is for a different dataset.")
         }
     } else {
-        stop("'taxon_table' not a 'safe_taxa' object created by 'get_taxa'")
+        stop("'taxon_table' not a 'safedata_taxa' object created by 'get_taxa'")
     }
 
     # This should never happen - would need a taxon field with no taxa worksheet

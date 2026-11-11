@@ -8,6 +8,7 @@
   * safe_api_search --> safedata_search
   * safe_record_set --> safedata_records
   * load_safe_data to load_safedata
+  * safe_locations --> safedata_locations
 
 # safedata 2.0.0
 
