@@ -132,7 +132,7 @@ search_dates <- function(
 
     # pass the query string to the api handler
     params <- c(date = dates, match_type = match_type)
-    return(safe_api_search("dates", params, ids, most_recent))
+    return(safedata_search("dates", params, ids, most_recent))
 }
 
 
@@ -150,7 +150,7 @@ search_fields <- function(
     validate_query_param("field_type", field_type)
 
     params <- c(text = field_text, ftype = field_type)
-    return(safe_api_search("fields", params, ids, most_recent))
+    return(safedata_search("fields", params, ids, most_recent))
 }
 
 
@@ -162,7 +162,7 @@ search_authors <- function(author, ids = NULL, most_recent = FALSE) {
     validate_query_param("author", author)
 
     params <- c(name = author)
-    return(safe_api_search("authors", params, ids, most_recent))
+    return(safedata_search("authors", params, ids, most_recent))
 }
 
 
@@ -194,7 +194,7 @@ search_taxa <- function(
         taxon_id = taxon_id,
         auth = taxon_auth
     )
-    return(safe_api_search("taxa", params, ids, most_recent))
+    return(safedata_search("taxa", params, ids, most_recent))
 }
 
 
@@ -206,7 +206,7 @@ search_text <- function(text, ids = NULL, most_recent = FALSE) {
     validate_query_param("text", text)
 
     params <- c(text = text)
-    return(safe_api_search("text", params, ids, most_recent))
+    return(safedata_search("text", params, ids, most_recent))
 }
 
 
@@ -247,11 +247,11 @@ search_spatial <- function(
 
     # pass the params to the handler
     params <- c(wkt = wkt, location = location, distance = distance)
-    return(safe_api_search("spatial", params, ids, most_recent))
+    return(safedata_search("spatial", params, ids, most_recent))
 }
 
 
-safe_api_search <- function(endpoint, params, ids = NULL, most_recent = FALSE) {
+safedata_search <- function(endpoint, params, ids = NULL, most_recent = FALSE) {
     #' Internal SAFE dataset API search functions
     #'
     #' The two internal functions described here handle validating the parameters passed
@@ -266,11 +266,11 @@ safe_api_search <- function(endpoint, params, ids = NULL, most_recent = FALSE) {
     #' @param class Accepted input classes
     #' @param length Accepted input lengths
     #' @inheritParams search_dates
-    #' @return The \code{safe_api_search} function returns an object of class
+    #' @return The \code{safedata_search} function returns an object of class
     #'    \code{\link{safedata_records}} of datasets that match the submitted query. The
     #'    \code{validate_query_param} function either returns NULL on success or raises
     #'    an error.
-    #' @describeIn safe_api_search Constructs, submits and formats calls to
+    #' @describeIn safedata_search Constructs, submits and formats calls to
     #'    the `safedata_server` API.
     #' @keywords internal
 
@@ -340,7 +340,7 @@ safe_api_search <- function(endpoint, params, ids = NULL, most_recent = FALSE) {
 
 
 validate_query_param <- function(name, val, class = "character", length = 1) {
-    #' @describeIn safe_api_search A basic query parameter validation handler
+    #' @describeIn safedata_search A basic query parameter validation handler
     #' @keywords internal
 
     if (
