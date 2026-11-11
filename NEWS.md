@@ -1,21 +1,20 @@
 <!-- markdownlint-disable MD022 MD025 -->
 
-# safedata 3.0.0
-
-* Changes to function and class naming to move from SAFE project origin (`safe_`) to
-  wider `safedata` system:
-  * download_safe_files --> download_safedata_files
-  * safe_api_search --> safedata_search
-  * safe_record_set --> safedata_records
-  * load_safe_data to load_safedata
-  * safe_locations --> safedata_locations
-
 # safedata 2.0.0
 
 * Update to handle new API and NCBI taxa from safedata_server and
   safedata_validator 3.0.0
 * Replaced all API and URL calls in examples, vignettes and testing with mocked
   content via a new api_mockr interface.
+* Changes to function and class naming to move from SAFE project origin (`safe_`) to
+  wider `safedata` system:
+  * function: download_safe_files --> download_safedata_files
+  * function: safe_api_search --> safedata_search
+  * function: load_safe_data to load_safedata
+  * S3 class: safe_record_set --> safedata_records
+  * S3 class: safe_locations --> safedata_locations
+  * S3 class: safe_taxa --> safedata_taxa
+
 
 # safedata 1.1.3
 
