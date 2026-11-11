@@ -37,7 +37,7 @@
 * Further fixing of indexing functions to separate load_index from get_index
   to get clearer separation of setting safe dir and just wanting the indexing
   contents.
-* Fixed download_safe_files so that it updates the cached index to record the
+* Fixed download_safedata_files so that it updates the cached index to record the
   new local file copies.
 
 # safedata 1.0.8
@@ -48,7 +48,7 @@
 
 # safedata 1.0.7
 
-* Moved download_safe_files to use the website download URLs not API
+* Moved download_safedata_files to use the website download URLs not API
 * Added ability to use tokens for restricted datasets (pretty rare, 
   but requires website URLS)
 * Fixed checking for field names to handle what early versions of safedata_validator missed

@@ -18,7 +18,7 @@ load_safedata(record_id, worksheet, ...)
 \item{worksheet}{The name of the worksheet to load}
 
 \item{\dots}{For \code{load_safedata}, these are additional arguments
-passed on to \code{\link{download_safe_files}} if the data file needs
+passed on to \code{\link{download_safedata_files}} if the data file needs
 to be downloaded. Otherwise, these are further arguments to the
 \code{str} and \code{print} methods.}
 

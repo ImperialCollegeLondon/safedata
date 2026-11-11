@@ -375,7 +375,7 @@ ways to do this.
 
 ### Bulk loading data
 
-The `download_safe_files()` function can be used to download the data files for the data
+The `download_safedata_files()` function can be used to download the data files for the data
 records in a `safedata_records`, such as those created using a search. Alternatively, you
 can use the URL of a safedata record or simply use the record id for the dataset.
 
@@ -387,7 +387,7 @@ confirmation, which can be useful in non-interactive use. The function will also
 download the JSON metadata for the specified datasets.
 
 ```{r download_safe, eval=FALSE}
-download_safe_files(within_a)
+download_safedata_files(within_a)
 ## 26 files requested from 26 records
 ##  - 0 local (0 bytes)
 ##  - 4 embargoed or restricted (2.2 Mb)
@@ -399,7 +399,7 @@ download_safe_files(within_a)
 ## Selection:
 ```
 
-By default, the `download_safe_files()` function downloads all of the files associated
+By default, the `download_safedata_files()` function downloads all of the files associated
 with the record. In addition to the core Excel file, this will also download any
 *additional* data files which may contain primary data that is either not suited to the
 Excel format or which provides additional information, such as PDFs. Although some
@@ -407,7 +407,7 @@ additional file formats are likely to be readable in R, the`safedata` package do
 currently provide a mechanism to load them automatically.
 
 ```{r download_safe_external, eval=FALSE}
-download_safe_files(3697804, xlsx_only = FALSE)
+download_safedata_files(3697804, xlsx_only = FALSE)
 # 2 files requested from 1 records
 #  - 1 local (11.3 Kb)
 #  - 0 embargoed or restricted (0 bytes)
@@ -430,7 +430,7 @@ that this will **delete local changes**.
 The `load_safedata` function is used to load a named data worksheet into R. If the
 datafile containing the worksheet is not currently downloaded, then `load_safedata`
 will automatically download the file if available. In this example, `confirm=FALSE` is
-passed onto `download_safe_files` to remove the interactive confirmation before
+passed onto `download_safedata_files` to remove the interactive confirmation before
 downloading.
 
 ```{r load_safedata}

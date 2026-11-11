@@ -22,7 +22,7 @@ reference:
   - safedata
   - set_safedata_dir
   - validate_record_ids
-  - download_safe_files
+  - download_safedata_files
   - set_example_safedata_dir
 - title: Data discovery
   desc: These functions provide an interface to the dataset metadata search API provided

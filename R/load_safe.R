@@ -21,7 +21,7 @@ load_safedata <- function(record_id, worksheet, ...) {
     #' @param x,object A \code{safedata} object.
     #' @param n The number of rows to show in the \code{print} method.
     #' @param \dots For \code{load_safedata}, these are additional arguments
-    #'    passed on to \code{\link{download_safe_files}} if the data file needs
+    #'    passed on to \code{\link{download_safedata_files}} if the data file needs
     #'    to be downloaded. Otherwise, these are further arguments to the
     #'    \code{str} and \code{print} methods.
     #' @return A data frame with the additional \code{safedata} class and
@@ -106,7 +106,7 @@ load_safedata <- function(record_id, worksheet, ...) {
     # Download the data if needed
     if (!index_row$local_copy) {
         verbose_message("Downloading datafile: ", index_row$filename)
-        downloaded <- download_safe_files(index_row$zenodo_record_id, ...)
+        downloaded <- download_safedata_files(index_row$zenodo_record_id, ...)
         if (!length(downloaded)) {
             stop("Data file unavailable")
         }
@@ -341,12 +341,12 @@ print.safedata <- function(x, n = 10, ...) {
 # There is currently no such mechanism for embargoed data - you just have, to wait it
 # out or contact the authors.
 #
-# The download_safe_files function uses the WWW URLs to support restricted file tokens
+# The download_safedata_files function uses the WWW URLs to support restricted file tokens
 # and to remove the need for an API intermediate call. The safedata_validator package
 # provides the `sync_local_dir` command that uses API URLs as a common framework to
 # download everything using an API token.
 
-download_safe_files <- function(
+download_safedata_files <- function(
     record_ids,
     confirm = TRUE,
     xlsx_only = TRUE,
@@ -393,12 +393,12 @@ download_safe_files <- function(
     #'        # Validate records to download
     #'        recs <- validate_record_ids(c(3247631, 3266827, 3266821))
     #'        print(recs)
-    #'        download_safe_files(recs, confirm = FALSE)
+    #'        download_safedata_files(recs, confirm = FALSE)
     #'        set_example_safedata_dir(on = FALSE)
     #'    }
     #'    \dontrun{
     #'        # This example requires a private token
-    #'        download_safe_files(1237730, confirm = FALSE,
+    #'        download_safedata_files(1237730, confirm = FALSE,
     #'                            token="longStringFromZenodo")
     #'    }
     #' @export
