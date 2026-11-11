@@ -28,7 +28,7 @@ get_locations <- function(obj, gazetteer_info = FALSE) {
     #' @param obj A single record id, or an existing safedata dataframe.
     #' @param gazetteer_info Should all the gazetteer fields be included in the
     #'   returned \code{\link[sf]{sf}} object.
-    #' @return An object of classes "safe_locations", "sf" and "data.frame".
+    #' @return An object of classes "safedata_locations", "sf" and "data.frame".
     #' @note Not all safedata datasets contain locations. In this case
     #'   \code{\link{get_locations}} will return NULL.
     #' @seealso \code{\link{add_locations}}, \code{\link{load_gazetteer}},
@@ -165,9 +165,9 @@ get_locations <- function(obj, gazetteer_info = FALSE) {
     nm[nm == "name"] <- "dataset_name"
     names(locations) <- nm
 
-    # add rownames, flag as a valid safe_locations table and return
+    # add rownames, flag as a valid safedata_locations table and return
     rownames(locations) <- locations$dataset_name
-    class(locations) <- c("safe_locations", class(locations))
+    class(locations) <- c("safedata_locations", class(locations))
     return(locations)
 }
 
@@ -231,9 +231,9 @@ add_locations <- function(
     # Load the locations table
     if (is.null(location_table)) {
         location_table <- get_locations(obj_attr$safedata_records)
-    } else if (!inherits(location_table, "safe_locations")) {
+    } else if (!inherits(location_table, "safedata_locations")) {
         stop(
-            "'location_table' not a 'safe_locations' object",
+            "'location_table' not a 'safedata_locations' object",
             " created by 'get_locations'"
         )
     }

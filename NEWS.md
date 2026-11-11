@@ -1,5 +1,14 @@
 <!-- markdownlint-disable MD022 MD025 -->
 
+# safedata 3.0.0
+
+* Changes to function and class naming to move from SAFE project origin (`safe_`) to
+  wider `safedata` system:
+  * download_safe_files --> download_safedata_files
+  * safe_api_search --> safedata_search
+  * safe_record_set --> safedata_records
+  * load_safe_data to load_safedata
+
 # safedata 2.0.0
 
 * Update to handle new API and NCBI taxa from safedata_server and
