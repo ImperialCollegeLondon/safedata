@@ -198,7 +198,7 @@ add_locations <- function(
     #'    \code{\link{load_location_aliases}}
     #' @examples
     #'    set_example_safedata_dir()
-    #'    beetle_abund <- load_safe_data(1400562, "Ant-Psel")
+    #'    beetle_abund <- load_safedata(1400562, "Ant-Psel")
     #'    beetle_abund <- add_locations(beetle_abund)
     #'    set_example_safedata_dir(on=FALSE)
     #' @export

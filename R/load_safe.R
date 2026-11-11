@@ -1,4 +1,4 @@
-load_safe_data <- function(record_id, worksheet, ...) {
+load_safedata <- function(record_id, worksheet, ...) {
     #' Load data from a safedata dataset.
     #'
     #' This function returns a data frame containing the data from a data worksheet in a
@@ -20,7 +20,7 @@ load_safe_data <- function(record_id, worksheet, ...) {
     #' @param worksheet The name of the worksheet to load
     #' @param x,object A \code{safedata} object.
     #' @param n The number of rows to show in the \code{print} method.
-    #' @param \dots For \code{load_safe_data}, these are additional arguments
+    #' @param \dots For \code{load_safedata}, these are additional arguments
     #'    passed on to \code{\link{download_safe_files}} if the data file needs
     #'    to be downloaded. Otherwise, these are further arguments to the
     #'    \code{str} and \code{print} methods.
@@ -28,7 +28,7 @@ load_safe_data <- function(record_id, worksheet, ...) {
     #'    additional attribute data containing metadata for the data.
     #' @examples
     #'    set_example_safedata_dir()
-    #'    beetle_abund <- load_safe_data(1400562, "Ant-Psel")
+    #'    beetle_abund <- load_safedata(1400562, "Ant-Psel")
     #'    str(beetle_abund)
     #'    # See also the show_worksheet function for further worksheet metadata
     #'    show_worksheet(beetle_abund)
@@ -252,7 +252,7 @@ load_safe_data <- function(record_id, worksheet, ...) {
 
 
 str.safedata <- function(object, ...) {
-    #' @describeIn load_safe_data Display structure of a safedata data frame
+    #' @describeIn load_safedata Display structure of a safedata data frame
     #' @export
 
     object_attr <- attr(object, "metadata")
@@ -275,7 +275,7 @@ str.safedata <- function(object, ...) {
 }
 
 print.safedata <- function(x, n = 10, ...) {
-    #' @describeIn load_safe_data Print safedata data frame
+    #' @describeIn load_safedata Print safedata data frame
     #' @export
 
     x_attr <- attr(x, "metadata")
@@ -618,7 +618,7 @@ insert_dataset <- function(record_id, files) {
     #'    files <- system.file("api_data", "template_ClareWfunctiondata.xlsx",
     #'                         package = "safedata")
     #'    insert_dataset(1237719, files)
-    #'    dat <- load_safe_data(1237719, "Data")
+    #'    dat <- load_safedata(1237719, "Data")
     #'    str(dat)
     #'    set_example_safedata_dir(on=FALSE)
     #' @export

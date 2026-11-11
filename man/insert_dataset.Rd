@@ -22,7 +22,7 @@ available data.
    files <- system.file("api_data", "template_ClareWfunctiondata.xlsx",
                         package = "safedata")
    insert_dataset(1237719, files)
-   dat <- load_safe_data(1237719, "Data")
+   dat <- load_safedata(1237719, "Data")
    str(dat)
    set_example_safedata_dir(on=FALSE)
 }
