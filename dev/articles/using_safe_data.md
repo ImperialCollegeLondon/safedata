@@ -87,7 +87,7 @@ fresh, empty directory. Note that the directory path is stored in
 getOption("safedata.dir")
 ```
 
-    #> [1] "/tmp/RtmpsjjWSU/my_safe_directory"
+    #> [1] "/tmp/RtmpKTiVwK/my_safe_directory"
 
 ## Using an existing `safedata` directory
 
@@ -549,10 +549,10 @@ show_worksheet(1400562, "EnvironVariables")
     #> 
     #> Fields:
     #>   field_name field_type description         
-    #> 1 Site       Location   Site of measurements
-    #> 2 Temp       Numeric    Soil temperature    
-    #> 3 Moisture   Numeric    Soil moisture       
-    #> 4 Cover      Numeric    Canopy cover
+    #> 1 Site       location   Site of measurements
+    #> 2 Temp       numeric    Soil temperature    
+    #> 3 Moisture   numeric    Soil moisture       
+    #> 4 Cover      numeric    Canopy cover
 
 There is also an extended display (`extended_fields=TRUE`) that will
 print out a list of all the available metadata for each field.
@@ -757,9 +757,9 @@ show_worksheet(beetle_abund)
     #> 
     #> Fields:
     #>   field_name           field_type description                    
-    #> 1 Site                 Location   Site where sample was collected
-    #> 2 ant species richness Numeric    Number of ant species in sample
-    #> 3 ant abundance        Abundance  Total number of ants in sample
+    #> 1 Site                 location   Site where sample was collected
+    #> 2 ant species richness numeric    Number of ant species in sample
+    #> 3 ant abundance        abundance  Total number of ants in sample
 
 ### Dataset taxa
 
@@ -992,7 +992,7 @@ analysis.
     library(sf)
     ```
 
-        #> Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
+        #> Linking to GEOS 3.14.1, GDAL 3.12.2, PROJ 9.7.1; sf_use_s2() is TRUE
 
     ``` r
 
@@ -1138,7 +1138,7 @@ absolute file path of those files.
     #>                            filename dataset_access
     #> 42 template_ClareWfunctiondata.xlsx           open
     #>                                                                                  path
-    #> 42 /tmp/RtmpsjjWSU/my_safe_directory/1198840/1237719/template_ClareWfunctiondata.xlsx
+    #> 42 /tmp/RtmpKTiVwK/my_safe_directory/1198840/1237719/template_ClareWfunctiondata.xlsx
     #>    local
     #> 42  TRUE
 

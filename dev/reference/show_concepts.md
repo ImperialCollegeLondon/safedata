@@ -144,10 +144,10 @@ embargoed or restricted dataset has been inserted using
 #> 
 #> Fields:
 #>   field_name field_type description         
-#> 1 Site       Location   Site of measurements
-#> 2 Temp       Numeric    Soil temperature    
-#> 3 Moisture   Numeric    Soil moisture       
-#> 4 Cover      Numeric    Canopy cover        
+#> 1 Site       location   Site of measurements
+#> 2 Temp       numeric    Soil temperature    
+#> 3 Moisture   numeric    Soil moisture       
+#> 4 Cover      numeric    Canopy cover        
    beetle_abund <- load_safe_data(1400562, "Ant-Psel")
    show_worksheet(beetle_abund, extended_fields = TRUE)
 #> Record ID: 1400562
@@ -160,16 +160,16 @@ embargoed or restricted dataset has been inserted using
 #> 
 #> Fields:
 #> Site :
-#>  - field_type: Location
+#>  - field_type: location
 #>  - interaction_name: Na
 #>  - description: Site where sample was collected
 #> ant species richness :
-#>  - field_type: Numeric
+#>  - field_type: numeric
 #>  - description: Number of ant species in sample
 #>  - method: Winkler bag
 #>  - units: #
 #> ant abundance :
-#>  - field_type: Abundance
+#>  - field_type: abundance
 #>  - description: Total number of ants in sample
 #>  - method: Winkler bag
 #>  - units: #

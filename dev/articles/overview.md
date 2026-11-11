@@ -147,7 +147,7 @@ The directory structure is as follows:
     (`url.json`),
   - an index of published datasets (`index.json`), and
   - spatial information on sampling sites across the project
-    (`gazetteer.geojson`, `location_aliases.json`)
+    (`gazetteer.geojson`, `location_aliases.csv`)
 
 - Download datasets are then stored in directories nested by first the
   **Zenodo concept id** of the dataset and then the specific **Zenodo

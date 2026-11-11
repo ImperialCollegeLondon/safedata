@@ -95,9 +95,9 @@ files - data stored in external files is not yet handled.
 #> 
 #> Fields:
 #>   field_name           field_type description                    
-#> 1 Site                 Location   Site where sample was collected
-#> 2 ant species richness Numeric    Number of ant species in sample
-#> 3 ant abundance        Abundance  Total number of ants in sample 
+#> 1 Site                 location   Site where sample was collected
+#> 2 ant species richness numeric    Number of ant species in sample
+#> 3 ant abundance        abundance  Total number of ants in sample 
    set_example_safedata_dir(on=FALSE)
 #> No response from server, skipping updates: http://example.safedata.server
 #> Loading and caching index
