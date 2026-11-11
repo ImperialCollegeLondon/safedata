@@ -56,7 +56,7 @@ if (getRversion() >= "2.15.1") {
         "path",
         "publication_date",
         "record",
-        "safe_record_set",
+        "safedata_records",
         "str",
         "taxon_name",
         "taxon_rank",

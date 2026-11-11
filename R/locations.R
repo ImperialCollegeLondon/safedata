@@ -40,7 +40,7 @@ get_locations <- function(obj, gazetteer_info = FALSE) {
     #' @export
 
     if (inherits(obj, "safedata")) {
-        record_set <- attr(obj, "metadata")$safe_record_set
+        record_set <- attr(obj, "metadata")$safedata_records
     } else {
         record_set <- validate_record_ids(obj)
     }
@@ -230,7 +230,7 @@ add_locations <- function(
 
     # Load the locations table
     if (is.null(location_table)) {
-        location_table <- get_locations(obj_attr$safe_record_set)
+        location_table <- get_locations(obj_attr$safedata_records)
     } else if (!inherits(location_table, "safe_locations")) {
         stop(
             "'location_table' not a 'safe_locations' object",

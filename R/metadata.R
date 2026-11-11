@@ -5,10 +5,10 @@ validate_record_ids <- function(record_set) {
     #' them against the index. Typically the identifiers are provided as
     #' integers, but the function will also handle Zenodo URLs and DOIs.
     #'
-    #' The function returns a data frame with class \code{safe_record_set},
+    #' The function returns a data frame with class \code{safedata_records},
     #' containing the columns \code{concept}, \code{record}, \code{available}
     #' and, finally, \code{mra} containing the most recent available record
-    #' (if any). The function can be run on an existing \code{safe_record_set}
+    #' (if any). The function can be run on an existing \code{safedata_records}
     #' to update this information.
     #'
     #' Note that \code{record} will be NA when a value represents a concept id.
@@ -22,9 +22,9 @@ validate_record_ids <- function(record_set) {
     #'
     #' @param record_set A vector of values containing Zenodo concept or
     #'    record ids.
-    #' @param x,y Objects of class \code{safe_record_set}
+    #' @param x,y Objects of class \code{safedata_records}
     #' @param ... Further arguments to print methods, unused.
-    #' @return An object of class \code{safe_record_set} (see Details)
+    #' @return An object of class \code{safedata_records} (see Details)
     #' @examples
     #'    set_example_safedata_dir()
     #'    validate_record_ids(c(3247631, 3266827, 3266821, -1000))
@@ -33,13 +33,13 @@ validate_record_ids <- function(record_set) {
     #'                          "https://zenodo.org/record/3266821",
     #'                          "not_this_one/3266821"))
     #'    set_example_safedata_dir(on=FALSE)
-    #' @aliases safe_record_set
+    #' @aliases safedata_records
     #' @export
 
     index <- get_index()
 
     # Only run validation if the input is not already a record set
-    if (!inherits(record_set, "safe_record_set")) {
+    if (!inherits(record_set, "safedata_records")) {
         # Otherwise validate
         if (
             !(is.vector(record_set) &&
@@ -143,7 +143,7 @@ validate_record_ids <- function(record_set) {
             record_set$concept
         )
 
-        class(record_set) <- c("safe_record_set", "data.frame")
+        class(record_set) <- c("safedata_records", "data.frame")
     }
 
     # Now add information on whether individual records are available and then,
@@ -186,9 +186,9 @@ validate_record_ids <- function(record_set) {
 }
 
 
-print.safe_record_set <- function(x, ...) {
+print.safedata_records <- function(x, ...) {
     #' @describeIn validate_record_ids Print a brief summary of
-    #'    "safe_record_set" objects.
+    #'    "safedata_records" objects.
     #' @export
 
     msg <- paste0(
@@ -232,7 +232,7 @@ print.safe_record_set <- function(x, ...) {
 }
 
 
-"&.safe_record_set" <- function(x, y) {
+"&.safedata_records" <- function(x, y) {
     #' @describeIn validate_record_ids Combine two record sets, retaining only
     #'    records that are present in both.
     #' @export
@@ -248,7 +248,7 @@ print.safe_record_set <- function(x, ...) {
 }
 
 
-"|.safe_record_set" <- function(x, y) {
+"|.safedata_records" <- function(x, y) {
     #' @describeIn validate_record_ids Combine two record sets, including the
     #'    records that are present in either.
     #' @export
@@ -277,7 +277,7 @@ fetch_record_metadata <- function(record_set) {
     #' downloaded as JSON format and stored within the record directory in the safedata
     #' directory for reuse.
     #'
-    #' @param record_set An object of class \code{\link{safe_record_set}}.
+    #' @param record_set An object of class \code{\link{safedata_records}}.
     #' @return The \code{fetch_record_metadata} function invisibly returns a logical
     #'    value indicating if all records were fetched successfully and
     #'    \code{load_record_metadata} returns a list object containing record metadata
@@ -298,8 +298,8 @@ fetch_record_metadata <- function(record_set) {
     #' @keywords internal
 
     # Check the input class
-    if (!inherits(record_set, "safe_record_set")) {
-        stop("Expects a safe_record_set object.")
+    if (!inherits(record_set, "safedata_records")) {
+        stop("Expects a safedata_records object.")
     }
 
     # Look for zenodo_record_id files only
@@ -375,12 +375,12 @@ load_record_metadata <- function(record_set) {
     #' @keywords internal
 
     if (
-        !inherits(record_set, "safe_record_set") ||
+        !inherits(record_set, "safedata_records") ||
             nrow(record_set) > 1 ||
             anyNA(record_set)
     ) {
         stop(
-            "Expects a single row safe_record_set object ",
+            "Expects a single row safedata_records object ",
             "with complete concept and record id."
         )
     }
@@ -424,7 +424,7 @@ show_concepts <- function(obj) {
     #' \enumerate{
     #'    \item A character or numeric vector of safedata record or concept ids, which
     #'          will be validated using \code{\link{validate_record_ids}}, or
-    #'    \item An already validated \code{\link{safe_record_set}} object, or
+    #'    \item An already validated \code{\link{safedata_records}} object, or
     #'    \item A \code{safedata} data frame loaded using \code{\link{load_safedata}}.
     #' }
     #'
@@ -459,7 +459,7 @@ show_concepts <- function(obj) {
     #' @export
 
     if (inherits(obj, "safedata")) {
-        record_set <- attr(obj, "metadata")$safe_record_set
+        record_set <- attr(obj, "metadata")$safedata_records
     } else {
         record_set <- validate_record_ids(obj)
     }
@@ -546,10 +546,10 @@ show_record <- function(obj) {
     #' @describeIn show_concepts Show details of a specific dataset
     #' @export
 
-    if (inherits(obj, "safe_record_set")) {
+    if (inherits(obj, "safedata_records")) {
         record_set <- obj
     } else if (inherits(obj, "safedata")) {
-        record_set <- attr(obj, "metadata")$safe_record_set
+        record_set <- attr(obj, "metadata")$safedata_records
     } else {
         record_set <- validate_record_ids(obj)
     }
@@ -668,7 +668,7 @@ show_worksheet <- function(obj, worksheet = NULL, extended_fields = FALSE) {
     #' @export
 
     if (inherits(obj, "safedata")) {
-        record_set <- attr(obj, "metadata")$safe_record_set
+        record_set <- attr(obj, "metadata")$safedata_records
         worksheet <- attr(obj, "metadata")$name
     } else {
         record_set <- validate_record_ids(obj)

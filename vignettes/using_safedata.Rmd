@@ -161,7 +161,7 @@ The functions are:
 * `search_taxa()`: searches for datasets containing particular taxa.
 * `search_spatial()`: searches for datasets sampling at or near a particular location.
 
-All of these functions return a `safe_record_set` objects, which is just a data frame
+All of these functions return a `safedata_records` objects, which is just a data frame
 containing validated record ids and access information for datasets matching your query.
 You can use the normal data frame indices (e.g. `recs[1,]`) to select particular
 records.
@@ -291,7 +291,7 @@ dataset reference to access metadata and available data, using the
 3. checks whether the data are currently available, and
 4. provides an interface to download and  import the related data files.
 
-Like the `search` functions, the output is `safe_record_set` object. Note that
+Like the `search` functions, the output is `safedata_records` object. Note that
 you can validate multiple references at once.
 
 ```{r validate_recs, echo=TRUE}
@@ -305,12 +305,12 @@ print(recs)
 
 In addition, all of the main functions in `safedata` that expect to be passed a dataset
 id will run `validate_record_ids()` on their inputs, so you can simply use those URLs
-directly with those functions without needing to specifically create a `safe_record_set`
+directly with those functions without needing to specifically create a `safedata_records`
 yourself.
 
 ## Displaying dataset metadata
 
-Printing a `safe_record_set` object displays a deliberately compact summary of a set of
+Printing a `safedata_records` object displays a deliberately compact summary of a set of
 record ids. There are three function that show the detailed metadata for records at
 three levels:
 
@@ -340,7 +340,7 @@ function prints out information about the dataset with that record id: it includ
 dataset title, status and other dataset level metadata and then a summary of the data
 worksheets contained in the dataset.
 
-Note that - because a `safe_record_set` is just a data frame with some extra information
+Note that - because a `safedata_records` is just a data frame with some extra information
 attached - you can use the usual data frame indexing to select a row to pass to other
 functions. Running `show_record()` also _requires an internet connection_ when a record
 is first examined: the package downloads a JSON file of the record metadata and stores
@@ -376,7 +376,7 @@ ways to do this.
 ### Bulk loading data
 
 The `download_safe_files()` function can be used to download the data files for the data
-records in a `safe_record_set`, such as those created using a search. Alternatively, you
+records in a `safedata_records`, such as those created using a search. Alternatively, you
 can use the URL of a safedata record or simply use the record id for the dataset.
 
 The function will check which datasets are currently available and download them to the
@@ -472,7 +472,7 @@ Some generate simple tables of taxa:
 1. `get_taxa()`:  This function loads a dataframe containing all of the taxa used within
    a dataset, with fields including the core GBIF taxonomic levels, the taxonomic label
    used within the dataset and the taxonomic status of the each taxon. You can load a
-   taxonomic dataframe from a `safe_record_set` row or using an existing loaded
+   taxonomic dataframe from a `safedata_records` row or using an existing loaded
    `safedata` object.
 
     ```{r get_taxa}

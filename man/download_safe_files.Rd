@@ -15,7 +15,7 @@ download_safe_files(
 }
 \arguments{
 \item{record_ids}{A vector of safedata dataset record ids or a
-\code{\link{safe_record_set}} object.}
+\code{\link{safedata_records}} object.}
 
 \item{confirm}{Requires the user to confirm before download (logical)}
 

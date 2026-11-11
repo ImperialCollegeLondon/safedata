@@ -50,7 +50,7 @@ get_taxa <- function(obj) {
     #' @export
 
     if (inherits(obj, "safedata")) {
-        record_set <- attr(obj, "metadata")$safe_record_set
+        record_set <- attr(obj, "metadata")$safedata_records
     } else {
         record_set <- validate_record_ids(obj)
     }
@@ -92,7 +92,7 @@ get_taxa <- function(obj) {
     }
 
     # Add record set metadata to table
-    attr(taxon_table, "metadata") <- list(safe_record_set = record_set)
+    attr(taxon_table, "metadata") <- list(safedata_records = record_set)
 
     return(taxon_table)
 }
@@ -315,10 +315,10 @@ add_taxa <- function(
     # Load the taxonomy, making sure that an existing taxon table is the right
     # one for the worksheet
     if (is.null(taxon_table)) {
-        taxon_table <- get_taxa(obj_attr$safe_record_set)
+        taxon_table <- get_taxa(obj_attr$safedata_records)
     } else if (inherits(taxon_table, "safe_taxa")) {
-        taxa_record_set <- attr(taxon_table, "metadata")$safe_record_set
-        if (!isTRUE(all.equal(taxa_record_set, obj_attr$safe_record_set))) {
+        taxa_record_set <- attr(taxon_table, "metadata")$safedata_records
+        if (!isTRUE(all.equal(taxa_record_set, obj_attr$safedata_records))) {
             stop("Provided 'taxon_table' is for a different dataset.")
         }
     } else {

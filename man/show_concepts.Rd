@@ -46,7 +46,7 @@ of three things:
 \enumerate{
    \item A character or numeric vector of safedata record or concept ids, which
          will be validated using \code{\link{validate_record_ids}}, or
-   \item An already validated \code{\link{safe_record_set}} object, or
+   \item An already validated \code{\link{safedata_records}} object, or
    \item A \code{safedata} data frame loaded using \code{\link{load_safedata}}.
 }
 

@@ -2,30 +2,30 @@
 % Please edit documentation in R/metadata.R
 \name{validate_record_ids}
 \alias{validate_record_ids}
-\alias{safe_record_set}
-\alias{print.safe_record_set}
-\alias{&.safe_record_set}
-\alias{|.safe_record_set}
+\alias{safedata_records}
+\alias{print.safedata_records}
+\alias{&.safedata_records}
+\alias{|.safedata_records}
 \title{Validates dataset record ids from user input}
 \usage{
 validate_record_ids(record_set)
 
-\method{print}{safe_record_set}(x, ...)
+\method{print}{safedata_records}(x, ...)
 
-\method{&}{safe_record_set}(x, y)
+\method{&}{safedata_records}(x, y)
 
-\method{|}{safe_record_set}(x, y)
+\method{|}{safedata_records}(x, y)
 }
 \arguments{
 \item{record_set}{A vector of values containing Zenodo concept or
 record ids.}
 
-\item{x, y}{Objects of class \code{safe_record_set}}
+\item{x, y}{Objects of class \code{safedata_records}}
 
 \item{...}{Further arguments to print methods, unused.}
 }
 \value{
-An object of class \code{safe_record_set} (see Details)
+An object of class \code{safedata_records} (see Details)
 }
 \description{
 This takes a vector of user supplied record identifiers and validates
@@ -33,10 +33,10 @@ them against the index. Typically the identifiers are provided as
 integers, but the function will also handle Zenodo URLs and DOIs.
 }
 \details{
-The function returns a data frame with class \code{safe_record_set},
+The function returns a data frame with class \code{safedata_records},
 containing the columns \code{concept}, \code{record}, \code{available}
 and, finally, \code{mra} containing the most recent available record
-(if any). The function can be run on an existing \code{safe_record_set}
+(if any). The function can be run on an existing \code{safedata_records}
 to update this information.
 
 Note that \code{record} will be NA when a value represents a concept id.
@@ -50,8 +50,8 @@ using the print method.
 }
 \section{Functions}{
 \itemize{
-\item \code{print(safe_record_set)}: Print a brief summary of
-"safe_record_set" objects.
+\item \code{print(safedata_records)}: Print a brief summary of
+"safedata_records" objects.
 
 \item \code{ & }: Combine two record sets, retaining only
 records that are present in both.

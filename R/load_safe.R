@@ -245,7 +245,7 @@ load_safedata <- function(record_id, worksheet, ...) {
 
     class(data) <- c("safedata", "data.frame")
     dwksh <- as.list(dwksh)
-    dwksh$safe_record_set <- record_set
+    dwksh$safedata_records <- record_set
     attr(data, "metadata") <- dwksh
     return(data)
 }
@@ -261,8 +261,8 @@ str.safedata <- function(object, ...) {
         object_attr,
         cat(sprintf(
             msg,
-            safe_record_set$concept,
-            safe_record_set$record,
+            safedata_records$concept,
+            safedata_records$record,
             name
         ))
     )
@@ -284,8 +284,8 @@ print.safedata <- function(x, n = 10, ...) {
         x_attr,
         cat(sprintf(
             msg,
-            safe_record_set$concept,
-            safe_record_set$record,
+            safedata_records$concept,
+            safedata_records$record,
             name
         ))
     )
@@ -371,7 +371,7 @@ download_safe_files <- function(
     #' should not, in general, modify files within a safedata directory.
     #'
     #' @param record_ids A vector of safedata dataset record ids or a
-    #'    \code{\link{safe_record_set}} object.
+    #'    \code{\link{safedata_records}} object.
     #' @param confirm Requires the user to confirm before download (logical)
     #' @param xlsx_only Should all files be downloaded or just the core .xslx
     #'    file (logical)
