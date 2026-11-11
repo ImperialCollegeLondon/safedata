@@ -679,11 +679,11 @@ insert_dataset <- function(record_id, files) {
     # - fetch the record metadata to guarantee the local file path
     fetch_record_metadata(record_set)
 
-    local_files$current_safe_dir_path <- file.path(
+    local_files$safedata_dir_path <- file.path(
         getOption("safedata.dir"),
         local_files$path
     )
-    local_files$local_copy <- file.exists(local_files$current_safe_dir_path)
+    local_files$local_copy <- file.exists(local_files$safedata_dir_path)
 
     if (any(local_files$local_copy)) {
         verbose_message(
@@ -699,7 +699,7 @@ insert_dataset <- function(record_id, files) {
             paste0(local_files$filename, collapse = ",")
         )
         copy_success <- try({
-            with(local_files, file.copy(local_path, current_safe_dir_path))
+            with(local_files, file.copy(local_path, safedata_dir_path))
         })
         if (inherits(copy_success, "try-error")) {
             stop(

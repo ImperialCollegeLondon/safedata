@@ -38,7 +38,7 @@ For more information on using the `safedata` package in R, see:
 * the
   [overview](https://imperialcollegelondon.github.io/safedata/articles/overview.html)
   vignette for the `safedata` system,
-* the [user guide](https://imperialcollegelondon.github.io/safedata/articles/using_safe_data.html)
+* the [user guide](https://imperialcollegelondon.github.io/safedata/articles/using_safedata.html)
   for the package, and
 * the `safedata` [function
   reference](https://imperialcollegelondon.github.io/safedata/reference/index.html),

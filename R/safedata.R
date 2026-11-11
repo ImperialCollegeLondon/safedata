@@ -31,7 +31,7 @@ if (getRversion() >= "2.15.1") {
         "checksum",
         "col_idx",
         "concept",
-        "current_safe_dir_path",
+        "safedata_dir_path",
         "dataset_access",
         "dataset_embargo",
         "dataset_title",
