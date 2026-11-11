@@ -41,7 +41,7 @@
             "file": "CSP_protocol_Phenols_Tannins_Analysis.pdf"
         }
     ],
-    "dataworksheets": [
+    "worksheets": [
         {
             "taxa_fields": [
                 "species"
@@ -62,7 +62,7 @@
             "external": null,
             "fields": [
                 {
-                    "field_type": "Categorical",
+                    "field_type": "categorical",
                     "description": "Location",
                     "method": null,
                     "levels": "Car_D1;Car_D2;Car_Bel;Car_Ser;Car_BN;Car_BS;Car_E;Car_LF",
@@ -72,7 +72,7 @@
                     "col_idx": 1
                 },
                 {
-                    "field_type": "Categorical",
+                    "field_type": "categorical",
                     "description": "Forest type: OG: old-growth plots, Maliau and Danum; SL: selectively logged plots at SAFE",
                     "method": null,
                     "levels": "OG;SL",
@@ -82,7 +82,7 @@
                     "col_idx": 2
                 },
                 {
-                    "field_type": "ID",
+                    "field_type": "id",
                     "description": "Plot name coherent with forestplots database",
                     "method": null,
                     "levels": null,
@@ -92,7 +92,7 @@
                     "col_idx": 3
                 },
                 {
-                    "field_type": "ID",
+                    "field_type": "id",
                     "description": "Plot name used during the BALI trait campaign",
                     "method": null,
                     "levels": null,
@@ -102,7 +102,7 @@
                     "col_idx": 4
                 },
                 {
-                    "field_type": "ID",
+                    "field_type": "id",
                     "description": "Sample code referencing: plot-'T'(ree) ID-branch type ",
                     "method": null,
                     "levels": null,
@@ -112,7 +112,7 @@
                     "col_idx": 5
                 },
                 {
-                    "field_type": "ID",
+                    "field_type": "id",
                     "description": "Binary classification of branch sampled depending on their position in the tree crown. BS: sun branch; BSH: shade branch",
                     "method": null,
                     "levels": "BS;BSH",
@@ -122,7 +122,7 @@
                     "col_idx": 6
                 },
                 {
-                    "field_type": "Date",
+                    "field_type": "date",
                     "description": "Date of sampling",
                     "method": null,
                     "range": [
@@ -136,7 +136,7 @@
                     "col_idx": 7
                 },
                 {
-                    "field_type": "ID",
+                    "field_type": "id",
                     "description": "Reference for tree tag label",
                     "method": null,
                     "levels": null,
@@ -146,7 +146,7 @@
                     "col_idx": 8
                 },
                 {
-                    "field_type": "Taxa",
+                    "field_type": "taxa",
                     "description": "Tree species",
                     "method": null,
                     "levels": null,
@@ -156,7 +156,7 @@
                     "col_idx": 9
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Height of tree individual",
                     "method": "Haglof Laser Range Finder",
                     "range": [
@@ -170,7 +170,7 @@
                     "col_idx": 10
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Foliar potassium content in mg per g dry weight",
                     "method": "Atomic absorption spectroscopy (AAS)",
                     "range": [
@@ -184,7 +184,7 @@
                     "col_idx": 11
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Foliar calcium content in mg per g dry weight",
                     "method": "Atomic absorption spectroscopy (AAS)",
                     "range": [
@@ -198,7 +198,7 @@
                     "col_idx": 12
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Foliar magnesium content in mg per g dry weight",
                     "method": "Atomic absorption spectroscopy (AAS)",
                     "range": [
@@ -212,7 +212,7 @@
                     "col_idx": 13
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Foliar phosporus content in mg per g dry weight",
                     "method": "Acid digestion",
                     "range": [
@@ -226,7 +226,7 @@
                     "col_idx": 14
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Foliar nitrogen concentration",
                     "method": "Combustion analysis",
                     "range": [
@@ -240,7 +240,7 @@
                     "col_idx": 15
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Foliar 15N isotope concentration",
                     "method": "Combustion analysis",
                     "range": [
@@ -254,7 +254,7 @@
                     "col_idx": 16
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Foliar carbon concentration",
                     "method": "Combustion analysis",
                     "range": [
@@ -268,7 +268,7 @@
                     "col_idx": 17
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Foliar 13C isotope concentration, expressed relative to Vienna Pee Dee Belemnite (VPDB) as \u03b413C in units of per mil [\u2030]",
                     "method": "Combustion analysis",
                     "range": [
@@ -282,7 +282,7 @@
                     "col_idx": 18
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Foliar carbon nitrogen ratio",
                     "method": "Combustion analysis",
                     "range": [
@@ -296,7 +296,7 @@
                     "col_idx": 19
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Mean dark respiration measured on leaf of a branch that is cut under water and remains in water, calculated from replicated leaves per branch",
                     "method": "Measured with Portable LiCor XT6400 Gas Exchange machineand the settings: CO2R= 400 Pa, PARi = 0",
                     "range": [
@@ -310,7 +310,7 @@
                     "col_idx": 20
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "description": "Standard deviation of dark respiration measured on leaf of a branch that is cut under water and remains in water, calculated from replicated leaves per branch",
                     "method": "Measured with Portable LiCor XT6400 Gas Exchange machineand the settings: CO2R= 400 Pa, PARi = 1",
                     "range": [
@@ -324,7 +324,7 @@
                     "col_idx": 21
                 },
                 {
-                    "field_type": "Replicate",
+                    "field_type": "replicate",
                     "description": "Number of replicates, i.e. leaves per branch used for mean trait",
                     "method": "Observation",
                     "levels": null,
@@ -334,7 +334,7 @@
                     "col_idx": 22
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Mean light-saturated net photosynthesis measured on leaf of a branch that is cut under water and remains in water, calculated from replicated leaves per branch. Data cleaning very conservative: subset of values only with conductance higher 0.04, Ci between 150 - 300, and PS higher than 1, leading to fewer data points.",
                     "method": "Measured with Portable LiCor XT6400 Gas Exchange machineand the settings: CO2R= 400 Pa, PARi = 2000",
                     "range": [
@@ -348,7 +348,7 @@
                     "col_idx": 23
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "description": "Standard deviation of light-saturated net photosynthesis measured on leaf of a branch that is cut under water and remains in water, calculated from replicated leaves per branch",
                     "method": "Measured with Portable LiCor XT6400 Gas Exchange machineand the settings: CO2R= 400 Pa, PARi = 2001",
                     "range": [
@@ -362,7 +362,7 @@
                     "col_idx": 24
                 },
                 {
-                    "field_type": "Replicate",
+                    "field_type": "replicate",
                     "description": "Number of replicates, i.e. leaves per branch used for mean trait",
                     "method": "Observation",
                     "levels": null,
@@ -372,7 +372,7 @@
                     "col_idx": 25
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Mean maximum photosynthetic capacity measured on leaf of a branch that is cut under water and remains in water, calculated from replicated leaves per branch. Data cleaning very conservative: subset of values only with conductance higher 0.04, Ci between 150 - 300, and PS higher than 1, leading to fewer data points.",
                     "method": "Measured with Portable LiCor XT6400 Gas Exchange machineand the settings: CO2R= 2000 Pa, PARi = 2000",
                     "range": [
@@ -386,7 +386,7 @@
                     "col_idx": 26
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "description": "Standard deviation of maximum photosynthetic capacity measured on leaf of a branch that is cut under water and remains in water, calculated from replicated leaves per branch",
                     "method": "Measured with Portable LiCor XT6400 Gas Exchange machineand the settings: CO2R= 2000 Pa, PARi = 2001",
                     "range": [
@@ -400,7 +400,7 @@
                     "col_idx": 27
                 },
                 {
-                    "field_type": "Replicate",
+                    "field_type": "replicate",
                     "description": "Number of replicates, i.e. leaves per branch used for mean trait",
                     "method": "Observation",
                     "levels": null,
@@ -410,7 +410,7 @@
                     "col_idx": 28
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Mean light-saturated net photosynthesis measured on leaf of a branch that is cut under water and remains in water, calculated from replicated leaves per branch",
                     "method": "Measured with Portable LiCor XT6400 Gas Exchange machineand the settings: CO2R= 400 Pa, PARi = 2000",
                     "range": [
@@ -424,7 +424,7 @@
                     "col_idx": 29
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "description": "Standard deviation of light-saturated net photosynthesis measured on leaf of a branch that is cut under water and remains in water, calculated from replicated leaves per branch",
                     "method": "Measured with Portable LiCor XT6400 Gas Exchange machineand the settings: CO2R= 400 Pa, PARi = 2001",
                     "range": [
@@ -438,7 +438,7 @@
                     "col_idx": 30
                 },
                 {
-                    "field_type": "Replicate",
+                    "field_type": "replicate",
                     "description": "Number of replicates, i.e. leaves per branch used for mean trait",
                     "method": "Observation",
                     "levels": null,
@@ -448,7 +448,7 @@
                     "col_idx": 31
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Mean maximum photosynthetic capacity measured on leaf of a branch that is cut under water and remains in water, calculated from replicated leaves per branch",
                     "method": "Measured with Portable LiCor XT6400 Gas Exchange machineand the settings: CO2R= 2000 Pa, PARi = 2000",
                     "range": [
@@ -462,7 +462,7 @@
                     "col_idx": 32
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "description": "Standard deviation of maximum photosynthetic capacity measured on leaf of a branch that is cut under water and remains in water, calculated from replicated leaves per branch",
                     "method": "Measured with Portable LiCor XT6400 Gas Exchange machineand the settings: CO2R= 2000 Pa, PARi = 2001",
                     "range": [
@@ -476,7 +476,7 @@
                     "col_idx": 33
                 },
                 {
-                    "field_type": "Replicate",
+                    "field_type": "replicate",
                     "description": "Number of replicates, i.e. leaves per branch used for mean trait",
                     "method": "Observation",
                     "levels": null,
@@ -486,7 +486,7 @@
                     "col_idx": 34
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Mean leaf area (LA) calculated from fresh leaves collected from branches, scanned immediately.",
                     "method": "Canon flatbed scanner",
                     "range": [
@@ -500,7 +500,7 @@
                     "col_idx": 35
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "description": "Standard deviation of leaf area",
                     "method": "Leaf scans",
                     "range": [
@@ -514,7 +514,7 @@
                     "col_idx": 36
                 },
                 {
-                    "field_type": "Replicate",
+                    "field_type": "replicate",
                     "description": "Number of replicates, i.e. leaves per branch used for mean trait",
                     "method": "Observation",
                     "levels": null,
@@ -524,7 +524,7 @@
                     "col_idx": 37
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Mean thickness of leaf",
                     "method": "micrometer",
                     "range": [
@@ -538,7 +538,7 @@
                     "col_idx": 38
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Mean leaf fresh weight",
                     "method": "Fine scale",
                     "range": [
@@ -552,7 +552,7 @@
                     "col_idx": 39
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Mean leaf oven-dried weight",
                     "method": "Fine scale",
                     "range": [
@@ -566,7 +566,7 @@
                     "col_idx": 40
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Mean leaf oven-dried weight",
                     "method": "Fine scale",
                     "range": [
@@ -580,7 +580,7 @@
                     "col_idx": 41
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Leaf dry-matter content (LDMC) is the oven-dry mass (mg) of a leaf, divided by its water-saturated fresh mass (g)\nmg g\u20131",
                     "method": "Leaf dry-matter content (LDMC) is the oven-dry mass (mg) of a leaf, divided by its water-saturated fresh mass (g)",
                     "range": [
@@ -594,7 +594,7 @@
                     "col_idx": 42
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "description": "Standard deviation of leaf thickness",
                     "method": "micrometer",
                     "range": [
@@ -608,7 +608,7 @@
                     "col_idx": 43
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "description": "Standard deviation of fresh leaf weight",
                     "method": "3 point balance",
                     "range": [
@@ -622,7 +622,7 @@
                     "col_idx": 44
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "description": "Standard deviation of dry leaf weight",
                     "method": "3 point balance",
                     "range": [
@@ -636,7 +636,7 @@
                     "col_idx": 45
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "description": "Standard deviation of dry leaf weight",
                     "method": "3 point balance",
                     "range": [
@@ -650,7 +650,7 @@
                     "col_idx": 46
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "description": "Standard deviation of leaf dry matter content",
                     "method": "leaf area/leaf dry mass",
                     "range": [
@@ -664,7 +664,7 @@
                     "col_idx": 47
                 },
                 {
-                    "field_type": "Replicate",
+                    "field_type": "replicate",
                     "description": "Number of replicates, i.e. leaves per branch used for mean trait",
                     "method": "Observation",
                     "levels": null,
@@ -674,7 +674,7 @@
                     "col_idx": 48
                 },
                 {
-                    "field_type": "Replicate",
+                    "field_type": "replicate",
                     "description": "Number of replicates, i.e. leaves per branch used for mean trait",
                     "method": "Observation",
                     "levels": null,
@@ -684,7 +684,7 @@
                     "col_idx": 49
                 },
                 {
-                    "field_type": "Replicate",
+                    "field_type": "replicate",
                     "description": "Number of replicates, i.e. leaves per branch used for mean trait",
                     "method": "Observation",
                     "levels": null,
@@ -694,7 +694,7 @@
                     "col_idx": 50
                 },
                 {
-                    "field_type": "Replicate",
+                    "field_type": "replicate",
                     "description": "Number of replicates, i.e. leaves per branch used for mean trait",
                     "method": "Observation",
                     "levels": null,
@@ -704,7 +704,7 @@
                     "col_idx": 51
                 },
                 {
-                    "field_type": "Replicate",
+                    "field_type": "replicate",
                     "description": "Number of replicates, i.e. leaves per branch used for mean trait",
                     "method": "Observation",
                     "levels": null,
@@ -714,7 +714,7 @@
                     "col_idx": 52
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Height from where branch sample was taken",
                     "method": "Haglof Laser Range Finder",
                     "range": [
@@ -728,7 +728,7 @@
                     "col_idx": 53
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Foliar chlorophyll a content",
                     "method": "Analytical protocol 'Leaf Chlorophyll and Carotenoid Determinations'",
                     "range": [
@@ -742,7 +742,7 @@
                     "col_idx": 54
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Foliar chlorophyll b content",
                     "method": "Analytical protocol 'Leaf Chlorophyll and Carotenoid Determinations'",
                     "range": [
@@ -756,7 +756,7 @@
                     "col_idx": 55
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Foliar carotenoids content",
                     "method": "Analytical protocol 'Leaf Chlorophyll and Carotenoid Determinations'",
                     "range": [
@@ -770,7 +770,7 @@
                     "col_idx": 56
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Mean force to punch leaf, dividing the observed force (N) required to puncture the leaf lamina by the circumference of the instrument\u2019s rod",
                     "method": "Chatillon punchometer ",
                     "range": [
@@ -784,7 +784,7 @@
                     "col_idx": 57
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Standard deviation for force to punch",
                     "method": "Chatillon punchometer ",
                     "range": [
@@ -798,7 +798,7 @@
                     "col_idx": 58
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Number of replicates, i.e. leaves per branch used for mean trait",
                     "method": "Observation",
                     "range": [
@@ -812,7 +812,7 @@
                     "col_idx": 59
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Mean specific force to punch (Fp divided by lamina thickness) ",
                     "method": "Chatillon punchometer ",
                     "range": [
@@ -826,7 +826,7 @@
                     "col_idx": 60
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Standard deviation for force to punch",
                     "method": "Chatillon punchometer ",
                     "range": [
@@ -840,7 +840,7 @@
                     "col_idx": 61
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Number of replicates, i.e. leaves per branch used for mean trait",
                     "method": "Observation",
                     "range": [
@@ -854,7 +854,7 @@
                     "col_idx": 62
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Branch wood density from branch segment with bark",
                     "method": "Oven-dry mass of a branch section with bark divided by the volume of the same section, when still fresh, volume determined by water-displacement method.",
                     "range": [
@@ -868,7 +868,7 @@
                     "col_idx": 63
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Branch wood density from branch segment without bark (bark removed prior measurement)",
                     "method": "Oven-dry mass of a branch section without bark divided by the volume of the same section, when still fresh, volume determined by water-displacement method.",
                     "range": [
@@ -882,7 +882,7 @@
                     "col_idx": 64
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Foliar hemicellulose concentration",
                     "method": "ANKOM",
                     "range": [
@@ -896,7 +896,7 @@
                     "col_idx": 65
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Foliar cellulose concentration",
                     "method": "ANKOM",
                     "range": [
@@ -910,7 +910,7 @@
                     "col_idx": 66
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Foliar lignin and recalcitrants concentration",
                     "method": "ANKOM",
                     "range": [
@@ -924,7 +924,7 @@
                     "col_idx": 67
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Total foliar tannin concentration ",
                     "method": "Analytical protocol 'Total Phenol and Tannin Determination in Fresh Leaves'",
                     "range": [
@@ -938,7 +938,7 @@
                     "col_idx": 68
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Total foliar phenol concentration ",
                     "method": "Analytical protocol 'Total Phenol and Tannin Determination in Fresh Leaves'",
                     "range": [
@@ -952,7 +952,7 @@
                     "col_idx": 69
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Specific leaf area (SLA) determined as the one-sided area of a fresh leaf, divided by its oven-dry mass.",
                     "method": "One-sided area of a fresh leaf, divided by its oven-dry mass",
                     "range": [
@@ -966,7 +966,7 @@
                     "col_idx": 70
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Foliar potassium content expressed on leaf area basis",
                     "method": "Atomic absorption spectroscopy (AAS)",
                     "range": [
@@ -980,7 +980,7 @@
                     "col_idx": 71
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Foliar calcium content expressed on leaf area basis",
                     "method": "Atomic absorption spectroscopy (AAS)",
                     "range": [
@@ -994,7 +994,7 @@
                     "col_idx": 72
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Foliar magnesium content expressed on leaf area basis",
                     "method": "Atomic absorption spectroscopy (AAS)",
                     "range": [
@@ -1008,7 +1008,7 @@
                     "col_idx": 73
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Foliar phosporus content expressed on leaf area basis",
                     "method": "Acid digestion",
                     "range": [
@@ -1022,7 +1022,7 @@
                     "col_idx": 74
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Foliar chlorophyll a content expressed on leaf area basis",
                     "method": "Analytical protocol 'Leaf Chlorophyll and Carotenoid Determinations'",
                     "range": [
@@ -1036,7 +1036,7 @@
                     "col_idx": 75
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Foliar chlorophyll b content expressed on leaf area basis",
                     "method": "Analytical protocol 'Leaf Chlorophyll and Carotenoid Determinations'",
                     "range": [
@@ -1050,7 +1050,7 @@
                     "col_idx": 76
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Foliar carotenoids content expressed on leaf area basis",
                     "method": "Analytical protocol 'Leaf Chlorophyll and Carotenoid Determinations'",
                     "range": [
@@ -1064,7 +1064,7 @@
                     "col_idx": 77
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Foliar tannin content expressed on leaf area basis",
                     "method": "Analytical protocol 'Total Phenol and Tannin Determination in Fresh Leaves'",
                     "range": [
@@ -1078,7 +1078,7 @@
                     "col_idx": 78
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Foliar phenol content expressed on leaf area basis",
                     "method": "Analytical protocol 'Total Phenol and Tannin Determination in Fresh Leaves'",
                     "range": [
@@ -1092,7 +1092,7 @@
                     "col_idx": 79
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Foliar nitrogen content expressed on leaf area basis",
                     "method": "Combustion analysis",
                     "range": [
@@ -1106,7 +1106,7 @@
                     "col_idx": 80
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Foliar carbon content expressed on leaf area basis",
                     "method": "Combustion analysis",
                     "range": [
@@ -1120,7 +1120,7 @@
                     "col_idx": 81
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Foliar hemicellulose content expressed on leaf area basis",
                     "method": "ANKOM",
                     "range": [
@@ -1134,7 +1134,7 @@
                     "col_idx": 82
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Foliar cellulose content expressed on leaf area basis",
                     "method": "ANKOM",
                     "range": [
@@ -1148,7 +1148,7 @@
                     "col_idx": 83
                 },
                 {
-                    "field_type": "Numeric trait",
+                    "field_type": "numeric trait",
                     "description": "Foliar lignin and recalcitrants content expressed on leaf area basis",
                     "method": "ANKOM",
                     "range": [

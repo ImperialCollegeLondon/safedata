@@ -24,7 +24,7 @@ mock_api_urls <- list(
         status_code = 200L
     ),
     "http://example.safedata.server/api/gazetteer/aliases/download/" = list(
-        content = "location_aliases.json",
+        content = "location_aliases.csv",
         status_code = 200L
     ),
     "http://example.safedata.server/api/datasets/index/hash/" = list(
@@ -40,7 +40,7 @@ mock_api_urls <- list(
         status_code = 200L
     ),
     # Example datasets used and metadata JSON
-    "http://example.safedata.server/api/record/1400562" = list(
+    "http://example.safedata.server/api/records/1400562/?format=json" = list(
         content = "1400562.json",
         status_code = 200L
     ),
@@ -49,7 +49,7 @@ mock_api_urls <- list(
         content = "Psomas_Ant_Pselaphine_SAFE_dataset.xlsx",
         status_code = 200L
     ),
-    "http://example.safedata.server/api/record/3247631" = list(
+    "http://example.safedata.server/api/records/3247631/?format=json" = list(
         content = "3247631.json",
         status_code = 200L
     ),
@@ -58,7 +58,7 @@ mock_api_urls <- list(
         content = "Both_tree_functional_traits.xlsx",
         status_code = 200L
     ),
-    "http://example.safedata.server/api/record/3266827" = list(
+    "http://example.safedata.server/api/records/3266827/?format=json" = list(
         content = "3266827.json",
         status_code = 200L
     ),
@@ -66,7 +66,7 @@ mock_api_urls <- list(
         content = "template_Symes.xlsx",
         status_code = 200L
     ),
-    "http://example.safedata.server/api/record/1237719" = list(
+    "http://example.safedata.server/api/records/1237719/?format=json" = list(
         content = "1237719.json",
         status_code = 200L
     ),
@@ -111,15 +111,15 @@ mock_api_urls <- list(
         status_code = 200L
     ),
     # Testing URLs
-    "http://example.safedata.server/api/record/1198475" = list(
+    "http://example.safedata.server/api/records/1198475/?format=json" = list(
         content = "1198475.json",
         status_code = 200L
     ),
-    "http://example.safedata.server/api/record/1237733" = list(
+    "http://example.safedata.server/api/records/1237733/?format=json" = list(
         content = "1237733.json",
         status_code = 200L
     ),
-    "http://example.safedata.server/api/record/1237731" = list(
+    "http://example.safedata.server/api/records/1237731/?format=json" = list(
         content = "1237731.json",
         status_code = 200L
     ),

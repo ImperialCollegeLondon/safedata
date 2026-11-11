@@ -19,7 +19,7 @@
     "filename": "template_Twining.xlsx",
     "access": "open",
     "external_files": null,
-    "dataworksheets": [
+    "worksheets": [
         {
             "taxa_fields": [
                 "Species"
@@ -43,7 +43,7 @@
             "external": null,
             "fields": [
                 {
-                    "field_type": "Date",
+                    "field_type": "date",
                     "interaction_name": null,
                     "description": "Date the trap was in place for",
                     "interaction_field": null,
@@ -60,7 +60,7 @@
                     "col_idx": 1
                 },
                 {
-                    "field_type": "Location",
+                    "field_type": "location",
                     "interaction_name": null,
                     "description": "SAFE Project river on which trap was set",
                     "interaction_field": null,
@@ -73,7 +73,7 @@
                     "col_idx": 2
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Trapping session number on that river",
                     "interaction_field": null,
@@ -90,7 +90,7 @@
                     "col_idx": 3
                 },
                 {
-                    "field_type": "ID",
+                    "field_type": "id",
                     "interaction_name": null,
                     "description": "Trap within River",
                     "interaction_field": null,
@@ -103,7 +103,7 @@
                     "col_idx": 4
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Julian day within 'Trap' within 'RiverVisit'",
                     "interaction_field": null,
@@ -120,7 +120,7 @@
                     "col_idx": 5
                 },
                 {
-                    "field_type": "Categorical",
+                    "field_type": "categorical",
                     "interaction_name": null,
                     "description": "Had the riparian area been recently damaged from logging in the 12 months prior to data collection",
                     "interaction_field": null,
@@ -133,7 +133,7 @@
                     "col_idx": 6
                 },
                 {
-                    "field_type": "Taxa",
+                    "field_type": "taxa",
                     "interaction_name": null,
                     "description": "Identity of the animal captured",
                     "interaction_field": null,
@@ -146,7 +146,7 @@
                     "col_idx": 7
                 },
                 {
-                    "field_type": "Categorical",
+                    "field_type": "categorical",
                     "interaction_name": null,
                     "description": "Bait removed (yes = yes; blank = no)",
                     "interaction_field": null,
@@ -159,7 +159,7 @@
                     "col_idx": 8
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Number of days bait was in trap before being removed",
                     "interaction_field": null,
@@ -176,7 +176,7 @@
                     "col_idx": 9
                 },
                 {
-                    "field_type": "Categorical",
+                    "field_type": "categorical",
                     "interaction_name": null,
                     "description": "For each trap within each trapping session, was the bait removed within a seven-day period (yes/no)",
                     "interaction_field": null,
@@ -189,7 +189,7 @@
                     "col_idx": 10
                 },
                 {
-                    "field_type": "ID",
+                    "field_type": "id",
                     "interaction_name": null,
                     "description": "Pit tag number",
                     "interaction_field": null,
@@ -202,7 +202,7 @@
                     "col_idx": 11
                 },
                 {
-                    "field_type": "Categorical",
+                    "field_type": "categorical",
                     "interaction_name": null,
                     "description": "Caught for first time, or recapture of a previously captured individual",
                     "interaction_field": null,
@@ -215,7 +215,7 @@
                     "col_idx": 12
                 },
                 {
-                    "field_type": "Categorical",
+                    "field_type": "categorical",
                     "interaction_name": null,
                     "description": "Male/Female (M/F)",
                     "interaction_field": null,
@@ -228,7 +228,7 @@
                     "col_idx": 13
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Snout-venter length",
                     "interaction_field": null,
@@ -245,7 +245,7 @@
                     "col_idx": 14
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Tail length",
                     "interaction_field": null,
@@ -262,7 +262,7 @@
                     "col_idx": 15
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Total length",
                     "interaction_field": null,
@@ -279,7 +279,7 @@
                     "col_idx": 16
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Body circumference",
                     "interaction_field": null,
@@ -296,7 +296,7 @@
                     "col_idx": 17
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Tail circumference at base",
                     "interaction_field": null,
@@ -313,7 +313,7 @@
                     "col_idx": 18
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Body mass",
                     "interaction_field": null,
@@ -330,7 +330,7 @@
                     "col_idx": 19
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Body health index (ln(body mass/total length))",
                     "interaction_field": null,
@@ -347,7 +347,7 @@
                     "col_idx": 20
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Head width",
                     "interaction_field": null,
@@ -364,7 +364,7 @@
                     "col_idx": 21
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Head height",
                     "interaction_field": null,
@@ -381,7 +381,7 @@
                     "col_idx": 22
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Head length",
                     "interaction_field": null,
@@ -398,7 +398,7 @@
                     "col_idx": 23
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Snout length",
                     "interaction_field": null,
@@ -415,7 +415,7 @@
                     "col_idx": 24
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Number of scars on body",
                     "interaction_field": null,
@@ -432,7 +432,7 @@
                     "col_idx": 25
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Number of ectoparasites on body",
                     "interaction_field": null,
@@ -449,7 +449,7 @@
                     "col_idx": 26
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Number of nematodes inside mouth",
                     "interaction_field": null,
@@ -466,7 +466,7 @@
                     "col_idx": 27
                 },
                 {
-                    "field_type": "Comments",
+                    "field_type": "comments",
                     "interaction_name": null,
                     "description": "Observations of material in faeces",
                     "interaction_field": null,
@@ -479,7 +479,7 @@
                     "col_idx": 28
                 },
                 {
-                    "field_type": "Categorical",
+                    "field_type": "categorical",
                     "interaction_name": null,
                     "description": "Reproductive stage",
                     "interaction_field": null,

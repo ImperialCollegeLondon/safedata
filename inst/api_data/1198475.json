@@ -19,7 +19,7 @@
     "filename": "template_LayfieldOtters.xlsx",
     "access": "embargo",
     "external_files": null,
-    "dataworksheets": [
+    "worksheets": [
         {
             "taxa_fields": [],
             "max_row": 66,
@@ -41,7 +41,7 @@
             "external": null,
             "fields": [
                 {
-                    "field_type": "Date",
+                    "field_type": "date",
                     "interaction_name": null,
                     "description": "Date Collected",
                     "interaction_field": null,
@@ -58,7 +58,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Categorical",
+                    "field_type": "categorical",
                     "interaction_name": null,
                     "description": "Morning or Evening",
                     "interaction_field": null,
@@ -71,7 +71,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "ID",
+                    "field_type": "id",
                     "interaction_name": null,
                     "description": "Catchment Site; indicates metres upriver from SAFE Project hydrology datalogger",
                     "interaction_field": null,
@@ -84,7 +84,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "ID",
+                    "field_type": "id",
                     "interaction_name": null,
                     "description": "Unique Code given to each samplea and subsample (1a, 1b, 1c\u2026)",
                     "interaction_field": null,
@@ -97,7 +97,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Location",
+                    "field_type": "location",
                     "interaction_name": null,
                     "description": "Riparian transect sample collected from",
                     "interaction_field": null,
@@ -110,7 +110,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Time",
+                    "field_type": "time",
                     "interaction_name": null,
                     "description": "Time arrived at site",
                     "interaction_field": null,
@@ -127,7 +127,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Time",
+                    "field_type": "time",
                     "interaction_name": null,
                     "description": "Time left site",
                     "interaction_field": null,
@@ -144,7 +144,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Time",
+                    "field_type": "time",
                     "interaction_name": null,
                     "description": "Sample collection starting time",
                     "interaction_field": null,
@@ -161,7 +161,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Time",
+                    "field_type": "time",
                     "interaction_name": null,
                     "description": "Sample collection ending time",
                     "interaction_field": null,
@@ -178,7 +178,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Water Temperature at time of sample",
                     "interaction_field": null,
@@ -195,7 +195,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Air Temperature at time of sample",
                     "interaction_field": null,
@@ -212,7 +212,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "pH of surface water",
                     "interaction_field": null,
@@ -229,7 +229,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Relative humidty at site",
                     "interaction_field": null,
@@ -246,7 +246,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Lux score at time of sample",
                     "interaction_field": null,
@@ -263,7 +263,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Categorical",
+                    "field_type": "categorical",
                     "interaction_name": null,
                     "description": "Precipitation Present (Yes or No)",
                     "interaction_field": null,
@@ -276,7 +276,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Categorical",
+                    "field_type": "categorical",
                     "interaction_name": null,
                     "description": "Presence of shade during collection",
                     "interaction_field": null,
@@ -289,7 +289,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Categorical",
+                    "field_type": "categorical",
                     "interaction_name": null,
                     "description": "Presence of leaf litter during collection",
                     "interaction_field": null,
@@ -302,7 +302,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Categorical",
+                    "field_type": "categorical",
                     "interaction_name": null,
                     "description": "Type of substrate",
                     "interaction_field": null,
@@ -315,7 +315,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Time taken for \"bottle\" to travel River_dist; used to calculate flow rate",
                     "interaction_field": null,
@@ -332,7 +332,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Time taken for \"bottle\" to travel River_dist; used to calculate flow rate",
                     "interaction_field": null,
@@ -349,7 +349,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Time taken for \"bottle\" to travel River_dist; used to calculate flow rate",
                     "interaction_field": null,
@@ -366,7 +366,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Average time taken for \"bottle\" to travel River_dist; used to calculate flow rate",
                     "interaction_field": null,
@@ -383,7 +383,7 @@
                     "method": "Calculated from Time1-Time3"
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Depth of sample",
                     "interaction_field": null,
@@ -400,7 +400,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Depth of sample",
                     "interaction_field": null,
@@ -417,7 +417,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Depth of sample",
                     "interaction_field": null,
@@ -434,7 +434,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Average_depth of sample",
                     "interaction_field": null,
@@ -451,7 +451,7 @@
                     "method": "Calculated from Depth1-Depth3"
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Distance \"bottle\" travelled at sample site ; used to calculate flow rate",
                     "interaction_field": null,
@@ -468,7 +468,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Calculated flow (speed = distance/ time)",
                     "interaction_field": null,
@@ -485,7 +485,7 @@
                     "method": "Calculated as 'River_Dist'/'TimeAv'"
                 },
                 {
-                    "field_type": "Categorical",
+                    "field_type": "categorical",
                     "interaction_name": null,
                     "description": "Presence of otters detected (to a level deemed above background noise on qPCR)",
                     "interaction_field": null,
@@ -498,7 +498,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Abundance",
+                    "field_type": "abundance",
                     "interaction_name": null,
                     "description": "Presence of otters detected (to a level deemed above background noise on qPCR)",
                     "interaction_field": null,
@@ -515,7 +515,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Number of positive negative controls out of 12",
                     "interaction_field": null,
@@ -532,7 +532,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Comments",
+                    "field_type": "comments",
                     "interaction_name": null,
                     "description": "Any important notes during sampling",
                     "interaction_field": null,
@@ -570,7 +570,7 @@
             "external": null,
             "fields": [
                 {
-                    "field_type": "Location",
+                    "field_type": "location",
                     "interaction_name": null,
                     "description": "Riparian transect sample collected from",
                     "interaction_field": null,
@@ -583,7 +583,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Categorical",
+                    "field_type": "categorical",
                     "interaction_name": null,
                     "description": "Morning or Evening",
                     "interaction_field": null,
@@ -596,7 +596,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Date",
+                    "field_type": "date",
                     "interaction_name": null,
                     "description": "Date of sampling",
                     "interaction_field": null,
@@ -613,7 +613,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Time",
+                    "field_type": "time",
                     "interaction_name": null,
                     "description": "Time of sampling",
                     "interaction_field": null,
@@ -630,7 +630,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "ID",
+                    "field_type": "id",
                     "interaction_name": null,
                     "description": "Catchment Site; indicates metres upriver from SAFE Project hydrology datalogger",
                     "interaction_field": null,
@@ -643,7 +643,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Abundance",
+                    "field_type": "abundance",
                     "interaction_name": null,
                     "description": "Otter observed at site? 0=no, 1=yes",
                     "interaction_field": null,
@@ -660,7 +660,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Abundance",
+                    "field_type": "abundance",
                     "interaction_name": null,
                     "description": "Otter faeces at site? 0=no, 1=yes",
                     "interaction_field": null,
@@ -677,7 +677,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Abundance",
+                    "field_type": "abundance",
                     "interaction_name": null,
                     "description": "Den present at site? 0=no, 1=yes",
                     "interaction_field": null,
@@ -694,7 +694,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Abundance",
+                    "field_type": "abundance",
                     "interaction_name": null,
                     "description": "Footprints at site? 0=no, 1=yes",
                     "interaction_field": null,
@@ -711,7 +711,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Abundance",
+                    "field_type": "abundance",
                     "interaction_name": null,
                     "description": "Remains of prey present? 0=no, 1=yes",
                     "interaction_field": null,
@@ -728,7 +728,7 @@
                     "method": "NA"
                 },
                 {
-                    "field_type": "Comments",
+                    "field_type": "comments",
                     "interaction_name": null,
                     "description": "Any additional notes deemed important",
                     "interaction_field": null,

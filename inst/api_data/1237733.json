@@ -19,7 +19,7 @@
     "filename": "template_Morris.xlsx",
     "access": "open",
     "external_files": null,
-    "dataworksheets": [
+    "worksheets": [
         {
             "taxa_fields": [
                 "Species"
@@ -43,7 +43,7 @@
             "external": null,
             "fields": [
                 {
-                    "field_type": "Date",
+                    "field_type": "date",
                     "interaction_name": null,
                     "description": "Date trap was collected",
                     "interaction_field": null,
@@ -60,7 +60,7 @@
                     "col_idx": 1
                 },
                 {
-                    "field_type": "Location",
+                    "field_type": "location",
                     "interaction_name": null,
                     "description": "Location of trap grid",
                     "interaction_field": null,
@@ -73,7 +73,7 @@
                     "col_idx": 2
                 },
                 {
-                    "field_type": "ID",
+                    "field_type": "id",
                     "interaction_name": null,
                     "description": "Point on the grid at which the trap was located",
                     "interaction_field": null,
@@ -86,7 +86,7 @@
                     "col_idx": 3
                 },
                 {
-                    "field_type": "Replicate",
+                    "field_type": "replicate",
                     "interaction_name": null,
                     "description": "Whether the trap was located at location A or B",
                     "interaction_field": null,
@@ -99,7 +99,7 @@
                     "col_idx": 4
                 },
                 {
-                    "field_type": "ID",
+                    "field_type": "id",
                     "interaction_name": null,
                     "description": "Unique identification for this trapping event",
                     "interaction_field": null,
@@ -112,7 +112,7 @@
                     "col_idx": 5
                 },
                 {
-                    "field_type": "Taxa",
+                    "field_type": "taxa",
                     "interaction_name": null,
                     "description": "Species identity",
                     "interaction_field": null,
@@ -125,7 +125,7 @@
                     "col_idx": 6
                 },
                 {
-                    "field_type": "Categorical",
+                    "field_type": "categorical",
                     "interaction_name": null,
                     "description": "Whether the iNdividual trapped had beeN previously caught before",
                     "interaction_field": null,
@@ -138,7 +138,7 @@
                     "col_idx": 7
                 },
                 {
-                    "field_type": "ID",
+                    "field_type": "id",
                     "interaction_name": null,
                     "description": "PIT tag number injected into that individual;NB excel auto-formatting has altered some of these numbers!!",
                     "interaction_field": null,
@@ -151,7 +151,7 @@
                     "col_idx": 8
                 },
                 {
-                    "field_type": "Categorical",
+                    "field_type": "categorical",
                     "interaction_name": null,
                     "description": "Age class of individual",
                     "interaction_field": null,
@@ -164,7 +164,7 @@
                     "col_idx": 9
                 },
                 {
-                    "field_type": "Categorical",
+                    "field_type": "categorical",
                     "interaction_name": null,
                     "description": "Sex of individual",
                     "interaction_field": null,
@@ -177,7 +177,7 @@
                     "col_idx": 10
                 },
                 {
-                    "field_type": "Comments",
+                    "field_type": "comments",
                     "interaction_name": null,
                     "description": "Notes on breeding condition such as perforated or unperforated vagina or the condition of the males testes ie descended or not",
                     "interaction_field": null,
@@ -190,7 +190,7 @@
                     "col_idx": 11
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Length of left hindfoot",
                     "interaction_field": null,
@@ -207,7 +207,7 @@
                     "col_idx": 12
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Length of left ear",
                     "interaction_field": null,
@@ -224,7 +224,7 @@
                     "col_idx": 13
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Estimate of ectoparasitev load on individual",
                     "interaction_field": null,
@@ -241,7 +241,7 @@
                     "col_idx": 14
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "Body mass",
                     "interaction_field": null,
@@ -258,7 +258,7 @@
                     "col_idx": 15
                 },
                 {
-                    "field_type": "Comments",
+                    "field_type": "comments",
                     "interaction_name": null,
                     "description": "Decsription of any injuries on individual if present",
                     "interaction_field": null,
@@ -271,7 +271,7 @@
                     "col_idx": 16
                 },
                 {
-                    "field_type": "Categorical",
+                    "field_type": "categorical",
                     "interaction_name": null,
                     "description": "Noting of whether the individual died during the trapping process",
                     "interaction_field": null,
@@ -284,7 +284,7 @@
                     "col_idx": 17
                 },
                 {
-                    "field_type": "Comments",
+                    "field_type": "comments",
                     "interaction_name": null,
                     "description": "Observations made on the individual",
                     "interaction_field": null,
@@ -322,7 +322,7 @@
             "external": null,
             "fields": [
                 {
-                    "field_type": "ID",
+                    "field_type": "id",
                     "interaction_name": null,
                     "description": "PIT tag number injected into that individual",
                     "interaction_field": null,
@@ -335,7 +335,7 @@
                     "col_idx": 1
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "An mean pixel value for the red channel in the section analysed on each individual.",
                     "interaction_field": null,
@@ -352,7 +352,7 @@
                     "col_idx": 2
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "An mean pixel value for the green channel in the section analysed on each individual.",
                     "interaction_field": null,
@@ -369,7 +369,7 @@
                     "col_idx": 3
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "An mean pixel value for the blue channel in the section analysed on each individual.",
                     "interaction_field": null,
@@ -386,7 +386,7 @@
                     "col_idx": 4
                 },
                 {
-                    "field_type": "Numeric",
+                    "field_type": "numeric",
                     "interaction_name": null,
                     "description": "An individual value which combines the mean values from the three colour channels",
                     "interaction_field": null,

@@ -34,7 +34,9 @@ test_that("no API fails gracefully on fetch", {
 test_that("API fails gracefully on partial fetch", {
     local_sdd <- local_create_sdd()
 
-    Sys.setenv(RESOURCE_DOWN = "/api/record/1237731$")
+    # Note need to escape the ? here to avoid the network mocking interpreting ? as a
+    # regex character and not a literal ?.
+    Sys.setenv(RESOURCE_DOWN = "/api/records/1237731/\\?format=json$")
     recs <- validate_record_ids(c(1237733, 1237731))
 
     success <- expect_message(

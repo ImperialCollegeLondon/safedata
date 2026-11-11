@@ -40,7 +40,7 @@ get_locations <- function(obj, gazetteer_info = FALSE) {
     #' @export
 
     if (inherits(obj, "safedata")) {
-        record_set <- attr(obj, "safedata")$safe_record_set
+        record_set <- attr(obj, "metadata")$safe_record_set
     } else {
         record_set <- validate_record_ids(obj)
     }
@@ -210,7 +210,7 @@ add_locations <- function(
     # Get the location fields and check it
     obj_attr <- attr(obj, "metadata")
     fields <- obj_attr$fields[[1]]
-    location_fields <- with(fields, field_name[field_type == "Location"])
+    location_fields <- with(fields, field_name[field_type == "location"])
 
     if (length(location_fields) == 0) {
         stop("Data frame does not contain location fields")
