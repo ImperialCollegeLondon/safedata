@@ -98,11 +98,11 @@ that holds published metadata for the datasets in your research community.
 
 ```{r create_new_dir}
 # Create a temporary location for use in this walk through
-safe_dir_path <- file.path(tempdir(), "my_safe_directory")
+safedata_dir_path <- file.path(tempdir(), "my_safedata_directory")
 
 # Create a new safedata directory
 create_safedata_dir(
-    safe_dir_path,
+    safedata_dir_path,
     url = "http://example.safedata.server"
 )
 ```
@@ -111,7 +111,7 @@ This will create the directory and download the current index files. You cannot 
 existing directory: the package wants to start with a fresh, empty directory. Note that
 the directory path is stored in `options()`:
 
-```{r show_safe_dir}
+```{r show_safedata_dir}
 getOption("safedata.dir")
 ```
 
@@ -121,12 +121,12 @@ Once you have created a `safedata` directory, you then use the `set_safedata_dir
 function to tell the `safedata` package where to look for index and data files:
 
 ```{r set_safedata_dir}
-set_safedata_dir(safe_dir_path)
+set_safedata_dir(safedata_dir_path)
 ```
 
 You will see that this function checks with the metadata server for updates
 to the key index files. This can be turned off for offline use
-(`set_safedata_dir('~/my_safe_directory', update=FALSE)`). The function also
+(`set_safedata_dir('~/my_safedata_directory', update=FALSE)`). The function also
 validates local data files: it checks the MD5 hash of local data file copies
 against the MD5 of the published data files.
 
@@ -406,7 +406,7 @@ Excel format or which provides additional information, such as PDFs. Although so
 additional file formats are likely to be readable in R, the`safedata` package does not
 currently provide a mechanism to load them automatically.
 
-```{r download_safe_external, eval=FALSE}
+```{r download_safedata_external, eval=FALSE}
 download_safedata_files(3697804, xlsx_only = FALSE)
 # 2 files requested from 1 records
 #  - 1 local (11.3 Kb)
@@ -616,5 +616,5 @@ get_file_details(1237719)
 
 # Turn off URL mocking and tidy up
 safedata:::mock_api(on = FALSE)
-unlink(safe_dir_path, recursive = TRUE)
+unlink(safedata_dir_path, recursive = TRUE)
 ```
