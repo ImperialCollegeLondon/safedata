@@ -22,7 +22,7 @@ reference:
   - safedata
   - set_safedata_dir
   - validate_record_ids
-  - download_safe_files
+  - download_safedata_files
   - set_example_safedata_dir
 - title: Data discovery
   desc: These functions provide an interface to the dataset metadata search API provided
@@ -40,7 +40,7 @@ reference:
     taxa and locations associated with a dataset and to match taxa and locations into a
     loaded data worksheet.
   contents:
-  - load_safe_data
+  - load_safedata
   - insert_dataset
   - get_taxa
   - get_taxon_coverage
@@ -67,7 +67,7 @@ reference:
   - load_gazetteer
   - load_location_aliases
   - fetch_record_metadata
-  - safe_api_search
+  - safedata_search
   - validate_query_param
   - taxon_index_to_taxon_table
   - try_to_download

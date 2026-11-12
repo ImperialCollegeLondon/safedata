@@ -1,4 +1,4 @@
-context("Test that set_safe_dir fail gracefully")
+context("Test that set_safedata_dir fail gracefully")
 
 test_that("no internet fails gracefully on create", {
     Sys.setenv(NETWORK_DOWN = TRUE)

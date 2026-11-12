@@ -13,7 +13,7 @@ get_locations(obj, gazetteer_info = FALSE)
 returned \code{\link[sf]{sf}} object.}
 }
 \value{
-An object of classes "safe_locations", "sf" and "data.frame".
+An object of classes "safedata_locations", "sf" and "data.frame".
 }
 \description{
 This function returns a spatial 'simple features' (\code{\link[sf]{sf}}) object

@@ -5,7 +5,7 @@ get_file_details <- function(record_id) {
     #' The access status of the record is reported, along with the local
     #' absolute file path and whether a local copy is present. If there
     #' is no local copy and the dataset is open access, you can use
-    #' \code{\link{download_safe_files}} to get local copies. If the dataset
+    #' \code{\link{download_safedata_files}} to get local copies. If the dataset
     #' is embargoed or restricted, see \code{\link{insert_dataset}}.
     #'
     #' @param record_id A record id

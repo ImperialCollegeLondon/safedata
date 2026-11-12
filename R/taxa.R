@@ -41,7 +41,7 @@ get_taxa <- function(obj) {
     #' \url{https://safedata-validator.readthedocs.io/en/stable/data_providers/data_format/taxa.html}  # nolint
     #'
     #' @param obj A single record id, or an existing safedata dataframe.
-    #' @return A taxonomy table of classes "safe_taxa" and "data.frame".
+    #' @return A taxonomy table of classes "safedata_taxa" and "data.frame".
     #' @seealso \code{\link{add_taxa}}
     #' @examples
     #'     set_example_safedata_dir()
@@ -50,7 +50,7 @@ get_taxa <- function(obj) {
     #' @export
 
     if (inherits(obj, "safedata")) {
-        record_set <- attr(obj, "metadata")$safe_record_set
+        record_set <- attr(obj, "metadata")$safedata_records
     } else {
         record_set <- validate_record_ids(obj)
     }
@@ -92,7 +92,7 @@ get_taxa <- function(obj) {
     }
 
     # Add record set metadata to table
-    attr(taxon_table, "metadata") <- list(safe_record_set = record_set)
+    attr(taxon_table, "metadata") <- list(safedata_records = record_set)
 
     return(taxon_table)
 }
@@ -241,7 +241,7 @@ taxon_index_to_taxon_table <- function(taxon_index) {
         taxon_table,
         subset(worksheet_taxa, select = tax_fields)
     )
-    class(taxon_table) <- c("safe_taxa", "data.frame")
+    class(taxon_table) <- c("safedata_taxa", "data.frame")
 
     return(taxon_table)
 }
@@ -289,7 +289,7 @@ add_taxa <- function(
     #' @seealso \code{\link{get_taxa}}
     #' @examples
     #'    set_example_safedata_dir()
-    #'    beetle_morph <- load_safe_data(1400562, "MorphFunctTraits")
+    #'    beetle_morph <- load_safedata(1400562, "MorphFunctTraits")
     #'    beetle_morph <- add_taxa(beetle_morph)
     #'    set_example_safedata_dir(on=FALSE)
     #' @export
@@ -315,14 +315,14 @@ add_taxa <- function(
     # Load the taxonomy, making sure that an existing taxon table is the right
     # one for the worksheet
     if (is.null(taxon_table)) {
-        taxon_table <- get_taxa(obj_attr$safe_record_set)
-    } else if (inherits(taxon_table, "safe_taxa")) {
-        taxa_record_set <- attr(taxon_table, "metadata")$safe_record_set
-        if (!isTRUE(all.equal(taxa_record_set, obj_attr$safe_record_set))) {
+        taxon_table <- get_taxa(obj_attr$safedata_records)
+    } else if (inherits(taxon_table, "safedata_taxa")) {
+        taxa_record_set <- attr(taxon_table, "metadata")$safedata_records
+        if (!isTRUE(all.equal(taxa_record_set, obj_attr$safedata_records))) {
             stop("Provided 'taxon_table' is for a different dataset.")
         }
     } else {
-        stop("'taxon_table' not a 'safe_taxa' object created by 'get_taxa'")
+        stop("'taxon_table' not a 'safedata_taxa' object created by 'get_taxa'")
     }
 
     # This should never happen - would need a taxon field with no taxa worksheet

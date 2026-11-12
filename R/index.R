@@ -29,7 +29,7 @@ set_safedata_dir <- function(safedir, update = TRUE) {
     #'         records available in the safedata community for a project;}
     #'   \item{\code{gazetteer.geojson}}{, containing the official list of known
     #'         sampling locations and GIS data; and}
-    #'   \item{\code{location_aliases.json}}{, a list of alternative names permitted for
+    #'   \item{\code{location_aliases.csv}}{, a list of alternative names permitted for
     #'         some locations.}
     #'   \item{\code{url.json}}{, the URL settings for the safedata metadata server}
     #' }
@@ -721,7 +721,7 @@ set_example_safedata_dir <- function(on = TRUE) {
                 url = "http://example.safedata.server"
             )
             # Add files for examples that assume files are present
-            download_safe_files(1400562, confirm = FALSE)
+            download_safedata_files(1400562, confirm = FALSE)
         })
     }
 

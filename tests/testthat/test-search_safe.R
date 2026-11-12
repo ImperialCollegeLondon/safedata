@@ -39,5 +39,5 @@ test_that("normal search behaviour", {
         search_text("soil"),
         regexp = "Search returned"
     )
-    expect_true(inherits(success, "safe_record_set"))
+    expect_true(inherits(success, "safedata_records"))
 })

@@ -9,7 +9,7 @@ test_that("Download dataset fails gracefully on internet down", {
     # Attempt to download a small dataset (otter qPCR), using confirm = FALSE
     # to avoid having to interact with the function.
     success <- expect_message(
-        download_safe_files(1198475, confirm = FALSE),
+        download_safedata_files(1198475, confirm = FALSE),
         regexp = "Could not download metadata, aborting download"
     )
     expect_false(success)
@@ -26,7 +26,7 @@ test_that("Download dataset fails gracefully on metadata server down", {
     # Attempt to download a small dataset (otter qPCR), using confirm = FALSE
     # to avoid having to interact with the function.
     success <- expect_message(
-        download_safe_files(1198475, confirm = FALSE),
+        download_safedata_files(1198475, confirm = FALSE),
         regexp = "Could not download metadata, aborting download"
     )
     expect_false(success)
@@ -62,7 +62,7 @@ test_that("Download dataset fails gracefully on Zenodo down", {
     # Attempt to download a small dataset (otter qPCR), using confirm = FALSE
     # to avoid having to interact with the function.
     success <- expect_message(
-        download_safe_files(1198475, confirm = FALSE),
+        download_safedata_files(1198475, confirm = FALSE),
         regexp = "Failed to download data:"
     )
 

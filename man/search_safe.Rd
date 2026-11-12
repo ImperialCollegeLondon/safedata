@@ -51,7 +51,7 @@ returning only the most recent versions of the datasets found. By default
 all versions of matching dataset concepts are returned.}
 
 \item{ids}{A set of safedata dataset record IDs to restrict a search. This will
-typically be a \code{\link{safe_record_set}} object returned by another
+typically be a \code{\link{safedata_records}} object returned by another
 search but can also be a vector of record ids in any of the formats
 accepted by \code{\link{validate_record_ids}}.}
 
@@ -84,14 +84,14 @@ longitude in WGS84 (EPSG:4326).}
 in metres within which to match either location or wkt searches.}
 }
 \value{
-An object of class \code{\link{safe_record_set}} of datasets that
+An object of class \code{\link{safedata_records}} of datasets that
    match the query.
 }
 \description{
 In addition to the datasets stored on Zenodo, the safedata system provides the
 `safedata_server` web application that serves an API to search dataset metadata in
 more depth. The search functions access this API and return
-\code{\link{safe_record_set}} objects identifying datasets that match a particular
+\code{\link{safedata_records}} objects identifying datasets that match a particular
 query.
 }
 \details{
@@ -99,7 +99,7 @@ The API provides endpoints to search datasets by date extents, data worksheet fi
 authors, taxa, free text and by spatial query. All of the functions accept the
 argument \code{most_recent}, which restricts the returned datasets to the most recent
 versions of each matching dataset concept. The functions can also be passed an
-existing \code{\link{safe_record_set}} object to search within the results of a
+existing \code{\link{safedata_records}} object to search within the results of a
 previous search.
 
 The \code{match_type} parameter specifies how to match date ranges and must be one of

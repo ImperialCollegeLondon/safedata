@@ -10,7 +10,7 @@ fetch_record_metadata(record_set)
 load_record_metadata(record_set)
 }
 \arguments{
-\item{record_set}{An object of class \code{\link{safe_record_set}}.}
+\item{record_set}{An object of class \code{\link{safedata_records}}.}
 }
 \value{
 The \code{fetch_record_metadata} function invisibly returns a logical

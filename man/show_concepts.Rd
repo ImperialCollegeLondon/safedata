@@ -46,8 +46,8 @@ of three things:
 \enumerate{
    \item A character or numeric vector of safedata record or concept ids, which
          will be validated using \code{\link{validate_record_ids}}, or
-   \item An already validated \code{\link{safe_record_set}} object, or
-   \item A \code{safedata} data frame loaded using \code{\link{load_safe_data}}.
+   \item An already validated \code{\link{safedata_records}} object, or
+   \item A \code{safedata} data frame loaded using \code{\link{load_safedata}}.
 }
 
 If \code{show_concepts} is passed a record id, then the function looks
@@ -75,7 +75,7 @@ dataset concept.
    show_record(recs[1,])
    # Show worksheet metadata from a record or from a loaded worksheet
    show_worksheet(1400562, "EnvironVariables")
-   beetle_abund <- load_safe_data(1400562, "Ant-Psel")
+   beetle_abund <- load_safedata(1400562, "Ant-Psel")
    show_worksheet(beetle_abund, extended_fields = TRUE)
    set_example_safedata_dir(on=FALSE)
 }
