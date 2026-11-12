@@ -30,7 +30,7 @@ added for the specific taxa used in in a taxa field in a data worksheet."><meta 
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/overview.html">Overview of the safedata system</a></li>
     <li><a class="dropdown-item" href="../articles/safe_project.html">The SAFE Project</a></li>
-    <li><a class="dropdown-item" href="../articles/using_safe_data.html">Using the `safedata` package</a></li>
+    <li><a class="dropdown-item" href="../articles/using_safedata.html">Using the `safedata` package</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item"><a class="nav-link" href="../build_notes.html">Development</a></li>
@@ -122,7 +122,7 @@ for synonymous or merged taxa.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span>   <span class="fu"><a href="set_example_safedata_dir.html">set_example_safedata_dir</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span>   <span class="va">beetle_morph</span> <span class="op">&lt;-</span> <span class="fu"><a href="load_safe_data.html">load_safe_data</a></span><span class="op">(</span><span class="fl">1400562</span>, <span class="st">"MorphFunctTraits"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="va">beetle_morph</span> <span class="op">&lt;-</span> <span class="fu"><a href="load_safedata.html">load_safedata</a></span><span class="op">(</span><span class="fl">1400562</span>, <span class="st">"MorphFunctTraits"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>   <span class="va">beetle_morph</span> <span class="op">&lt;-</span> <span class="fu">add_taxa</span><span class="op">(</span><span class="va">beetle_morph</span><span class="op">)</span></span></span>
 <span class="r-in"><span>   <span class="fu"><a href="set_example_safedata_dir.html">set_example_safedata_dir</a></span><span class="op">(</span>on<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No response from server, skipping updates: http://example.safedata.server</span>

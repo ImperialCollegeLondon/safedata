@@ -7,4 +7,4 @@
 - [The SAFE
   Project](https://imperialcollegelondon.github.io/safedata/dev/articles/safe_project.md):
 - [Using the \`safedata\`
-  package](https://imperialcollegelondon.github.io/safedata/dev/articles/using_safe_data.md):
+  package](https://imperialcollegelondon.github.io/safedata/dev/articles/using_safedata.md):

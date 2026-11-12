@@ -22,7 +22,7 @@ The functions provide three levels of information:"><meta name="robots" content=
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/overview.html">Overview of the safedata system</a></li>
     <li><a class="dropdown-item" href="../articles/safe_project.html">The SAFE Project</a></li>
-    <li><a class="dropdown-item" href="../articles/using_safe_data.html">Using the `safedata` package</a></li>
+    <li><a class="dropdown-item" href="../articles/using_safedata.html">Using the `safedata` package</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item"><a class="nav-link" href="../build_notes.html">Development</a></li>
@@ -98,8 +98,8 @@ fields or a longer output including full metadata descriptors.</p></dd>
 of three things:</p>
 <ol><li><p>A character or numeric vector of safedata record or concept ids, which
          will be validated using <code><a href="validate_record_ids.html">validate_record_ids</a></code>, or</p></li>
-<li><p>An already validated <code><a href="validate_record_ids.html">safe_record_set</a></code> object, or</p></li>
-<li><p>A <code>safedata</code> data frame loaded using <code><a href="load_safe_data.html">load_safe_data</a></code>.</p></li>
+<li><p>An already validated <code><a href="validate_record_ids.html">safedata_records</a></code> object, or</p></li>
+<li><p>A <code>safedata</code> data frame loaded using <code><a href="load_safedata.html">load_safedata</a></code>.</p></li>
 </ol><p>If <code>show_concepts</code> is passed a record id, then the function looks
 up the relevant concept. The version table indicates which versions
 are available ("*" for the most recent available version and "o"
@@ -184,7 +184,7 @@ dataset concept.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 Temp       numeric    Soil temperature    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 Moisture   numeric    Soil moisture       </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4 Cover      numeric    Canopy cover        </span>
-<span class="r-in"><span>   <span class="va">beetle_abund</span> <span class="op">&lt;-</span> <span class="fu"><a href="load_safe_data.html">load_safe_data</a></span><span class="op">(</span><span class="fl">1400562</span>, <span class="st">"Ant-Psel"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="va">beetle_abund</span> <span class="op">&lt;-</span> <span class="fu"><a href="load_safedata.html">load_safedata</a></span><span class="op">(</span><span class="fl">1400562</span>, <span class="st">"Ant-Psel"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>   <span class="fu">show_worksheet</span><span class="op">(</span><span class="va">beetle_abund</span>, extended_fields <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Record ID: 1400562</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Worksheet name: Ant-Psel</span>

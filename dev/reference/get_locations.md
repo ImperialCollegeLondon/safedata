@@ -24,7 +24,7 @@ get_locations(obj, gazetteer_info = FALSE)
 
 ## Value
 
-An object of classes "safe_locations", "sf" and "data.frame".
+An object of classes "safedata_locations", "sf" and "data.frame".
 
 ## Details
 

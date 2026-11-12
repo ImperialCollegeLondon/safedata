@@ -20,7 +20,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="articles/overview.html">Overview of the safedata system</a></li>
     <li><a class="dropdown-item" href="articles/safe_project.html">The SAFE Project</a></li>
-    <li><a class="dropdown-item" href="articles/using_safe_data.html">Using the `safedata` package</a></li>
+    <li><a class="dropdown-item" href="articles/using_safedata.html">Using the `safedata` package</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
 <li class="active nav-item"><a class="nav-link" href="build_notes.html">Development</a></li>
@@ -168,7 +168,8 @@
 </div>
 <div class="section level3">
 <h3 id="checking-on-different-platforms">Checking on different platforms<a class="anchor" aria-label="anchor" href="#checking-on-different-platforms"></a></h3>
-<p>The GitHub Action build process should now be underway for the <code>main</code> branch. Git Actions is configured (see <code>.github/workflows/check-standard.yaml</code>) to build the package under R stable on Ubuntu, Mac and Windows and R devel on Ubuntu.</p>
+<p>The GitHub Action build process should now be underway for the <code>main</code> branch. Git Actions is configured (see <code>.github/workflows/check-standard.yaml</code>) to build the package under R stable on Ubuntu, Mac and Windows whenever a PR is updated, so the logs of those actions can be used to show checks pass on stable.</p>
+<p>In addition, the repo has a further action to run R CMD CHECK on the current nightly build of R (<code>devel</code>, see <code>.github/workflows/check-devel.yaml</code>). This is not included in the standard PR checks because the lack of caching for nighly builds means that this action can take nearly an hour to complete. It can be manually triggered from the Github Actions page for the repo - this should be run on the <code>main</code> branch for release candidate code.</p>
 <p>Although Windows is included in the GitHub Actions testing environment, the R Project also maintains a Windows test environment that can be used. This needs a built copy of the <code>main</code> branch, so run <code>build_scripts/build_and_check.sh</code> again. This should create a newly built package with the new version number (e.g. <code>safedata_1.0.6.tar.gz</code>). If everything checked out ok before creating the release, this is really just updating the version name.</p>
 <p>You then need to upload that file to <code>win-builder</code>. The python script <code>build_scripts/upload_to_win-builder.py</code> will do this for you - it is simply automating the process of using FTP to upload the current version for checking under both R stable and R devel. Note that <code>win-builder</code> communicates by email with the package maintainer (whoever has the <code>cre</code> flag in the <code>authors</code> section of the <code>DESCRIPTION</code> file).</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="ex">python</span> build_scripts/upload_to_win-builder.py</span></code></pre></div>

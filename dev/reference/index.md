@@ -15,11 +15,11 @@ and to download data.
   [`create_safedata_dir()`](https://imperialcollegelondon.github.io/safedata/dev/reference/set_safedata_dir.md)
   : Set or create a safedata directory
 - [`validate_record_ids()`](https://imperialcollegelondon.github.io/safedata/dev/reference/validate_record_ids.md)
-  [`print(`*`<safe_record_set>`*`)`](https://imperialcollegelondon.github.io/safedata/dev/reference/validate_record_ids.md)
-  [`` `&`( ``*`<safe_record_set>`*`)`](https://imperialcollegelondon.github.io/safedata/dev/reference/validate_record_ids.md)
-  [`` `|`( ``*`<safe_record_set>`*`)`](https://imperialcollegelondon.github.io/safedata/dev/reference/validate_record_ids.md)
+  [`print(`*`<safedata_records>`*`)`](https://imperialcollegelondon.github.io/safedata/dev/reference/validate_record_ids.md)
+  [`` `&`( ``*`<safedata_records>`*`)`](https://imperialcollegelondon.github.io/safedata/dev/reference/validate_record_ids.md)
+  [`` `|`( ``*`<safedata_records>`*`)`](https://imperialcollegelondon.github.io/safedata/dev/reference/validate_record_ids.md)
   : Validates dataset record ids from user input
-- [`download_safe_files()`](https://imperialcollegelondon.github.io/safedata/dev/reference/download_safe_files.md)
+- [`download_safedata_files()`](https://imperialcollegelondon.github.io/safedata/dev/reference/download_safedata_files.md)
   : Download SAFE dataset files
 - [`set_example_safedata_dir()`](https://imperialcollegelondon.github.io/safedata/dev/reference/set_example_safedata_dir.md)
   : Functions to use an example data directory for package examples
@@ -54,9 +54,9 @@ These functions load data from a safedata dataset and allow users to
 explore the taxa and locations associated with a dataset and to match
 taxa and locations into a loaded data worksheet.
 
-- [`load_safe_data()`](https://imperialcollegelondon.github.io/safedata/dev/reference/load_safe_data.md)
-  [`str(`*`<safedata>`*`)`](https://imperialcollegelondon.github.io/safedata/dev/reference/load_safe_data.md)
-  [`print(`*`<safedata>`*`)`](https://imperialcollegelondon.github.io/safedata/dev/reference/load_safe_data.md)
+- [`load_safedata()`](https://imperialcollegelondon.github.io/safedata/dev/reference/load_safedata.md)
+  [`str(`*`<safedata>`*`)`](https://imperialcollegelondon.github.io/safedata/dev/reference/load_safedata.md)
+  [`print(`*`<safedata>`*`)`](https://imperialcollegelondon.github.io/safedata/dev/reference/load_safedata.md)
   : Load data from a safedata dataset.
 - [`insert_dataset()`](https://imperialcollegelondon.github.io/safedata/dev/reference/insert_dataset.md)
   : Inserts local copies of files from a dataset into a safedata
@@ -111,8 +111,8 @@ namespace but are documented here briefly.
 - [`fetch_record_metadata()`](https://imperialcollegelondon.github.io/safedata/dev/reference/fetch_record_metadata.md)
   [`load_record_metadata()`](https://imperialcollegelondon.github.io/safedata/dev/reference/fetch_record_metadata.md)
   : Get and load safedata metadata
-- [`safe_api_search()`](https://imperialcollegelondon.github.io/safedata/dev/reference/safe_api_search.md)
-  [`validate_query_param()`](https://imperialcollegelondon.github.io/safedata/dev/reference/safe_api_search.md)
+- [`safedata_search()`](https://imperialcollegelondon.github.io/safedata/dev/reference/safedata_search.md)
+  [`validate_query_param()`](https://imperialcollegelondon.github.io/safedata/dev/reference/safedata_search.md)
   : Internal SAFE dataset API search functions
 - [`taxon_index_to_taxon_table()`](https://imperialcollegelondon.github.io/safedata/dev/reference/taxon_index_to_taxon_table.md)
   : Create a table showing taxon hierarchies from taxon metadata

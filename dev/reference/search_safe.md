@@ -4,7 +4,7 @@ In addition to the datasets stored on Zenodo, the safedata system
 provides the \`safedata_server\` web application that serves an API to
 search dataset metadata in more depth. The search functions access this
 API and return
-[`safe_record_set`](https://imperialcollegelondon.github.io/safedata/dev/reference/validate_record_ids.md)
+[`safedata_records`](https://imperialcollegelondon.github.io/safedata/dev/reference/validate_record_ids.md)
 objects identifying datasets that match a particular query.
 
 ## Usage
@@ -62,7 +62,7 @@ search_spatial(
 
   A set of safedata dataset record IDs to restrict a search. This will
   typically be a
-  [`safe_record_set`](https://imperialcollegelondon.github.io/safedata/dev/reference/validate_record_ids.md)
+  [`safedata_records`](https://imperialcollegelondon.github.io/safedata/dev/reference/validate_record_ids.md)
   object returned by another search but can also be a vector of record
   ids in any of the formats accepted by
   [`validate_record_ids`](https://imperialcollegelondon.github.io/safedata/dev/reference/validate_record_ids.md).
@@ -120,7 +120,7 @@ search_spatial(
 ## Value
 
 An object of class
-[`safe_record_set`](https://imperialcollegelondon.github.io/safedata/dev/reference/validate_record_ids.md)
+[`safedata_records`](https://imperialcollegelondon.github.io/safedata/dev/reference/validate_record_ids.md)
 of datasets that match the query.
 
 ## Details
@@ -130,7 +130,7 @@ worksheet fields, authors, taxa, free text and by spatial query. All of
 the functions accept the argument `most_recent`, which restricts the
 returned datasets to the most recent versions of each matching dataset
 concept. The functions can also be passed an existing
-[`safe_record_set`](https://imperialcollegelondon.github.io/safedata/dev/reference/validate_record_ids.md)
+[`safedata_records`](https://imperialcollegelondon.github.io/safedata/dev/reference/validate_record_ids.md)
 object to search within the results of a previous search.
 
 The `match_type` parameter specifies how to match date ranges and must

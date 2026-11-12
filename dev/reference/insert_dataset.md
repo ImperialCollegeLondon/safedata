@@ -31,7 +31,7 @@ insert_dataset(record_id, files)
 #> Downloading 1 record metadata files
 #> Downloaded metadata: 1237719
 #> Inserting files: template_ClareWfunctiondata.xlsx
-   dat <- load_safe_data(1237719, "Data")
+   dat <- load_safedata(1237719, "Data")
    str(dat)
 #> SAFE dataset
 #> Concept: 1198840; Record 1237719; Worksheet: Data

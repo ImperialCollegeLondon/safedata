@@ -58,11 +58,11 @@ three things:
     or
 
 2.  An already validated
-    [`safe_record_set`](https://imperialcollegelondon.github.io/safedata/dev/reference/validate_record_ids.md)
+    [`safedata_records`](https://imperialcollegelondon.github.io/safedata/dev/reference/validate_record_ids.md)
     object, or
 
 3.  A `safedata` data frame loaded using
-    [`load_safe_data`](https://imperialcollegelondon.github.io/safedata/dev/reference/load_safe_data.md).
+    [`load_safedata`](https://imperialcollegelondon.github.io/safedata/dev/reference/load_safedata.md).
 
 If `show_concepts` is passed a record id, then the function looks up the
 relevant concept. The version table indicates which versions are
@@ -148,7 +148,7 @@ embargoed or restricted dataset has been inserted using
 #> 2 Temp       numeric    Soil temperature    
 #> 3 Moisture   numeric    Soil moisture       
 #> 4 Cover      numeric    Canopy cover        
-   beetle_abund <- load_safe_data(1400562, "Ant-Psel")
+   beetle_abund <- load_safedata(1400562, "Ant-Psel")
    show_worksheet(beetle_abund, extended_fields = TRUE)
 #> Record ID: 1400562
 #> Worksheet name: Ant-Psel

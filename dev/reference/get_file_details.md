@@ -4,7 +4,7 @@ This function returns a data frame of the files associated with a
 record. The access status of the record is reported, along with the
 local absolute file path and whether a local copy is present. If there
 is no local copy and the dataset is open access, you can use
-[`download_safe_files`](https://imperialcollegelondon.github.io/safedata/dev/reference/download_safe_files.md)
+[`download_safedata_files`](https://imperialcollegelondon.github.io/safedata/dev/reference/download_safedata_files.md)
 to get local copies. If the dataset is embargoed or restricted, see
 [`insert_dataset`](https://imperialcollegelondon.github.io/safedata/dev/reference/insert_dataset.md).
 

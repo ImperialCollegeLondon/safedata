@@ -24,7 +24,7 @@ integers, but the function will also handle Zenodo URLs and DOIs."><meta name="r
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/overview.html">Overview of the safedata system</a></li>
     <li><a class="dropdown-item" href="../articles/safe_project.html">The SAFE Project</a></li>
-    <li><a class="dropdown-item" href="../articles/using_safe_data.html">Using the `safedata` package</a></li>
+    <li><a class="dropdown-item" href="../articles/using_safedata.html">Using the `safedata` package</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item"><a class="nav-link" href="../build_notes.html">Development</a></li>
@@ -52,13 +52,13 @@ integers, but the function will also handle Zenodo URLs and DOIs.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">validate_record_ids</span><span class="op">(</span><span class="va">record_set</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S3 method for class 'safe_record_set'</span></span>
+<span><span class="co"># S3 method for class 'safedata_records'</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S3 method for class 'safe_record_set'</span></span>
+<span><span class="co"># S3 method for class 'safedata_records'</span></span>
 <span><span class="va">x</span> <span class="op">&amp;</span> <span class="va">y</span></span>
 <span></span>
-<span><span class="co"># S3 method for class 'safe_record_set'</span></span>
+<span><span class="co"># S3 method for class 'safedata_records'</span></span>
 <span><span class="va">x</span> <span class="op">|</span> <span class="va">y</span></span></code></pre></div>
     </div>
 
@@ -72,7 +72,7 @@ record ids.</p></dd>
 
 
 <dt id="arg-x-y">x, y<a class="anchor" aria-label="anchor" href="#arg-x-y"></a></dt>
-<dd><p>Objects of class <code>safe_record_set</code></p></dd>
+<dd><p>Objects of class <code>safedata_records</code></p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -81,14 +81,14 @@ record ids.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class <code>safe_record_set</code> (see Details)</p>
+    <p>An object of class <code>safedata_records</code> (see Details)</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The function returns a data frame with class <code>safe_record_set</code>,
+    <p>The function returns a data frame with class <code>safedata_records</code>,
 containing the columns <code>concept</code>, <code>record</code>, <code>available</code>
 and, finally, <code>mra</code> containing the most recent available record
-(if any). The function can be run on an existing <code>safe_record_set</code>
+(if any). The function can be run on an existing <code>safedata_records</code>
 to update this information.</p>
 <p>Note that <code>record</code> will be NA when a value represents a concept id.
 Inputs that do not match a record or concept ids are returned in the
@@ -101,8 +101,8 @@ using the print method.</p>
     <div class="section level2">
     <h2 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a></h2>
 
-<ul><li><p><code>print(safe_record_set)</code>: Print a brief summary of
-"safe_record_set" objects.</p></li>
+<ul><li><p><code>print(safedata_records)</code>: Print a brief summary of
+"safedata_records" objects.</p></li>
 <li><p><code> &amp; </code>: Combine two record sets, retaining only
 records that are present in both.</p></li>
 <li><p><code> | </code>: Combine two record sets, including the

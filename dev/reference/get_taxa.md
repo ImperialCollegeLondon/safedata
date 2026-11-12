@@ -19,7 +19,7 @@ get_taxa(obj)
 
 ## Value
 
-A taxonomy table of classes "safe_taxa" and "data.frame".
+A taxonomy table of classes "safedata_taxa" and "data.frame".
 
 ## Details
 

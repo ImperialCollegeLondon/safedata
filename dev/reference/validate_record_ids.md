@@ -9,13 +9,13 @@ integers, but the function will also handle Zenodo URLs and DOIs.
 ``` r
 validate_record_ids(record_set)
 
-# S3 method for class 'safe_record_set'
+# S3 method for class 'safedata_records'
 print(x, ...)
 
-# S3 method for class 'safe_record_set'
+# S3 method for class 'safedata_records'
 x & y
 
-# S3 method for class 'safe_record_set'
+# S3 method for class 'safedata_records'
 x | y
 ```
 
@@ -27,7 +27,7 @@ x | y
 
 - x, y:
 
-  Objects of class `safe_record_set`
+  Objects of class `safedata_records`
 
 - ...:
 
@@ -35,14 +35,14 @@ x | y
 
 ## Value
 
-An object of class `safe_record_set` (see Details)
+An object of class `safedata_records` (see Details)
 
 ## Details
 
-The function returns a data frame with class `safe_record_set`,
+The function returns a data frame with class `safedata_records`,
 containing the columns `concept`, `record`, `available` and, finally,
 `mra` containing the most recent available record (if any). The function
-can be run on an existing `safe_record_set` to update this information.
+can be run on an existing `safedata_records` to update this information.
 
 Note that `record` will be NA when a value represents a concept id.
 Inputs that do not match a record or concept ids are returned in the
@@ -55,7 +55,7 @@ the print method.
 
 ## Functions
 
-- `print(safe_record_set)`: Print a brief summary of "safe_record_set"
+- `print(safedata_records)`: Print a brief summary of "safedata_records"
   objects.
 
 - ` & `: Combine two record sets, retaining only records that are

@@ -68,7 +68,7 @@ a settings file for the safedata directory:
   , containing the official list of known sampling locations and GIS
   data; and
 
-- `location_aliases.json`:
+- `location_aliases.csv`:
 
   , a list of alternative names permitted for some locations.
 

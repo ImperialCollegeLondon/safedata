@@ -77,7 +77,7 @@ taxon name used in the taxonomy database for synonymous or merged taxa.
 
 ``` r
    set_example_safedata_dir()
-   beetle_morph <- load_safe_data(1400562, "MorphFunctTraits")
+   beetle_morph <- load_safedata(1400562, "MorphFunctTraits")
    beetle_morph <- add_taxa(beetle_morph)
    set_example_safedata_dir(on=FALSE)
 #> No response from server, skipping updates: http://example.safedata.server

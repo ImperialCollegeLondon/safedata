@@ -15,7 +15,7 @@ load_record_metadata(record_set)
 - record_set:
 
   An object of class
-  [`safe_record_set`](https://imperialcollegelondon.github.io/safedata/dev/reference/validate_record_ids.md).
+  [`safedata_records`](https://imperialcollegelondon.github.io/safedata/dev/reference/validate_record_ids.md).
 
 ## Value
 

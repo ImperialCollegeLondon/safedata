@@ -300,7 +300,16 @@ are checking in the `develop` branch then you will see a note saying
 The GitHub Action build process should now be underway for the `main`
 branch. Git Actions is configured (see
 `.github/workflows/check-standard.yaml`) to build the package under R
-stable on Ubuntu, Mac and Windows and R devel on Ubuntu.
+stable on Ubuntu, Mac and Windows whenever a PR is updated, so the logs
+of those actions can be used to show checks pass on stable.
+
+In addition, the repo has a further action to run R CMD CHECK on the
+current nightly build of R (`devel`, see
+`.github/workflows/check-devel.yaml`). This is not included in the
+standard PR checks because the lack of caching for nighly builds means
+that this action can take nearly an hour to complete. It can be manually
+triggered from the Github Actions page for the repo - this should be run
+on the `main` branch for release candidate code.
 
 Although Windows is included in the GitHub Actions testing environment,
 the R Project also maintains a Windows test environment that can be
