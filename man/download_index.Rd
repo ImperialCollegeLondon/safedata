@@ -8,7 +8,7 @@ download_index()
 }
 \description{
 This function downloads the dataset index from the `safedata_server` API
-API (e.g. \url{https://data.safeproject.net/api/datasets/index/download/}) and
+API (e.g. \url{https://data.safeproject.net/resources/index.json}) and
 saves it in the safedata directory
 }
 \keyword{internal}
