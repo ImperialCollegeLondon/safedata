@@ -151,35 +151,34 @@ set_safedata_dir <- function(safedir, update = TRUE) {
         update_successful <- TRUE
         backed_up <- character()
 
-        # Check the files - do exactly the same thing for three files, three
-        # hashes, three download wrapper functions and three reporting names
+        # Check the files - do exactly the same thing for three files, providing a
+        # label, the file path and a download wrapper function for each.
         update_details <- list(
             list(
                 fname = "Index",
                 path = getOption("safedata.index"),
-                hash_key = "index",
                 dfun = download_index
             ),
             list(
                 fname = "Gazetteer",
                 path = getOption("safedata.gazetteer"),
-                hash_key = "gazetteer",
                 dfun = download_gazetteer
             ),
             list(
                 fname = "Location aliases",
                 path = getOption("safedata.loc_aliases"),
-                hash_key = "location_aliases",
                 dfun = download_location_aliases
             )
         )
 
         for (details in update_details) {
-            # Try to get the current index hashes from the safedata_server API and
-            # then check each of the three index files
-            remote_file_hash <- remote_hashes[details$hash_key]
+            # Get the MD5 hash for the up-to-date remote version of the file
+            remote_file_hash <- remote_hashes[basename(details$path)]
 
-            if (tools::md5sum(details$path) != remote_file_hash) {
+            # Only replace the file if it is out of date
+            if (tools::md5sum(details$path) == remote_file_hash) {
+                verbose_message(sprintf(" - %s up to date", details$fname))
+            } else {
                 verbose_message(sprintf(" - Updating %s", details$fname))
                 # Save the current version in case we need to roll back
                 file.rename(details$path, paste0(details$path, ".oldbkp"))
@@ -195,8 +194,6 @@ set_safedata_dir <- function(safedir, update = TRUE) {
                     )
                     update_successful <- FALSE
                 }
-            } else {
-                verbose_message(sprintf(" - %s up to date", details$fname))
             }
         }
 
