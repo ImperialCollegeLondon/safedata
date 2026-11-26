@@ -125,7 +125,6 @@ set_safedata_dir <- function(safedir, update = TRUE) {
             "No response from server, skipping updates: ",
             settings$url
         ))
-        update <- FALSE
         load_index()
         return(invisible(TRUE))
     }
@@ -134,54 +133,52 @@ set_safedata_dir <- function(safedir, update = TRUE) {
     if (update) {
         verbose_message("Checking for updates")
 
+        # Try and download the remote hashes, skipping update when there is an error
+        remote_hashes <- try_to_download(paste0(settings$url, "/resources/hashes.json"))
+
+        if (isFALSE(remote_hashes)) {
+            message("Failed to download update hashes aliases, skipping updates:")
+            message(attr(remote_hashes, "fail_msg"))
+            load_index()
+            return(invisible(TRUE))
+        }
+
+        # Extract hash dictionary from content.
+        remote_hashes <- httr::content(remote_hashes)
+
         # Update the indexing files as an atomic commit - there is unlikely
         # to be an issue in having non-contemporary versions, but why risk it
         update_successful <- TRUE
         backed_up <- character()
 
-        # Check the files - do exactly the same thing for three files, three
-        # hashes, three download wrapper functions and three reporting names
+        # Check the files - do exactly the same thing for three files, providing a
+        # label, the file path and a download wrapper function for each.
         update_details <- list(
             list(
                 fname = "Index",
                 path = getOption("safedata.index"),
-                api = "/api/datasets/index/hash/",
                 dfun = download_index
             ),
             list(
                 fname = "Gazetteer",
                 path = getOption("safedata.gazetteer"),
-                api = "/api/gazetteer/hash/",
                 dfun = download_gazetteer
             ),
             list(
                 fname = "Location aliases",
                 path = getOption("safedata.loc_aliases"),
-                api = "/api/gazetteer/aliases/hash/",
                 dfun = download_location_aliases
             )
         )
 
         for (details in update_details) {
-            # Try to get the current index hashes from the safedata_server API and
-            # then check each of the three index files
-            api <- paste0(getOption("safedata.url"), details$api)
-            index_hash <- try_to_download(api)
+            # Get the MD5 hash for the up-to-date remote version of the file
+            remote_file_hash <- remote_hashes[basename(details$path)]
 
-            if (isFALSE(index_hash)) {
-                update_successful <- FALSE
-                verbose_message(
-                    sprintf(
-                        " - Cannot retrieve remote file hash: %s",
-                        details$fname
-                    )
-                )
-                next
+            # Only replace the file if it is out of date
+            if (tools::md5sum(details$path) == remote_file_hash) {
+                verbose_message(sprintf(" - %s up to date", details$fname))
             } else {
-                index_hash <- httr::content(index_hash)$md5
-            }
-
-            if (tools::md5sum(details$path) != index_hash) {
                 verbose_message(sprintf(" - Updating %s", details$fname))
                 # Save the current version in case we need to roll back
                 file.rename(details$path, paste0(details$path, ".oldbkp"))
@@ -197,8 +194,6 @@ set_safedata_dir <- function(safedir, update = TRUE) {
                     )
                     update_successful <- FALSE
                 }
-            } else {
-                verbose_message(sprintf(" - %s up to date", details$fname))
             }
         }
 
@@ -342,7 +337,7 @@ download_index <- function() {
     #' Downloads the current dataset index
     #'
     #' This function downloads the dataset index from the `safedata_server` API
-    #' API (e.g. \url{https://data.safeproject.net/api/datasets/index/download/}) and
+    #' API (e.g. \url{https://data.safeproject.net/resources/index.json}) and
     #' saves it in the safedata directory
     #'
     #' @return NULL
@@ -350,7 +345,7 @@ download_index <- function() {
 
     path <- getOption("safedata.index")
     url <- getOption("safedata.url")
-    api <- paste0(url, "/api/datasets/index/download/")
+    api <- paste0(url, "/resources/index.json")
 
     success <- try_to_download(api, path)
 
@@ -367,7 +362,7 @@ download_gazetteer <- function() {
     #' Downloads the gazetteer from a safedata metadata server.
     #'
     #' This function downloads the gazetteer using the `safedata_server` API (e.g.
-    #' \url{https://data.safeproject.net/api/gazetteer/download/}) and saves it in the
+    #' \url{https://data.safeproject.net/resources/gazetteer.geojson}) and saves it in the
     #' safedata directory.
     #'
     #' @return NULL
@@ -375,7 +370,7 @@ download_gazetteer <- function() {
 
     path <- getOption("safedata.gazetteer")
     url <- getOption("safedata.url")
-    api <- paste0(url, "/api/gazetteer/download/")
+    api <- paste0(url, "/resources/gazetteer.geojson")
 
     success <- try_to_download(api, path)
 
@@ -392,7 +387,7 @@ download_location_aliases <- function() {
     #' Downloads location aliases from a safedata metadata server.
     #'
     #' This function downloads location aliases from a `safedata_server` API (e.g.
-    #' \url{https://data.safeproject.net/api/gazetteer/aliases/download/}) and saves it
+    #' \url{https://data.safeproject.net/resources/location_aliases.csv}) and saves it
     #' in the safedata directory.
     #'
     #' @return NULL
@@ -400,7 +395,7 @@ download_location_aliases <- function() {
 
     path <- getOption("safedata.loc_aliases")
     url <- getOption("safedata.url")
-    api <- paste0(url, "/api/gazetteer/aliases/download/")
+    api <- paste0(url, "/resources/location_aliases.csv")
     success <- try_to_download(api, path)
 
     if (!success) {

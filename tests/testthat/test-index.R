@@ -77,7 +77,7 @@ test_that("no API fails gracefully on update", {
 test_that("Specific resource unavailable - test atomic update.", {
     local_sdd <- local_create_sdd()
 
-    Sys.setenv(RESOURCE_DOWN = "api/datasets/index/download/$")
+    Sys.setenv(RESOURCE_DOWN = "resources/index.json$")
 
     # Nerf the index file by adding trailing spaces so that the
     # hashes don't match and the file therefore requires updating

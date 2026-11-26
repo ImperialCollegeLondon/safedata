@@ -15,28 +15,20 @@ mock_api_urls <- list(
     ),
 
     # Main index files
-    "http://example.safedata.server/api/datasets/index/download/" = list(
+    "http://example.safedata.server/resources/index.json" = list(
         content = "index.json",
         status_code = 200L
     ),
-    "http://example.safedata.server/api/gazetteer/download/" = list(
+    "http://example.safedata.server/resources/gazetteer.geojson" = list(
         content = "gazetteer.geojson",
         status_code = 200L
     ),
-    "http://example.safedata.server/api/gazetteer/aliases/download/" = list(
+    "http://example.safedata.server/resources/location_aliases.csv" = list(
         content = "location_aliases.csv",
         status_code = 200L
     ),
-    "http://example.safedata.server/api/datasets/index/hash/" = list(
-        content = "index_hash.json",
-        status_code = 200L
-    ),
-    "http://example.safedata.server/api/gazetteer/hash/" = list(
-        content = "gazetteer_hash.json",
-        status_code = 200L
-    ),
-    "http://example.safedata.server/api/gazetteer/aliases/hash/" = list(
-        content = "aliases_hash.json",
+    "http://example.safedata.server/resources/hashes.json" = list(
+        content = "hashes.json",
         status_code = 200L
     ),
     # Example datasets used and metadata JSON
